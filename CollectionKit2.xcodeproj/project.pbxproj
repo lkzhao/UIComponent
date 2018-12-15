@@ -12,6 +12,12 @@
 		A304892D21C347010026EDA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A304892B21C347010026EDA7 /* Main.storyboard */; };
 		A304892F21C347020026EDA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A304892E21C347020026EDA7 /* Assets.xcassets */; };
 		A304893221C347020026EDA7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A304893021C347020026EDA7 /* LaunchScreen.storyboard */; };
+		A304893A21C347190026EDA7 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304893921C347190026EDA7 /* CollectionView.swift */; };
+		A304893D21C3472E0026EDA7 /* UIScrollView+CollectionKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304893B21C3472E0026EDA7 /* UIScrollView+CollectionKit.swift */; };
+		A304893E21C3472E0026EDA7 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304893C21C3472E0026EDA7 /* Util.swift */; };
+		A304894021C347420026EDA7 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304893F21C347420026EDA7 /* Provider.swift */; };
+		A304894221C35F2F0026EDA7 /* CollectionReuseViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304894121C35F2F0026EDA7 /* CollectionReuseViewManager.swift */; };
+		A304894421C361DD0026EDA7 /* UIView+CollectionKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304894321C361DD0026EDA7 /* UIView+CollectionKit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +28,12 @@
 		A304892E21C347020026EDA7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A304893121C347020026EDA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A304893321C347020026EDA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A304893921C347190026EDA7 /* CollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+		A304893B21C3472E0026EDA7 /* UIScrollView+CollectionKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+CollectionKit.swift"; sourceTree = "<group>"; };
+		A304893C21C3472E0026EDA7 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		A304893F21C347420026EDA7 /* Provider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		A304894121C35F2F0026EDA7 /* CollectionReuseViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionReuseViewManager.swift; sourceTree = "<group>"; };
+		A304894321C361DD0026EDA7 /* UIView+CollectionKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+CollectionKit.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +68,12 @@
 			children = (
 				A304892721C347010026EDA7 /* AppDelegate.swift */,
 				A304892921C347010026EDA7 /* ViewController.swift */,
+				A304893F21C347420026EDA7 /* Provider.swift */,
+				A304893921C347190026EDA7 /* CollectionView.swift */,
+				A304893B21C3472E0026EDA7 /* UIScrollView+CollectionKit.swift */,
+				A304893C21C3472E0026EDA7 /* Util.swift */,
+				A304894321C361DD0026EDA7 /* UIView+CollectionKit.swift */,
+				A304894121C35F2F0026EDA7 /* CollectionReuseViewManager.swift */,
 				A304892B21C347010026EDA7 /* Main.storyboard */,
 				A304892E21C347020026EDA7 /* Assets.xcassets */,
 				A304893021C347020026EDA7 /* LaunchScreen.storyboard */,
@@ -135,7 +153,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A304893D21C3472E0026EDA7 /* UIScrollView+CollectionKit.swift in Sources */,
+				A304893A21C347190026EDA7 /* CollectionView.swift in Sources */,
+				A304894221C35F2F0026EDA7 /* CollectionReuseViewManager.swift in Sources */,
+				A304893E21C3472E0026EDA7 /* Util.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
+				A304894421C361DD0026EDA7 /* UIView+CollectionKit.swift in Sources */,
+				A304894021C347420026EDA7 /* Provider.swift in Sources */,
 				A304892821C347010026EDA7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

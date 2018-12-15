@@ -9,12 +9,23 @@
 import UIKit
 
 class ViewController: UIViewController {
+  let collectionView = CollectionView()
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
+    view.addSubview(collectionView)
+
+    collectionView.provider = TransposeLayoutProvider(
+      child: WaterfallLayoutProvider(
+        children: (0..<100).map { LabelViewProvider(text: "\($0)") }
+      )
+    )
   }
 
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    collectionView.frame = view.bounds
+  }
 
 }
 
