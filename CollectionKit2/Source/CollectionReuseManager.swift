@@ -1,5 +1,5 @@
 //
-//  CollectionReuseViewManager.swift
+//  CollectionReuseManager.swift
 //  CollectionKit
 //
 //  Created by Luke Zhao on 2017-07-21.
@@ -8,13 +8,11 @@
 
 import UIKit
 
-public protocol CollectionViewReusableView: class {
+public protocol CollectionReusableView: class {
   func prepareForReuse()
 }
 
-public class CollectionReuseViewManager: NSObject {
-
-  public static let shared = CollectionReuseViewManager()
+open class CollectionReuseManager: NSObject {
 
   /// Time it takes for CollectionReuseViewManager to
   /// dump all reusableViews to save memory
@@ -32,7 +30,6 @@ public class CollectionReuseViewManager: NSObject {
   public func queue(identifier id: String? = nil,
                     view: UIView) {
     let identifier = id ?? NSStringFromClass(type(of: view))
-    view.reuseManager = nil
     if removeFromCollectionViewWhenReuse {
       view.removeFromSuperview()
     } else {
@@ -55,13 +52,12 @@ public class CollectionReuseViewManager: NSObject {
                                   _ defaultView: @autoclosure () -> T) -> T {
     let queuedView = reusableViews[identifier]?.popLast() as? T
     let view = queuedView ?? defaultView()
-    if let view = view as? CollectionViewReusableView {
+    if let view = view as? CollectionReusableView {
       view.prepareForReuse()
     }
     if !removeFromCollectionViewWhenReuse {
       view.isHidden = false
     }
-    view.reuseManager = self
     return view
   }
 

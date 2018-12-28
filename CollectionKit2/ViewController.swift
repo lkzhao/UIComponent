@@ -61,28 +61,29 @@ class ViewController: UIViewController {
         children: [
           BaseViewProvider(
             key: "ndad",
-            reuseManager: nil,
+            animator: nil,
             update: { (view: UILabel) in
               view.backgroundColor = .red
             },
             size: { maxSize in
               CGSize(width: maxSize.width, height: 100)
-            }),
+            })
+        ] + labels + [
           WaterfallLayoutProvider(
             children: (0..<6).map { data in
-              BaseViewProvider(key: "\(data)",
+              BaseViewProvider(key: "test-\(data)",
                 update: { (view: UILabel) in
                   view.text = "\(data)"
                   view.backgroundColor = UIColor(hue: CGFloat(data) / 30,
                                                  saturation: 0.68,
                                                  brightness: 0.98,
                                                  alpha: 1)
-                },
+              },
                 size: {
                   CGSize(width: $0.width, height: 100 + (data == 0 ? 30 : 0))
               })
-            })
-        ] + labels
+          })
+        ]
       )
     )
   }

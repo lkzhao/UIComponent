@@ -39,19 +39,6 @@ open class CollectionView: UIScrollView {
     self.provider = provider
   }
 
-  public override init(frame: CGRect) {
-    super.init(frame: frame)
-    commonInit()
-  }
-
-  public required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
-    commonInit()
-  }
-
-  func commonInit() {
-  }
-
   open override func layoutSubviews() {
     super.layoutSubviews()
     if needsReload {
@@ -73,23 +60,12 @@ open class CollectionView: UIScrollView {
     setNeedsLayout()
   }
 
+  // re-layout, but not updating cells' contents
   public func invalidateLayout() {
     guard !isLoadingCell && !isReloading && hasReloaded, let provider = provider else { return }
     contentSize = provider.layout(size: innerSize)
     needsInvalidateLayout = false
     loadCells()
-  }
-
-  /*
-   * Update visibleCells according to scrollView's visibleFrame
-   * load cells that move into the visibleFrame and recycles them when
-   * they move out of the visibleFrame.
-   */
-  func loadCells() {
-    guard !isLoadingCell && !isReloading && hasReloaded else { return }
-    isLoadingCell = true
-    _loadCells(reloading: false)
-    isLoadingCell = false
   }
 
   // reload all frames. will automatically diff insertion & deletion
@@ -110,6 +86,18 @@ open class CollectionView: UIScrollView {
     needsReload = false
     reloadCount += 1
     isReloading = false
+  }
+
+  /*
+   * Update visibleCells according to scrollView's visibleFrame
+   * load cells that move into the visibleFrame and recycles them when
+   * they move out of the visibleFrame.
+   */
+  private func loadCells() {
+    guard !isLoadingCell && !isReloading && hasReloaded else { return }
+    isLoadingCell = true
+    _loadCells(reloading: false)
+    isLoadingCell = false
   }
 
   private func _loadCells(reloading: Bool) {
@@ -159,7 +147,8 @@ open class CollectionView: UIScrollView {
                                                     frame: frame)
         }
       } else {
-        cell = viewProvider.construct()
+        cell = (viewProvider.animator ?? animator).dequeue(viewProvider.construct())
+        viewProvider.update(view: cell)
         (viewProvider.animator ?? animator).insert(collectionView: self,
                                                    view: cell,
                                                    frame: frame)

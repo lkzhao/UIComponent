@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class Animator {
+open class Animator: CollectionReuseManager {
 
   /// Called when CollectionView inserts a view into its subviews.
   ///
@@ -28,7 +28,7 @@ open class Animator {
 
   /// Called when CollectionView deletes a view from its subviews.
   ///
-  /// Perform any deletion animation, then call `view.recycleForCollectionKitReuse()`
+  /// Perform any deletion animation, then call `queue(view: view)`
   /// after the animation finishes
   ///
   /// - Parameters:
@@ -36,7 +36,7 @@ open class Animator {
   ///   - view: the view being deleted
   open func delete(collectionView: CollectionView,
                    view: UIView) {
-    view.recycleForCollectionKitReuse()
+    queue(view: view)
   }
 
   /// Called when:
@@ -75,5 +75,7 @@ open class Animator {
     view.center += delta
   }
 
-  public init() {}
+  public override init() {
+    super.init()
+  }
 }

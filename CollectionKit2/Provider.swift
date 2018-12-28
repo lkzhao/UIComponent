@@ -164,30 +164,25 @@ open class BaseViewProvider<View: UIView>: ViewProvider {
   public typealias SizeGenerator = (CGSize) -> CGSize
 
   public var animator: Animator?
-  public var reuseManager: CollectionReuseViewManager?
   public var viewGenerator: ViewGenerator?
   public var viewUpdater: ViewUpdater?
   public var sizeSource: SizeGenerator?
 
-  public init(key: String,
-              reuseManager: CollectionReuseViewManager? = CollectionReuseViewManager.shared,
+  public init(key: String = UUID().uuidString,
+              animator: Animator? = nil,
               update: ViewUpdater?,
               size: SizeGenerator?) {
     self.key = key
-    self.reuseManager = reuseManager
+    self.animator = animator
     self.viewUpdater = update
     self.sizeSource = size
   }
 
   public func construct() -> UIView {
     if let viewGenerator = viewGenerator {
-      let view = reuseManager?.dequeue(viewGenerator()) ?? viewGenerator()
-      update(view: view)
-      return view
+      return viewGenerator()
     } else {
-      let view = reuseManager?.dequeue(View()) ?? View()
-      update(view: view)
-      return view
+      return View()
     }
   }
 
@@ -210,11 +205,3 @@ open class BaseViewProvider<View: UIView>: ViewProvider {
     return [(self, CGRect(origin: .zero, size: _size))]
   }
 }
-
-
-// Problems
-// 1. transposed layout not able to modify size getter
-//      Soln: make transposed version of each layout, override getChildSize
-// 2. ViewProvider cannot be struct because it needs to store
-//    an extra _size variable
-// 3. animator are hard to compose
