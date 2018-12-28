@@ -18,6 +18,9 @@
 		A304894021C347420026EDA7 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304893F21C347420026EDA7 /* Provider.swift */; };
 		A304894221C35F2F0026EDA7 /* CollectionReuseViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304894121C35F2F0026EDA7 /* CollectionReuseViewManager.swift */; };
 		A304894421C361DD0026EDA7 /* UIView+CollectionKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304894321C361DD0026EDA7 /* UIView+CollectionKit.swift */; };
+		A3881A6121D595B00088FA90 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6021D595B00088FA90 /* Animator.swift */; };
+		A3881A6321D59C640088FA90 /* AnimatedReloadAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */; };
+		A3881A6521D5B46B0088FA90 /* CountedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6421D5B46B0088FA90 /* CountedSet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +37,9 @@
 		A304893F21C347420026EDA7 /* Provider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		A304894121C35F2F0026EDA7 /* CollectionReuseViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionReuseViewManager.swift; sourceTree = "<group>"; };
 		A304894321C361DD0026EDA7 /* UIView+CollectionKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+CollectionKit.swift"; sourceTree = "<group>"; };
+		A3881A6021D595B00088FA90 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
+		A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedReloadAnimator.swift; sourceTree = "<group>"; };
+		A3881A6421D5B46B0088FA90 /* CountedSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountedSet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,8 +74,11 @@
 			children = (
 				A304892721C347010026EDA7 /* AppDelegate.swift */,
 				A304892921C347010026EDA7 /* ViewController.swift */,
+				A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */,
 				A304893F21C347420026EDA7 /* Provider.swift */,
 				A304893921C347190026EDA7 /* CollectionView.swift */,
+				A3881A6421D5B46B0088FA90 /* CountedSet.swift */,
+				A3881A6021D595B00088FA90 /* Animator.swift */,
 				A304893B21C3472E0026EDA7 /* UIScrollView+CollectionKit.swift */,
 				A304893C21C3472E0026EDA7 /* Util.swift */,
 				A304894321C361DD0026EDA7 /* UIView+CollectionKit.swift */,
@@ -158,7 +167,10 @@
 				A304894221C35F2F0026EDA7 /* CollectionReuseViewManager.swift in Sources */,
 				A304893E21C3472E0026EDA7 /* Util.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
+				A3881A6321D59C640088FA90 /* AnimatedReloadAnimator.swift in Sources */,
 				A304894421C361DD0026EDA7 /* UIView+CollectionKit.swift in Sources */,
+				A3881A6121D595B00088FA90 /* Animator.swift in Sources */,
+				A3881A6521D5B46B0088FA90 /* CountedSet.swift in Sources */,
 				A304894021C347420026EDA7 /* Provider.swift in Sources */,
 				A304892821C347010026EDA7 /* AppDelegate.swift in Sources */,
 			);

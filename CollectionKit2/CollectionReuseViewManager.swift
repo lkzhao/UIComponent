@@ -14,6 +14,8 @@ public protocol CollectionViewReusableView: class {
 
 public class CollectionReuseViewManager: NSObject {
 
+  public static let shared = CollectionReuseViewManager()
+
   /// Time it takes for CollectionReuseViewManager to
   /// dump all reusableViews to save memory
   public var lifeSpan: TimeInterval = 5.0
