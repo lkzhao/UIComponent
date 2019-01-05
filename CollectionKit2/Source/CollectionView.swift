@@ -46,7 +46,7 @@ open class CollectionView: UIScrollView {
     } else if needsInvalidateLayout || bounds.size != lastLoadBounds.size {
       invalidateLayout()
     } else if bounds != lastLoadBounds {
-      loadCells()
+      _loadCells(reloading: false)
     }
   }
 
@@ -65,7 +65,7 @@ open class CollectionView: UIScrollView {
     guard !isLoadingCell && !isReloading && hasReloaded, let provider = provider else { return }
     contentSize = provider.layout(size: innerSize)
     needsInvalidateLayout = false
-    loadCells()
+    _loadCells(reloading: false)
   }
 
   // reload all frames. will automatically diff insertion & deletion
@@ -88,20 +88,9 @@ open class CollectionView: UIScrollView {
     isReloading = false
   }
 
-  /*
-   * Update visibleCells according to scrollView's visibleFrame
-   * load cells that move into the visibleFrame and recycles them when
-   * they move out of the visibleFrame.
-   */
-  private func loadCells() {
-    guard !isLoadingCell && !isReloading && hasReloaded else { return }
-    isLoadingCell = true
-    _loadCells(reloading: false)
-    isLoadingCell = false
-  }
-
   private func _loadCells(reloading: Bool) {
-    guard let provider = provider else { return }
+    guard !isLoadingCell, let provider = provider else { return }
+    isLoadingCell = true
     let newVisibleViewData = provider.views(in: visibleFrame)
 
     // construct private identifiers
@@ -111,14 +100,14 @@ open class CollectionView: UIScrollView {
       var finalIdentifier = identifier
       var count = 1
       while newIdentifierSet[finalIdentifier] != nil {
-        finalIdentifier = identifier + "(\(count))"
+        finalIdentifier = identifier + String(count)
         count += 1
       }
       newIdentifierSet[finalIdentifier] = $0
       return finalIdentifier
     }
 
-    var newCells = Array<UIView>(repeating: self, count: newVisibleViewData.count)
+    var newCells = Array<UIView?>(repeating: nil, count: newVisibleViewData.count)
 
     // 1st pass, delete all removed cells and move existing cells
     for index in 0..<visibleCells.count {
@@ -136,8 +125,8 @@ open class CollectionView: UIScrollView {
     for (index, viewData) in newVisibleViewData.enumerated() {
       let (viewProvider, frame) = viewData
       let cell: UIView
-      if newCells[index] != self {
-        cell = newCells[index]
+      if let existingCell = newCells[index] {
+        cell = existingCell
         if reloading {
           // cell was on screen before reload, need to update the view.
           viewProvider.update(view: cell)
@@ -162,18 +151,16 @@ open class CollectionView: UIScrollView {
 
     visibleIdentifiers = newIdentifiers
     visibleViewData = newVisibleViewData
-    visibleCells = newCells
+    visibleCells = newCells as! [UIView]
     lastLoadBounds = bounds
+    isLoadingCell = false
   }
 }
 
 extension CollectionView {
   public func cell(at point: CGPoint) -> UIView? {
-    for cell in visibleCells {
-      if cell.point(inside: cell.convert(point, from: self), with: nil) {
-        return cell
-      }
+    return visibleCells.first {
+      $0.point(inside: $0.convert(point, from: self), with: nil)
     }
-    return nil
   }
 }

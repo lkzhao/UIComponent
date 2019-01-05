@@ -11,6 +11,9 @@ import UIKit
 public protocol Provider {
   func layout(size: CGSize) -> CGSize
   func views(in frame: CGRect) -> [(ViewProvider, CGRect)]
+
+  func getIntrinsicWidth(height: CGFloat) -> CGFloat
+  func getIntrinsicHeight(width: CGFloat) -> CGFloat
 }
 
 public protocol ViewProvider: Provider {
@@ -31,6 +34,12 @@ open class MultiChildProvider: Provider {
   open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
     fatalError()
   }
+  open func getIntrinsicHeight(width: CGFloat) -> CGFloat {
+    return 0
+  }
+  open func getIntrinsicWidth(height: CGFloat) -> CGFloat {
+    return 0
+  }
 }
 
 open class SingleChildProvider: Provider {
@@ -39,15 +48,22 @@ open class SingleChildProvider: Provider {
     self.child = child
   }
   open func layout(size: CGSize) -> CGSize {
-    fatalError()
+    return child.layout(size: size)
   }
   open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-    fatalError()
+    return child.views(in: frame)
+  }
+  open func getIntrinsicHeight(width: CGFloat) -> CGFloat {
+    return child.getIntrinsicHeight(width: width)
+  }
+  open func getIntrinsicWidth(height: CGFloat) -> CGFloat {
+    return child.getIntrinsicWidth(height: height)
   }
 }
 
 open class LayoutProvider: MultiChildProvider {
   public private(set) var frames: [CGRect] = []
+  open var transposed = false
 
   open func simpleLayout(size: CGSize) -> [CGRect] {
     fatalError("Subclass should provide its own layout")
@@ -57,8 +73,19 @@ open class LayoutProvider: MultiChildProvider {
 
   }
 
+  open func getSize(child: Provider, maxSize: CGSize) -> CGSize {
+    if transposed {
+      return child.layout(size: maxSize.transposed).transposed
+    }
+    return child.layout(size: maxSize)
+  }
+
   open override func layout(size: CGSize) -> CGSize {
-    frames = simpleLayout(size: size)
+    if transposed {
+      frames = simpleLayout(size: size.transposed).map { $0.transposed }
+    } else {
+      frames = simpleLayout(size: size)
+    }
     let contentSize = frames.reduce(CGRect.zero) { (old, item) in
       old.union(item)
       }.size
@@ -77,7 +104,59 @@ open class LayoutProvider: MultiChildProvider {
   }
 }
 
-class WaterfallLayoutProvider: LayoutProvider {
+open class SortedLayoutProvider: LayoutProvider {
+  private var maxFrameLength: CGFloat = 0
+  open var isImplementedInVertical: Bool { return true }
+
+  open override func doneLayout() {
+    if transposed == isImplementedInVertical {
+      maxFrameLength = frames.max { $0.width < $1.width }?.width ?? 0
+    } else {
+      maxFrameLength = frames.max { $0.height < $1.height }?.height ?? 0
+    }
+  }
+  
+  open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+    var result = [(ViewProvider, CGRect)]()
+    if transposed == isImplementedInVertical {
+      var index = frames.binarySearch { $0.minX < frame.minX - maxFrameLength }
+      while index < frames.count {
+        let childFrame = frames[index]
+        if childFrame.minX >= frame.maxX {
+          break
+        }
+        if childFrame.maxX > frame.minX {
+          let child = children[index]
+          let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map {
+            ($0.0, CGRect(origin: $0.1.origin + childFrame.origin, size: $0.1.size))
+          }
+          result.append(contentsOf: childResult)
+        }
+        index += 1
+      }
+    } else {
+      var index = frames.binarySearch { $0.minY < frame.minY - maxFrameLength }
+      while index < frames.count {
+        let childFrame = frames[index]
+        if childFrame.minY >= frame.maxY {
+          break
+        }
+        if childFrame.maxY > frame.minY {
+          let child = children[index]
+          let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map {
+            ($0.0, CGRect(origin: $0.1.origin + childFrame.origin, size: $0.1.size))
+          }
+          result.append(contentsOf: childResult)
+        }
+        index += 1
+      }
+    }
+
+    return result
+  }
+}
+
+class WaterfallLayoutProvider: SortedLayoutProvider {
   public var columns: Int
   public var spacing: CGFloat
   private var columnWidth: [CGFloat] = [0, 0]
@@ -104,7 +183,7 @@ class WaterfallLayoutProvider: LayoutProvider {
     }
 
     for child in children {
-      var cellSize = child.layout(size: CGSize(width: columnWidth, height: .infinity))
+      var cellSize = getSize(child: child, maxSize: CGSize(width: columnWidth, height: size.height))
       cellSize = CGSize(width: columnWidth, height: cellSize.height)
       let (columnIndex, offsetY) = getMinColomn()
       columnHeight[columnIndex] += cellSize.height + spacing
@@ -118,45 +197,43 @@ class WaterfallLayoutProvider: LayoutProvider {
   }
 }
 
-open class WrapperProvider: SingleChildProvider {
-  open override func layout(size: CGSize) -> CGSize {
-    return child.layout(size: size)
-  }
-
-  open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-    return child.views(in: frame)
+class HorizontalWaterfallLayoutProvider: WaterfallLayoutProvider {
+  public override init(columns: Int = 2, spacing: CGFloat = 0, children: [Provider]) {
+    super.init(columns: columns, spacing: spacing, children: children)
+    self.transposed = true
   }
 }
 
-open class TransposeLayoutProvider: WrapperProvider {
-  open override func layout(size: CGSize) -> CGSize {
-    return child.layout(size: size.transposed).transposed
-  }
-  open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-    return child.views(in: frame.transposed).map {
-      ($0.0, $0.1.transposed)
-    }
-  }
-}
-
-open class InsetLayoutProvider: WrapperProvider {
+open class InsetLayoutProvider: Provider {
   var insets: UIEdgeInsets
+  var child: Provider
+
   init(insets: UIEdgeInsets, child: Provider) {
     self.insets = insets
-    super.init(child: child)
+    self.child = child
   }
-  open override func layout(size: CGSize) -> CGSize {
+
+  open func layout(size: CGSize) -> CGSize {
     return child.layout(size: size.insets(by: insets)).insets(by: -insets)
   }
-  open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+  open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
     return child.views(in: frame.inset(by: -insets)).map {
       ($0.0, $0.1 + CGPoint(x: insets.left, y: insets.top))
     }
   }
+  open func getIntrinsicWidth(height: CGFloat) -> CGFloat {
+    let vInsets = insets.bottom + insets.top
+    let hInsets = insets.left + insets.right
+    return child.getIntrinsicWidth(height: height - vInsets) + hInsets
+  }
+  open func getIntrinsicHeight(width: CGFloat) -> CGFloat {
+    let vInsets = insets.bottom + insets.top
+    let hInsets = insets.left + insets.right
+    return child.getIntrinsicHeight(width: width - hInsets) + vInsets
+  }
 }
 
 open class BaseViewProvider<View: UIView>: ViewProvider {
-
   public var key: String
 
   public typealias ViewGenerator = () -> View
@@ -203,5 +280,13 @@ open class BaseViewProvider<View: UIView>: ViewProvider {
 
   public func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
     return [(self, CGRect(origin: .zero, size: _size))]
+  }
+
+  public func getIntrinsicWidth(height: CGFloat) -> CGFloat {
+    return 0
+  }
+
+  public func getIntrinsicHeight(width: CGFloat) -> CGFloat {
+    return 0
   }
 }

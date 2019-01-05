@@ -52,38 +52,50 @@ class ViewController: UIViewController {
                                          alpha: 1)
         },
         size: {
-          CGSize(width: $0.width, height: 100 + (data == 0 ? 30 : 0))
+          CGSize(width: 100 + (data == 0 ? 30 : 0), height: $0.height)
         })
     }
     collectionView.provider = InsetLayoutProvider(
-      insets: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50),
-      child: WaterfallLayoutProvider(
-        children: [
-          BaseViewProvider(
-            key: "ndad",
-            animator: nil,
+      insets: UIEdgeInsets(top: 50, left: 0, bottom: 50, right: 0),
+      child: FlexLayout(
+        children: (0..<3).map { data in
+          BaseViewProvider(key: "test-\(data)",
             update: { (view: UILabel) in
-              view.backgroundColor = .red
+              view.text = "\(data)"
+              view.backgroundColor = UIColor(hue: CGFloat(data) / 30,
+                                             saturation: 0.68,
+                                             brightness: 0.98,
+                                             alpha: 1)
             },
-            size: { maxSize in
-              CGSize(width: maxSize.width, height: 100)
-            })
-        ] + labels + [
-          WaterfallLayoutProvider(
-            children: (0..<6).map { data in
-              BaseViewProvider(key: "test-\(data)",
-                update: { (view: UILabel) in
-                  view.text = "\(data)"
-                  view.backgroundColor = UIColor(hue: CGFloat(data) / 30,
-                                                 saturation: 0.68,
-                                                 brightness: 0.98,
-                                                 alpha: 1)
-              },
-                size: {
-                  CGSize(width: $0.width, height: 100 + (data == 0 ? 30 : 0))
-              })
+            size: { _ in
+              CGSize(width: 30, height: 50)
           })
-        ]
+        } + [
+            Flex(child: BaseViewProvider(key: "test-flex",
+              update: { (view: UILabel) in
+                view.text = "F"
+                view.backgroundColor = UIColor(hue: CGFloat(10) / 30,
+                                               saturation: 0.68,
+                                               brightness: 0.98,
+                                               alpha: 1)
+              },
+              size: {
+                CGSize(width: $0.width, height: 50)
+              })
+            ),
+
+            Flex(flex: 2, child: BaseViewProvider(key: "test-flex2",
+                                         update: { (view: UILabel) in
+                                          view.text = "F2"
+                                          view.backgroundColor = UIColor(hue: CGFloat(15) / 30,
+                                                                         saturation: 0.68,
+                                                                         brightness: 0.98,
+                                                                         alpha: 1)
+                                         },
+                                         size: {
+                                          CGSize(width: $0.width, height: 50)
+            }))
+          ]
       )
     )
   }
