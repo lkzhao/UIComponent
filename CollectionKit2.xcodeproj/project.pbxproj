@@ -19,7 +19,7 @@
 		A304894221C35F2F0026EDA7 /* CollectionReuseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304894121C35F2F0026EDA7 /* CollectionReuseManager.swift */; };
 		A31FEA3E21DD1CDA008D7667 /* FlexLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31FEA3D21DD1CDA008D7667 /* FlexLayout.swift */; };
 		A31FEA4021DD1D14008D7667 /* LayoutHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31FEA3F21DD1D14008D7667 /* LayoutHelper.swift */; };
-		A31FEA4221E12BF8008D7667 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31FEA4121E12BF8008D7667 /* Box.swift */; };
+		A31FEA4421E445C5008D7667 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31FEA4321E445C5008D7667 /* FlowLayout.swift */; };
 		A3881A6121D595B00088FA90 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6021D595B00088FA90 /* Animator.swift */; };
 		A3881A6321D59C640088FA90 /* AnimatedReloadAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */; };
 /* End PBXBuildFile section */
@@ -39,7 +39,7 @@
 		A304894121C35F2F0026EDA7 /* CollectionReuseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionReuseManager.swift; sourceTree = "<group>"; };
 		A31FEA3D21DD1CDA008D7667 /* FlexLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexLayout.swift; sourceTree = "<group>"; };
 		A31FEA3F21DD1D14008D7667 /* LayoutHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutHelper.swift; sourceTree = "<group>"; };
-		A31FEA4121E12BF8008D7667 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
+		A31FEA4321E445C5008D7667 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		A3881A6021D595B00088FA90 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedReloadAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,7 +94,7 @@
 				A3881A6021D595B00088FA90 /* Animator.swift */,
 				A304893F21C347420026EDA7 /* Provider.swift */,
 				A31FEA3D21DD1CDA008D7667 /* FlexLayout.swift */,
-				A31FEA4121E12BF8008D7667 /* Box.swift */,
+				A31FEA4321E445C5008D7667 /* FlowLayout.swift */,
 				A31FEA3F21DD1D14008D7667 /* LayoutHelper.swift */,
 				A304893B21C3472E0026EDA7 /* UIScrollView+CollectionKit.swift */,
 				A304893C21C3472E0026EDA7 /* Util.swift */,
@@ -174,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A31FEA3E21DD1CDA008D7667 /* FlexLayout.swift in Sources */,
+				A31FEA4421E445C5008D7667 /* FlowLayout.swift in Sources */,
 				A304893D21C3472E0026EDA7 /* UIScrollView+CollectionKit.swift in Sources */,
 				A304893A21C347190026EDA7 /* CollectionView.swift in Sources */,
 				A304894221C35F2F0026EDA7 /* CollectionReuseManager.swift in Sources */,
@@ -182,7 +183,6 @@
 				A31FEA4021DD1D14008D7667 /* LayoutHelper.swift in Sources */,
 				A3881A6321D59C640088FA90 /* AnimatedReloadAnimator.swift in Sources */,
 				A3881A6121D595B00088FA90 /* Animator.swift in Sources */,
-				A31FEA4221E12BF8008D7667 /* Box.swift in Sources */,
 				A304894021C347420026EDA7 /* Provider.swift in Sources */,
 				A304892821C347010026EDA7 /* AppDelegate.swift in Sources */,
 			);
