@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class Flex: SingleChildProvider {
+open class Flex: SingleChildProvider {
   var flex: CGFloat
 
   init(flex: CGFloat = 1, child: Provider) {
@@ -17,15 +17,15 @@ public class Flex: SingleChildProvider {
   }
 }
 
-public class FlexLayout: SortedLayoutProvider {
-  public var spacing: CGFloat
-  public var alignItems: AlignItem
-  public var justifyContent: JustifyContent
+open class FlexLayout: SortedLayoutProvider {
+  open var spacing: CGFloat
+  open var alignItems: AlignItem
+  open var justifyContent: JustifyContent
 
   /// always stretch filling item to fill empty space even if child returns a smaller size
-  public var alwaysFillEmptySpaces: Bool = true
+  open var alwaysFillEmptySpaces: Bool = true
 
-  public override var isImplementedInVertical: Bool {
+  open override var isImplementedInVertical: Bool {
     return false
   }
 
@@ -39,7 +39,7 @@ public class FlexLayout: SortedLayoutProvider {
     super.init(children: children)
   }
 
-  public override func simpleLayout(size: CGSize) -> [CGRect] {
+  open override func simpleLayout(size: CGSize) -> [CGRect] {
     let (sizes, totalWidth) = getCellSizes(size: size)
 
     let (offset, distributedSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
@@ -88,5 +88,20 @@ extension FlexLayout {
     }
 
     return (sizes, freezedWidth - spacings)
+  }
+}
+
+public typealias RowLayout = FlexLayout
+
+open class ColumnLayout: FlexLayout {
+  public override init(spacing: CGFloat = 0,
+              justifyContent: JustifyContent = .start,
+              alignItems: AlignItem = .start,
+              children: [Provider]) {
+    super.init(spacing: spacing,
+               justifyContent: justifyContent,
+               alignItems: alignItems,
+               children: children)
+    self.transposed = true
   }
 }

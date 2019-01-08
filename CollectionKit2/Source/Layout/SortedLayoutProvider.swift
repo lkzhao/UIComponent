@@ -20,8 +20,8 @@ open class SortedLayoutProvider: LayoutProvider {
     }
   }
 
-  open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-    var result = [(ViewProvider, CGRect)]()
+  open func visibleIndexes(in frame: CGRect) -> [Int] {
+    var results = [Int]()
     if transposed == isImplementedInVertical {
       var index = frames.binarySearch { $0.minX < frame.minX - maxFrameLength }
       while index < frames.count {
@@ -30,11 +30,7 @@ open class SortedLayoutProvider: LayoutProvider {
           break
         }
         if childFrame.maxX > frame.minX {
-          let child = children[index]
-          let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map {
-            ($0.0, CGRect(origin: $0.1.origin + childFrame.origin, size: $0.1.size))
-          }
-          result.append(contentsOf: childResult)
+          results.append(index)
         }
         index += 1
       }
@@ -46,16 +42,24 @@ open class SortedLayoutProvider: LayoutProvider {
           break
         }
         if childFrame.maxY > frame.minY {
-          let child = children[index]
-          let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map {
-            ($0.0, CGRect(origin: $0.1.origin + childFrame.origin, size: $0.1.size))
-          }
-          result.append(contentsOf: childResult)
+          results.append(index)
         }
         index += 1
       }
     }
+    return results
+  }
 
+  open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+    var result = [(ViewProvider, CGRect)]()
+    for index in visibleIndexes(in: frame) {
+      let child = children[index]
+      let childFrame = frames[index]
+      let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map {
+        ($0.0, CGRect(origin: $0.1.origin + childFrame.origin, size: $0.1.size))
+      }
+      result.append(contentsOf: childResult)
+    }
     return result
   }
 }

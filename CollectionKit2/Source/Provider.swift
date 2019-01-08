@@ -16,7 +16,7 @@ public protocol Provider {
   func getIntrinsicHeight(width: CGFloat) -> CGFloat
 }
 
-public protocol ViewProvider: Provider {
+public protocol ViewProvider: class, Provider {
   var key: String { get }
   var animator: Animator? { get }
   func construct() -> UIView

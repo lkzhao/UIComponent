@@ -33,16 +33,17 @@ class ViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    collectionView.animator = AnimatedReloadAnimator()
     view.addSubview(collectionView)
     reloadButton.addTarget(self, action: #selector(reload), for: .touchUpInside)
     view.addSubview(reloadButton)
     reload()
   }
 
+  let labelAnimator = AnimatedReloadAnimator()
   @objc func reload() {
     let labels: [Provider] = (data[currentDataIndex]).map { data in
       ClosureViewProvider(key: "\(data)",
+        animator: labelAnimator,
         update: { (view: UILabel) in
           view.text = "\(data)"
           view.backgroundColor = UIColor(hue: CGFloat(data) / 30,
@@ -95,11 +96,37 @@ class ViewController: UIViewController {
           }))
       ]
     )
-    let flow = FlowLayout(children:[flex] + labels)
-    flow.transposed = true
+    let flow = FlowLayout(children:labels)
+    let extra: [Provider] = (0..<15).map { data in
+      ClosureViewProvider(key: "test-sticky-\(data)",
+        update: { (view: UILabel) in
+          view.text = "\(data)"
+          view.backgroundColor = UIColor(hue: CGFloat(data) / 30,
+                                         saturation: 0.68,
+                                         brightness: 0.98,
+                                         alpha: 1)
+      },
+        size: { _ in
+          CGSize(width: 30, height: 50)
+      })
+    }
     collectionView.provider = InsetLayoutProvider(
       insets: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50),
-      child: flow
+      child: StickyColumnLayout(children: [
+          Sticky(child: flex),
+          flow,
+          Sticky(child: ClosureViewProvider(key: "test-sticky2",
+                                            update: { (view: UILabel) in
+                                              view.text = "S1"
+                                              view.backgroundColor = UIColor(hue: CGFloat(30) / 30,
+                                                                             saturation: 0.68,
+                                                                             brightness: 0.98,
+                                                                             alpha: 1)
+                                            },
+                                            size: { _ in
+                                              CGSize(width: 100, height: 50)
+          })),
+          ] + extra)
     )
   }
 
