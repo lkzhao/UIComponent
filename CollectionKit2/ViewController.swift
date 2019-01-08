@@ -42,7 +42,7 @@ class ViewController: UIViewController {
 
   @objc func reload() {
     let labels: [Provider] = (data[currentDataIndex]).map { data in
-      BaseViewProvider(key: "\(data)",
+      ClosureViewProvider(key: "\(data)",
         update: { (view: UILabel) in
           view.text = "\(data)"
           view.backgroundColor = UIColor(hue: CGFloat(data) / 30,
@@ -57,7 +57,7 @@ class ViewController: UIViewController {
     currentDataIndex = (currentDataIndex + 1) % data.count
     let flex = FlexLayout(
       children: (0..<3).map { data in
-        BaseViewProvider(key: "test-\(data)",
+        ClosureViewProvider(key: "test-\(data)",
           update: { (view: UILabel) in
             view.text = "\(data)"
             view.backgroundColor = UIColor(hue: CGFloat(data) / 30,
@@ -69,7 +69,7 @@ class ViewController: UIViewController {
             CGSize(width: 30, height: 50)
         })
         } + [
-          Flex(child: BaseViewProvider(key: "test-flex",
+          Flex(child: ClosureViewProvider(key: "test-flex",
                                        update: { (view: UILabel) in
                                         view.text = "F"
                                         view.backgroundColor = UIColor(hue: CGFloat(10) / 30,
@@ -82,7 +82,7 @@ class ViewController: UIViewController {
           })
           ),
 
-          Flex(flex: 2, child: BaseViewProvider(key: "test-flex2",
+          Flex(flex: 2, child: ClosureViewProvider(key: "test-flex2",
                                                 update: { (view: UILabel) in
                                                   view.text = "F2"
                                                   view.backgroundColor = UIColor(hue: CGFloat(15) / 30,
