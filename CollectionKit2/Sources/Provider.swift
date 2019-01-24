@@ -11,9 +11,6 @@ import UIKit
 public protocol Provider {
   func layout(size: CGSize) -> CGSize
   func views(in frame: CGRect) -> [(ViewProvider, CGRect)]
-
-  func getIntrinsicWidth(height: CGFloat) -> CGFloat
-  func getIntrinsicHeight(width: CGFloat) -> CGFloat
 }
 
 public protocol ViewProvider: class, Provider {
@@ -25,7 +22,7 @@ public protocol ViewProvider: class, Provider {
 
 open class MultiChildProvider: Provider {
   open var children: [Provider] = []
-  init(children: [Provider]) {
+  public init(children: [Provider]) {
     self.children = children
   }
   open func layout(size: CGSize) -> CGSize {
@@ -34,17 +31,11 @@ open class MultiChildProvider: Provider {
   open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
     return []
   }
-  open func getIntrinsicHeight(width: CGFloat) -> CGFloat {
-    return 0
-  }
-  open func getIntrinsicWidth(height: CGFloat) -> CGFloat {
-    return 0
-  }
 }
 
 open class SingleChildProvider: Provider {
   open var child: Provider
-  init(child: Provider) {
+  public init(child: Provider) {
     self.child = child
   }
   open func layout(size: CGSize) -> CGSize {
@@ -52,11 +43,5 @@ open class SingleChildProvider: Provider {
   }
   open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
     return child.views(in: frame)
-  }
-  open func getIntrinsicHeight(width: CGFloat) -> CGFloat {
-    return child.getIntrinsicHeight(width: width)
-  }
-  open func getIntrinsicWidth(height: CGFloat) -> CGFloat {
-    return child.getIntrinsicWidth(height: height)
   }
 }

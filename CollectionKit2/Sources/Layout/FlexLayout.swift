@@ -9,9 +9,9 @@
 import UIKit
 
 open class Flex: SingleChildProvider {
-  var flex: CGFloat
+  public var flex: CGFloat
 
-  init(flex: CGFloat = 1, child: Provider) {
+  public init(flex: CGFloat = 1, child: Provider) {
     self.flex = flex
     super.init(child: child)
   }

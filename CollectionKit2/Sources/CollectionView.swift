@@ -136,8 +136,10 @@ open class CollectionView: UIScrollView {
                                                     frame: frame)
         }
       } else {
-        cell = (viewProvider.animator ?? animator).dequeue(viewProvider.construct())
+        cell = viewProvider.construct()
         viewProvider.update(view: cell)
+        cell.bounds.size = frame.bounds.size
+        cell.center = frame.center
         (viewProvider.animator ?? animator).insert(collectionView: self,
                                                    view: cell,
                                                    frame: frame)

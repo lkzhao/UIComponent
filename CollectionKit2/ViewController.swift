@@ -110,7 +110,7 @@ class ViewController: UIViewController {
           CGSize(width: 30, height: 50)
       })
     }
-    collectionView.provider = InsetLayoutProvider(
+    collectionView.provider = VisibleFrameInset(
       insets: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50),
       child: StickyColumnLayout(children: [
           Sticky(child: flex),

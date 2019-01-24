@@ -22,11 +22,13 @@ open class ClosureViewProvider<View: UIView>: ViewProvider {
 
   public init(key: String = UUID().uuidString,
               animator: Animator? = nil,
+              generate: ViewGenerator? = nil,
               update: ViewUpdater?,
               size: SizeGenerator?) {
     self.key = key
     self.animator = animator
     self.viewUpdater = update
+    self.viewGenerator = generate
     self.sizeSource = size
   }
 
@@ -55,14 +57,6 @@ open class ClosureViewProvider<View: UIView>: ViewProvider {
 
   public func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
     return [(self, CGRect(origin: .zero, size: _size))]
-  }
-
-  public func getIntrinsicWidth(height: CGFloat) -> CGFloat {
-    return 0
-  }
-
-  public func getIntrinsicHeight(width: CGFloat) -> CGFloat {
-    return 0
   }
 }
 

@@ -30,13 +30,13 @@ class AnimatedReloadAnimator: Animator {
         view.alpha = 0
       }, completion: { _ in
         if !collectionView.visibleCells.contains(view) {
-          self.queue(view: view)
           view.transform = CGAffineTransform.identity
           view.alpha = 1
+          view.recycleForCollectionKitReuse()
         }
       })
     } else {
-      queue(view: view)
+      view.recycleForCollectionKitReuse()
     }
   }
 

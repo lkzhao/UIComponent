@@ -26,6 +26,8 @@
 		A31FEA4D21E448E0008D7667 /* InsetLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31FEA4C21E448E0008D7667 /* InsetLayout.swift */; };
 		A31FEA4F21E44981008D7667 /* ClosureViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31FEA4E21E44981008D7667 /* ClosureViewProvider.swift */; };
 		A31FEA5121E44A34008D7667 /* StickyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31FEA5021E44A34008D7667 /* StickyLayout.swift */; };
+		A31FEA5321E462AB008D7667 /* VisibleFrameInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31FEA5221E462AB008D7667 /* VisibleFrameInset.swift */; };
+		A327227021F9328F00FBB493 /* UIView+CollectionKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A327226F21F9328F00FBB493 /* UIView+CollectionKit.swift */; };
 		A3881A6121D595B00088FA90 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6021D595B00088FA90 /* Animator.swift */; };
 		A3881A6321D59C640088FA90 /* AnimatedReloadAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */; };
 /* End PBXBuildFile section */
@@ -52,6 +54,8 @@
 		A31FEA4C21E448E0008D7667 /* InsetLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetLayout.swift; sourceTree = "<group>"; };
 		A31FEA4E21E44981008D7667 /* ClosureViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosureViewProvider.swift; sourceTree = "<group>"; };
 		A31FEA5021E44A34008D7667 /* StickyLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyLayout.swift; sourceTree = "<group>"; };
+		A31FEA5221E462AB008D7667 /* VisibleFrameInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibleFrameInset.swift; sourceTree = "<group>"; };
+		A327226F21F9328F00FBB493 /* UIView+CollectionKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+CollectionKit.swift"; sourceTree = "<group>"; };
 		A3881A6021D595B00088FA90 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedReloadAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -89,7 +93,7 @@
 				A304892721C347010026EDA7 /* AppDelegate.swift */,
 				A304892921C347010026EDA7 /* ViewController.swift */,
 				A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */,
-				A3881A6621D5CA330088FA90 /* Source */,
+				A3881A6621D5CA330088FA90 /* Sources */,
 				A304892B21C347010026EDA7 /* Main.storyboard */,
 				A304892E21C347020026EDA7 /* Assets.xcassets */,
 				A304893021C347020026EDA7 /* LaunchScreen.storyboard */,
@@ -105,6 +109,7 @@
 				A31FEA4A21E44871008D7667 /* SortedLayoutProvider.swift */,
 				A31FEA3D21DD1CDA008D7667 /* FlexLayout.swift */,
 				A31FEA5021E44A34008D7667 /* StickyLayout.swift */,
+				A31FEA5221E462AB008D7667 /* VisibleFrameInset.swift */,
 				A31FEA4321E445C5008D7667 /* FlowLayout.swift */,
 				A31FEA4C21E448E0008D7667 /* InsetLayout.swift */,
 				A31FEA4621E44848008D7667 /* WaterfallLayout.swift */,
@@ -113,7 +118,7 @@
 			path = Layout;
 			sourceTree = "<group>";
 		};
-		A3881A6621D5CA330088FA90 /* Source */ = {
+		A3881A6621D5CA330088FA90 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				A304893921C347190026EDA7 /* CollectionView.swift */,
@@ -123,9 +128,10 @@
 				A31FEA4E21E44981008D7667 /* ClosureViewProvider.swift */,
 				A31FEA4521E44837008D7667 /* Layout */,
 				A304893B21C3472E0026EDA7 /* UIScrollView+CollectionKit.swift */,
+				A327226F21F9328F00FBB493 /* UIView+CollectionKit.swift */,
 				A304893C21C3472E0026EDA7 /* Util.swift */,
 			);
-			path = Source;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,6 +208,7 @@
 				A31FEA3E21DD1CDA008D7667 /* FlexLayout.swift in Sources */,
 				A31FEA4421E445C5008D7667 /* FlowLayout.swift in Sources */,
 				A304893D21C3472E0026EDA7 /* UIScrollView+CollectionKit.swift in Sources */,
+				A31FEA5321E462AB008D7667 /* VisibleFrameInset.swift in Sources */,
 				A304893A21C347190026EDA7 /* CollectionView.swift in Sources */,
 				A31FEA4F21E44981008D7667 /* ClosureViewProvider.swift in Sources */,
 				A304894221C35F2F0026EDA7 /* CollectionReuseManager.swift in Sources */,
@@ -215,6 +222,7 @@
 				A31FEA4921E44854008D7667 /* LayoutProvider.swift in Sources */,
 				A304894021C347420026EDA7 /* Provider.swift in Sources */,
 				A31FEA4D21E448E0008D7667 /* InsetLayout.swift in Sources */,
+				A327227021F9328F00FBB493 /* UIView+CollectionKit.swift in Sources */,
 				A31FEA4B21E44871008D7667 /* SortedLayoutProvider.swift in Sources */,
 				A304892821C347010026EDA7 /* AppDelegate.swift in Sources */,
 			);
