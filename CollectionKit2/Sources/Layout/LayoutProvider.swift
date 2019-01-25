@@ -21,10 +21,15 @@ open class LayoutProvider: MultiChildProvider {
   }
 
   open func getSize(child: Provider, maxSize: CGSize) -> CGSize {
+    let size: CGSize
     if transposed {
-      return child.layout(size: maxSize.transposed).transposed
+      size = child.layout(size: maxSize.transposed).transposed
+    } else {
+      size = child.layout(size: maxSize)
     }
-    return child.layout(size: maxSize)
+    assert(size.width.isFinite, "\(child)'s width is invalid")
+    assert(size.height.isFinite, "\(child)'s height is invalid")
+    return size
   }
 
   open override func layout(size: CGSize) -> CGSize {

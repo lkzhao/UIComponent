@@ -28,24 +28,31 @@ struct LayoutHelper {
     -> [CGRect] where SizeArray.Iterator.Element == CGSize {
       var frames: [CGRect] = []
       var offset = startingPrimaryOffset
+      var range = secondaryRange
+      if range.upperBound == .infinity, alignItems != .start {
+        let upperBound = sizes.max(by: { (a, b) in
+          a.height < b.height
+        })?.height ?? 0
+        range = range.lowerBound...upperBound
+      }
       for cellSize in sizes {
         let cellFrame: CGRect
         switch alignItems {
         case .start:
-          cellFrame = CGRect(origin: CGPoint(x: offset, y: secondaryRange.lowerBound), size: cellSize)
+          cellFrame = CGRect(origin: CGPoint(x: offset, y: range.lowerBound), size: cellSize)
         case .end:
           cellFrame = CGRect(origin: CGPoint(x: offset,
-                                             y: secondaryRange.upperBound - cellSize.height),
+                                             y: range.upperBound - cellSize.height),
                              size: cellSize)
         case .center:
-          let secondaryOffset = secondaryRange.lowerBound +
-            (secondaryRange.upperBound - secondaryRange.lowerBound - cellSize.height) / 2
+          let secondaryOffset = range.lowerBound +
+            (range.upperBound - range.lowerBound - cellSize.height) / 2
           cellFrame = CGRect(origin: CGPoint(x: offset, y: secondaryOffset),
                              size: cellSize)
         case .stretch:
-          cellFrame = CGRect(origin: CGPoint(x: offset, y: secondaryRange.lowerBound),
+          cellFrame = CGRect(origin: CGPoint(x: offset, y: range.lowerBound),
                              size: CGSize(width: cellSize.width,
-                                          height: secondaryRange.upperBound - secondaryRange.lowerBound))
+                                          height: range.upperBound - range.lowerBound))
         }
         frames.append(cellFrame)
         offset += cellSize.width + spacing
@@ -61,7 +68,8 @@ struct LayoutHelper {
     var offset: CGFloat = 0
     var spacing = minimunSpacing
     guard numberOfItems > 0 else { return (offset, spacing) }
-    if totalPrimary + CGFloat(numberOfItems - 1) * minimunSpacing < maxPrimary {
+    if maxPrimary != .infinity,
+      totalPrimary + CGFloat(numberOfItems - 1) * minimunSpacing < maxPrimary {
       let leftOverPrimary = maxPrimary - totalPrimary
       switch justifyContent {
       case .start:

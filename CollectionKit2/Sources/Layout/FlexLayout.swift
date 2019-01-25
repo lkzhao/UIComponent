@@ -71,7 +71,8 @@ extension FlexLayout {
         fillIndexes.append(i)
         sizes.append(.zero)
       } else {
-        let size = getSize(child: child, maxSize: size)
+        let size = getSize(child: child, maxSize: CGSize(width: .infinity,
+                                                         height: size.height))
         sizes.append(size)
         freezedWidth += size.width
       }

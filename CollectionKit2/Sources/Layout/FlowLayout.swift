@@ -46,7 +46,7 @@ public class FlowLayout: SortedLayoutProvider {
   public override func simpleLayout(size: CGSize) -> [CGRect] {
     var frames: [CGRect] = []
 
-    let sizes = children.map { getSize(child: $0, maxSize: size) }
+    let sizes = children.map { getSize(child: $0, maxSize: CGSize(width: size.width, height: .infinity)) }
     let (totalHeight, lineData) = distributeLines(sizes: sizes, maxWidth: size.width)
 
     var (yOffset, spacing) = LayoutHelper.distribute(justifyContent: alignContent,

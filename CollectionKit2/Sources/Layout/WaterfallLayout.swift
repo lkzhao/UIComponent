@@ -35,7 +35,7 @@ public class WaterfallLayout: SortedLayoutProvider {
     }
 
     for child in children {
-      var cellSize = getSize(child: child, maxSize: CGSize(width: columnWidth, height: size.height))
+      var cellSize = getSize(child: child, maxSize: CGSize(width: columnWidth, height: .infinity))
       cellSize = CGSize(width: columnWidth, height: cellSize.height)
       let (columnIndex, offsetY) = getMinColomn()
       columnHeight[columnIndex] += cellSize.height + spacing
