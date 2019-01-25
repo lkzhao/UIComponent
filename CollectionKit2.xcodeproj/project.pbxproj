@@ -32,6 +32,7 @@
 		A327227421FAA5B800FBB493 /* FitViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A327227321FAA5B800FBB493 /* FitViewProvider.swift */; };
 		A327227621FAA5D400FBB493 /* FillViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A327227521FAA5D400FBB493 /* FillViewProvider.swift */; };
 		A327227821FAA5EB00FBB493 /* SpaceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A327227721FAA5EB00FBB493 /* SpaceProvider.swift */; };
+		A327227C21FABF6500FBB493 /* SimpleViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A327227B21FABF6500FBB493 /* SimpleViewProvider.swift */; };
 		A3881A6121D595B00088FA90 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6021D595B00088FA90 /* Animator.swift */; };
 		A3881A6321D59C640088FA90 /* AnimatedReloadAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */; };
 /* End PBXBuildFile section */
@@ -64,6 +65,7 @@
 		A327227321FAA5B800FBB493 /* FitViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitViewProvider.swift; sourceTree = "<group>"; };
 		A327227521FAA5D400FBB493 /* FillViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillViewProvider.swift; sourceTree = "<group>"; };
 		A327227721FAA5EB00FBB493 /* SpaceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceProvider.swift; sourceTree = "<group>"; };
+		A327227B21FABF6500FBB493 /* SimpleViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleViewProvider.swift; sourceTree = "<group>"; };
 		A3881A6021D595B00088FA90 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedReloadAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +137,7 @@
 				A3881A6021D595B00088FA90 /* Animator.swift */,
 				A304893F21C347420026EDA7 /* Provider.swift */,
 				A31FEA4E21E44981008D7667 /* ClosureViewProvider.swift */,
+				A327227B21FABF6500FBB493 /* SimpleViewProvider.swift */,
 				A327227321FAA5B800FBB493 /* FitViewProvider.swift */,
 				A327227521FAA5D400FBB493 /* FillViewProvider.swift */,
 				A327227721FAA5EB00FBB493 /* SpaceProvider.swift */,
@@ -237,6 +240,7 @@
 				A3881A6121D595B00088FA90 /* Animator.swift in Sources */,
 				A31FEA4921E44854008D7667 /* LayoutProvider.swift in Sources */,
 				A304894021C347420026EDA7 /* Provider.swift in Sources */,
+				A327227C21FABF6500FBB493 /* SimpleViewProvider.swift in Sources */,
 				A31FEA4D21E448E0008D7667 /* InsetLayout.swift in Sources */,
 				A327227021F9328F00FBB493 /* UIView+CollectionKit.swift in Sources */,
 				A31FEA4B21E44871008D7667 /* SortedLayoutProvider.swift in Sources */,

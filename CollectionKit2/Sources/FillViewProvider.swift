@@ -8,15 +8,16 @@
 
 import UIKit
 
-public class FillViewProvider: FitViewProvider {
-  public override func layout(size: CGSize) -> CGSize {
-    _size = size
-    if let width = width {
-      _size.width = width
-    }
-    if let height = height {
-      _size.height = height
-    }
-    return _size
+public class FillViewProvider: SimpleViewProvider {
+  public init(
+    key: String = UUID().uuidString,
+    animator: Animator? = nil,
+    width: CGFloat? = nil,
+    height: CGFloat? = nil,
+    view: UIView) {
+    super.init(key: key, animator: animator,
+               width: width == nil ? .fill : .absolute(width!),
+               height: height == nil ? .fill : .absolute(height!),
+               view: view)
   }
 }
