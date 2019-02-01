@@ -29,6 +29,7 @@ open class CollectionReuseManager: NSObject {
 
   public func queue(identifier id: String? = nil,
                     view: UIView) {
+    view.reuseManager = nil
     let identifier = id ?? NSStringFromClass(type(of: view))
     if removeFromCollectionViewWhenReuse {
       view.removeFromSuperview()
@@ -58,6 +59,7 @@ open class CollectionReuseManager: NSObject {
     if !removeFromCollectionViewWhenReuse {
       view.isHidden = false
     }
+    view.reuseManager = self
     return view
   }
 

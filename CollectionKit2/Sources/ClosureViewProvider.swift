@@ -19,20 +19,27 @@ open class ClosureViewProvider<View: UIView>: ViewProvider {
   public var viewGenerator: ViewGenerator?
   public var viewUpdater: ViewUpdater?
   public var sizeSource: SizeGenerator?
+  public var reuseManager: CollectionReuseManager?
 
   public init(key: String = UUID().uuidString,
               animator: Animator? = nil,
+              reuseManager: CollectionReuseManager? = nil,
               generate: ViewGenerator? = nil,
               update: ViewUpdater?,
               size: SizeGenerator?) {
     self.key = key
     self.animator = animator
+    self.reuseManager = reuseManager
     self.viewUpdater = update
     self.viewGenerator = generate
     self.sizeSource = size
   }
 
   public func construct() -> UIView {
+    return reuseManager?.dequeue(_construct()) ?? _construct()
+  }
+
+  private func _construct() -> UIView {
     if let viewGenerator = viewGenerator {
       return viewGenerator()
     } else {

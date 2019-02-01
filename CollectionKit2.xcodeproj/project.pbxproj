@@ -87,7 +87,9 @@
 				A304892621C347010026EDA7 /* CollectionKit2 */,
 				A304892521C347010026EDA7 /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		A304892521C347010026EDA7 /* Products */ = {
 			isa = PBXGroup;
