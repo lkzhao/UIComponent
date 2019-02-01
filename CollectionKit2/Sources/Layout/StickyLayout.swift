@@ -60,7 +60,8 @@ public class StickyRowLayout: RowLayout {
                                    y: stickyChildFrame.origin.y)
         }
       }
-      let stickyChildResult = children[stickyIndex].views(in: CGRect(origin: .zero, size: frame.size)).map {
+      let adjustedFrame = stickyChildFrame - stickyChildFrame.origin + pushedPosition
+      let stickyChildResult = children[stickyIndex].views(in: frame.intersection(adjustedFrame) - pushedPosition).map {
         ($0.0, CGRect(origin: $0.1.origin + pushedPosition, size: $0.1.size))
       }
       result.append(contentsOf: stickyChildResult)

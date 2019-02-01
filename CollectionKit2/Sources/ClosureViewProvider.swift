@@ -56,7 +56,11 @@ open class ClosureViewProvider<View: UIView>: ViewProvider {
   }
 
   public func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-    return [(self, CGRect(origin: .zero, size: _size))]
+    let childFrame = CGRect(origin: .zero, size: _size)
+    if frame.intersects(childFrame) {
+        return [(self, childFrame)]
+    }
+    return []
   }
 }
 
