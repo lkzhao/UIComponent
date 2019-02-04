@@ -10,10 +10,18 @@ import UIKit
 
 open class LayoutProvider: MultiChildProvider {
   public private(set) var frames: [CGRect] = []
-  open var transposed = false
+  open var isTransposed: Bool { return false }
 
   open func simpleLayout(size: CGSize) -> [CGRect] {
     fatalError("Subclass should provide its own layout")
+  }
+
+  open func simpleLayoutWithCustomSize(size: CGSize) -> ([CGRect], CGSize) {
+    let frames = simpleLayout(size: size)
+    let contentSize = frames.reduce(CGRect.zero) { (old, item) in
+      old.union(item)
+      }.size
+    return (frames, contentSize)
   }
 
   open func doneLayout() {
@@ -22,7 +30,7 @@ open class LayoutProvider: MultiChildProvider {
 
   open func getSize(child: Provider, maxSize: CGSize) -> CGSize {
     let size: CGSize
-    if transposed {
+    if isTransposed {
       size = child.layout(size: maxSize.transposed).transposed
     } else {
       size = child.layout(size: maxSize)
@@ -33,14 +41,16 @@ open class LayoutProvider: MultiChildProvider {
   }
 
   open override func layout(size: CGSize) -> CGSize {
-    if transposed {
-      frames = simpleLayout(size: size.transposed).map { $0.transposed }
+    let contentSize: CGSize
+    if isTransposed {
+      let (_frames, _contentSize) = simpleLayoutWithCustomSize(size: size.transposed)
+      frames = _frames.map { $0.transposed }
+      contentSize = _contentSize.transposed
     } else {
-      frames = simpleLayout(size: size)
+      let (_frames, _contentSize) = simpleLayoutWithCustomSize(size: size)
+      frames = _frames
+      contentSize = _contentSize
     }
-    let contentSize = frames.reduce(CGRect.zero) { (old, item) in
-      old.union(item)
-      }.size
     doneLayout()
     return contentSize
   }

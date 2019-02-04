@@ -13,7 +13,7 @@ open class SortedLayoutProvider: LayoutProvider {
   open var isImplementedInVertical: Bool { return true }
 
   open override func doneLayout() {
-    if transposed == isImplementedInVertical {
+    if isTransposed == isImplementedInVertical {
       maxFrameLength = frames.max { $0.width < $1.width }?.width ?? 0
     } else {
       maxFrameLength = frames.max { $0.height < $1.height }?.height ?? 0
@@ -22,7 +22,7 @@ open class SortedLayoutProvider: LayoutProvider {
 
   open func visibleIndexes(in frame: CGRect) -> [Int] {
     var results = [Int]()
-    if transposed == isImplementedInVertical {
+    if isTransposed == isImplementedInVertical {
       var index = frames.binarySearch { $0.minX < frame.minX - maxFrameLength }
       while index < frames.count {
         let childFrame = frames[index]

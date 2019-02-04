@@ -68,7 +68,7 @@ public class FlowLayout: SortedLayoutProvider {
                                               startingPrimaryOffset: xOffset,
                                               spacing: lineInteritemSpacing,
                                               sizes: sizes[index..<(index+count)],
-                                              secondaryRange: yOffset...(yOffset + lineSize.height))
+                                              secondaryRange: yOffset...(yOffset + lineSize.height)).0
 
       frames.append(contentsOf: lineFrames)
 

@@ -8,9 +8,9 @@
 
 import UIKit
 
-public class WaterfallLayout: SortedLayoutProvider {
-  public var columns: Int
-  public var spacing: CGFloat
+open class WaterfallLayout: SortedLayoutProvider {
+  open var columns: Int
+  open var spacing: CGFloat
   private var columnWidth: [CGFloat] = [0, 0]
   private var maxSize = CGSize.zero
 
@@ -20,7 +20,7 @@ public class WaterfallLayout: SortedLayoutProvider {
     super.init(children: children)
   }
 
-  public override func simpleLayout(size: CGSize) -> [CGRect] {
+  open override func simpleLayout(size: CGSize) -> [CGRect] {
     var frames: [CGRect] = []
 
     let columnWidth = (size.width - CGFloat(columns - 1) * spacing) / CGFloat(columns)
@@ -49,9 +49,6 @@ public class WaterfallLayout: SortedLayoutProvider {
   }
 }
 
-class HorizontalWaterfallLayout: WaterfallLayout {
-  public override init(columns: Int = 2, spacing: CGFloat = 0, children: [Provider]) {
-    super.init(columns: columns, spacing: spacing, children: children)
-    self.transposed = true
-  }
+open class HorizontalWaterfallLayout: WaterfallLayout {
+  open override var isTransposed: Bool { return true }
 }

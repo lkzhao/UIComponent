@@ -33,6 +33,7 @@
 		A327227621FAA5D400FBB493 /* FillViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A327227521FAA5D400FBB493 /* FillViewProvider.swift */; };
 		A327227821FAA5EB00FBB493 /* SpaceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A327227721FAA5EB00FBB493 /* SpaceProvider.swift */; };
 		A327227C21FABF6500FBB493 /* SimpleViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A327227B21FABF6500FBB493 /* SimpleViewProvider.swift */; };
+		A35443BB2207B8AA0067F5C0 /* OverlayProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35443BA2207B8AA0067F5C0 /* OverlayProvider.swift */; };
 		A3881A6121D595B00088FA90 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6021D595B00088FA90 /* Animator.swift */; };
 		A3881A6321D59C640088FA90 /* AnimatedReloadAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */; };
 /* End PBXBuildFile section */
@@ -66,6 +67,7 @@
 		A327227521FAA5D400FBB493 /* FillViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillViewProvider.swift; sourceTree = "<group>"; };
 		A327227721FAA5EB00FBB493 /* SpaceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceProvider.swift; sourceTree = "<group>"; };
 		A327227B21FABF6500FBB493 /* SimpleViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleViewProvider.swift; sourceTree = "<group>"; };
+		A35443BA2207B8AA0067F5C0 /* OverlayProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayProvider.swift; sourceTree = "<group>"; };
 		A3881A6021D595B00088FA90 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedReloadAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -143,6 +145,7 @@
 				A327227321FAA5B800FBB493 /* FitViewProvider.swift */,
 				A327227521FAA5D400FBB493 /* FillViewProvider.swift */,
 				A327227721FAA5EB00FBB493 /* SpaceProvider.swift */,
+				A35443BA2207B8AA0067F5C0 /* OverlayProvider.swift */,
 				A31FEA4521E44837008D7667 /* Layout */,
 				A304893B21C3472E0026EDA7 /* UIScrollView+CollectionKit.swift */,
 				A327226F21F9328F00FBB493 /* UIView+CollectionKit.swift */,
@@ -235,6 +238,7 @@
 				A304894221C35F2F0026EDA7 /* CollectionReuseManager.swift in Sources */,
 				A304893E21C3472E0026EDA7 /* Util.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
+				A35443BB2207B8AA0067F5C0 /* OverlayProvider.swift in Sources */,
 				A31FEA4721E44848008D7667 /* WaterfallLayout.swift in Sources */,
 				A31FEA4021DD1D14008D7667 /* LayoutHelper.swift in Sources */,
 				A31FEA5121E44A34008D7667 /* StickyLayout.swift in Sources */,

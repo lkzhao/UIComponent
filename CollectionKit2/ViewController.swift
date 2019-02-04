@@ -110,24 +110,57 @@ class ViewController: UIViewController {
           CGSize(width: 30, height: 50)
       })
     }
-    collectionView.provider = VisibleFrameInset(
-      insets: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50),
-      child: StickyColumnLayout(children: [
-          Sticky(child: flex),
-          flow,
-          Sticky(child: ClosureViewProvider(key: "test-sticky2",
-                                            update: { (view: UILabel) in
-                                              view.text = "S1"
-                                              view.backgroundColor = UIColor(hue: CGFloat(30) / 30,
-                                                                             saturation: 0.68,
-                                                                             brightness: 0.98,
-                                                                             alpha: 1)
-                                            },
-                                            size: { _ in
-                                              CGSize(width: 100, height: 50)
-          })),
-          ] + extra)
+//    collectionView.provider = VisibleFrameInset(
+//      insets: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50),
+//      child: StickyColumnLayout(children: [
+//          Sticky(child: flex),
+//          flow,
+//          Sticky(child: ClosureViewProvider(key: "test-sticky2",
+//                                            update: { (view: UILabel) in
+//                                              view.text = "S1"
+//                                              view.backgroundColor = UIColor(hue: CGFloat(30) / 30,
+//                                                                             saturation: 0.68,
+//                                                                             brightness: 0.98,
+//                                                                             alpha: 1)
+//                                            },
+//                                            size: { _ in
+//                                              CGSize(width: 100, height: 50)
+//          })),
+//          ] + extra)
+//    )
+
+    let titleLabel = UILabel()
+    titleLabel.text = "Congratz!"
+    let title2Label = UILabel()
+    title2Label.text = "Congratz! Lol this"
+
+    let cardView = UIView()
+    cardView.backgroundColor = .red
+    cardView.layer.cornerRadius = 17
+
+    let card = OverlayProvider(
+      back: FillViewProvider(view: cardView),
+      front: InsetLayout(
+        insets: UIEdgeInsets(top: 20, left: 20,
+                             bottom: 20, right: 20),
+        child: ColumnLayout(
+          fitCrossAxis: true,
+          alignItems: .center,
+          children: [
+            FitViewProvider(view: titleLabel),
+            FitViewProvider(view: title2Label)
+            ])
+      )
     )
+    collectionView.provider =
+      InsetLayout(
+        insets: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20),
+        child: ColumnLayout(
+          justifyContent: .center,
+          alignItems: .start,
+          children: [
+            card
+          ]))
   }
 
   override func viewDidLayoutSubviews() {

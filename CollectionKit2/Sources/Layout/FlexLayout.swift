@@ -22,6 +22,8 @@ open class FlexLayout: SortedLayoutProvider {
   open var alignItems: AlignItem
   open var justifyContent: JustifyContent
 
+  open var fitCrossAxis: Bool
+
   /// always stretch filling item to fill empty space even if child returns a smaller size
   open var alwaysFillEmptySpaces: Bool = true
 
@@ -30,16 +32,18 @@ open class FlexLayout: SortedLayoutProvider {
   }
 
   public init(spacing: CGFloat = 0,
+              fitCrossAxis: Bool = false,
               justifyContent: JustifyContent = .start,
               alignItems: AlignItem = .start,
               children: [Provider]) {
     self.spacing = spacing
     self.justifyContent = justifyContent
     self.alignItems = alignItems
+    self.fitCrossAxis = fitCrossAxis
     super.init(children: children)
   }
 
-  open override func simpleLayout(size: CGSize) -> [CGRect] {
+  open override func simpleLayoutWithCustomSize(size: CGSize) -> ([CGRect], CGSize) {
     let (sizes, totalWidth) = getCellSizes(size: size)
 
     let (offset, distributedSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
@@ -48,11 +52,16 @@ open class FlexLayout: SortedLayoutProvider {
                                                                minimunSpacing: spacing,
                                                                numberOfItems: children.count)
 
-    let frames = LayoutHelper.alignItem(alignItems: alignItems,
-                                        startingPrimaryOffset: offset, spacing: distributedSpacing,
-                                        sizes: sizes, secondaryRange: 0...max(0, size.height))
+    var upperBound = size.height
+    if fitCrossAxis || upperBound == .infinity {
+      upperBound = sizes.max(by: { (a, b) in
+        a.height < b.height
+      })?.height ?? 0
+    }
 
-    return frames
+    return LayoutHelper.alignItem(alignItems: alignItems,
+                                  startingPrimaryOffset: offset, spacing: distributedSpacing,
+                                  sizes: sizes, secondaryRange: 0...max(0, upperBound))
   }
 }
 
@@ -95,14 +104,5 @@ extension FlexLayout {
 public typealias RowLayout = FlexLayout
 
 open class ColumnLayout: FlexLayout {
-  public override init(spacing: CGFloat = 0,
-              justifyContent: JustifyContent = .start,
-              alignItems: AlignItem = .start,
-              children: [Provider]) {
-    super.init(spacing: spacing,
-               justifyContent: justifyContent,
-               alignItems: alignItems,
-               children: children)
-    self.transposed = true
-  }
+  open override var isTransposed: Bool { return true }
 }

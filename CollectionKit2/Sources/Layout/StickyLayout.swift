@@ -14,15 +14,15 @@ public class Sticky: SingleChildProvider {
   }
 }
 
-public class StickyRowLayout: RowLayout {
+open class StickyRowLayout: RowLayout {
 
-  var stickyIndexes: [Int] = []
+  private var stickyIndexes: [Int] = []
 
-  public override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+  open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
     var result = [(ViewProvider, CGRect)]()
 
     let topFrameIndex: Int
-    if transposed {
+    if isTransposed {
       topFrameIndex = stickyIndexes.binarySearch { frames[$0].minY < frame.minY } - 1
     } else {
       topFrameIndex = stickyIndexes.binarySearch { frames[$0].minX < frame.minX } - 1
@@ -43,7 +43,7 @@ public class StickyRowLayout: RowLayout {
     if let stickyIndex = stickyIndex, stickyIndex >= 0 {
       let stickyChildFrame = frames[stickyIndex]
       let pushedPosition: CGPoint
-      if transposed {
+      if isTransposed {
         if let nextStickyIndex = stickyIndexes.get(topFrameIndex + 1) {
           pushedPosition = CGPoint(x: stickyChildFrame.origin.x,
                                    y: min(frame.minY, frames[nextStickyIndex].minY - stickyChildFrame.height))
@@ -70,22 +70,13 @@ public class StickyRowLayout: RowLayout {
     return result
   }
 
-  public override func layout(size: CGSize) -> CGSize {
+  open override func layout(size: CGSize) -> CGSize {
     let size = super.layout(size: size)
     stickyIndexes = children.enumerated().filter { $0.element is Sticky } .map { $0.offset }
     return size
   }
 }
 
-public class StickyColumnLayout: StickyRowLayout {
-  public override init(spacing: CGFloat = 0,
-                       justifyContent: JustifyContent = .start,
-                       alignItems: AlignItem = .start,
-                       children: [Provider]) {
-    super.init(spacing: spacing,
-               justifyContent: justifyContent,
-               alignItems: alignItems,
-               children: children)
-    self.transposed = true
-  }
+open class StickyColumnLayout: StickyRowLayout {
+  open override var isTransposed: Bool { return true }
 }

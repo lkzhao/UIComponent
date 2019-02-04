@@ -25,16 +25,10 @@ struct LayoutHelper {
                                              spacing: CGFloat,
                                              sizes: SizeArray,
                                              secondaryRange: ClosedRange<CGFloat>)
-    -> [CGRect] where SizeArray.Iterator.Element == CGSize {
+    -> ([CGRect], CGSize) where SizeArray.Iterator.Element == CGSize {
       var frames: [CGRect] = []
       var offset = startingPrimaryOffset
       var range = secondaryRange
-      if range.upperBound == .infinity, alignItems != .start {
-        let upperBound = sizes.max(by: { (a, b) in
-          a.height < b.height
-        })?.height ?? 0
-        range = range.lowerBound...upperBound
-      }
       for cellSize in sizes {
         let cellFrame: CGRect
         switch alignItems {
@@ -57,7 +51,7 @@ struct LayoutHelper {
         frames.append(cellFrame)
         offset += cellSize.width + spacing
       }
-      return frames
+      return (frames, CGSize(width: offset, height: range.upperBound - range.lowerBound))
   }
 
   static func distribute(justifyContent: JustifyContent,
