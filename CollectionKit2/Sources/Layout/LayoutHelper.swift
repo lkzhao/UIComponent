@@ -51,7 +51,8 @@ struct LayoutHelper {
         frames.append(cellFrame)
         offset += cellSize.width + spacing
       }
-      return (frames, CGSize(width: offset, height: range.upperBound - range.lowerBound))
+      return (frames, CGSize(width: offset - spacing,
+                             height: range.upperBound - range.lowerBound))
   }
 
   static func distribute(justifyContent: JustifyContent,
