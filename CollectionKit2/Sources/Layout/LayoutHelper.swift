@@ -28,7 +28,7 @@ struct LayoutHelper {
     -> ([CGRect], CGSize) where SizeArray.Iterator.Element == CGSize {
       var frames: [CGRect] = []
       var offset = startingPrimaryOffset
-      var range = secondaryRange
+      let range = secondaryRange
       for cellSize in sizes {
         let cellFrame: CGRect
         switch alignItems {
@@ -51,7 +51,7 @@ struct LayoutHelper {
         frames.append(cellFrame)
         offset += cellSize.width + spacing
       }
-      return (frames, CGSize(width: offset - spacing,
+      return (frames, CGSize(width: offset - (frames.isEmpty ? 0 : spacing),
                              height: range.upperBound - range.lowerBound))
   }
 
