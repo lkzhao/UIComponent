@@ -11,12 +11,14 @@ import UIKit
 open class WaterfallLayout: SortedLayoutProvider {
   open var columns: Int
   open var spacing: CGFloat
+  open var alignItems: AlignItem
   private var columnWidth: [CGFloat] = [0, 0]
   private var maxSize = CGSize.zero
 
-  public init(columns: Int = 2, spacing: CGFloat = 0, children: [Provider]) {
+  public init(columns: Int = 2, spacing: CGFloat = 0, alignItems: AlignItem = .start, children: [Provider]) {
     self.columns = columns
     self.spacing = spacing
+    self.alignItems = alignItems
     super.init(children: children)
   }
 
@@ -36,12 +38,28 @@ open class WaterfallLayout: SortedLayoutProvider {
 
     for child in children {
       var cellSize = getSize(child: child, maxSize: CGSize(width: columnWidth, height: .infinity))
-      cellSize = CGSize(width: columnWidth, height: cellSize.height)
       let (columnIndex, offsetY) = getMinColomn()
       columnHeight[columnIndex] += cellSize.height + spacing
-      let frame = CGRect(origin: CGPoint(x: CGFloat(columnIndex) * (columnWidth + spacing),
-                                         y: offsetY),
-                         size: cellSize)
+
+      let frame: CGRect
+      switch alignItems {
+      case .start:
+        frame = CGRect(origin: CGPoint(x: CGFloat(columnIndex) * (columnWidth + spacing),
+                                       y: offsetY),
+                       size: cellSize)
+      case .end:
+        frame = CGRect(origin: CGPoint(x: CGFloat(columnIndex) * (columnWidth + spacing) + columnWidth - cellSize.width,
+                                       y: offsetY),
+                       size: cellSize)
+      case .center:
+        frame = CGRect(origin: CGPoint(x: CGFloat(columnIndex) * (columnWidth + spacing) + (columnWidth - cellSize.width) / 2,
+                                       y: offsetY),
+                       size: cellSize)
+      case .stretch:
+        frame = CGRect(origin: CGPoint(x: CGFloat(columnIndex) * (columnWidth + spacing),
+                                       y: offsetY),
+                       size: CGSize(width: columnWidth, height: cellSize.height))
+      }
       frames.append(frame)
     }
 

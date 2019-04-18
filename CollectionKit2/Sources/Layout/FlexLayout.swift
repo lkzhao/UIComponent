@@ -63,11 +63,8 @@ open class FlexLayout: SortedLayoutProvider {
                                   startingPrimaryOffset: offset, spacing: distributedSpacing,
                                   sizes: sizes, secondaryRange: 0...max(0, upperBound))
   }
-}
 
-extension FlexLayout {
-
-  func getCellSizes(size: CGSize) -> (sizes: [CGSize], totalWidth: CGFloat) {
+  open func getCellSizes(size: CGSize) -> (sizes: [CGSize], totalWidth: CGFloat) {
     var sizes: [CGSize] = []
     let spacings = spacing * CGFloat(children.count - 1)
     var freezedWidth = spacings
