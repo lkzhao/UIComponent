@@ -27,6 +27,9 @@ open class FlexLayout: SortedLayoutProvider {
   /// always stretch filling item to fill empty space even if child returns a smaller size
   open var alwaysFillEmptySpaces: Bool = true
 
+  /// whether or not we pass the parent maxSize down to the children for layout
+  open var passThroughParentSize: Bool = false
+
   open override var isImplementedInVertical: Bool {
     return false
   }
@@ -77,7 +80,7 @@ open class FlexLayout: SortedLayoutProvider {
         fillIndexes.append(i)
         sizes.append(.zero)
       } else {
-        let size = getSize(child: child, maxSize: CGSize(width: .infinity,
+        let size = getSize(child: child, maxSize: CGSize(width: passThroughParentSize ? size.width : .infinity,
                                                          height: size.height))
         sizes.append(size)
         freezedWidth += size.width
