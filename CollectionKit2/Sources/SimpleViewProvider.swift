@@ -39,17 +39,10 @@ public class SimpleViewProvider: ViewProvider {
 
   var _size: CGSize = .zero
   public func layout(size: CGSize) -> CGSize {
-    let fitSize: CGSize
-    if case .fit = width {
-      fitSize = view.sizeThatFits(size)
-    } else if case .fit = height {
-      fitSize = view.sizeThatFits(size)
-    } else {
-      fitSize = .zero
-    }
+    let fitSize = view.sizeThatFits(size)
     switch width {
     case .fill:
-      _size.width = size.width
+      _size.width = size.width == .infinity ? fitSize.width : size.width
     case .fit:
       _size.width = fitSize.width
     case .absolute(let value):
@@ -57,7 +50,7 @@ public class SimpleViewProvider: ViewProvider {
     }
     switch height {
     case .fill:
-      _size.height = size.height
+      _size.height = size.height == .infinity ? fitSize.height : size.height
     case .fit:
       _size.height = fitSize.height
     case .absolute(let value):
