@@ -35,7 +35,7 @@ open class FlexLayout: SortedLayoutProvider {
   }
 
   public init(spacing: CGFloat = 0,
-              fitCrossAxis: Bool = false,
+              fitCrossAxis: Bool = false, // false -> fill
               justifyContent: JustifyContent = .start,
               alignItems: AlignItem = .start,
               children: [Provider]) {
