@@ -50,10 +50,10 @@ class ViewController: UIViewController {
                                          saturation: 0.68,
                                          brightness: 0.98,
                                          alpha: 1)
-        },
+      },
         size: { _ in
           CGSize(width: 100, height: 100)
-        })
+      })
     }
     currentDataIndex = (currentDataIndex + 1) % data.count
     let flex = FlexLayout(
@@ -166,9 +166,7 @@ class ViewController: UIViewController {
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     collectionView.frame = view.bounds
-    reloadButton.frame = CGRect(x: 0, y: view.bounds.height - 44,
-                                width: view.bounds.width, height: 44)
+    reloadButton.frame = CGRect(x: 0, y: view.bounds.height - 60,
+                                width: view.bounds.width, height: 60)
   }
-
 }
-

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02229B072294D6EF00318C18 /* SingleChildProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02229B062294D6EF00318C18 /* SingleChildProvider.swift */; };
+		02229B092294D6FF00318C18 /* MultiChildProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02229B082294D6FF00318C18 /* MultiChildProvider.swift */; };
 		A304892821C347010026EDA7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304892721C347010026EDA7 /* AppDelegate.swift */; };
 		A304892A21C347010026EDA7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304892921C347010026EDA7 /* ViewController.swift */; };
 		A304892D21C347010026EDA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A304892B21C347010026EDA7 /* Main.storyboard */; };
@@ -39,6 +41,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		02229B062294D6EF00318C18 /* SingleChildProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleChildProvider.swift; sourceTree = "<group>"; };
+		02229B082294D6FF00318C18 /* MultiChildProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiChildProvider.swift; sourceTree = "<group>"; };
 		A304892421C347010026EDA7 /* CollectionKit2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollectionKit2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A304892721C347010026EDA7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A304892921C347010026EDA7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -140,6 +144,8 @@
 				A304894121C35F2F0026EDA7 /* CollectionReuseManager.swift */,
 				A3881A6021D595B00088FA90 /* Animator.swift */,
 				A304893F21C347420026EDA7 /* Provider.swift */,
+				02229B062294D6EF00318C18 /* SingleChildProvider.swift */,
+				02229B082294D6FF00318C18 /* MultiChildProvider.swift */,
 				A31FEA4E21E44981008D7667 /* ClosureViewProvider.swift */,
 				A327227B21FABF6500FBB493 /* SimpleViewProvider.swift */,
 				A327227321FAA5B800FBB493 /* FitViewProvider.swift */,
@@ -233,10 +239,12 @@
 				A327227821FAA5EB00FBB493 /* SpaceProvider.swift in Sources */,
 				A31FEA5321E462AB008D7667 /* VisibleFrameInset.swift in Sources */,
 				A327227421FAA5B800FBB493 /* FitViewProvider.swift in Sources */,
+				02229B072294D6EF00318C18 /* SingleChildProvider.swift in Sources */,
 				A304893A21C347190026EDA7 /* CollectionView.swift in Sources */,
 				A31FEA4F21E44981008D7667 /* ClosureViewProvider.swift in Sources */,
 				A304894221C35F2F0026EDA7 /* CollectionReuseManager.swift in Sources */,
 				A304893E21C3472E0026EDA7 /* Util.swift in Sources */,
+				02229B092294D6FF00318C18 /* MultiChildProvider.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
 				A35443BB2207B8AA0067F5C0 /* OverlayProvider.swift in Sources */,
 				A31FEA4721E44848008D7667 /* WaterfallLayout.swift in Sources */,
