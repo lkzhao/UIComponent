@@ -14,12 +14,3 @@ public protocol Provider {
   /// parent provider frame, visable frame in self's corrdinates.
   func views(in frame: CGRect) -> [(ViewProvider, CGRect)] // view frame in self's corrdinates
 }
-
-public protocol ViewProvider: class, Provider {
-  var key: String { get }
-  var animator: Animator? { get }
-  func construct() -> UIView //
-
-  /// Update the dequeud view
-  func update(view: UIView)
-}

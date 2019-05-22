@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		02229B072294D6EF00318C18 /* SingleChildProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02229B062294D6EF00318C18 /* SingleChildProvider.swift */; };
 		02229B092294D6FF00318C18 /* MultiChildProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02229B082294D6FF00318C18 /* MultiChildProvider.swift */; };
+		02229B0B2294D94600318C18 /* ViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02229B0A2294D94600318C18 /* ViewProvider.swift */; };
 		A304892821C347010026EDA7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304892721C347010026EDA7 /* AppDelegate.swift */; };
 		A304892A21C347010026EDA7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304892921C347010026EDA7 /* ViewController.swift */; };
 		A304892D21C347010026EDA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A304892B21C347010026EDA7 /* Main.storyboard */; };
@@ -43,6 +44,7 @@
 /* Begin PBXFileReference section */
 		02229B062294D6EF00318C18 /* SingleChildProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleChildProvider.swift; sourceTree = "<group>"; };
 		02229B082294D6FF00318C18 /* MultiChildProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiChildProvider.swift; sourceTree = "<group>"; };
+		02229B0A2294D94600318C18 /* ViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewProvider.swift; sourceTree = "<group>"; };
 		A304892421C347010026EDA7 /* CollectionKit2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollectionKit2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A304892721C347010026EDA7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A304892921C347010026EDA7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				A304894121C35F2F0026EDA7 /* CollectionReuseManager.swift */,
 				A3881A6021D595B00088FA90 /* Animator.swift */,
 				A304893F21C347420026EDA7 /* Provider.swift */,
+				02229B0A2294D94600318C18 /* ViewProvider.swift */,
 				02229B062294D6EF00318C18 /* SingleChildProvider.swift */,
 				02229B082294D6FF00318C18 /* MultiChildProvider.swift */,
 				A31FEA4E21E44981008D7667 /* ClosureViewProvider.swift */,
@@ -253,6 +256,7 @@
 				A3881A6321D59C640088FA90 /* AnimatedReloadAnimator.swift in Sources */,
 				A3881A6121D595B00088FA90 /* Animator.swift in Sources */,
 				A31FEA4921E44854008D7667 /* LayoutProvider.swift in Sources */,
+				02229B0B2294D94600318C18 /* ViewProvider.swift in Sources */,
 				A304894021C347420026EDA7 /* Provider.swift in Sources */,
 				A327227C21FABF6500FBB493 /* SimpleViewProvider.swift in Sources */,
 				A31FEA4D21E448E0008D7667 /* InsetLayout.swift in Sources */,
