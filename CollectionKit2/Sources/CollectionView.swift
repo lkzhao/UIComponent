@@ -157,6 +157,10 @@ open class CollectionView: UIScrollView {
     lastLoadBounds = bounds
     isLoadingCell = false
   }
+
+  open override func sizeThatFits(_ size: CGSize) -> CGSize {
+    return provider?.layout(size: size) ?? .zero
+  }
 }
 
 extension CollectionView {
