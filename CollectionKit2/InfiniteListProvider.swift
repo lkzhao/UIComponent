@@ -39,7 +39,7 @@ class InfiniteListProvider: ProgressiveProvider {
     // Make sure this runs at least at O(log(n)) time, otherwise there is almost no benefit to use
     // ProgressiveProvider. Here, it is done using a binary search through the calculated frames
 
-    if frame.maxY > calculatedHeight {
+    if frame.maxY + frame.height > calculatedHeight {
       // need to leave some space for future scroll
       layoutUntil(height: frame.maxY + frame.height)
 
@@ -48,8 +48,8 @@ class InfiniteListProvider: ProgressiveProvider {
     }
 
     var results = [Int]()
-    var index = frames.binarySearch { $0.maxX < frame.minX }
-    while let childFrame = frames.get(index), childFrame.minX < frame.maxX {
+    var index = frames.binarySearch { $0.maxY < frame.minY }
+    while let childFrame = frames.get(index), childFrame.minY < frame.maxY {
       results.append(index)
       index += 1
     }
