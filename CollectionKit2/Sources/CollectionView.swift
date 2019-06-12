@@ -11,7 +11,21 @@ import UIKit
 open class CollectionView: UIScrollView {
 
   public var provider: Provider? {
-    didSet { setNeedsReload() }
+    willSet {
+      (provider as? ProgressiveProvider)?.onUpdate = nil
+    }
+    didSet {
+      if let provider = provider as? ProgressiveProvider {
+        provider.onUpdate = { [weak provider, weak self] newSize in
+          guard provider === self?.provider else { return }
+          self?.contentSize = newSize
+          if self?.isLoadingCell == false {
+            self?.setNeedsLoadCells()
+          }
+        }
+      }
+      setNeedsReload()
+    }
   }
 
   public var animator: Animator = Animator() {
@@ -57,6 +71,11 @@ open class CollectionView: UIScrollView {
 
   public func setNeedsInvalidateLayout() {
     needsInvalidateLayout = true
+    setNeedsLayout()
+  }
+
+  public func setNeedsLoadCells() {
+    lastLoadBounds = .zero
     setNeedsLayout()
   }
 

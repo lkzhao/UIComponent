@@ -39,6 +39,7 @@
 		A35443BB2207B8AA0067F5C0 /* OverlayProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35443BA2207B8AA0067F5C0 /* OverlayProvider.swift */; };
 		A3881A6121D595B00088FA90 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6021D595B00088FA90 /* Animator.swift */; };
 		A3881A6321D59C640088FA90 /* AnimatedReloadAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */; };
+		A3C1EDC722B0863B007E4D3A /* InfiniteListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C1EDC622B0863B007E4D3A /* InfiniteListProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +77,7 @@
 		A35443BA2207B8AA0067F5C0 /* OverlayProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayProvider.swift; sourceTree = "<group>"; };
 		A3881A6021D595B00088FA90 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedReloadAnimator.swift; sourceTree = "<group>"; };
+		A3C1EDC622B0863B007E4D3A /* InfiniteListProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteListProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				A304892721C347010026EDA7 /* AppDelegate.swift */,
 				A304892921C347010026EDA7 /* ViewController.swift */,
 				A3881A6221D59C640088FA90 /* AnimatedReloadAnimator.swift */,
+				A3C1EDC622B0863B007E4D3A /* InfiniteListProvider.swift */,
 				A3881A6621D5CA330088FA90 /* Sources */,
 				A304892B21C347010026EDA7 /* Main.storyboard */,
 				A304892E21C347020026EDA7 /* Assets.xcassets */,
@@ -234,6 +237,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3C1EDC722B0863B007E4D3A /* InfiniteListProvider.swift in Sources */,
 				A31FEA3E21DD1CDA008D7667 /* FlexLayout.swift in Sources */,
 				A31FEA4421E445C5008D7667 /* FlowLayout.swift in Sources */,
 				A327227621FAA5D400FBB493 /* FillViewProvider.swift in Sources */,
