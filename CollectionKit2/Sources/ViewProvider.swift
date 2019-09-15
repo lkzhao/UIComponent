@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol ViewProvider: class, Provider {
+public protocol ViewProvider: Provider {
   var key: String { get }
   var animator: Animator? { get }
 
