@@ -11,6 +11,7 @@ import UIKit
 open class VisibleFrameInset: SingleChildProvider {
   public var insets: UIEdgeInsets
   public var insetProvider: ((CGSize) -> UIEdgeInsets)?
+  private var layoutSize: CGSize = .zero
 
   public init(insets: UIEdgeInsets = .zero, child: Provider) {
     self.insets = insets
@@ -24,13 +25,14 @@ open class VisibleFrameInset: SingleChildProvider {
   }
 
   open override func layout(size: CGSize) -> CGSize {
-    if let insetProvider = insetProvider {
-      insets = insetProvider(size)
-    }
+    layoutSize = size
     return super.layout(size: size)
   }
 
   open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+    if let insetProvider = insetProvider {
+      insets = insetProvider(layoutSize)
+    }
     return child.views(in: frame.inset(by: insets))
   }
 }
