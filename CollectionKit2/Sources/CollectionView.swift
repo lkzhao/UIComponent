@@ -45,7 +45,6 @@ open class CollectionView: UIScrollView {
 
   public private(set) var lastLoadBounds: CGRect = .zero
   public private(set) var contentOffsetChange: CGPoint = .zero
-  public private(set) var lastDragLocation: CGPoint = .zero
 
   private var visibleIdentifiers: [String] = []
 
@@ -56,9 +55,6 @@ open class CollectionView: UIScrollView {
 
   open override func layoutSubviews() {
     super.layoutSubviews()
-    if panGestureRecognizer.state == .changed || panGestureRecognizer.state == .began {
-      lastDragLocation = panGestureRecognizer.location(in: self)
-    }
     if needsReload {
       reloadData()
     } else if needsInvalidateLayout || bounds.size != lastLoadBounds.size {
@@ -114,6 +110,7 @@ open class CollectionView: UIScrollView {
   private func _loadCells(reloading: Bool) {
     guard !isLoadingCell, let provider = provider else { return }
     isLoadingCell = true
+    animator.willUpdate(collectionView: self)
     let newVisibleViewData = provider.views(in: visibleFrame)
 
     // construct private identifiers

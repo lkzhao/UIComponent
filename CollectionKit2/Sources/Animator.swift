@@ -9,6 +9,14 @@
 import UIKit
 
 open class Animator {
+  /// Called before CollectionView perform any update to the cells.
+  /// This method is only called when your animator is the collectionView's root animator (i.e. collectionView.animator)
+  ///
+  /// - Parameters:
+  ///   - collectionView: the CollectionView performing the update
+  open func willUpdate(collectionView: CollectionView) {
+    
+  }
 
   /// Called when CollectionView inserts a view into its subviews.
   ///
