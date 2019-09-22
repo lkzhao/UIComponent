@@ -78,6 +78,12 @@ open class CollectionView: UIScrollView {
     lastLoadBounds = .zero
     setNeedsLayout()
   }
+  
+  @available(iOS 11, *)
+  open override func safeAreaInsetsDidChange() {
+    super.safeAreaInsetsDidChange()
+    setNeedsInvalidateLayout()
+  }
 
   // re-layout, but not updating cells' contents
   public func invalidateLayout() {
