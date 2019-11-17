@@ -19,6 +19,7 @@ public class SimpleViewProvider: ViewProvider {
   public var animator: Animator?
   public var width: SizeStrategy
   public var height: SizeStrategy
+  public var sizeProvider: ((CGSize) -> CGSize)?
 
   public init(key: String = UUID().uuidString,
               animator: Animator? = nil,
@@ -31,6 +32,17 @@ public class SimpleViewProvider: ViewProvider {
     self.width = width
     self.height = height
   }
+  public init(key: String = UUID().uuidString,
+              animator: Animator? = nil,
+              view: UIView,
+              sizeProvider: @escaping (CGSize) -> CGSize) {
+    self.key = key
+    self.view = view
+    self.animator = animator
+    self.width = .fit
+    self.height = .fit
+    self.sizeProvider = sizeProvider
+  }
   public func construct() -> UIView {
     return view
   }
@@ -39,6 +51,10 @@ public class SimpleViewProvider: ViewProvider {
 
   var _size: CGSize = .zero
   public func layout(size: CGSize) -> CGSize {
+    if let sizeProvider = sizeProvider {
+      _size = sizeProvider(size)
+      return _size
+    }
     let fitSize = view.sizeThatFits(size)
     switch width {
     case .fill:
