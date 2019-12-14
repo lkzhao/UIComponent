@@ -45,6 +45,15 @@ open class CollectionView: UIScrollView {
 
   public private(set) var lastLoadBounds: CGRect = .zero
   public private(set) var contentOffsetChange: CGPoint = .zero
+    
+    public var contentView: UIView? {
+        didSet {
+            oldValue?.removeFromSuperview()
+            if let contentView = contentView {
+                addSubview(contentView)
+            }
+        }
+    }
 
   private var visibleIdentifiers: [String] = []
 
@@ -62,6 +71,7 @@ open class CollectionView: UIScrollView {
     } else if bounds != lastLoadBounds {
       _loadCells(reloading: false)
     }
+    contentView?.frame = CGRect(origin: .zero, size: contentSize)
   }
 
   public func setNeedsReload() {
@@ -117,6 +127,7 @@ open class CollectionView: UIScrollView {
     guard !isLoadingCell, let provider = provider else { return }
     isLoadingCell = true
     animator.willUpdate(collectionView: self)
+    let visibleFrame = contentView?.convert(bounds, from: self) ?? bounds
     let newVisibleViewData = provider.views(in: visibleFrame)
 
     // construct private identifiers
@@ -174,7 +185,7 @@ open class CollectionView: UIScrollView {
       (viewProvider.animator ?? animator).update(collectionView: self,
                                                  view: cell,
                                                  frame: frame)
-      insertSubview(cell, at: index)
+      (contentView ?? self).insertSubview(cell, at: index)
     }
 
     visibleIdentifiers = newIdentifiers
