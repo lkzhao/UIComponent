@@ -109,7 +109,7 @@ open class CollectionView: UIScrollView {
     isReloading = true
 
     let oldContentOffset = contentOffset
-    contentSize = provider.layout(size: innerSize)
+    contentSize = provider.layout(size: innerSize) * zoomScale
     if let offset = contentOffsetAdjustFn?() {
       contentOffset = offset
     }

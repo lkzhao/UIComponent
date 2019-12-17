@@ -96,6 +96,9 @@ func * (left: CGFloat, right: CGPoint) -> CGPoint {
 func * (left: CGPoint, right: CGPoint) -> CGPoint {
   return CGPoint(x: left.x*right.x, y: left.y*right.y)
 }
+func * (left: CGSize, right: CGFloat) -> CGSize {
+  return CGSize(width: left.width * right, height: left.height * right)
+}
 prefix func - (point: CGPoint) -> CGPoint {
   return CGPoint.zero - point
 }
