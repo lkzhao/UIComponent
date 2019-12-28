@@ -72,6 +72,28 @@ open class CollectionView: UIScrollView {
       _loadCells(reloading: false)
     }
     contentView?.frame = CGRect(origin: .zero, size: contentSize)
+    ensureZoomViewIsCentered()
+  }
+
+    
+  public func ensureZoomViewIsCentered() {
+    guard let contentView = contentView else { return }
+    let boundsSize = bounds.inset(by: adjustedContentInset)
+    var frameToCenter = contentView.frame
+
+    if frameToCenter.size.width < boundsSize.width {
+      frameToCenter.origin.x = (boundsSize.width - frameToCenter.size.width) * 0.5
+    } else {
+      frameToCenter.origin.x = 0
+    }
+
+    if frameToCenter.size.height < boundsSize.height {
+      frameToCenter.origin.y = (boundsSize.height - frameToCenter.size.height) * 0.5
+    } else {
+      frameToCenter.origin.y = 0
+    }
+    
+    contentView.frame = frameToCenter
   }
 
   public func setNeedsReload() {

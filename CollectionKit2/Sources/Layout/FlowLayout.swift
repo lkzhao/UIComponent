@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class FlowLayout: SortedLayoutProvider {
+open class FlowLayout: SortedLayoutProvider {
   public var lineSpacing: CGFloat
   public var interitemSpacing: CGFloat
 
