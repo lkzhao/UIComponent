@@ -45,15 +45,17 @@ open class CollectionView: UIScrollView {
 
   public private(set) var lastLoadBounds: CGRect = .zero
   public private(set) var contentOffsetChange: CGPoint = .zero
-    
-    public var contentView: UIView? {
-        didSet {
-            oldValue?.removeFromSuperview()
-            if let contentView = contentView {
-                addSubview(contentView)
-            }
-        }
+
+  public var centerContentViewVertically = false
+  public var centerContentViewHorizontally = true
+  public var contentView: UIView? {
+    didSet {
+      oldValue?.removeFromSuperview()
+      if let contentView = contentView {
+        addSubview(contentView)
+      }
     }
+  }
 
   private var visibleIdentifiers: [String] = []
 
@@ -78,16 +80,21 @@ open class CollectionView: UIScrollView {
     
   public func ensureZoomViewIsCentered() {
     guard let contentView = contentView else { return }
-    let boundsSize = bounds.inset(by: adjustedContentInset)
+    let boundsSize: CGRect
+    if #available(iOS 11.0, *) {
+        boundsSize = bounds.inset(by: adjustedContentInset)
+    } else {
+        boundsSize = bounds.inset(by: contentInset)
+    }
     var frameToCenter = contentView.frame
 
-    if frameToCenter.size.width < boundsSize.width {
+    if centerContentViewHorizontally, frameToCenter.size.width < boundsSize.width {
       frameToCenter.origin.x = (boundsSize.width - frameToCenter.size.width) * 0.5
     } else {
       frameToCenter.origin.x = 0
     }
 
-    if frameToCenter.size.height < boundsSize.height {
+    if centerContentViewVertically, frameToCenter.size.height < boundsSize.height {
       frameToCenter.origin.y = (boundsSize.height - frameToCenter.size.height) * 0.5
     } else {
       frameToCenter.origin.y = 0
