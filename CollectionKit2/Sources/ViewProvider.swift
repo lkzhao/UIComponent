@@ -10,14 +10,14 @@ import UIKit
 
 public protocol ViewProvider: Provider {
 	/// A unique key for identifying self.
-  var key: String { get }
+	var key: String { get }
 
 	/// The animator used for layout animations.
-  var animator: Animator? { get }
+	var animator: Animator? { get }
 
 	/// Make a new view.
-  func makeView() -> UIView
+	func makeView() -> UIView
 
-  /// Update the dequeued view.
-  func updateView(_ view: UIView)
+	/// Update the dequeued view.
+	func updateView(_ view: UIView)
 }

@@ -10,19 +10,20 @@ import UIKit
 
 /// A provider composed with doubly layered providers.
 open class OverlayProvider: Provider {
-  open var back: Provider
-  open var front: Provider
-  public init(back: Provider, front: Provider) {
-    self.back = back
-    self.front = front
-  }
-  open func layout(size: CGSize) -> CGSize {
-    let frontSize = front.layout(size: size)
-    let _ = back.layout(size: frontSize)
-    return frontSize
-  }
+	open var back: Provider
+	open var front: Provider
+	public init(back: Provider, front: Provider) {
+		self.back = back
+		self.front = front
+	}
 
-  open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-    return back.views(in: frame) + front.views(in: frame)
-  }
+	open func layout(size: CGSize) -> CGSize {
+		let frontSize = front.layout(size: size)
+		_ = back.layout(size: frontSize)
+		return frontSize
+	}
+
+	open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+		return back.views(in: frame) + front.views(in: frame)
+	}
 }

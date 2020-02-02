@@ -6,19 +6,21 @@
 //  Copyright © 2019 Luke Zhao. All rights reserved.
 //
 
-import Foundation
 import CoreGraphics.CGGeometry
+import Foundation
 
 open class MultiChildProvider: Provider {
-  open var children: [Provider] = []
+	open var children: [Provider] = []
 
-  public init(children: [Provider]) {
-    self.children = children
-  }
-  open func layout(size: CGSize) -> CGSize {
-    fatalError("Subclass should provide the implementation.")
-  }
-  open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+	public init(children: [Provider]) {
+		self.children = children
+	}
+
+	open func layout(size _: CGSize) -> CGSize {
 		fatalError("Subclass should provide the implementation.")
-  }
+	}
+
+	open func views(in _: CGRect) -> [(ViewProvider, CGRect)] {
+		fatalError("Subclass should provide the implementation.")
+	}
 }

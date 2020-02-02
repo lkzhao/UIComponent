@@ -9,15 +9,16 @@
 import UIKit
 
 public class FillViewProvider: SimpleViewProvider {
-  public init(
-    key: String = UUID().uuidString,
-    animator: Animator? = nil,
-    width: CGFloat? = nil,
-    height: CGFloat? = nil,
-    view: UIView) {
-    super.init(key: key, animator: animator,
-               width: width == nil ? .fill : .absolute(width!),
-               height: height == nil ? .fill : .absolute(height!),
-               view: view)
-  }
+	public init(
+		key: String = UUID().uuidString,
+		animator: Animator? = nil,
+		width: CGFloat? = nil,
+		height: CGFloat? = nil,
+		view: UIView
+	) {
+		super.init(key: key, animator: animator,
+							 width: width == nil ? .fill : .absolute(width!),
+							 height: height == nil ? .fill : .absolute(height!),
+							 view: view)
+	}
 }

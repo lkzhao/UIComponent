@@ -9,10 +9,10 @@
 import UIKit
 
 public class PageLayout: SortedLayoutProvider {
-  public override func simpleLayout(size: CGSize) -> [CGRect] {
-    return children.enumerated().map {
-      CGRect(origin: CGPoint(x: CGFloat($0) * size.width, y: 0),
-             size: getSize(child: $1, maxSize: size))
-    }
-  }
+	public override func simpleLayout(size: CGSize) -> [CGRect] {
+		return children.enumerated().map {
+			CGRect(origin: CGPoint(x: CGFloat($0) * size.width, y: 0),
+						 size: getSize(child: $1, maxSize: size))
+		}
+	}
 }

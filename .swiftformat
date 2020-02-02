@@ -1,0 +1,13 @@
+# rules
+--enable isEmpty
+
+# format options
+--decimalgrouping none
+--hexgrouping none
+--importgrouping testable-bottom
+--indent tab
+--octalgrouping none
+--self init-only
+--semicolons never
+--tabwidth 2
+--ifdef no-indent

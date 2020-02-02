@@ -9,16 +9,15 @@
 import UIKit
 
 /// Provider provides its size and its items' views.
-public protocol Provider: class {
-  /// Get content size based on the parent's size.
+public protocol Provider: AnyObject {
+	/// Get content size based on the parent's size.
 	/// - Parameter size: Parent provider's content size.
-  func layout(size: CGSize) -> CGSize
+	func layout(size: CGSize) -> CGSize
 
 	/// Get items' view and its rect within the frame in current provider's coordinates.
 	/// - Parameter frame: Parent provider's visible frame in current provider's coordinates.
-  func views(in frame: CGRect) -> [(ViewProvider, CGRect)]
+	func views(in frame: CGRect) -> [(ViewProvider, CGRect)]
 }
-
 
 /// ProgressiveProvider
 /// A Provider that can update its own `contentSize` at a future time.
@@ -42,5 +41,5 @@ public protocol Provider: class {
 /// of your application. Checkout `InfiniteListProvider` in the example project for
 /// a basic ProgressiveProvider implementation reference.
 public protocol ProgressiveProvider: Provider {
-  var onUpdate: ((CGSize) -> Void)? { get set }
+	var onUpdate: ((CGSize) -> Void)? { get set }
 }

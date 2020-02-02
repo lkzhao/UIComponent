@@ -9,20 +9,20 @@
 import UIKit
 
 extension UIView {
-  private struct AssociatedKeys {
-    static var reuseManager = "reuseManager"
-  }
+	private struct AssociatedKeys {
+		static var reuseManager = "reuseManager"
+	}
 
-  internal var reuseManager: CollectionReuseManager? {
-    get { return objc_getAssociatedObject(self, &AssociatedKeys.reuseManager) as? CollectionReuseManager }
-    set { objc_setAssociatedObject(self, &AssociatedKeys.reuseManager, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-  }
+	internal var reuseManager: CollectionReuseManager? {
+		get { return objc_getAssociatedObject(self, &AssociatedKeys.reuseManager) as? CollectionReuseManager }
+		set { objc_setAssociatedObject(self, &AssociatedKeys.reuseManager, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+	}
 
-  public func recycleForCollectionKitReuse() {
-    if let reuseManager = reuseManager {
-      reuseManager.queue(view: self)
-    } else {
-      removeFromSuperview()
-    }
-  }
+	public func recycleForCollectionKitReuse() {
+		if let reuseManager = reuseManager {
+			reuseManager.queue(view: self)
+		} else {
+			removeFromSuperview()
+		}
+	}
 }
