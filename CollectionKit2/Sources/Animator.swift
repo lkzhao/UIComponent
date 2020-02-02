@@ -31,7 +31,7 @@ open class Animator {
 
 	/// Called when CollectionView deletes a view from its subviews.
 	///
-	/// Perform any deletion animation, then call `queue(view: view)`
+	/// Perform any deletion animation, then call `enqueue(view: view)`
 	/// after the animation finishes
 	///
 	/// - Parameters:

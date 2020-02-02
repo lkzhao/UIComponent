@@ -20,7 +20,7 @@ extension UIView {
 
 	public func recycleForCollectionKitReuse() {
 		if let reuseManager = reuseManager {
-			reuseManager.queue(view: self)
+			reuseManager.enqueue(view: self)
 		} else {
 			removeFromSuperview()
 		}

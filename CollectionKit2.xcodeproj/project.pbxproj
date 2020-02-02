@@ -150,12 +150,12 @@
 				A304893921C347190026EDA7 /* CollectionView.swift */,
 				024B12C123E67AE0004F4D00 /* CollectionView+Extensions.swift */,
 				A304894121C35F2F0026EDA7 /* CollectionReuseManager.swift */,
+				A31FEA4E21E44981008D7667 /* ClosureViewProvider.swift */,
 				A3881A6021D595B00088FA90 /* Animator.swift */,
 				A304893F21C347420026EDA7 /* Provider.swift */,
 				02229B0A2294D94600318C18 /* ViewProvider.swift */,
 				02229B062294D6EF00318C18 /* SingleChildProvider.swift */,
 				02229B082294D6FF00318C18 /* MultiChildProvider.swift */,
-				A31FEA4E21E44981008D7667 /* ClosureViewProvider.swift */,
 				A327227B21FABF6500FBB493 /* SimpleViewProvider.swift */,
 				A327227321FAA5B800FBB493 /* FitViewProvider.swift */,
 				A327227521FAA5D400FBB493 /* FillViewProvider.swift */,
@@ -201,6 +201,7 @@
 				TargetAttributes = {
 					A304892321C347010026EDA7 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1130;
 					};
 				};
 			};
@@ -424,7 +425,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lkzhao.CollectionKit2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -441,7 +442,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lkzhao.CollectionKit2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
