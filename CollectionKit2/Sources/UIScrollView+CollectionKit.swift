@@ -12,21 +12,11 @@ extension UIScrollView {
   public var visibleFrame: CGRect {
     return bounds
   }
+	
   public var visibleFrameLessInset: CGRect {
     return visibleFrame.inset(by: contentInset)
   }
-  public var absoluteFrameLessInset: CGRect {
-    let contentInset: UIEdgeInsets
-    if #available(iOS 11.0, *) {
-        contentInset = adjustedContentInset
-    } else {
-        contentInset = self.contentInset
-    }
-    return CGRect(origin: .zero, size: bounds.size).inset(by: contentInset)
-  }
-  public var innerSize: CGSize {
-    return absoluteFrameLessInset.size
-  }
+
   public var offsetFrame: CGRect {
     let contentInset: UIEdgeInsets
     if #available(iOS 11.0, *) {

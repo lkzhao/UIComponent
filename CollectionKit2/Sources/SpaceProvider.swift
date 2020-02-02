@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// A provider for spacing.
 public class SpaceProvider: Provider {
   public var width: CGFloat
   public var height: CGFloat

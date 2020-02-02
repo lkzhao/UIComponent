@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// A layout provider wraps another provider with insets.
 open class InsetLayout: Provider {
   public var insets: UIEdgeInsets
   public var child: Provider
@@ -26,7 +27,7 @@ open class InsetLayout: Provider {
 
   open func layout(size: CGSize) -> CGSize {
     insets = insetProvider?(size) ?? insets
-    return child.layout(size: size.insets(by: insets)).insets(by: -insets)
+    return child.layout(size: size.inset(by: insets)).inset(by: -insets)
   }
 
   open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {

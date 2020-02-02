@@ -8,11 +8,15 @@
 
 import UIKit
 
+/// Provider provides its size and its items' views.
 public protocol Provider: class {
-  /// parent prodivder size
-  func layout(size: CGSize) -> CGSize // self size, content size
-  /// parent provider frame, visable frame in self's corrdinates.
-  func views(in frame: CGRect) -> [(ViewProvider, CGRect)] // view frame in self's corrdinates
+  /// Get content size based on the parent's size.
+	/// - Parameter size: Parent provider's content size.
+  func layout(size: CGSize) -> CGSize
+
+	/// Get items' view and its rect within the frame in current provider's coordinates.
+	/// - Parameter frame: Parent provider's visible frame in current provider's coordinates.
+  func views(in frame: CGRect) -> [(ViewProvider, CGRect)]
 }
 
 
@@ -32,7 +36,7 @@ public protocol Provider: class {
 ///   down more, layout more cells.
 /// * background thread layout.
 ///
-/// Implementing ProvissiveProvider is an advance usage and requires deep understanding of
+/// Implementing ProgressiveProvider is an advance usage and requires deep understanding of
 /// layout logic. ProgressiveProvider has to be the root Provider of a CollectionView
 /// in order to work. Use only when regular Provider doesn't meet the performance need
 /// of your application. Checkout `InfiniteListProvider` in the example project for

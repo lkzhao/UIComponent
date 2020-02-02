@@ -11,13 +11,14 @@ import CoreGraphics.CGGeometry
 
 open class MultiChildProvider: Provider {
   open var children: [Provider] = []
+
   public init(children: [Provider]) {
     self.children = children
   }
   open func layout(size: CGSize) -> CGSize {
-    return .zero
+    fatalError("Subclass should provide the implementation.")
   }
   open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-    return []
+		fatalError("Subclass should provide the implementation.")
   }
 }

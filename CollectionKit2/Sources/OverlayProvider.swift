@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// A provider composed with doubly layered providers.
 open class OverlayProvider: Provider {
   open var back: Provider
   open var front: Provider

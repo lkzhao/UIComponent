@@ -37,7 +37,7 @@ open class CollectionView: UIScrollView {
   public private(set) var needsInvalidateLayout = false
   public private(set) var isLoadingCell = false
   public private(set) var isReloading = false
-  public var hasReloaded: Bool { return reloadCount > 0 }
+  public var hasReloaded: Bool { reloadCount > 0 }
 
   // visible identifiers for cells on screen
   public private(set) var visibleCells: [UIView] = []
@@ -127,7 +127,7 @@ open class CollectionView: UIScrollView {
   // re-layout, but not updating cells' contents
   public func invalidateLayout() {
     guard !isLoadingCell && !isReloading && hasReloaded, let provider = provider else { return }
-    contentSize = provider.layout(size: innerSize)
+    contentSize = provider.layout(size: adjustedSize)
     needsInvalidateLayout = false
     _loadCells(reloading: false)
   }
@@ -136,9 +136,13 @@ open class CollectionView: UIScrollView {
   public func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
     guard let provider = provider, !isReloading else { return }
     isReloading = true
+		defer {
+			isReloading = false
+		}
+
+		contentSize = provider.layout(size: adjustedSize) * zoomScale
 
     let oldContentOffset = contentOffset
-    contentSize = provider.layout(size: innerSize) * zoomScale
     if let offset = contentOffsetAdjustFn?() {
       contentOffset = offset
     }
@@ -149,27 +153,30 @@ open class CollectionView: UIScrollView {
     needsInvalidateLayout = false
     needsReload = false
     reloadCount += 1
-    isReloading = false
   }
 
   private func _loadCells(reloading: Bool) {
     guard !isLoadingCell, let provider = provider else { return }
     isLoadingCell = true
+		defer {
+			isLoadingCell = false
+		}
+
     animator.willUpdate(collectionView: self)
     let visibleFrame = contentView?.convert(bounds, from: self) ?? bounds
     let newVisibleViewData = provider.views(in: visibleFrame)
 
     // construct private identifiers
     var newIdentifierSet = [String: Int]()
-    let newIdentifiers: [String] = newVisibleViewData.enumerated().map {
-      let identifier = $1.0.key
+    let newIdentifiers: [String] = newVisibleViewData.enumerated().map { (index, viewData) in
+      let identifier = viewData.0.key
       var finalIdentifier = identifier
       var count = 1
       while newIdentifierSet[finalIdentifier] != nil {
         finalIdentifier = identifier + String(count)
         count += 1
       }
-      newIdentifierSet[finalIdentifier] = $0
+      newIdentifierSet[finalIdentifier] = index
       return finalIdentifier
     }
 
@@ -195,15 +202,15 @@ open class CollectionView: UIScrollView {
         cell = existingCell
         if reloading {
           // cell was on screen before reload, need to update the view.
-          viewProvider.update(view: cell)
+          viewProvider.updateView(cell)
           (viewProvider.animator ?? animator).shift(collectionView: self,
                                                     delta: contentOffsetChange,
                                                     view: cell,
                                                     frame: frame)
         }
       } else {
-        cell = viewProvider.construct()
-        viewProvider.update(view: cell)
+        cell = viewProvider.makeView()
+        viewProvider.updateView(cell)
         cell.bounds.size = frame.bounds.size
         cell.center = frame.center
         (viewProvider.animator ?? animator).insert(collectionView: self,
@@ -221,7 +228,6 @@ open class CollectionView: UIScrollView {
     visibleViewData = newVisibleViewData
     visibleCells = newCells as! [UIView]
     lastLoadBounds = bounds
-    isLoadingCell = false
   }
 
   open override func sizeThatFits(_ size: CGSize) -> CGSize {

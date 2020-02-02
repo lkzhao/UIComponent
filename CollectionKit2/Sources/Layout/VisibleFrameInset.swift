@@ -36,4 +36,3 @@ open class VisibleFrameInset: SingleChildProvider {
     return child.views(in: frame.inset(by: insets))
   }
 }
-

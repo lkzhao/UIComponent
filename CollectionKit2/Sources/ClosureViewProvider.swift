@@ -35,11 +35,11 @@ open class ClosureViewProvider<View: UIView>: ViewProvider {
     self.sizeSource = size
   }
 
-  public func construct() -> UIView {
-    return reuseManager?.dequeue(_construct()) ?? _construct()
+  public func makeView() -> UIView {
+    return reuseManager?.dequeue(_makeView()) ?? _makeView()
   }
 
-  private func _construct() -> UIView {
+  private func _makeView() -> UIView {
     if let viewGenerator = viewGenerator {
       return viewGenerator()
     } else {
@@ -47,7 +47,7 @@ open class ClosureViewProvider<View: UIView>: ViewProvider {
     }
   }
 
-  public func update(view: UIView) {
+  public func updateView(_ view: UIView) {
     guard let view = view as? View else { return }
     viewUpdater?(view)
   }
