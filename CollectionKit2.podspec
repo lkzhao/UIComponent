@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "CollectionKit2"
-  s.version          = "0.1.0"
+  s.version          = "0.2.0"
   s.summary          = "A modern swift framework for building data-driven reusable collection view components."
 
   s.description      = <<-DESC
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.author           = { "Luke" => "lzhaoyilun@gmail.com" }
   s.source           = { :git => "https://github.com/lkzhao/CollectionKit.git", :tag => s.version.to_s }
 
-  s.ios.deployment_target  = '8.0'
+  s.ios.deployment_target  = '12.0'
   s.ios.frameworks         = 'UIKit', 'Foundation'
 
   s.requires_arc = true
