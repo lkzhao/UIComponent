@@ -52,6 +52,7 @@ open class SortedLayoutProvider: LayoutProvider {
 
 	open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
 		var result = [(ViewProvider, CGRect)]()
+
 		for index in visibleIndexes(in: frame) {
 			let child = children[index]
 			let childFrame = frames[index]
@@ -60,6 +61,7 @@ open class SortedLayoutProvider: LayoutProvider {
 			}
 			result.append(contentsOf: childResult)
 		}
+
 		return result
 	}
 }

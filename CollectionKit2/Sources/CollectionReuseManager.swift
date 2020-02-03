@@ -25,7 +25,7 @@ open class CollectionReuseManager: NSObject {
 
 	var reusableViews: [String: [UIView]] = [:]
 	var cleanupTimer: Timer?
-	
+
 	public func enqueue(identifier id: String? = nil,
 											view: UIView) {
 		view.reuseManager = nil

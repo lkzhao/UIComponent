@@ -1,3 +1,3 @@
 # Run swiftformat.
 format:
-	@swiftformat . --verbose
+	@swiftformat .

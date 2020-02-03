@@ -9,7 +9,6 @@
 import UIKit
 
 open class ClosureViewProvider<View: UIView>: ViewProvider {
-
 	public typealias ViewGenerator = () -> View
 	public typealias ViewUpdater = (View) -> Void
 	public typealias SizeGenerator = (CGSize) -> CGSize

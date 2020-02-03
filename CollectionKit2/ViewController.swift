@@ -36,14 +36,33 @@ class ViewController: UIViewController {
 		reloadButton.addTarget(self, action: #selector(reload), for: .touchUpInside)
 		view.addSubview(reloadButton)
 
-		let viewProvider = FillViewProvider(view: {
+		let viewProvider1 = FillViewProvider(view: {
 			let v = UIView()
 			v.backgroundColor = .red
 			return v
 		}())
-		let provider = InsetLayout(insets: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), child: viewProvider)
-		//    collectionView.provider = DemoProvider() //InfiniteListProvider()
+
+		let viewProvider2 = ClosureViewProvider(generate: { () -> UIView in
+			UIView()
+		}, update: { view in
+			view.backgroundColor = .blue
+		}) { (_) -> CGSize in
+			CGSize(width: 100, height: 200)
+		}
+
+		let viewProvider = FlowLayout(children: [viewProvider1, viewProvider2])
+		let provider = InsetLayout(insets: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8),
+															 child: HalfSizeProvider(provider: HalfSizeProvider(provider: HalfSizeProvider(provider: viewProvider1))))
+
+		let provider2 = viewProvider
 		collectionView.provider = provider
+
+		let animator = AnimatedReloadAnimator(entryTransform: AnimatedReloadAnimator.fancyEntryTransform)
+		collectionView.animator = animator
+
+		DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+			self.collectionView.provider = provider2
+		}
 
 		collectionView.isScrollEnabled = true
 		collectionView.alwaysBounceVertical = true
@@ -61,39 +80,22 @@ class ViewController: UIViewController {
 	}
 }
 
-class DemoProvider: Provider {
+class HalfSizeProvider: Provider {
+	private let provider: Provider
+	init(provider: Provider) {
+		self.provider = provider
+	}
+
+	var _size: CGSize = .zero
 	func layout(size: CGSize) -> CGSize {
-		return CGSize(width: size.width, height: size.height * 2)
+		_size = provider.layout(size: CGSize(width: size.width, height: size.height / 2))
+		return _size
 	}
 
-	func views(in _: CGRect) -> [(ViewProvider, CGRect)] {
-		return [
-			(DemoViewProvider(), CGRect(x: 0, y: 0, width: 100, height: 200)),
-			(DemoViewProvider(), CGRect(x: 0, y: 300, width: 100, height: 200)),
-		]
-	}
-}
-
-class DemoViewProvider: ViewProvider {
-	var key: String = UUID().uuidString
-
-	var animator: Animator?
-
-	func makeView() -> UIView {
-		let v = UIView()
-		v.backgroundColor = .red
-		return v
-	}
-
-	func updateView(_: UIView) {
-		// print("update view")
-	}
-
-	func layout(size _: CGSize) -> CGSize {
-		return CGSize(width: 40, height: 60)
-	}
-
-	func views(in _: CGRect) -> [(ViewProvider, CGRect)] {
-		return []
+	func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+		print("frame: \(frame)")
+		return provider.views(in: CGRect(origin: .zero, size: _size)).map { viewProvider, frame in
+			(viewProvider, frame)
+		}
 	}
 }
