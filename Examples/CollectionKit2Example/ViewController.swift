@@ -5,6 +5,8 @@
 //  Created by Luke Zhao on 2018-12-13.
 //  Copyright © 2018 Luke Zhao. All rights reserved.
 //
+
+import CollectionKit2
 import UIKit
 
 class ViewController: UIViewController {

@@ -8,9 +8,9 @@
 
 import UIKit
 
-class AnimatedReloadAnimator: Animator {
-	static let defaultEntryTransform: CATransform3D = CATransform3DTranslate(CATransform3DScale(CATransform3DIdentity, 0.8, 0.8, 1), 0, 0, 0)
-	static let fancyEntryTransform: CATransform3D = {
+public class AnimatedReloadAnimator: Animator {
+	public static let defaultEntryTransform: CATransform3D = CATransform3DTranslate(CATransform3DScale(CATransform3DIdentity, 0.8, 0.8, 1), 0, 0, 0)
+	public static let fancyEntryTransform: CATransform3D = {
 		var trans = CATransform3DIdentity
 		trans.m34 = -1 / 500
 		return CATransform3DScale(CATransform3DRotate(CATransform3DTranslate(trans, 0, -50, -100), 0.5, 1, 0, 0), 0.8, 0.8, 1)
@@ -18,12 +18,12 @@ class AnimatedReloadAnimator: Animator {
 
 	let entryTransform: CATransform3D
 
-	init(entryTransform: CATransform3D = defaultEntryTransform) {
+	public init(entryTransform: CATransform3D = defaultEntryTransform) {
 		self.entryTransform = entryTransform
 		super.init()
 	}
 
-	override func delete(collectionView: CollectionView, view: UIView) {
+	public override func delete(collectionView: CollectionView, view: UIView) {
 		if collectionView.isReloading, collectionView.bounds.intersects(view.frame) {
 			UIView.animate(withDuration: 0.25, animations: {
 				view.layer.transform = self.entryTransform
@@ -40,7 +40,7 @@ class AnimatedReloadAnimator: Animator {
 		}
 	}
 
-	override func insert(collectionView: CollectionView, view: UIView, frame: CGRect) {
+	public override func insert(collectionView: CollectionView, view: UIView, frame: CGRect) {
 		view.bounds = frame.bounds
 		view.center = frame.center
 		if collectionView.isReloading, collectionView.hasReloaded, collectionView.bounds.intersects(frame) {
@@ -54,7 +54,7 @@ class AnimatedReloadAnimator: Animator {
 		}
 	}
 
-	override func update(collectionView _: CollectionView, view: UIView, frame: CGRect) {
+	public override func update(collectionView _: CollectionView, view: UIView, frame: CGRect) {
 		if view.center != frame.center {
 			UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: [.layoutSubviews], animations: {
 				view.center = frame.center
