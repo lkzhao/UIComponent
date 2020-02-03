@@ -9,15 +9,16 @@
 import UIKit
 
 public class FitViewProvider: SimpleViewProvider {
-  public init(
-    key: String = UUID().uuidString,
-    animator: Animator? = nil,
-    width: CGFloat? = nil,
-    height: CGFloat? = nil,
-    view: UIView) {
-    super.init(key: key, animator: animator,
-               width: width == nil ? .fit : .absolute(width!),
-               height: height == nil ? .fit : .absolute(height!),
-               view: view)
-  }
+	public init(
+		key: String = UUID().uuidString,
+		animator: Animator? = nil,
+		width: CGFloat? = nil,
+		height: CGFloat? = nil,
+		view: UIView
+	) {
+		super.init(key: key, animator: animator,
+							 width: width == nil ? .fit : .absolute(width!),
+							 height: height == nil ? .fit : .absolute(height!),
+							 view: view)
+	}
 }
