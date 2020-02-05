@@ -57,14 +57,69 @@ class ViewController: UIViewController {
 															 child: HalfSizeProvider(provider: HalfSizeProvider(provider: HalfSizeProvider(provider: viewProvider1))))
 
 		let provider2 = viewProvider
-		collectionView.provider = provider
+    let v0 = UIView()
+    v0.backgroundColor = .black
+    let v1 = UIView()
+    v1.backgroundColor = .red
+    let v2 = UIView()
+    v2.backgroundColor = .blue
+    let v3 = UIView()
+    v3.backgroundColor = .green
 
-		let animator = AnimatedReloadAnimator(entryTransform: AnimatedReloadAnimator.fancyEntryTransform)
-		collectionView.animator = animator
+//    collectionView.provider = ColumnLayout {
+//      RowLayout {
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v1)
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v2)
+//      }
+//      RowLayout {
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: UIView())
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: UIView())
+//      }
+//    }
+    
+//    collectionView.provider = ColumnLayout {
+//      ForEach(data[0]) { number in
+//        ClosureViewProvider(update: { (view: UILabel) in
+//          view.text = "\(number)"
+//        }, size: { _ in
+//          CGSize(width: 100, height: 100)
+//        })
+//      }
+//    }
 
-		DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-			self.collectionView.provider = provider2
-		}
+    let showV1 = true
+    collectionView.provider = ColumnLayout {
+      RowLayout {
+        ForEach(0..<5) { number in
+          LabelProvider(text: "\(number)")
+          LabelProvider(text: "LOL")
+        }
+      }
+      SimpleViewProvider(width: .absolute(200), height: .absolute(100), view: v0)
+      if showV1 {
+        SimpleViewProvider(width: .absolute(200), height: .absolute(100), view: v1)
+      }
+    }
+    
+    
+//    let shouldDisplayFirstRow = true
+//    collectionView.provider = ColumnLayout {
+//      if shouldDisplayFirstRow {
+//        SimpleViewProvider(width: .absolute(200), height: .absolute(100), view: v0)
+//      }
+//      RowLayout {
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v1)
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v2)
+//      }
+//      SimpleViewProvider(width: .absolute(200), height: .absolute(100), view: v3)
+//    }
+
+//		let animator = AnimatedReloadAnimator(entryTransform: AnimatedReloadAnimator.fancyEntryTransform)
+//		collectionView.animator = animator
+//
+//		DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//			self.collectionView.provider = provider2
+//		}
 
 		collectionView.isScrollEnabled = true
 		collectionView.alwaysBounceVertical = true
@@ -80,6 +135,23 @@ class ViewController: UIViewController {
 		reloadButton.frame = CGRect(x: 0, y: view.bounds.height - 60,
 																width: view.bounds.width, height: 60)
 	}
+}
+
+class LabelProvider: BaseViewProvider<UILabel> {
+  var text: String
+  var font: UIFont
+  init(text: String, font: UIFont = UIFont.systemFont(ofSize: 16)) {
+    self.text = text
+    self.font = font
+    super.init()
+  }
+  override func updateView(_ view: UILabel) {
+    view.font = font
+    view.text = text
+  }
+  override func sizeThatFits(_ size: CGSize) -> CGSize {
+    return (text as NSString).boundingRect(with: size, options: [], attributes: [.font: font], context: nil).size
+  }
 }
 
 class HalfSizeProvider: Provider {
