@@ -10,13 +10,13 @@ import UIKit
 
 /// Provider provides its size and its items' views.
 public protocol Provider: AnyObject, ProviderBuilderComponent {
-	/// Get content size based on the parent's size.
-	/// - Parameter size: Parent provider's content size.
-	func layout(size: CGSize) -> CGSize
-
-	/// Get items' view and its rect within the frame in current provider's coordinates.
-	/// - Parameter frame: Parent provider's visible frame in current provider's coordinates.
-	func views(in frame: CGRect) -> [(ViewProvider, CGRect)]
+  /// Get content size based on the parent's size.
+  /// - Parameter size: Parent provider's content size.
+  func layout(size: CGSize) -> CGSize
+  
+  /// Get items' view and its rect within the frame in current provider's coordinates.
+  /// - Parameter frame: Parent provider's visible frame in current provider's coordinates.
+  func views(in frame: CGRect) -> [(ViewProvider, CGRect)]
 }
 
 /// ProgressiveProvider
@@ -41,46 +41,34 @@ public protocol Provider: AnyObject, ProviderBuilderComponent {
 /// of your application. Checkout `InfiniteListProvider` in the example project for
 /// a basic ProgressiveProvider implementation reference.
 public protocol ProgressiveProvider: Provider {
-	var onUpdate: ((CGSize) -> Void)? { get set }
+  var onUpdate: ((CGSize) -> Void)? { get set }
 }
 
-
-
-// Swift Funtion Builders
-public protocol ProviderBuilderComponent {
-  var providers: [Provider] { get }
+extension Provider {
+  public func padding(_ amount: CGFloat) -> InsetLayout {
+    return InsetLayout(insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount), child: self)
+  }
+  public func wrap() -> CKViewProvider {
+    return CKViewProvider(self)
+  }
+  public func flex(_ weight: CGFloat = 1) -> Flex {
+    return Flex(weight: weight, child: self)
+  }
 }
 
-public extension Provider {
-    var providers: [Provider] {
-        return [self]
+open class CKViewProvider: ViewAdapter<CKView> {
+  var provider: Provider
+  public init(_ provider: Provider) {
+    self.provider = provider
+    super.init()
+  }
+  public override func updateView(_ view: CKView) {
+    if view.provider !== provider {
+      view.provider = provider
     }
-}
-
-struct InternalProviderBuilderComponent: ProviderBuilderComponent {
-  var providers: [Provider]
-}
-
-public struct ForEach<S: Sequence, D>: ProviderBuilderComponent where S.Element == D {
-  public var providers: [Provider]
-  
-  public init(_ data: S, @ProviderBuilder _ content: (D) -> ProviderBuilderComponent) {
-    providers = data.flatMap { content($0).providers }
+    super.updateView(view)
   }
-}
-
-@_functionBuilder
-public struct ProviderBuilder {
-  public static func buildBlock(_ segments: ProviderBuilderComponent...) -> ProviderBuilderComponent {
-    return InternalProviderBuilderComponent(providers: segments.flatMap { $0.providers })
-  }
-  public static func buildIf(_ segments: ProviderBuilderComponent?...) -> ProviderBuilderComponent {
-    return InternalProviderBuilderComponent(providers: segments.flatMap { $0?.providers ?? [] })
-  }
-}
-
-public extension FlexLayout {
-  convenience init(@ProviderBuilder _ content: () -> ProviderBuilderComponent) {
-    self.init(children: content().providers)
+  public override func sizeThatFits(_ size: CGSize) -> CGSize {
+    return provider.layout(size: size)
   }
 }

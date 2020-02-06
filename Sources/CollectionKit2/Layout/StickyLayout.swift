@@ -14,7 +14,7 @@ public class Sticky: SingleChildProvider {
 	}
 }
 
-open class StickyRowLayout: RowLayout {
+open class StickyHStack: HStack {
 	private var stickyIndexes: [Int] = []
 
 	open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
@@ -76,6 +76,6 @@ open class StickyRowLayout: RowLayout {
 	}
 }
 
-open class StickyColumnLayout: StickyRowLayout {
+open class StickyVStack: StickyHStack {
 	open override var isTransposed: Bool { return true }
 }

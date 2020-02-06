@@ -14,6 +14,7 @@
 		A304892F21C347020026EDA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A304892E21C347020026EDA7 /* Assets.xcassets */; };
 		A304893221C347020026EDA7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A304893021C347020026EDA7 /* LaunchScreen.storyboard */; };
 		A3C1EDC722B0863B007E4D3A /* InfiniteListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C1EDC622B0863B007E4D3A /* InfiniteListProvider.swift */; };
+		B1B6EAA023EB4CB900A983E1 /* Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B6EA9F23EB4CB900A983E1 /* Then.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		A304893121C347020026EDA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A304893321C347020026EDA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A3C1EDC622B0863B007E4D3A /* InfiniteListProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteListProvider.swift; sourceTree = "<group>"; };
+		B1B6EA9F23EB4CB900A983E1 /* Then.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Then.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 				A304892721C347010026EDA7 /* AppDelegate.swift */,
 				A304892921C347010026EDA7 /* ViewController.swift */,
 				A3C1EDC622B0863B007E4D3A /* InfiniteListProvider.swift */,
+				B1B6EA9F23EB4CB900A983E1 /* Then.swift */,
 				A304892B21C347010026EDA7 /* Main.storyboard */,
 				A304892E21C347020026EDA7 /* Assets.xcassets */,
 				A304893021C347020026EDA7 /* LaunchScreen.storyboard */,
@@ -156,6 +159,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1B6EAA023EB4CB900A983E1 /* Then.swift in Sources */,
 				A3C1EDC722B0863B007E4D3A /* InfiniteListProvider.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
 				A304892821C347010026EDA7 /* AppDelegate.swift in Sources */,

@@ -14,7 +14,7 @@ open class Animator {
 	///
 	/// - Parameters:
 	///   - collectionView: the CollectionView performing the update
-	open func willUpdate(collectionView _: CollectionView) {}
+	open func willUpdate(collectionView _: ProviderDisplayableView) {}
 
 	/// Called when CollectionView inserts a view into its subviews.
 	///
@@ -25,7 +25,7 @@ open class Animator {
 	///   - view: the view being inserted
 	///   - at: index of the view inside the CollectionView (after flattening step)
 	///   - frame: frame provided by the layout
-	open func insert(collectionView _: CollectionView,
+	open func insert(collectionView _: ProviderDisplayableView,
 									 view _: UIView,
 									 frame _: CGRect) {}
 
@@ -37,7 +37,7 @@ open class Animator {
 	/// - Parameters:
 	///   - collectionView: source CollectionView
 	///   - view: the view being deleted
-	open func delete(collectionView _: CollectionView,
+	open func delete(collectionView _: ProviderDisplayableView,
 									 view: UIView) {
 		view.recycleForCollectionKitReuse()
 	}
@@ -52,7 +52,7 @@ open class Animator {
 	///   - view: the view being updated
 	///   - at: index of the view inside the CollectionView (after flattening step)
 	///   - frame: frame provided by the layout
-	open func update(collectionView _: CollectionView,
+	open func update(collectionView _: ProviderDisplayableView,
 									 view: UIView,
 									 frame: CGRect) {
 		if view.bounds.size != frame.bounds.size {
@@ -71,7 +71,7 @@ open class Animator {
 	///   - view: the view being updated
 	///   - at: index of the view inside the CollectionView (after flattening step)
 	///   - frame: frame provided by the layout
-	open func shift(collectionView _: CollectionView,
+	open func shift(collectionView _: ProviderDisplayableView,
 									delta: CGPoint,
 									view: UIView,
 									frame _: CGRect) {

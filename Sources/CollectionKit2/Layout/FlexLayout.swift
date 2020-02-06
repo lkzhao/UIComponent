@@ -11,8 +11,8 @@ import UIKit
 open class Flex: SingleChildProvider {
 	public var flex: CGFloat
 
-	public init(flex: CGFloat = 1, child: Provider) {
-		self.flex = flex
+	public init(weight: CGFloat = 1, child: Provider) {
+		self.flex = weight
 		super.init(child: child)
 	}
 }
@@ -22,7 +22,7 @@ open class FlexLayout: SortedLayoutProvider {
 	open var alignItems: AlignItem
 	open var justifyContent: JustifyContent
 
-	open var fitCrossAxis: Bool
+	open var fitCrossAxis: Bool = false
 
 	/// always stretch filling item to fill empty space even if child returns a smaller size
 	open var alwaysFillEmptySpaces: Bool = true
@@ -35,14 +35,12 @@ open class FlexLayout: SortedLayoutProvider {
 	}
 
 	public init(spacing: CGFloat = 0,
-							fitCrossAxis: Bool = false, // false -> fill
 							justifyContent: JustifyContent = .start,
 							alignItems: AlignItem = .start,
 							children: [Provider]) {
 		self.spacing = spacing
 		self.justifyContent = justifyContent
 		self.alignItems = alignItems
-		self.fitCrossAxis = fitCrossAxis
 		super.init(children: children)
 	}
 
@@ -105,4 +103,13 @@ public typealias RowLayout = FlexLayout
 
 open class ColumnLayout: FlexLayout {
 	open override var isTransposed: Bool { return true }
+}
+
+public typealias HStack = RowLayout
+public typealias VStack = ColumnLayout
+
+public extension FlexLayout {
+  convenience init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
+    self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, children: content().providers)
+  }
 }

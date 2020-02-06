@@ -109,3 +109,14 @@ open class FlowLayout: SortedLayoutProvider {
 		return (totalHeight, lineData)
 	}
 }
+
+public extension FlowLayout {
+  convenience init(lineSpacing: CGFloat = 0,
+                   interitemSpacing: CGFloat = 0,
+                   justifyContent: JustifyContent = .start,
+                   alignItems: AlignItem = .start,
+                   alignContent: AlignContent = .start,
+                   @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
+    self.init(lineSpacing: lineSpacing, interitemSpacing: interitemSpacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: content().providers)
+  }
+}

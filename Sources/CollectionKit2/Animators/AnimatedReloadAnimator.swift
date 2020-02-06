@@ -23,7 +23,7 @@ public class AnimatedReloadAnimator: Animator {
 		super.init()
 	}
 
-	public override func delete(collectionView: CollectionView, view: UIView) {
+	public override func delete(collectionView: ProviderDisplayableView, view: UIView) {
 		if collectionView.isReloading, collectionView.bounds.intersects(view.frame) {
 			UIView.animate(withDuration: 0.25, animations: {
 				view.layer.transform = self.entryTransform
@@ -40,11 +40,11 @@ public class AnimatedReloadAnimator: Animator {
 		}
 	}
 
-	public override func insert(collectionView: CollectionView, view: UIView, frame: CGRect) {
+	public override func insert(collectionView: ProviderDisplayableView, view: UIView, frame: CGRect) {
 		view.bounds = frame.bounds
 		view.center = frame.center
 		if collectionView.isReloading, collectionView.hasReloaded, collectionView.bounds.intersects(frame) {
-			let offsetTime: TimeInterval = TimeInterval(frame.origin.distance(collectionView.contentOffset) / 3000)
+      let offsetTime: TimeInterval = TimeInterval(frame.origin.distance(collectionView.bounds.origin) / 3000)
 			view.layer.transform = entryTransform
 			view.alpha = 0
 			UIView.animate(withDuration: 0.5, delay: offsetTime, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
@@ -54,7 +54,7 @@ public class AnimatedReloadAnimator: Animator {
 		}
 	}
 
-	public override func update(collectionView _: CollectionView, view: UIView, frame: CGRect) {
+	public override func update(collectionView _: ProviderDisplayableView, view: UIView, frame: CGRect) {
 		if view.center != frame.center {
 			UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: [.layoutSubviews], animations: {
 				view.center = frame.center

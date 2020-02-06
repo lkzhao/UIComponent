@@ -10,7 +10,7 @@ import CollectionKit2
 import UIKit
 
 class ViewController: UIViewController {
-	let collectionView = CollectionView()
+	var collectionView = CollectionView()
 
 	let reloadButton: UIButton = {
 		let button = UIButton()
@@ -66,18 +66,18 @@ class ViewController: UIViewController {
     let v3 = UIView()
     v3.backgroundColor = .green
 
-//    collectionView.provider = ColumnLayout {
-//      RowLayout {
+//    collectionView.provider = VStack {
+//      HStack {
 //        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v1)
 //        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v2)
 //      }
-//      RowLayout {
+//      HStack {
 //        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: UIView())
 //        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: UIView())
 //      }
 //    }
     
-//    collectionView.provider = ColumnLayout {
+//    collectionView.provider = VStack {
 //      ForEach(data[0]) { number in
 //        ClosureViewProvider(update: { (view: UILabel) in
 //          view.text = "\(number)"
@@ -88,26 +88,43 @@ class ViewController: UIViewController {
 //    }
 
     let showV1 = true
-    collectionView.provider = ColumnLayout {
-      RowLayout {
+    collectionView.provider = VStack {
+      HStack {
+        Text("FLEX").color(.white).padding(20).wrap().backgroundColor(.black)
         ForEach(0..<5) { number in
-          LabelProvider(text: "\(number)")
-          LabelProvider(text: "LOL")
+          VStack(alignItems: .center) {
+            Text("\(number)")
+            VSpace(50)
+            Text("LOL").padding(10)
+          }
         }
       }
-      SimpleViewProvider(width: .absolute(200), height: .absolute(100), view: v0)
+      FlowLayout {
+        User(name: "John Appleseed", image: UIImage(systemName: "person")!)
+        User(name: "Brian", image: UIImage(systemName: "person")!)
+        User(name: "Josh", image: UIImage(systemName: "person")!)
+        User(name: "Mason", image: UIImage(systemName: "person")!)
+      }
+      UILabel().then {
+        $0.font = UIFont.boldSystemFont(ofSize: 44)
+        $0.textColor = .white
+        $0.backgroundColor = .black
+        $0.text = "Raw Label"
+      }
       if showV1 {
-        SimpleViewProvider(width: .absolute(200), height: .absolute(100), view: v1)
+        UILabel().then {
+          $0.text = "Oh my gosh"
+        }
       }
     }
     
     
 //    let shouldDisplayFirstRow = true
-//    collectionView.provider = ColumnLayout {
+//    collectionView.provider = VStack {
 //      if shouldDisplayFirstRow {
 //        SimpleViewProvider(width: .absolute(200), height: .absolute(100), view: v0)
 //      }
-//      RowLayout {
+//      HStack {
 //        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v1)
 //        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v2)
 //      }
@@ -137,20 +154,13 @@ class ViewController: UIViewController {
 	}
 }
 
-class LabelProvider: BaseViewProvider<UILabel> {
-  var text: String
-  var font: UIFont
-  init(text: String, font: UIFont = UIFont.systemFont(ofSize: 16)) {
-    self.text = text
-    self.font = font
-    super.init()
-  }
-  override func updateView(_ view: UILabel) {
-    view.font = font
-    view.text = text
-  }
-  override func sizeThatFits(_ size: CGSize) -> CGSize {
-    return (text as NSString).boundingRect(with: size, options: [], attributes: [.font: font], context: nil).size
+class User: SingleChildProvider {
+  init(name: String, image: UIImage) {
+    super.init(child: HStack(alignItems: .center) {
+      Image(image).tintColor(.darkGray)
+      HSpace(10)
+      Text(name)
+    }.padding(20))
   }
 }
 
