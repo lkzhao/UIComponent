@@ -9,57 +9,57 @@
 import UIKit
 
 public protocol ProviderDisplayable: class {
-  var cubeData: CubeData { get }
+  var ckData: CKData { get }
 }
 
 public typealias ProviderDisplayableView = ProviderDisplayable & UIView
 
 public extension ProviderDisplayable {
   var provider: Provider? {
-    get { return cubeData.provider }
-    set { cubeData.provider = newValue }
+    get { return ckData.provider }
+    set { ckData.provider = newValue }
   }
   var animator: Animator {
-    get { return cubeData.animator }
-    set { cubeData.animator = newValue }
+    get { return ckData.animator }
+    set { ckData.animator = newValue }
   }
   var reloadCount: Int {
-    return cubeData.reloadCount
+    return ckData.reloadCount
   }
   var needsReload: Bool {
-    return cubeData.needsReload
+    return ckData.needsReload
   }
   var needsInvalidateLayout: Bool {
-    return cubeData.needsInvalidateLayout
+    return ckData.needsInvalidateLayout
   }
   var isLoadingCell: Bool {
-    return cubeData.isLoadingCell
+    return ckData.isLoadingCell
   }
   var isReloading: Bool {
-    return cubeData.isReloading
+    return ckData.isReloading
   }
   var hasReloaded: Bool { reloadCount > 0 }
 
   var visibleCells: [UIView] {
-    return cubeData.visibleCells
+    return ckData.visibleCells
   }
   var visibleViewData: [(ViewProvider, CGRect)] {
-    return cubeData.visibleViewData
+    return ckData.visibleViewData
   }
   var lastLoadBounds: CGRect {
-    return cubeData.lastLoadBounds
+    return ckData.lastLoadBounds
   }
   var contentOffsetChange: CGPoint {
-    return cubeData.contentOffsetChange
+    return ckData.contentOffsetChange
   }
   func setNeedsReload() {
-    cubeData.setNeedsReload()
+    ckData.setNeedsReload()
   }
   func setNeedsInvalidateLayout() {
-    cubeData.setNeedsInvalidateLayout()
+    ckData.setNeedsInvalidateLayout()
   }
   func setNeedsLoadCells() {
-    cubeData.setNeedsLoadCells()
+    ckData.setNeedsLoadCells()
   }
   func ensureZoomViewIsCentered() {
     
@@ -78,7 +78,7 @@ extension ProviderDisplayable where Self: UIView {
   }
 }
 
-public class CubeData {
+public class CKData {
   public weak var view: ProviderDisplayableView?
   public var provider: Provider? {
     willSet {
@@ -317,11 +317,11 @@ public class CubeData {
 }
 
 open class CollectionView: UIScrollView, ProviderDisplayable {
-  lazy public var cubeData: CubeData = CubeData(view: self)
+  lazy public var ckData: CKData = CKData(view: self)
   
   public var contentView: UIView? {
-    get { return cubeData.contentView }
-    set { cubeData.contentView = newValue }
+    get { return ckData.contentView }
+    set { ckData.contentView = newValue }
   }
 
 	public convenience init(provider: Provider) {
@@ -336,12 +336,12 @@ open class CollectionView: UIScrollView, ProviderDisplayable {
 
 	open override func layoutSubviews() {
 		super.layoutSubviews()
-    cubeData.layoutSubview()
+    ckData.layoutSubview()
 	}
 }
 
 open class CKView: UIView, ProviderDisplayable {
-  lazy public var cubeData: CubeData = CubeData(view: self)
+  lazy public var ckData: CKData = CKData(view: self)
 
   public convenience init(provider: Provider) {
     self.init()
@@ -355,6 +355,6 @@ open class CKView: UIView, ProviderDisplayable {
 
   open override func layoutSubviews() {
     super.layoutSubviews()
-    cubeData.layoutSubview()
+    ckData.layoutSubview()
   }
 }
