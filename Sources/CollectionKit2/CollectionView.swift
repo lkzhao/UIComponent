@@ -61,6 +61,13 @@ public extension ProviderDisplayable {
   func setNeedsLoadCells() {
     cubeData.setNeedsLoadCells()
   }
+  func ensureZoomViewIsCentered() {
+    
+  }
+  func invalidateLayout() {
+  }
+  func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
+  }
 }
 
 extension ProviderDisplayable where Self: UIView {
@@ -311,6 +318,11 @@ public class CubeData {
 
 open class CollectionView: UIScrollView, ProviderDisplayable {
   lazy public var cubeData: CubeData = CubeData(view: self)
+  
+  public var contentView: UIView? {
+    get { return cubeData.contentView }
+    set { cubeData.contentView = newValue }
+  }
 
 	public convenience init(provider: Provider) {
 		self.init()
