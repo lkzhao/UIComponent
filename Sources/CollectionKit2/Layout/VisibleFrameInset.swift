@@ -24,7 +24,7 @@ open class VisibleFrameInset: SingleChildProvider {
 		super.init(child: child)
 	}
 
-	open override func layout(size: CGSize) -> CGSize {
+	open override func layout(size: CGSize) -> LayoutNode {
 		layoutSize = size
 		return super.layout(size: size)
 	}

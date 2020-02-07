@@ -8,15 +8,19 @@
 
 import UIKit
 
-/// Provider provides its size and its items' views.
-public protocol Provider: ProviderBuilderComponent {
-  /// Get content size based on the parent's size.
-  /// - Parameter size: Parent provider's content size.
-  func layout(size: CGSize) -> CGSize
+public protocol LayoutNode {
+  var size: CGSize
   
   /// Get items' view and its rect within the frame in current provider's coordinates.
   /// - Parameter frame: Parent provider's visible frame in current provider's coordinates.
   func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)]
+}
+
+/// Provider provides its size and its items' views.
+public protocol Provider: ProviderBuilderComponent {
+  /// Get content size based on the parent's size.
+  /// - Parameter size: Parent provider's content size.
+  func layout(size: CGSize) -> LayoutNode
 }
 
 /// ProgressiveProvider

@@ -33,7 +33,7 @@ extension AnyViewProvider {
 }
 
 extension AnyViewProvider {
-  public func layout(size: CGSize) -> CGSize {
+  public func layout(size: CGSize) -> LayoutNode {
     let size = sizeThatFits(size)
     ViewProviderSizeCache.shared.cache[key] = size
     return size

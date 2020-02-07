@@ -38,7 +38,7 @@ open class LayoutProvider: MultiChildProvider {
 		return size
 	}
 
-	open override func layout(size: CGSize) -> CGSize {
+	open override func layout(size: CGSize) -> LayoutNode {
 		let contentSize: CGSize
 		if isTransposed {
 			let (_frames, _contentSize) = simpleLayoutWithCustomSize(size: size.transposed)

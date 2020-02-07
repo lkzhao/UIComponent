@@ -69,7 +69,7 @@ open class StickyHStack: HStack {
 		return result
 	}
 
-	open override func layout(size: CGSize) -> CGSize {
+	open override func layout(size: CGSize) -> LayoutNode {
 		let size = super.layout(size: size)
 		stickyIndexes = children.enumerated().filter { $0.element is Sticky }.map { $0.offset }
 		return size

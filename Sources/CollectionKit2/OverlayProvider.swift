@@ -17,7 +17,7 @@ open class OverlayProvider: Provider {
 		self.front = front
 	}
 
-	open func layout(size: CGSize) -> CGSize {
+	open func layout(size: CGSize) -> LayoutNode {
 		let frontSize = front.layout(size: size)
 		_ = back.layout(size: frontSize)
 		return frontSize

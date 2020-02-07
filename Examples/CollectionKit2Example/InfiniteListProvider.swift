@@ -25,7 +25,7 @@ class InfiniteListProvider: ProgressiveProvider {
 		}
 	}
 
-	func layout(size: CGSize) -> CGSize {
+	func layout(size: CGSize) -> LayoutNode {
 		if size.width != calculatedWidth {
 			// clear calculated values
 			calculatedWidth = size.width

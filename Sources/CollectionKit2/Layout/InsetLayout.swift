@@ -25,7 +25,7 @@ open class InsetLayout: Provider {
 		self.child = child
 	}
 
-	open func layout(size: CGSize) -> CGSize {
+	open func layout(size: CGSize) -> LayoutNode {
 		insets = insetProvider?(size) ?? insets
 		return child.layout(size: size.inset(by: insets)).inset(by: -insets)
 	}

@@ -15,7 +15,7 @@ open class SingleChildProvider: Provider {
 		self.child = child
 	}
 
-	open func layout(size: CGSize) -> CGSize {
+	open func layout(size: CGSize) -> LayoutNode {
 		return child.layout(size: size)
 	}
 

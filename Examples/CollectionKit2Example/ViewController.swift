@@ -175,7 +175,7 @@ class HalfSizeProvider: Provider {
 	}
 
 	var _size: CGSize = .zero
-	func layout(size: CGSize) -> CGSize {
+	func layout(size: CGSize) -> LayoutNode {
 		_size = provider.layout(size: CGSize(width: size.width, height: size.height / 2))
 		return _size
 	}
