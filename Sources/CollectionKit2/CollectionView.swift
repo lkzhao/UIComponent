@@ -62,11 +62,13 @@ public extension ProviderDisplayable {
     ckData.setNeedsLoadCells()
   }
   func ensureZoomViewIsCentered() {
-    
+    ckData.ensureZoomViewIsCentered()
   }
   func invalidateLayout() {
+    ckData.invalidateLayout()
   }
   func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
+    ckData.reloadData(contentOffsetAdjustFn: contentOffsetAdjustFn)
   }
 }
 
@@ -338,6 +340,10 @@ open class CollectionView: UIScrollView, ProviderDisplayable {
 		super.layoutSubviews()
     ckData.layoutSubview()
 	}
+  
+  open override func sizeThatFits(_ size: CGSize) -> CGSize {
+    ckData.sizeThatFits(size)
+  }
 }
 
 open class CKView: UIView, ProviderDisplayable {
@@ -356,5 +362,9 @@ open class CKView: UIView, ProviderDisplayable {
   open override func layoutSubviews() {
     super.layoutSubviews()
     ckData.layoutSubview()
+  }
+  
+  open override func sizeThatFits(_ size: CGSize) -> CGSize {
+    ckData.sizeThatFits(size)
   }
 }
