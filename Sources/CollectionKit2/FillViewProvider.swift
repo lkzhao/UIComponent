@@ -8,13 +8,13 @@
 
 import UIKit
 
-public class FillViewProvider: SimpleViewProvider {
+public class FillViewProvider<View: UIView>: SimpleViewProvider<View> {
 	public init(
 		key: String = UUID().uuidString,
 		animator: Animator? = nil,
 		width: CGFloat? = nil,
 		height: CGFloat? = nil,
-		view: UIView
+		view: View
 	) {
 		super.init(key: key, animator: animator,
 							 width: width == nil ? .fill : .absolute(width!),

@@ -29,7 +29,7 @@ open class VisibleFrameInset: SingleChildProvider {
 		return super.layout(size: size)
 	}
 
-	open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+	open override func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
 		if let insetProvider = insetProvider {
 			insets = insetProvider(layoutSize)
 		}

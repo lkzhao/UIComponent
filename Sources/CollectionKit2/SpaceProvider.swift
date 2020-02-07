@@ -22,7 +22,7 @@ public class SpaceProvider: Provider {
 		return CGSize(width: width, height: height)
 	}
 
-	public func views(in _: CGRect) -> [(ViewProvider, CGRect)] {
+	public func views(in _: CGRect) -> [(AnyViewProvider, CGRect)] {
 		return []
 	}
 }
@@ -35,7 +35,7 @@ public class VSpace: Provider {
   public func layout(size _: CGSize) -> CGSize {
     return CGSize(width: 0, height: height)
   }
-  public func views(in _: CGRect) -> [(ViewProvider, CGRect)] {
+  public func views(in _: CGRect) -> [(AnyViewProvider, CGRect)] {
     return []
   }
 }
@@ -48,7 +48,7 @@ public class HSpace: Provider {
   public func layout(size _: CGSize) -> CGSize {
     return CGSize(width: width, height: 0)
   }
-  public func views(in _: CGRect) -> [(ViewProvider, CGRect)] {
+  public func views(in _: CGRect) -> [(AnyViewProvider, CGRect)] {
     return []
   }
 }

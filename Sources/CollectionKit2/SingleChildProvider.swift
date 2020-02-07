@@ -19,7 +19,7 @@ open class SingleChildProvider: Provider {
 		return child.layout(size: size)
 	}
 
-	open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+	open func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
 		return child.views(in: frame)
 	}
 }

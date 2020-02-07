@@ -53,8 +53,8 @@ open class LayoutProvider: MultiChildProvider {
 		return contentSize
 	}
 
-	open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-		var result = [(ViewProvider, CGRect)]()
+	open override func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+		var result = [(AnyViewProvider, CGRect)]()
 
 		for (i, childFrame) in frames.enumerated() where frame.intersects(childFrame) {
 			let child = children[i]

@@ -43,7 +43,7 @@ public extension ProviderDisplayable {
   var visibleCells: [UIView] {
     return ckData.visibleCells
   }
-  var visibleViewData: [(ViewProvider, CGRect)] {
+  var visibleViewData: [(AnyViewProvider, CGRect)] {
     return ckData.visibleViewData
   }
   var lastLoadBounds: CGRect {
@@ -87,7 +87,7 @@ public class CKData {
     didSet {
       if let provider = provider as? ProgressiveProvider {
         provider.onUpdate = { [weak provider, weak self] newSize in
-          guard provider === self?.provider else { return }
+          guard let progressProvider = self?.provider as? ProgressiveProvider, provider === progressProvider else { return }
           self?.contentSize = newSize
           if self?.isLoadingCell == false {
             self?.setNeedsLoadCells()
@@ -111,7 +111,7 @@ public class CKData {
 
   // visible identifiers for cells on screen
   public private(set) var visibleCells: [UIView] = []
-  public private(set) var visibleViewData: [(ViewProvider, CGRect)] = []
+  public private(set) var visibleViewData: [(AnyViewProvider, CGRect)] = []
 
   public private(set) var lastLoadBounds: CGRect = .zero
   public private(set) var contentOffsetChange: CGPoint = .zero
@@ -283,15 +283,15 @@ public class CKData {
         cell = existingCell
         if reloading {
           // cell was on screen before reload, need to update the view.
-          viewProvider.updateView(cell)
+          viewProvider._updateView(cell)
           (viewProvider.animator ?? animator).shift(collectionView: view,
                                                     delta: contentOffsetChange,
                                                     view: cell,
                                                     frame: frame)
         }
       } else {
-        cell = viewProvider.makeView()
-        viewProvider.updateView(cell)
+        cell = viewProvider._makeView()
+        viewProvider._updateView(cell)
         cell.bounds.size = frame.bounds.size
         cell.center = frame.center
         (viewProvider.animator ?? animator).insert(collectionView: view,

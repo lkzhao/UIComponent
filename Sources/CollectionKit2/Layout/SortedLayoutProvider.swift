@@ -50,8 +50,8 @@ open class SortedLayoutProvider: LayoutProvider {
 		return results
 	}
 
-	open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-		var result = [(ViewProvider, CGRect)]()
+	open override func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+		var result = [(AnyViewProvider, CGRect)]()
 
 		for index in visibleIndexes(in: frame) {
 			let child = children[index]

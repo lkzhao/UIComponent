@@ -23,7 +23,7 @@ open class OverlayProvider: Provider {
 		return frontSize
 	}
 
-	open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+	open func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
 		return back.views(in: frame) + front.views(in: frame)
 	}
 }

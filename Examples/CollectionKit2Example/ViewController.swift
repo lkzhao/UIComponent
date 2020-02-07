@@ -86,8 +86,7 @@ class ViewController: UIViewController {
 //        })
 //      }
 //    }
-
-    let showV1 = true
+    
     collectionView.provider = VStack {
       HStack {
         Text("FLEX").color(.white).padding(20).wrap().backgroundColor(.black)
@@ -99,24 +98,29 @@ class ViewController: UIViewController {
           }
         }
       }
-      FlowLayout {
-        User(name: "John Appleseed", image: UIImage(systemName: "person")!)
-        User(name: "Brian", image: UIImage(systemName: "person")!)
-        User(name: "Josh", image: UIImage(systemName: "person")!)
-        User(name: "Mason", image: UIImage(systemName: "person")!)
-      }
-      UILabel().then {
-        $0.font = UIFont.boldSystemFont(ofSize: 44)
-        $0.textColor = .white
-        $0.backgroundColor = .black
-        $0.text = "Raw Label"
-      }
-      if showV1 {
-        UILabel().then {
-          $0.text = "Oh my gosh"
-        }
-      }
-    }
+      ViewAdapter(view: v1).size(width: .fill, height: .absolute(50.0))
+      ViewAdapter(view: v2).size(width: .fill, height: .absolute(50.0))
+    }.padding(10)
+//    let showV1 = true
+//    collectionView.provider = VStack {
+//      FlowLayout {
+//        User(name: "John Appleseed", image: UIImage(systemName: "person")!)
+//        User(name: "Brian", image: UIImage(systemName: "person")!)
+//        User(name: "Josh", image: UIImage(systemName: "person")!)
+//        User(name: "Mason", image: UIImage(systemName: "person")!)
+//      }
+//      UILabel().then {
+//        $0.font = UIFont.boldSystemFont(ofSize: 44)
+//        $0.textColor = .white
+//        $0.backgroundColor = .black
+//        $0.text = "Raw Label"
+//      }
+//      if showV1 {
+//        UILabel().then {
+//          $0.text = "Oh my gosh"
+//        }
+//      }
+//    }
     
     
 //    let shouldDisplayFirstRow = true
@@ -176,7 +180,7 @@ class HalfSizeProvider: Provider {
 		return _size
 	}
 
-	func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+	func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
 		print("frame: \(frame)")
 		return provider.views(in: CGRect(origin: .zero, size: _size)).map { viewProvider, frame in
 			(viewProvider, frame)

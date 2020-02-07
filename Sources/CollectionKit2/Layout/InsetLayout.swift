@@ -30,7 +30,7 @@ open class InsetLayout: Provider {
 		return child.layout(size: size.inset(by: insets)).inset(by: -insets)
 	}
 
-	open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+	open func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
 		return child.views(in: frame.inset(by: -insets)).map {
 			($0.0, $0.1 + CGPoint(x: insets.left, y: insets.top))
 		}

@@ -36,7 +36,7 @@ class InfiniteListProvider: ProgressiveProvider {
 		return CGSize(width: calculatedWidth, height: calculatedHeight)
 	}
 
-	func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
+	func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
 		// Make sure this runs at least at O(log(n)) time, otherwise there is almost no benefit to use
 		// ProgressiveProvider. Here, it is done using a binary search through the calculated frames
 

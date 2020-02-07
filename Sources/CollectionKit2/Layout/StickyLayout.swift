@@ -17,8 +17,8 @@ public class Sticky: SingleChildProvider {
 open class StickyHStack: HStack {
 	private var stickyIndexes: [Int] = []
 
-	open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-		var result = [(ViewProvider, CGRect)]()
+	open override func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+		var result = [(AnyViewProvider, CGRect)]()
 
 		let topFrameIndex: Int
 		if isTransposed {

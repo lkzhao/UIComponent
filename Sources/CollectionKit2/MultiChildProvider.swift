@@ -20,7 +20,7 @@ open class MultiChildProvider: Provider {
 		fatalError("Subclass should provide the implementation.")
 	}
 
-	open func views(in _: CGRect) -> [(ViewProvider, CGRect)] {
+	open func views(in _: CGRect) -> [(AnyViewProvider, CGRect)] {
 		fatalError("Subclass should provide the implementation.")
 	}
 }

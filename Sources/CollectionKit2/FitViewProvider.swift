@@ -8,13 +8,13 @@
 
 import UIKit
 
-public class FitViewProvider: SimpleViewProvider {
+public class FitViewProvider<View: UIView>: SimpleViewProvider<View> {
 	public init(
 		key: String = UUID().uuidString,
 		animator: Animator? = nil,
 		width: CGFloat? = nil,
 		height: CGFloat? = nil,
-		view: UIView
+		view: View
 	) {
 		super.init(key: key, animator: animator,
 							 width: width == nil ? .fit : .absolute(width!),
