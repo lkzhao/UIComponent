@@ -8,12 +8,12 @@
 
 import UIKit
 
-struct SlowLayoutNode: LayoutNode {
+public struct SlowLayoutNode: LayoutNode {
   let children: [LayoutNode]
   let frames: [CGRect]
-  let size: CGSize
+  public let size: CGSize
 
-  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+  public func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
     var result = [(AnyViewProvider, CGRect)]()
 
     for (i, childFrame) in frames.enumerated() where frame.intersects(childFrame) {
@@ -28,20 +28,20 @@ struct SlowLayoutNode: LayoutNode {
   }
 }
 
-struct HSortedLayoutNode: LayoutNode {
+public struct HSortedLayoutNode: LayoutNode {
   let children: [LayoutNode]
   let frames: [CGRect]
-  let size: CGSize
   let maxFrameLength: CGFloat
+  public let size: CGSize
   
-  init(children: [LayoutNode], frames: [CGRect], size: CGSize) {
+  public init(children: [LayoutNode], frames: [CGRect], size: CGSize) {
     self.maxFrameLength = frames.max { $0.width < $1.width }?.width ?? 0
     self.children = children
     self.frames = frames
     self.size = size
   }
   
-  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+  public func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
     var result = [(AnyViewProvider, CGRect)]()
     var index = frames.binarySearch { $0.minX < frame.minX - maxFrameLength }
     while index < frames.count {
@@ -63,20 +63,20 @@ struct HSortedLayoutNode: LayoutNode {
   }
 }
 
-struct VSortedLayoutNode: LayoutNode {
+public struct VSortedLayoutNode: LayoutNode {
   let children: [LayoutNode]
   let frames: [CGRect]
-  let size: CGSize
   let maxFrameLength: CGFloat
+  public let size: CGSize
   
-  init(children: [LayoutNode], frames: [CGRect], size: CGSize) {
+  public init(children: [LayoutNode], frames: [CGRect], size: CGSize) {
     self.maxFrameLength = frames.max { $0.width < $1.width }?.width ?? 0
     self.children = children
     self.frames = frames
     self.size = size
   }
   
-  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+  public func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
     var result = [(AnyViewProvider, CGRect)]()
     var index = frames.binarySearch { $0.minY < frame.minY - maxFrameLength }
     while index < frames.count {

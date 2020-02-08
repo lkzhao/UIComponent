@@ -27,6 +27,12 @@ extension Provider {
   public func padding(_ amount: CGFloat) -> InsetLayout {
     return InsetLayout(insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount), child: self)
   }
+  public func insets(_ insets: UIEdgeInsets) -> InsetLayout {
+    return InsetLayout(insets: insets, child: self)
+  }
+  public func insets(_ insetProvider: @escaping (CGSize) -> UIEdgeInsets) -> InsetLayout {
+    return InsetLayout(insetProvider: insetProvider, child: self)
+  }
   public func view() -> CKViewProvider {
     return CKViewProvider(self)
   }

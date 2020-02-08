@@ -90,7 +90,7 @@ public class CKData {
     didSet { setNeedsReload() }
   }
   
-  public private(set) var layoutNode: LayoutNode = SpaceLayoutNode(size: .zero)
+  public private(set) var layoutNode: LayoutNode = EmptyLayoutNode()
   
   public internal(set) var needsReload = true
   public internal(set) var needsInvalidateLayout = false

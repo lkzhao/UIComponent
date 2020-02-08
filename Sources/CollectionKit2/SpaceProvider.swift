@@ -23,9 +23,20 @@ public class SpaceProvider: Provider {
 	}
 }
 
-struct SpaceLayoutNode: LayoutNode {
-  let size: CGSize
-  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+public struct EmptyLayoutNode: LayoutNode {
+  public var size: CGSize { return .zero }
+  public init() {}
+  public func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    return []
+  }
+}
+
+public struct SpaceLayoutNode: LayoutNode {
+  public let size: CGSize
+  public init(size: CGSize) {
+    self.size = size
+  }
+  public func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
     return []
   }
 }

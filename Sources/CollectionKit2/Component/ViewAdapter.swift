@@ -36,18 +36,18 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
     self.view = view
   }
   
-  public func makeView() -> View {
+  open func makeView() -> View {
     return view ?? View()
   }
   
-  public func updateView(_ view: View) {
+  open func updateView(_ view: View) {
     for value in values {
       value.write(to: view)
     }
   }
   
   // MARK: - View Provider
-  public func sizeThatFits(_ size: CGSize) -> CGSize {
+  open func sizeThatFits(_ size: CGSize) -> CGSize {
     return view?.sizeThatFits(size) ?? .zero
   }
   

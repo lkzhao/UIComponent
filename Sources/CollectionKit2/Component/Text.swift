@@ -29,4 +29,7 @@ public extension Text {
   func color(_ color: UIColor) -> Self {
     with(\.textColor, color)
   }
+  func numberOfLines(_ lines: Int) -> Self {
+    with(\.numberOfLines, lines)
+  }
 }
