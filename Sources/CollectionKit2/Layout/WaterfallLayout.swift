@@ -63,7 +63,7 @@ extension WaterfallLayoutProtocol {
   }
 }
 
-public struct WaterfallLayout: LayoutProvider, WaterfallLayoutProtocol {
+public struct WaterfallLayout: WaterfallLayoutProtocol {
 	public var columns: Int
 	public var spacing: CGFloat
 	public var alignItems: AlignItem
@@ -77,7 +77,7 @@ public struct WaterfallLayout: LayoutProvider, WaterfallLayoutProtocol {
 	}
 }
 
-public struct HorizontalWaterfallLayout: LayoutProvider, WaterfallLayoutProtocol {
+public struct HorizontalWaterfallLayout: WaterfallLayoutProtocol {
   public var columns: Int
   public var spacing: CGFloat
   public var alignItems: AlignItem
@@ -92,5 +92,17 @@ public struct HorizontalWaterfallLayout: LayoutProvider, WaterfallLayoutProtocol
 
   public var isTransposed: Bool {
     return true
+  }
+}
+
+public extension WaterfallLayout {
+  init(columns: Int = 2, spacing: CGFloat = 0, alignItems: AlignItem = .start, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
+    self.init(columns: columns, spacing: spacing, alignItems: alignItems, children: content().providers)
+  }
+}
+
+public extension HorizontalWaterfallLayout {
+  init(columns: Int = 2, spacing: CGFloat = 0, alignItems: AlignItem = .start, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
+    self.init(columns: columns, spacing: spacing, alignItems: alignItems, children: content().providers)
   }
 }
