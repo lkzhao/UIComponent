@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class Text: ViewAdapter<UILabel> {
+open class Text: ViewAdapter<UILabel> {
   var text: String
   var font: UIFont
   public init(_ text: String, font: UIFont = UIFont.systemFont(ofSize: 16)) {

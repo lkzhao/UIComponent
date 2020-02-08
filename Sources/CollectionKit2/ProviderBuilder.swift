@@ -30,6 +30,12 @@ public struct ProviderBuilder {
   public static func buildIf(_ segments: ProviderBuilderComponent?...) -> ProviderBuilderComponent {
     return InternalProviderBuilderComponent(providers: segments.flatMap { $0?.providers ?? [] })
   }
+  public static func buildEither(first: ProviderBuilderComponent) -> ProviderBuilderComponent {
+    return first
+  }
+  public static func buildEither(second: ProviderBuilderComponent) -> ProviderBuilderComponent {
+    return second
+  }
 }
 
 extension UIView: ProviderBuilderComponent {

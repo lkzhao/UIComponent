@@ -34,6 +34,15 @@ extension AnyViewProvider {
   public func size(width: SizeStrategy = .fit, height: SizeStrategy = .fit) -> AnyViewProvider {
     return SizeOverrideProvider(child: self, width: width, height: height)
   }
+  public func size(width: CGFloat, height: SizeStrategy = .fit) -> AnyViewProvider {
+    return SizeOverrideProvider(child: self, width: .absolute(width), height: height)
+  }
+  public func size(width: CGFloat, height: CGFloat) -> AnyViewProvider {
+    return SizeOverrideProvider(child: self, width: .absolute(width), height: .absolute(height))
+  }
+  public func size(width: SizeStrategy = .fit, height: CGFloat) -> AnyViewProvider {
+    return SizeOverrideProvider(child: self, width: width, height: .absolute(height))
+  }
 }
 
 extension AnyViewProvider {

@@ -24,8 +24,11 @@ public protocol Provider: ProviderBuilderComponent {
 }
 
 extension Provider {
-  public func padding(_ amount: CGFloat) -> InsetLayout {
+  public func insets(_ amount: CGFloat) -> InsetLayout {
     return InsetLayout(insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount), child: self)
+  }
+  public func insets(h: CGFloat = 0, v: CGFloat = 0) -> InsetLayout {
+    return InsetLayout(insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h), child: self)
   }
   public func insets(_ insets: UIEdgeInsets) -> InsetLayout {
     return InsetLayout(insets: insets, child: self)
