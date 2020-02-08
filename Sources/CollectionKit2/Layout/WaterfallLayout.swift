@@ -63,7 +63,7 @@ extension WaterfallLayoutProtocol {
   }
 }
 
-public struct WaterfallLayout: LayoutProvider {
+public struct WaterfallLayout: LayoutProvider, WaterfallLayoutProtocol {
 	public var columns: Int
 	public var spacing: CGFloat
 	public var alignItems: AlignItem
@@ -77,7 +77,7 @@ public struct WaterfallLayout: LayoutProvider {
 	}
 }
 
-public struct HorizontalWaterfallLayout: LayoutProvider {
+public struct HorizontalWaterfallLayout: LayoutProvider, WaterfallLayoutProtocol {
   public var columns: Int
   public var spacing: CGFloat
   public var alignItems: AlignItem
