@@ -19,8 +19,8 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
       (to as! View)[keyPath: keyPath] = value
     }
   }
-  var values: [GenericValueHolder] = []
   
+  private var values: [GenericValueHolder] = []
   public var key: String
   public var animator: Animator?
   public var reuseManager: CollectionReuseManager?
@@ -36,18 +36,18 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
     self.view = view
   }
   
-  open func makeView() -> View {
+  public func makeView() -> View {
     return view ?? View()
   }
   
-  open func updateView(_ view: View) {
+  public func updateView(_ view: View) {
     for value in values {
       value.write(to: view)
     }
   }
   
   // MARK: - View Provider
-  open func sizeThatFits(_ size: CGSize) -> CGSize {
+  public func sizeThatFits(_ size: CGSize) -> CGSize {
     return view?.sizeThatFits(size) ?? .zero
   }
   
@@ -66,67 +66,35 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
     values.append(ValueHolder(keyPath: keyPath, value: value))
     return self
   }
+  
+  public func tintColor(_ tintColor: UIColor) -> Self {
+    with(\.tintColor, tintColor)
+  }
 
   public func backgroundColor(_ color: UIColor) -> Self {
     with(\.backgroundColor, color)
   }
-}
 
-class SizeOverrideProvider: AnyViewProvider {
-  var width: SizeStrategy
-  var height: SizeStrategy
-  var child: AnyViewProvider
-  
-  var key: String {
-    return child.key
-  }
-  
-  var animator: Animator? {
-    return child.animator
-  }
-  
-  init(child: AnyViewProvider, width: SizeStrategy, height: SizeStrategy) {
-    self.child = child
-    self.width = width
-    self.height = height
-  }
-  
-  func sizeThatFits(_ size: CGSize) -> CGSize {
-    let fitSize: CGSize
-    if width.isFit || height.isFit {
-      fitSize = child.sizeThatFits(size)
-    } else {
-      fitSize = .zero
-    }
-    
-    var result = CGSize.zero
-    switch width {
-    case .fill:
-      // if parent width is infinity (un specified?)
-      result.width = (size.width == .infinity ? fitSize.width : size.width)
-    case .fit:
-      result.width = fitSize.width
-    case let .absolute(value):
-      result.width = value
-    }
-
-    switch height {
-    case .fill:
-      result.height = size.height == .infinity ? fitSize.height : size.height
-    case .fit:
-      result.height = fitSize.height
-    case let .absolute(value):
-      result.height = value
-    }
-
-    return result
+  public func scaleAspectFit() -> Self {
+    with(\.contentMode, .scaleAspectFit)
   }
 
-  func _makeView() -> UIView {
-    return child._makeView()
+  public func scaleAspectFill() -> Self {
+    with(\.contentMode, .scaleAspectFill)
+  }
+
+  public func alignCenter() -> Self {
+    with(\.contentMode, .center)
+  }
+
+  public func cornerRadius(_ cornerRadius: CGFloat) -> Self {
+    with(\.layer.cornerRadius, cornerRadius)
   }
   
-  func _updateView(_ view: UIView) {
-    child._updateView(view)
+  public func shadow(color: UIColor = UIColor.black.withAlphaComponent(0.33), radius: CGFloat, x: CGFloat = 0, y: CGFloat = 0) -> Self {
+    _ = with(\.layer.shadowColor, color.cgColor)
+    _ = with(\.layer.shadowRadius, radius)
+    _ = with(\.layer.shadowOffset, CGSize(width: x, height: y))
+    return with(\.layer.shadowOpacity, 1)
   }
 }

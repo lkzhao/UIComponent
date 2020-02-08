@@ -9,7 +9,7 @@
 import UIKit
 
 public protocol LayoutNode {
-  var size: CGSize
+  var size: CGSize { get }
   
   /// Get items' view and its rect within the frame in current provider's coordinates.
   /// - Parameter frame: Parent provider's visible frame in current provider's coordinates.
@@ -23,40 +23,28 @@ public protocol Provider: ProviderBuilderComponent {
   func layout(size: CGSize) -> LayoutNode
 }
 
-/// ProgressiveProvider
-/// A Provider that can update its own `contentSize` at a future time.
-///
-/// A regular Provider usually does its layout when `layout(size:)`
-/// is called. This is fine for small dataset, but for large dataset, doing a complete
-/// layout cycle takes quite a bit of time. This blocks main thread, and
-/// makes UI unresponsive.
-///
-/// What ProgressiveProvider can do is returning a temporary `contentSize` when `layout(size:)`
-/// is called, then later update its CollectionView with a new `contentSize`.
-///
-/// Use cases that this enables:
-/// * only layout enough cells to be displayed within the viewport, as the user scrolls
-///   down more, layout more cells.
-/// * background thread layout.
-///
-/// Implementing ProgressiveProvider is an advance usage and requires deep understanding of
-/// layout logic. ProgressiveProvider has to be the root Provider of a CollectionView
-/// in order to work. Use only when regular Provider doesn't meet the performance need
-/// of your application. Checkout `InfiniteListProvider` in the example project for
-/// a basic ProgressiveProvider implementation reference.
-public protocol ProgressiveProvider: AnyObject, Provider {
-  var onUpdate: ((CGSize) -> Void)? { get set }
-}
-
 extension Provider {
   public func padding(_ amount: CGFloat) -> InsetLayout {
     return InsetLayout(insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount), child: self)
   }
-  public func wrap() -> CKViewProvider {
+  public func view() -> CKViewProvider {
     return CKViewProvider(self)
+  }
+  public func scrollView() -> CKScrollViewProvider {
+    return CKScrollViewProvider(self)
   }
   public func flex(_ weight: CGFloat = 1) -> Flex {
     return Flex(weight: weight, child: self)
+  }
+}
+
+public protocol ProviderWrapper: Provider {
+  var provider: Provider { get }
+}
+
+extension ProviderWrapper {
+  public func layout(size: CGSize) -> LayoutNode {
+    return provider.layout(size: size)
   }
 }
 
@@ -71,6 +59,21 @@ open class CKViewProvider: ViewAdapter<CKView> {
     super.updateView(view)
   }
   public override func sizeThatFits(_ size: CGSize) -> CGSize {
-    return provider.layout(size: size)
+    return provider.layout(size: size).size
+  }
+}
+
+open class CKScrollViewProvider: ViewAdapter<CollectionView> {
+  var provider: Provider
+  public init(_ provider: Provider) {
+    self.provider = provider
+    super.init()
+  }
+  public override func updateView(_ view: CollectionView) {
+    view.provider = provider
+    super.updateView(view)
+  }
+  public override func sizeThatFits(_ size: CGSize) -> CGSize {
+    return provider.layout(size: size).size
   }
 }

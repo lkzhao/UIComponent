@@ -83,30 +83,18 @@ extension ProviderDisplayable where Self: UIView {
 public class CKData {
   public weak var view: ProviderDisplayableView?
   public var provider: Provider? {
-    willSet {
-      (provider as? ProgressiveProvider)?.onUpdate = nil
-    }
-    didSet {
-      if let provider = provider as? ProgressiveProvider {
-        provider.onUpdate = { [weak provider, weak self] newSize in
-          guard let progressProvider = self?.provider as? ProgressiveProvider, provider === progressProvider else { return }
-          self?.contentSize = newSize
-          if self?.isLoadingCell == false {
-            self?.setNeedsLoadCells()
-          }
-        }
-      }
-      setNeedsReload()
-    }
-  }
+     didSet { setNeedsReload() }
+   }
 
   public var animator: Animator = Animator() {
     didSet { setNeedsReload() }
   }
-
+  
+  public private(set) var layoutNode: LayoutNode = SpaceLayoutNode(size: .zero)
+  
+  public internal(set) var needsReload = true
+  public internal(set) var needsInvalidateLayout = false
   public private(set) var reloadCount = 0
-  public private(set) var needsReload = true
-  public private(set) var needsInvalidateLayout = false
   public private(set) var isLoadingCell = false
   public private(set) var isReloading = false
   public var hasReloaded: Bool { reloadCount > 0 }
@@ -209,8 +197,8 @@ public class CKData {
 
   // re-layout, but not updating cells' contents
   public func invalidateLayout() {
-    guard let view = view, !isLoadingCell, !isReloading, hasReloaded, let provider = provider else { return }
-    contentSize = provider.layout(size: adjustedSize)
+    guard !isLoadingCell, !isReloading, hasReloaded, let provider = provider else { return }
+    layoutNode = provider.layout(size: adjustedSize)
     needsInvalidateLayout = false
     _loadCells(reloading: false)
   }
@@ -223,7 +211,8 @@ public class CKData {
       isReloading = false
     }
 
-    contentSize = provider.layout(size: adjustedSize) * zoomScale
+    layoutNode = provider.layout(size: adjustedSize)
+    contentSize = layoutNode.size * zoomScale
 
     let oldContentOffset = contentOffset
     if let offset = contentOffsetAdjustFn?() {
@@ -247,7 +236,13 @@ public class CKData {
 
     animator.willUpdate(collectionView: view)
     let visibleFrame = contentView?.convert(bounds, from: view) ?? bounds
-    let newVisibleViewData = provider.views(in: visibleFrame)
+    
+    let newVisibleViewData = layoutNode.views(in: visibleFrame)
+    if contentSize != layoutNode.size * zoomScale {
+      // update contentSize if it is changed. Some layoutNodes update
+      // its size when views(in: visibleFrame) is called. e.g. InfiniteLayout
+      contentSize = layoutNode.size * zoomScale
+    }
 
     // construct private identifiers
     var newIdentifierSet = [String: Int]()
@@ -314,7 +309,7 @@ public class CKData {
   }
 
   open func sizeThatFits(_ size: CGSize) -> CGSize {
-    return provider?.layout(size: size) ?? .zero
+    return provider?.layout(size: size).size ?? .zero
   }
 }
 

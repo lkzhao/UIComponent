@@ -21,9 +21,3 @@ public class Image: ViewAdapter<UIImageView> {
     return image.size
   }
 }
-
-public extension Image {
-  func tintColor(_ tintColor: UIColor) -> Self {
-    with(\.tintColor, tintColor)
-  }
-}

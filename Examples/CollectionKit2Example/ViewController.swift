@@ -38,25 +38,6 @@ class ViewController: UIViewController {
 		reloadButton.addTarget(self, action: #selector(reload), for: .touchUpInside)
 		view.addSubview(reloadButton)
 
-		let viewProvider1 = FillViewProvider(view: {
-			let v = UIView()
-			v.backgroundColor = .red
-			return v
-		}())
-
-		let viewProvider2 = ClosureViewProvider(generate: { () -> UIView in
-			UIView()
-		}, update: { view in
-			view.backgroundColor = .blue
-		}) { (_) -> CGSize in
-			CGSize(width: 100, height: 200)
-		}
-
-		let viewProvider = FlowLayout(children: [viewProvider1, viewProvider2])
-		let provider = InsetLayout(insets: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8),
-															 child: HalfSizeProvider(provider: HalfSizeProvider(provider: HalfSizeProvider(provider: viewProvider1))))
-
-		let provider2 = viewProvider
     let v0 = UIView()
     v0.backgroundColor = .black
     let v1 = UIView()
@@ -87,20 +68,51 @@ class ViewController: UIViewController {
 //      }
 //    }
     
-    collectionView.provider = VStack {
-      HStack {
-        Text("FLEX").color(.white).padding(20).wrap().backgroundColor(.black)
-        ForEach(0..<5) { number in
-          VStack(alignItems: .center) {
-            Text("\(number)")
-            VSpace(50)
-            Text("LOL").padding(10)
-          }
-        }
+//    collectionView.provider = VStack {
+//      HStack {
+//        Text("FLEX").color(.red).padding(20).view().backgroundColor(.black).flex()
+//        ForEach(0..<5) { number in
+//          VStack(alignItems: .center) {
+//            Text("\(number)")
+//            VSpace(50)
+//            Text("LOL").padding(10)
+//          }
+//        }
+//      }
+//      ViewAdapter(view: v1).size(width: .fill, height: .absolute(50.0))
+//      ViewAdapter(view: v2).size(width: .fill, height: .absolute(50.0))
+//    }
+
+    struct User: ProviderWrapper {
+      let name: String
+      let image: UIImage
+      
+      var provider: Provider {
+        HStack(alignItems: .center) {
+          Image(image).tintColor(.darkGray)
+          HSpace(10)
+          Text(name)
+          Flex()
+        }.padding(20).view().backgroundColor(.white).cornerRadius(10).shadow(radius: 8)
       }
-      ViewAdapter(view: v1).size(width: .fill, height: .absolute(50.0))
-      ViewAdapter(view: v2).size(width: .fill, height: .absolute(50.0))
+    }
+
+    collectionView.provider = VStack(spacing: 10) {
+      User(name: "John Appleseed", image: UIImage(systemName: "person")!)
+      User(name: "Brian", image: UIImage(systemName: "person")!)
+      User(name: "Josh", image: UIImage(systemName: "person")!)
+      User(name: "Mason", image: UIImage(systemName: "person")!)
     }.padding(10)
+    
+//    collectionView.provider = InfiniteListProvider()
+
+//    collectionView.provider = VStack(spacing: 10) {
+//      ForEach(0..<5) { number in
+//        Text("\(number)").backgroundColor(.red)
+//        Text("LOL").backgroundColor(.green)
+//      }
+//    }
+    
 //    let showV1 = true
 //    collectionView.provider = VStack {
 //      FlowLayout {
@@ -155,35 +167,5 @@ class ViewController: UIViewController {
 		collectionView.frame = view.bounds
 		reloadButton.frame = CGRect(x: 0, y: view.bounds.height - 60,
 																width: view.bounds.width, height: 60)
-	}
-}
-
-class User: SingleChildProvider {
-  init(name: String, image: UIImage) {
-    super.init(child: HStack(alignItems: .center) {
-      Image(image).tintColor(.darkGray)
-      HSpace(10)
-      Text(name)
-    }.padding(20))
-  }
-}
-
-class HalfSizeProvider: Provider {
-	private let provider: Provider
-	init(provider: Provider) {
-		self.provider = provider
-	}
-
-	var _size: CGSize = .zero
-	func layout(size: CGSize) -> LayoutNode {
-		_size = provider.layout(size: CGSize(width: size.width, height: size.height / 2))
-		return _size
-	}
-
-	func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
-		print("frame: \(frame)")
-		return provider.views(in: CGRect(origin: .zero, size: _size)).map { viewProvider, frame in
-			(viewProvider, frame)
-		}
 	}
 }

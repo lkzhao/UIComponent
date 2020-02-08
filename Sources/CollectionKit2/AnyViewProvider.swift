@@ -26,6 +26,10 @@ public protocol AnyViewProvider: Provider {
 }
 
 extension AnyViewProvider {
+  var animator: Animator? {
+    return nil
+  }
+
   // MARK: - modifier
   public func size(width: SizeStrategy = .fit, height: SizeStrategy = .fit) -> AnyViewProvider {
     return SizeOverrideProvider(child: self, width: width, height: height)
@@ -34,21 +38,78 @@ extension AnyViewProvider {
 
 extension AnyViewProvider {
   public func layout(size: CGSize) -> LayoutNode {
-    let size = sizeThatFits(size)
-    ViewProviderSizeCache.shared.cache[key] = size
-    return size
+    return SingleLayoutNode(size: sizeThatFits(size), viewProvider: self)
   }
+}
 
-  public func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
-    let childFrame = CGRect(origin: .zero, size: ViewProviderSizeCache.shared.cache[key] ?? .zero)
+struct SingleLayoutNode: LayoutNode {
+  let size: CGSize
+  let viewProvider: AnyViewProvider
+  
+  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    let childFrame = CGRect(origin: .zero, size: size)
     if frame.intersects(childFrame) {
-      return [(self, childFrame)]
+      return [(viewProvider, childFrame)]
     }
     return []
   }
 }
 
-class ViewProviderSizeCache {
-  static let shared = ViewProviderSizeCache()
-  var cache: [String: CGSize] = [:]
+class SizeOverrideProvider: AnyViewProvider {
+  var width: SizeStrategy
+  var height: SizeStrategy
+  var child: AnyViewProvider
+  
+  var key: String {
+    return child.key
+  }
+  
+  var animator: Animator? {
+    return child.animator
+  }
+  
+  init(child: AnyViewProvider, width: SizeStrategy, height: SizeStrategy) {
+    self.child = child
+    self.width = width
+    self.height = height
+  }
+  
+  func sizeThatFits(_ size: CGSize) -> CGSize {
+    let fitSize: CGSize
+    if width.isFit || height.isFit {
+      fitSize = child.sizeThatFits(size)
+    } else {
+      fitSize = .zero
+    }
+    
+    var result = CGSize.zero
+    switch width {
+    case .fill:
+      // if parent width is infinity (un specified?)
+      result.width = (size.width == .infinity ? fitSize.width : size.width)
+    case .fit:
+      result.width = fitSize.width
+    case let .absolute(value):
+      result.width = value
+    }
+
+    switch height {
+    case .fill:
+      result.height = size.height == .infinity ? fitSize.height : size.height
+    case .fit:
+      result.height = fitSize.height
+    case let .absolute(value):
+      result.height = value
+    }
+
+    return result
+  }
+
+  func _makeView() -> UIView {
+    return child._makeView()
+  }
+  
+  func _updateView(_ view: UIView) {
+    child._updateView(view)
+  }
 }

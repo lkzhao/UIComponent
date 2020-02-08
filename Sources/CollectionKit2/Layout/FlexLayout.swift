@@ -8,108 +8,175 @@
 
 import UIKit
 
-open class Flex: SingleChildProvider {
-	public var flex: CGFloat
+public struct Flex: Provider {
+	public let flex: CGFloat
+  public let child: Provider
 
-	public init(weight: CGFloat = 1, child: Provider) {
+	public init(weight: CGFloat = 1, child: Provider = SpaceProvider()) {
 		self.flex = weight
-		super.init(child: child)
+    self.child = child
 	}
+  
+  public func layout(size: CGSize) -> LayoutNode {
+    child.layout(size: size)
+  }
 }
 
-open class FlexLayout: SortedLayoutProvider {
-	open var spacing: CGFloat
-	open var alignItems: AlignItem
-	open var justifyContent: JustifyContent
+public struct StackConfig {
+  var spacing: CGFloat
+  var alignItems: AlignItem
+  var justifyContent: JustifyContent
 
-	open var fitCrossAxis: Bool = false
-
-	/// always stretch filling item to fill empty space even if child returns a smaller size
-	open var alwaysFillEmptySpaces: Bool = true
-
-	/// whether or not we pass the parent maxSize down to the children for layout
-	open var passThroughParentSize: Bool = false
-
-	open override var isImplementedInVertical: Bool {
-		return false
-	}
-
-	public init(spacing: CGFloat = 0,
-							justifyContent: JustifyContent = .start,
-							alignItems: AlignItem = .start,
-							children: [Provider]) {
-		self.spacing = spacing
-		self.justifyContent = justifyContent
-		self.alignItems = alignItems
-		super.init(children: children)
-	}
-
-	open override func simpleLayoutWithCustomSize(size: CGSize) -> ([CGRect], CGSize) {
-		let (sizes, totalWidth) = getCellSizes(size: size)
-
-		let (offset, distributedSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
-																															 maxPrimary: size.width,
-																															 totalPrimary: totalWidth,
-																															 minimunSpacing: spacing,
-																															 numberOfItems: children.count)
-
-		var upperBound = size.height
-		if fitCrossAxis || upperBound == .infinity {
-			upperBound = sizes.max(by: { a, b in
-				a.height < b.height
-      })?.height ?? 0
-		}
-
-		return LayoutHelper.alignItem(alignItems: alignItems,
-																	startingPrimaryOffset: offset, spacing: distributedSpacing,
-																	sizes: sizes, secondaryRange: 0 ... max(0, upperBound))
-	}
-
-	open func getCellSizes(size: CGSize) -> (sizes: [CGSize], totalWidth: CGFloat) {
-		var sizes: [CGSize] = []
-		let spacings = spacing * CGFloat(children.count - 1)
-		var freezedWidth = spacings
-		var fillIndexes: [Int] = []
-		var totalFlex: CGFloat = 0
-
-		for (i, child) in children.enumerated() {
-			if let child = child as? Flex {
-				totalFlex += child.flex
-				fillIndexes.append(i)
-				sizes.append(.zero)
-			} else {
-				let size = getSize(child: child, maxSize: CGSize(width: passThroughParentSize ? size.width : .infinity,
-																												 height: size.height))
-				sizes.append(size)
-				freezedWidth += size.width
-			}
-		}
-
-		let widthPerFlex: CGFloat = max(0, size.width - freezedWidth) / max(totalFlex, 1)
-		for i in fillIndexes {
-			let child = children[i] as! Flex
-			let size = getSize(child: child, maxSize: CGSize(width: widthPerFlex * child.flex,
-																											 height: size.height))
-			let width = alwaysFillEmptySpaces ? max(widthPerFlex, size.width) : size.width
-			sizes[i] = CGSize(width: width, height: size.height)
-			freezedWidth += sizes[i].width
-		}
-
-		return (sizes, freezedWidth - spacings)
-	}
+  var fitCrossAxis: Bool = false
+  var alwaysFillEmptySpaces: Bool = true
+  var passThroughParentSize: Bool = false
 }
 
-public typealias RowLayout = FlexLayout
-
-open class ColumnLayout: FlexLayout {
-	open override var isTransposed: Bool { return true }
+public protocol StackLayout: LayoutProvider {
+  var children: [Provider] { get }
+  var config: StackConfig { get set }
 }
 
-public typealias HStack = RowLayout
-public typealias VStack = ColumnLayout
+extension StackLayout {
+  public var spacing: CGFloat {
+    get { config.spacing }
+    set { config.spacing = newValue }
+  }
+  public var alignItems: AlignItem {
+    get { config.alignItems }
+    set { config.alignItems = newValue }
+  }
+  public var justifyContent: JustifyContent {
+    get { config.justifyContent }
+    set { config.justifyContent = newValue }
+  }
+  public var fitCrossAxis: Bool {
+    get { config.fitCrossAxis }
+    set { config.fitCrossAxis = newValue }
+  }
+  public var alwaysFillEmptySpaces: Bool {
+    get { config.alwaysFillEmptySpaces }
+    set { config.alwaysFillEmptySpaces = newValue }
+  }
+  public var passThroughParentSize: Bool {
+    get { config.passThroughParentSize }
+    set { config.passThroughParentSize = newValue }
+  }
 
-public extension FlexLayout {
-  convenience init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
+  public func simpleLayoutWithCustomSize(size: CGSize) -> (([LayoutNode], [CGRect]), CGSize) {
+    let (nodes, totalWidth) = getLayoutNodes(size: size)
+
+    let (offset, distributedSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
+                                                               maxPrimary: size.width,
+                                                               totalPrimary: totalWidth,
+                                                               minimunSpacing: spacing,
+                                                               numberOfItems: children.count)
+
+    var upperBound = size.height
+    if fitCrossAxis || upperBound == .infinity {
+      upperBound = nodes.max(by: { a, b in
+        a.size.height < b.size.height
+      })?.size.height ?? 0
+    }
+
+    let (frames, contentSize) = LayoutHelper.alignItem(alignItems: alignItems,
+                                                       startingPrimaryOffset: offset, spacing: distributedSpacing,
+                                                       sizes: nodes.lazy.map({ $0.size }), secondaryRange: 0 ... max(0, upperBound))
+    return ((nodes, frames), contentSize)
+  }
+
+  public func getLayoutNodes(size: CGSize) -> (nodes: [LayoutNode], totalWidth: CGFloat) {
+    var nodes: [LayoutNode] = []
+    let spacings = spacing * CGFloat(children.count - 1)
+    var freezedWidth = spacings
+    var fillIndexes: [Int] = []
+    var totalFlex: CGFloat = 0
+
+    for (i, child) in children.enumerated() {
+      if let child = child as? Flex {
+        totalFlex += child.flex
+        fillIndexes.append(i)
+        nodes.append(SpaceLayoutNode(size: .zero))
+      } else {
+        let node = getLayoutNode(child: child, maxSize: CGSize(width: passThroughParentSize ? size.width : .infinity,
+                                                               height: size.height))
+        nodes.append(node)
+        freezedWidth += node.size.width
+      }
+    }
+
+    let widthPerFlex: CGFloat = max(0, size.width - freezedWidth) / max(totalFlex, 1)
+    for i in fillIndexes {
+      let child = children[i] as! Flex
+      let size = getLayoutNode(child: child, maxSize: CGSize(width: widthPerFlex * child.flex,
+                                                       height: size.height))
+      let width = alwaysFillEmptySpaces ? max(widthPerFlex, size.size.width) : size.size.width
+      nodes[i] = SizeOverrideLayoutNode(child: size, size: CGSize(width: width, height: size.size.height))
+      freezedWidth += nodes[i].size.width
+    }
+
+    return (nodes, freezedWidth - spacings)
+  }
+}
+
+
+public struct HStack: StackLayout {
+  public var config: StackConfig
+  public var children: [Provider]
+
+  public init(spacing: CGFloat = 0,
+              justifyContent: JustifyContent = .start,
+              alignItems: AlignItem = .start,
+              children: [Provider]) {
+    self.children = children
+    self.config = StackConfig(spacing: spacing, alignItems: alignItems, justifyContent: justifyContent)
+  }
+
+  public var isVerticalLayout: Bool {
+    return false
+  }
+}
+
+public struct VStack: StackLayout {
+  public var config: StackConfig
+  public var children: [Provider]
+
+  public init(spacing: CGFloat = 0,
+              justifyContent: JustifyContent = .start,
+              alignItems: AlignItem = .start,
+              children: [Provider]) {
+    self.children = children
+    self.config = StackConfig(spacing: spacing, alignItems: alignItems, justifyContent: justifyContent)
+  }
+
+  public var isVerticalLayout: Bool {
+    return false
+  }
+  
+  public var isTransposed: Bool {
+    return true
+  }
+}
+
+struct SizeOverrideLayoutNode: LayoutNode {
+  let child: LayoutNode
+  let size: CGSize
+  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    child.views(in: frame)
+  }
+}
+
+public extension VStack {
+  init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
     self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, children: content().providers)
   }
 }
+
+public extension HStack {
+  init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
+    self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, children: content().providers)
+  }
+}
+
+public typealias RowLayout = HStack
+public typealias ColumnLayout = VStack

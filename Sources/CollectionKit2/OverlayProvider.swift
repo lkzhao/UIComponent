@@ -12,18 +12,24 @@ import UIKit
 open class OverlayProvider: Provider {
 	open var back: Provider
 	open var front: Provider
+
 	public init(back: Provider, front: Provider) {
 		self.back = back
 		self.front = front
 	}
 
 	open func layout(size: CGSize) -> LayoutNode {
-		let frontSize = front.layout(size: size)
-		_ = back.layout(size: frontSize)
-		return frontSize
+		let frontNode = front.layout(size: size)
+    let backNode = back.layout(size: frontNode.size)
+    return OverlayLayoutNode(front: frontNode, back: backNode, size: frontNode.size)
 	}
+}
 
-	open func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
-		return back.views(in: frame) + front.views(in: frame)
-	}
+struct OverlayLayoutNode: LayoutNode {
+  let front: LayoutNode
+  let back: LayoutNode
+  let size: CGSize
+  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    back.views(in: frame) + front.views(in: frame)
+  }
 }

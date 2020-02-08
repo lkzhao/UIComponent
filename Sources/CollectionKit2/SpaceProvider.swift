@@ -18,13 +18,16 @@ public class SpaceProvider: Provider {
 		self.height = height
 	}
 
-	public func layout(size _: CGSize) -> CGSize {
-		return CGSize(width: width, height: height)
+	public func layout(size _: CGSize) -> LayoutNode {
+    return SpaceLayoutNode(size: CGSize(width: width, height: height))
 	}
+}
 
-	public func views(in _: CGRect) -> [(AnyViewProvider, CGRect)] {
-		return []
-	}
+struct SpaceLayoutNode: LayoutNode {
+  let size: CGSize
+  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    return []
+  }
 }
 
 public class VSpace: Provider {
@@ -32,11 +35,8 @@ public class VSpace: Provider {
   public init(_ height: CGFloat) {
     self.height = height
   }
-  public func layout(size _: CGSize) -> CGSize {
-    return CGSize(width: 0, height: height)
-  }
-  public func views(in _: CGRect) -> [(AnyViewProvider, CGRect)] {
-    return []
+  public func layout(size _: CGSize) -> LayoutNode {
+    return SpaceLayoutNode(size: CGSize(width: 0, height: height))
   }
 }
 
@@ -45,10 +45,7 @@ public class HSpace: Provider {
   public init(_ width: CGFloat) {
     self.width = width
   }
-  public func layout(size _: CGSize) -> CGSize {
-    return CGSize(width: width, height: 0)
-  }
-  public func views(in _: CGRect) -> [(AnyViewProvider, CGRect)] {
-    return []
+  public func layout(size _: CGSize) -> LayoutNode {
+    return SpaceLayoutNode(size: CGSize(width: width, height: 0))
   }
 }
