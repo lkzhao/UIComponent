@@ -9,6 +9,9 @@ import UIKit
 
 public class Image: ViewAdapter<UIImageView> {
   var image: UIImage
+  public convenience init(_ imageName: String) {
+    self.init(UIImage(named: imageName)!)
+  }
   public init(_ image: UIImage) {
     self.image = image
     super.init()
