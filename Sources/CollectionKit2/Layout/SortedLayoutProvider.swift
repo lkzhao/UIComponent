@@ -70,7 +70,7 @@ public struct VSortedLayoutNode: LayoutNode {
   public let size: CGSize
   
   public init(children: [LayoutNode], frames: [CGRect], size: CGSize) {
-    self.maxFrameLength = frames.max { $0.width < $1.width }?.width ?? 0
+    self.maxFrameLength = frames.max { $0.height < $1.height }?.height ?? 0
     self.children = children
     self.frames = frames
     self.size = size
