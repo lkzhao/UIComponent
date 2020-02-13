@@ -10,6 +10,7 @@ import UIKit
 
 public protocol LayoutProvider: Provider {
 	var isTransposed: Bool { get }
+  var isSortedLayout: Bool { get }
   var isVerticalLayout: Bool { get }
 
 	func simpleLayout(size: CGSize) -> ([LayoutNode], [CGRect])
@@ -18,6 +19,7 @@ public protocol LayoutProvider: Provider {
 
 extension LayoutProvider {
   public var isTransposed: Bool { return false }
+  public var isSortedLayout: Bool { return true }
   public var isVerticalLayout: Bool { return true }
   
   public func simpleLayout(size _: CGSize) -> ([LayoutNode], [CGRect]) {
@@ -56,10 +58,14 @@ extension LayoutProvider {
     } else {
       ((nodes, frames), contentSize) = simpleLayoutWithCustomSize(size: size)
     }
-    if isVerticalLayout != isTransposed {
-      return VSortedLayoutNode(children: nodes, frames: frames, size: contentSize)
+    if isSortedLayout {
+      if isVerticalLayout != isTransposed {
+        return VSortedLayoutNode(children: nodes, frames: frames, size: contentSize)
+      } else {
+        return HSortedLayoutNode(children: nodes, frames: frames, size: contentSize)
+      }
     } else {
-      return HSortedLayoutNode(children: nodes, frames: frames, size: contentSize)
+      return SlowLayoutNode(children: nodes, frames: frames, size: contentSize)
     }
   }
 }
