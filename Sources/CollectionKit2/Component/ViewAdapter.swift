@@ -91,10 +91,18 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
     with(\.layer.cornerRadius, cornerRadius)
   }
   
+  public func opacity(_ opacity: CGFloat) -> Self {
+    with(\.alpha, opacity)
+  }
+
+  public func border(_ color: UIColor, width: CGFloat) -> Self {
+    with(\.layer.borderColor, color.cgColor).with(\.layer.borderWidth, width)
+  }
+  
   public func shadow(color: UIColor = UIColor.black.withAlphaComponent(0.33), radius: CGFloat, x: CGFloat = 0, y: CGFloat = 0) -> Self {
-    _ = with(\.layer.shadowColor, color.cgColor)
-    _ = with(\.layer.shadowRadius, radius)
-    _ = with(\.layer.shadowOffset, CGSize(width: x, height: y))
-    return with(\.layer.shadowOpacity, 1)
+    with(\.layer.shadowColor, color.cgColor)
+      .with(\.layer.shadowRadius, radius)
+      .with(\.layer.shadowOffset, CGSize(width: x, height: y))
+      .with(\.layer.shadowOpacity, 1)
   }
 }

@@ -64,9 +64,9 @@ public struct HSortedLayoutNode: LayoutNode {
 }
 
 public struct VSortedLayoutNode: LayoutNode {
-  let children: [LayoutNode]
-  let frames: [CGRect]
-  let maxFrameLength: CGFloat
+  public let children: [LayoutNode]
+  public let frames: [CGRect]
+  public let maxFrameLength: CGFloat
   public let size: CGSize
   
   public init(children: [LayoutNode], frames: [CGRect], size: CGSize) {
