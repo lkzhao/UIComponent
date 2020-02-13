@@ -7,20 +7,20 @@
 
 import Foundation
 
-class Separator: ViewAdapter<UIView> {
-  let color: UIColor
+public class Separator: ViewAdapter<UIView> {
+  public var color: UIColor
 
-  init(key: String = UUID().uuidString, color: UIColor = .gray) {
+  public init(key: String = UUID().uuidString, color: UIColor = UIColor(white: 0.9, alpha: 1.0)) {
     self.color = color
     super.init(key: key)
   }
 
-  override func updateView(_ view: UIView) {
+  public override func updateView(_ view: UIView) {
     view.backgroundColor = color
     super.updateView(view)
   }
 
-  override func sizeThatFits(_ size: CGSize) -> CGSize {
+  public override func sizeThatFits(_ size: CGSize) -> CGSize {
     return CGSize(width: size.width, height: 1)
   }
 }

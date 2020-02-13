@@ -7,21 +7,21 @@
 
 import Foundation
 
-struct ZStack: LayoutProvider {
-  enum Alignment {
+public struct ZStack: LayoutProvider {
+  public enum Alignment {
     case topLeading, top, topTrailing
     case leading, center, trailing
     case bottomLeading, bottom, bottomTrailing
   }
 
-  var alignment: Alignment = .center
-  var children: [Provider]
+  public var alignment: Alignment = .center
+  public var children: [Provider]
 
-  var isSortedLayout: Bool {
+  public var isSortedLayout: Bool {
     return false
   }
 
-  func simpleLayout(size: CGSize) -> ([LayoutNode], [CGRect]) {
+  public func simpleLayout(size: CGSize) -> ([LayoutNode], [CGRect]) {
     let layoutNodes: [LayoutNode] = children.map { getLayoutNode(child: $0, maxSize: size) }
     let width: CGFloat = layoutNodes.max { $0.size.width < $1.size.width }?.size.width ?? 0
     let height: CGFloat = layoutNodes.max { $0.size.height < $1.size.height }?.size.height ?? 0
@@ -50,7 +50,7 @@ struct ZStack: LayoutProvider {
   }
 }
 
-extension ZStack {
+public extension ZStack {
   init(alignment: Alignment = .center, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
     self.init(alignment: alignment, children: content().providers)
   }
