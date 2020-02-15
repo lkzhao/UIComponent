@@ -5,7 +5,7 @@
 //  Created by Luke Zhao on 2/12/20.
 //
 
-import Foundation
+import UIKit
 
 public extension AnyViewProvider {
   func animator(_ animator: Animator) -> AnyViewProvider {

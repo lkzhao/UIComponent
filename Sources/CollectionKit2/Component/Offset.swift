@@ -5,7 +5,7 @@
 //  Created by Luke Zhao on 2/12/20.
 //
 
-import Foundation
+import UIKit
 
 struct OffsetProvider: Provider {
   public var offset: CGPoint

@@ -93,7 +93,7 @@ class ViewController: UIViewController {
           HSpace(10)
           Text(name)
           Flex()
-        }.padding(20).view().backgroundColor(.white).cornerRadius(10).shadow(radius: 8)
+        }.insets(20).view().backgroundColor(.white).cornerRadius(10).shadow(radius: 8)
       }
     }
 
@@ -102,7 +102,7 @@ class ViewController: UIViewController {
       User(name: "Brian", image: UIImage(systemName: "person")!)
       User(name: "Josh", image: UIImage(systemName: "person")!)
       User(name: "Mason", image: UIImage(systemName: "person")!)
-    }.padding(10)
+    }.insets(10)
     
 //    collectionView.provider = InfiniteListProvider()
 
