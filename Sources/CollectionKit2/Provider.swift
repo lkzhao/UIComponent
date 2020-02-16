@@ -36,11 +36,11 @@ extension Provider {
   public func insets(_ insetProvider: @escaping (CGSize) -> UIEdgeInsets) -> InsetLayout {
     return InsetLayout(insetProvider: insetProvider, child: self)
   }
-  public func view() -> CKViewProvider {
-    return CKViewProvider(self)
+  public func view() -> ProviderDisplayableViewAdapter<CKView> {
+    return ProviderDisplayableViewAdapter<CKView>(self)
   }
-  public func scrollView() -> CKScrollViewProvider {
-    return CKScrollViewProvider(self)
+  public func scrollView() -> ProviderDisplayableViewAdapter<CollectionView> {
+    return ProviderDisplayableViewAdapter<CollectionView>(self)
   }
   public func flex(_ weight: CGFloat = 1) -> Flex {
     return Flex(weight: weight, child: self)
@@ -57,32 +57,20 @@ extension ProviderWrapper {
   }
 }
 
-open class CKViewProvider: ViewAdapter<CKView> {
-  var provider: Provider
+open class ProviderDisplayableViewAdapter<View: UIView & ProviderDisplayable>: ViewAdapter<View> {
+  open var provider: Provider
+  var cachedLayoutNode: LayoutNode?
   public init(_ provider: Provider) {
     self.provider = provider
     super.init()
   }
-  public override func updateView(_ view: CKView) {
-    view.provider = provider
+  open override func updateView(_ view: View) {
+    view.ckData.updateWithExisting(provider: provider, layoutNode: cachedLayoutNode)
     super.updateView(view)
   }
-  public override func sizeThatFits(_ size: CGSize) -> CGSize {
-    return provider.layout(size: size).size
-  }
-}
-
-open class CKScrollViewProvider: ViewAdapter<CollectionView> {
-  var provider: Provider
-  public init(_ provider: Provider) {
-    self.provider = provider
-    super.init()
-  }
-  public override func updateView(_ view: CollectionView) {
-    view.provider = provider
-    super.updateView(view)
-  }
-  public override func sizeThatFits(_ size: CGSize) -> CGSize {
-    return provider.layout(size: size).size
+  open override func sizeThatFits(_ size: CGSize) -> CGSize {
+    let layoutNode = provider.layout(size: size)
+    cachedLayoutNode = layoutNode
+    return layoutNode.size
   }
 }

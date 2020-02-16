@@ -29,8 +29,8 @@ public extension ProviderDisplayable {
   var needsReload: Bool {
     return ckData.needsReload
   }
-  var needsInvalidateLayout: Bool {
-    return ckData.needsInvalidateLayout
+  var needsLoadCell: Bool {
+    return ckData.needsLoadCell
   }
   var isLoadingCell: Bool {
     return ckData.isLoadingCell
@@ -90,10 +90,10 @@ public class CKData {
     didSet { setNeedsReload() }
   }
   
-  public private(set) var layoutNode: LayoutNode = EmptyLayoutNode()
+  public private(set) var layoutNode: LayoutNode?
   
   public internal(set) var needsReload = true
-  public internal(set) var needsInvalidateLayout = false
+  public internal(set) var needsLoadCell = false
   public private(set) var reloadCount = 0
   public private(set) var isLoadingCell = false
   public private(set) var isReloading = false
@@ -150,10 +150,10 @@ public class CKData {
   func layoutSubview() {
     if needsReload {
       reloadData()
-    } else if needsInvalidateLayout || bounds.size != lastLoadBounds.size {
+    } else if bounds.size != lastLoadBounds.size {
       invalidateLayout()
-    } else if bounds != lastLoadBounds {
-      _loadCells(reloading: false)
+    } else if bounds != lastLoadBounds || needsLoadCell {
+      _loadCells()
     }
     contentView?.frame = CGRect(origin: .zero, size: contentSize)
     ensureZoomViewIsCentered()
@@ -186,33 +186,33 @@ public class CKData {
   }
 
   public func setNeedsInvalidateLayout() {
-    needsInvalidateLayout = true
-    view?.setNeedsLayout()
+    layoutNode = nil
+    setNeedsLoadCells()
   }
 
   public func setNeedsLoadCells() {
-    lastLoadBounds = .zero
+    needsLoadCell = true
     view?.setNeedsLayout()
   }
 
   // re-layout, but not updating cells' contents
   public func invalidateLayout() {
-    guard !isLoadingCell, !isReloading, hasReloaded, let provider = provider else { return }
-    layoutNode = provider.layout(size: adjustedSize)
-    needsInvalidateLayout = false
-    _loadCells(reloading: false)
+    guard !isLoadingCell, !isReloading, hasReloaded else { return }
+    layoutNode = nil
+    _loadCells()
   }
 
   // reload all frames. will automatically diff insertion & deletion
   public func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
-    guard let view = view, let provider = provider, !isReloading else { return }
+    guard let provider = provider, !isReloading else { return }
     isReloading = true
     defer {
+      needsReload = false
       isReloading = false
     }
 
     layoutNode = provider.layout(size: adjustedSize)
-    contentSize = layoutNode.size * zoomScale
+    contentSize = layoutNode!.size * zoomScale
 
     let oldContentOffset = contentOffset
     if let offset = contentOffsetAdjustFn?() {
@@ -220,18 +220,26 @@ public class CKData {
     }
     contentOffsetChange = contentOffset - oldContentOffset
 
-    _loadCells(reloading: true)
+    _loadCells()
 
-    needsInvalidateLayout = false
-    needsReload = false
     reloadCount += 1
   }
 
-  private func _loadCells(reloading: Bool) {
+  private func _loadCells() {
     guard let view = view, !isLoadingCell, let provider = provider else { return }
     isLoadingCell = true
     defer {
+      needsLoadCell = false
       isLoadingCell = false
+    }
+    
+    let layoutNode: LayoutNode
+    if let currentLayoutNode = self.layoutNode {
+      layoutNode = currentLayoutNode
+    } else {
+      layoutNode = provider.layout(size: adjustedSize)
+      contentSize = layoutNode.size * zoomScale
+      self.layoutNode = layoutNode
     }
 
     animator.willUpdate(collectionView: view)
@@ -278,7 +286,7 @@ public class CKData {
       let cell: UIView
       if let existingCell = newCells[index] {
         cell = existingCell
-        if reloading {
+        if isReloading {
           // cell was on screen before reload, need to update the view.
           viewProvider._updateView(cell)
           (viewProvider.animator ?? animator).shift(collectionView: view,
@@ -306,6 +314,25 @@ public class CKData {
     visibleViewData = newVisibleViewData
     visibleCells = newCells as! [UIView]
     lastLoadBounds = bounds
+  }
+  
+  // This function assigns provider with an already calculated layoutNode
+  // This is a performance hack that skips layout for the provider if it has already
+  // been layed out.
+  internal func updateWithExisting(provider: Provider, layoutNode: LayoutNode?) {
+    self.provider = provider
+    self.layoutNode = layoutNode
+    
+    // needsReload is set to true when assigning the provider. We want to skip reload so we set it back to false
+    needsReload = false
+    
+    // lastLoadBounds must be set to the size of the layout node in order to skip layout, if the size is different, then we
+    // will trigger another invalidateLayout
+    lastLoadBounds = CGRect(origin: .zero, size: layoutNode?.size ?? .zero)
+    
+    // finally we set needsLoadCell to true. we don't need to call setNeedsLayout because
+    // it is set when setting the provider
+    needsLoadCell = true
   }
 
   open func sizeThatFits(_ size: CGSize) -> CGSize {

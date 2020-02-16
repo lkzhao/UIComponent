@@ -53,10 +53,10 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
         context.valueResets[k] = nil
       }
     }
-    for (idPath, value) in values {
+    for (k, value) in values {
       let resetValueWriter = value.write(to: view)
-      if context.valueResets[idPath] == nil {
-        context.valueResets[idPath] = resetValueWriter
+      if context.valueResets[k] == nil {
+        context.valueResets[k] = resetValueWriter
       }
     }
   }
