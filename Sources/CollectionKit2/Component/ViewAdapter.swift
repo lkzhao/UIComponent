@@ -18,7 +18,6 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
     func write(to: AnyObject) -> GenericValueHolder {
       let toView = (to as! View)
       let resetHolder = ValueHolder<Value>(keyPath: keyPath, value: toView[keyPath: keyPath])
-      print("Write \(keyPath) = \(value)")
       toView[keyPath: keyPath] = value
       return resetHolder
     }
