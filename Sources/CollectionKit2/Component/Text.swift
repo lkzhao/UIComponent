@@ -32,4 +32,7 @@ public extension Text {
   func numberOfLines(_ lines: Int) -> Self {
     with(\.numberOfLines, lines)
   }
+  func textAlignment(_ textAlignment: NSTextAlignment) -> Self {
+    with(\.textAlignment, textAlignment)
+  }
 }

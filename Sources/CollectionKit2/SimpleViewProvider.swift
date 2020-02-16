@@ -32,7 +32,7 @@ public class SimpleViewProvider<View: UIView>: ViewAdapter<View> {
 							view: View) {
 		self.width = width
 		self.height = height
-    super.init(key: key, animator: animator, reuseManager: nil, view: view)
+    super.init(key: key, animator: animator, view: view)
 	}
 
 	public init(key: String = UUID().uuidString,
@@ -42,7 +42,7 @@ public class SimpleViewProvider<View: UIView>: ViewAdapter<View> {
 		self.width = .fit
 		self.height = .fit
 		self.sizeProvider = sizeProvider
-    super.init(key: key, animator: animator, reuseManager: nil, view: view)
+    super.init(key: key, animator: animator, view: view)
 	}
 
   public override func sizeThatFits(_ size: CGSize) -> CGSize {

@@ -8,41 +8,57 @@
 import UIKit
 
 protocol GenericValueHolder {
-  func write(to: AnyObject)
+  func write(to: AnyObject) -> GenericValueHolder
 }
 
 open class ViewAdapter<View: UIView>: AnyViewProvider {
   struct ValueHolder<Value>: GenericValueHolder {
     let keyPath: ReferenceWritableKeyPath<View, Value>
     let value: Value
-    func write(to: AnyObject) {
-      (to as! View)[keyPath: keyPath] = value
+    func write(to: AnyObject) -> GenericValueHolder {
+      let toView = (to as! View)
+      let resetHolder = ValueHolder<Value>(keyPath: keyPath, value: toView[keyPath: keyPath])
+      print("Write \(keyPath) = \(value)")
+      toView[keyPath: keyPath] = value
+      return resetHolder
     }
   }
+
+  // MARK: - Reuse
+  open lazy var reuseKey: String? = NSStringFromClass(Self.self)
+
+  // MARK: -
+  private var values: [AnyKeyPath: GenericValueHolder] = [:]
   
-  private var values: [GenericValueHolder] = []
-  public var key: String
-  public var animator: Animator?
-  public var reuseManager: CollectionReuseManager?
-  public var view: View?
+  open var key: String
+  open var animator: Animator?
+  open var view: View?
   
   public init(key: String = UUID().uuidString,
               animator: Animator? = nil,
-              reuseManager: CollectionReuseManager? = nil,
               view: View? = nil) {
     self.key = key
     self.animator = animator
-    self.reuseManager = reuseManager
     self.view = view
   }
   
   open func makeView() -> View {
-    return view ?? View()
+    return View()
   }
   
   open func updateView(_ view: View) {
-    for value in values {
-      value.write(to: view)
+    let context = view.ckContext
+    for (k, v) in context.valueResets {
+      if values[k] == nil {
+        _ = v.write(to: view)
+        context.valueResets[k] = nil
+      }
+    }
+    for (keyPath, value) in values {
+      let resetValueWriter = value.write(to: view)
+      if context.valueResets[keyPath] == nil {
+        context.valueResets[keyPath] = resetValueWriter
+      }
     }
   }
   
@@ -52,7 +68,13 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
   }
   
   public func _makeView() -> UIView {
-    return reuseManager?.dequeue(makeView()) ?? makeView()
+    if let view = view {
+      return view
+    }
+    if let reuseKey = reuseKey {
+      return CollectionReuseManager.shared.dequeue(identifier: reuseKey, makeView())
+    }
+    return makeView()
   }
   
   public func _updateView(_ view: UIView) {
@@ -63,7 +85,7 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
   // MARK: - modifiers
 
   public func with<Value>(_ keyPath: ReferenceWritableKeyPath<View, Value>, _ value: Value) -> Self {
-    values.append(ValueHolder(keyPath: keyPath, value: value))
+    values[keyPath] = ValueHolder(keyPath: keyPath, value: value)
     return self
   }
   
@@ -106,3 +128,4 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
       .with(\.layer.shadowOpacity, 1)
   }
 }
+

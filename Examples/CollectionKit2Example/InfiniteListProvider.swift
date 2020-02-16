@@ -32,7 +32,6 @@ class InfiniteListLayoutNode: LayoutNode {
   var size: CGSize {
     CGSize(width: boundingSize.width, height: calculatedHeight)
   }
-
   func layoutUntil(height: CGFloat) {
     while calculatedHeight < height {
       let offsetY = calculatedHeight == 0 ? 0 : calculatedHeight + 4
@@ -55,7 +54,7 @@ class InfiniteListLayoutNode: LayoutNode {
       index += 1
     }
     return results.map { index in
-      let vp = ClosureViewProvider(key: "\(index)", update: { (view: UILabel) in
+      let vp = ClosureViewProvider(key: "\(index)", reuseKey: "infinite.label", update: { (view: UILabel) in
         view.text = "Item \(index)"
       }, size: nil)
       let frame = frames[index]

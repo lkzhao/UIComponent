@@ -19,11 +19,12 @@ open class ClosureViewProvider<View: UIView>: ViewAdapter<View> {
   
   public init(key: String = UUID().uuidString,
               animator: Animator? = nil,
-              reuseManager: CollectionReuseManager? = nil,
+              reuseKey: String? = nil,
               generate: ViewGenerator? = nil,
               update: ViewUpdater?,
               size: SizeGenerator?) {
-    super.init(key: key, animator: animator, reuseManager: reuseManager)
+    super.init(key: key, animator: animator)
+    self.reuseKey = reuseKey
     self.viewGenerator = generate
     self.viewUpdater = update
     self.sizeSource = size

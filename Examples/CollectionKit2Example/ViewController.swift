@@ -83,26 +83,26 @@ class ViewController: UIViewController {
 //      ViewAdapter(view: v2).size(width: .fill, height: .absolute(50.0))
 //    }
 
-    struct User: ProviderWrapper {
-      let name: String
-      let image: UIImage
-      
-      var provider: Provider {
-        HStack(alignItems: .center) {
-          Image(image).tintColor(.darkGray)
-          HSpace(10)
-          Text(name)
-          Flex()
-        }.insets(20).view().backgroundColor(.white).cornerRadius(10).shadow(radius: 8)
-      }
-    }
-
-    collectionView.provider = VStack(spacing: 10) {
-      User(name: "John Appleseed", image: UIImage(systemName: "person")!)
-      User(name: "Brian", image: UIImage(systemName: "person")!)
-      User(name: "Josh", image: UIImage(systemName: "person")!)
-      User(name: "Mason", image: UIImage(systemName: "person")!)
-    }.insets(10)
+//    struct User: ProviderWrapper {
+//      let name: String
+//      let image: UIImage
+//      
+//      var provider: Provider {
+//        HStack(alignItems: .center) {
+//          Image(image).tintColor(.darkGray)
+//          HSpace(10)
+//          Text(name)
+//          Flex()
+//        }.insets(20).view().backgroundColor(.white).cornerRadius(10).shadow(radius: 8)
+//      }
+//    }
+//
+//    collectionView.provider = VStack(spacing: 10) {
+//      User(name: "John Appleseed", image: UIImage(systemName: "person")!)
+//      User(name: "Brian", image: UIImage(systemName: "person")!)
+//      User(name: "Josh", image: UIImage(systemName: "person")!)
+//      User(name: "Mason", image: UIImage(systemName: "person")!)
+//    }.insets(10)
     
 //    collectionView.provider = InfiniteListProvider()
 
@@ -154,9 +154,24 @@ class ViewController: UIViewController {
 //			self.collectionView.provider = provider2
 //		}
 
+    updateProvider()
 		collectionView.isScrollEnabled = true
 		collectionView.alwaysBounceVertical = true
 	}
+
+  var isSelected = false
+  func updateProvider() {
+    collectionView.provider = HStack {
+      if isSelected {
+        Text("Text").color(.red)
+      } else {
+        Text("Text")
+      }
+    }.tappableView { [weak self] in
+      self?.isSelected.toggle()
+      self?.updateProvider()
+    }
+  }
 
 	@objc func reload() {
 		collectionView.setNeedsReload()
@@ -168,4 +183,49 @@ class ViewController: UIViewController {
 		reloadButton.frame = CGRect(x: 0, y: view.bounds.height - 60,
 																width: view.bounds.width, height: 60)
 	}
+}
+
+class TappableView: CKView {
+  var onTap: (() -> Void)? {
+    didSet {
+      if oldValue == nil, onTap != nil {
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTap)))
+      } else if onTap == nil, oldValue != nil {
+        for gesture in gestureRecognizers ?? [] where gesture is UITapGestureRecognizer {
+          removeGestureRecognizer(gesture)
+        }
+      }
+    }
+  }
+
+  @objc func didTap() {
+    onTap?()
+  }
+}
+
+class TappableViewAdapter: ViewAdapter<TappableView> {
+  var child: Provider
+  var onTap: () -> Void
+
+  init(key: String, onTap: @escaping () -> Void, child: Provider) {
+    self.child = child
+    self.onTap = onTap
+    super.init(key: key)
+  }
+
+  override func updateView(_ view: TappableView) {
+    view.onTap = onTap
+    view.provider = child
+    super.updateView(view)
+  }
+
+  override func sizeThatFits(_ size: CGSize) -> CGSize {
+    return child.layout(size: size).size
+  }
+}
+
+extension Provider {
+  func tappableView(key: String = UUID().uuidString, _ onTap: @escaping () -> Void) -> TappableViewAdapter {
+    return TappableViewAdapter(key: key, onTap: onTap, child: self)
+  }
 }
