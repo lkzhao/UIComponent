@@ -40,6 +40,6 @@ public struct ProviderBuilder {
 
 extension UIView: ProviderBuilderComponent {
   public var providers: [Provider] {
-    return [SimpleViewProvider(key: "view-\(self.hashValue)", view: self)]
+    return [SimpleViewProvider(id: "view-\(self.hashValue)", view: self)]
   }
 }

@@ -247,7 +247,7 @@ public class CKData {
     // construct private identifiers
     var newIdentifierSet = [String: Int]()
     let newIdentifiers: [String] = newVisibleViewData.enumerated().map { index, viewData in
-      let identifier = viewData.0.key
+      let identifier = viewData.0.id
       var finalIdentifier = identifier
       var count = 1
       while newIdentifierSet[finalIdentifier] != nil {

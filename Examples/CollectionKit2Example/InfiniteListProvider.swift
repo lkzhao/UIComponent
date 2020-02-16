@@ -54,7 +54,7 @@ class InfiniteListLayoutNode: LayoutNode {
       index += 1
     }
     return results.map { index in
-      let vp = ClosureViewProvider(key: "\(index)", reuseKey: "infinite.label", update: { (view: UILabel) in
+      let vp = ClosureViewProvider(id: "\(index)", reuseKey: "infinite.label", update: { (view: UILabel) in
         view.text = "Item \(index)"
       }, size: nil)
       let frame = frames[index]

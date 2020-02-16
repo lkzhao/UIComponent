@@ -16,8 +16,8 @@ public extension AnyViewProvider {
 private struct AnimatorOverrideProvider: AnyViewProvider {
   var child: AnyViewProvider
 
-  var key: String {
-    return child.key
+  var id: String {
+    return child.id
   }
 
   var animator: Animator?

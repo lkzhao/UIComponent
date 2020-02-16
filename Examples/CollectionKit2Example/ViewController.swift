@@ -207,10 +207,10 @@ class TappableViewAdapter: ViewAdapter<TappableView> {
   var child: Provider
   var onTap: () -> Void
 
-  init(key: String, onTap: @escaping () -> Void, child: Provider) {
+  init(id: String, onTap: @escaping () -> Void, child: Provider) {
     self.child = child
     self.onTap = onTap
-    super.init(key: key)
+    super.init(id: id)
   }
 
   override func updateView(_ view: TappableView) {
@@ -225,7 +225,7 @@ class TappableViewAdapter: ViewAdapter<TappableView> {
 }
 
 extension Provider {
-  func tappableView(key: String = UUID().uuidString, _ onTap: @escaping () -> Void) -> TappableViewAdapter {
-    return TappableViewAdapter(key: key, onTap: onTap, child: self)
+  func tappableView(id: String = UUID().uuidString, _ onTap: @escaping () -> Void) -> TappableViewAdapter {
+    return TappableViewAdapter(id: id, onTap: onTap, child: self)
   }
 }

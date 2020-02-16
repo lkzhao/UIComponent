@@ -25,24 +25,24 @@ public class SimpleViewProvider<View: UIView>: ViewAdapter<View> {
 	public var height: SizeStrategy
   public var sizeProvider: ((CGSize) -> CGSize)?
 
-	public init(key: String = UUID().uuidString,
+	public init(id: String = UUID().uuidString,
 							animator: Animator? = nil,
 							width: SizeStrategy = .fit,
 							height: SizeStrategy = .fit,
 							view: View) {
 		self.width = width
 		self.height = height
-    super.init(key: key, animator: animator, view: view)
+    super.init(id: id, animator: animator, view: view)
 	}
 
-	public init(key: String = UUID().uuidString,
+	public init(id: String = UUID().uuidString,
 							animator: Animator? = nil,
 							view: View,
 							sizeProvider: @escaping (CGSize) -> CGSize) {
 		self.width = .fit
 		self.height = .fit
 		self.sizeProvider = sizeProvider
-    super.init(key: key, animator: animator, view: view)
+    super.init(id: id, animator: animator, view: view)
 	}
 
   public override func sizeThatFits(_ size: CGSize) -> CGSize {

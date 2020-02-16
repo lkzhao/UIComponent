@@ -29,14 +29,14 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
   // MARK: -
   private var values: [AnyKeyPath: GenericValueHolder] = [:]
   
-  open var key: String
+  open var id: String
   open var animator: Animator?
   open var view: View?
   
-  public init(key: String = UUID().uuidString,
+  public init(id: String = UUID().uuidString,
               animator: Animator? = nil,
               view: View? = nil) {
-    self.key = key
+    self.id = id
     self.animator = animator
     self.view = view
   }
@@ -53,10 +53,10 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
         context.valueResets[k] = nil
       }
     }
-    for (keyPath, value) in values {
+    for (idPath, value) in values {
       let resetValueWriter = value.write(to: view)
-      if context.valueResets[keyPath] == nil {
-        context.valueResets[keyPath] = resetValueWriter
+      if context.valueResets[idPath] == nil {
+        context.valueResets[idPath] = resetValueWriter
       }
     }
   }

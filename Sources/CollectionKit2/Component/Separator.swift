@@ -10,9 +10,9 @@ import UIKit
 public class Separator: ViewAdapter<UIView> {
   public var color: UIColor
 
-  public init(key: String = UUID().uuidString, color: UIColor = UIColor(white: 0.9, alpha: 1.0)) {
+  public init(id: String = UUID().uuidString, color: UIColor = UIColor(white: 0.9, alpha: 1.0)) {
     self.color = color
-    super.init(key: key)
+    super.init(id: id)
   }
 
   public override func updateView(_ view: UIView) {

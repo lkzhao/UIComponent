@@ -9,8 +9,8 @@
 import UIKit
 
 public protocol AnyViewProvider: Provider {
-	/// A unique key for identifying self.
-	var key: String { get }
+	/// A unique id for identifying self.
+	var id: String { get }
 
 	/// The animator used for layout animations.
 	var animator: Animator? { get }
@@ -21,7 +21,7 @@ public protocol AnyViewProvider: Provider {
 	/// Update the dequeued view.
 	func _updateView(_ view: UIView)
 
-  /// retrive view size
+  /// retrieve size
   func sizeThatFits(_ size: CGSize) -> CGSize
 }
 
@@ -69,8 +69,8 @@ class SizeOverrideProvider: AnyViewProvider {
   var height: SizeStrategy
   var child: AnyViewProvider
   
-  var key: String {
-    return child.key
+  var id: String {
+    return child.id
   }
   
   var animator: Animator? {
