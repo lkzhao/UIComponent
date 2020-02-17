@@ -8,20 +8,21 @@
 import UIKit
 
 open class Text: ViewAdapter<UILabel> {
-  var text: String
-  var font: UIFont
+  public var attributedText: NSAttributedString
   public init(_ text: String, font: UIFont = UIFont.systemFont(ofSize: 16)) {
-    self.text = text
-    self.font = font
+    self.attributedText = NSAttributedString(string: text, attributes: [.font: font])
+    super.init()
+  }
+  public init(_ attributedText: NSAttributedString) {
+    self.attributedText = attributedText
     super.init()
   }
   public override func updateView(_ view: UILabel) {
-    view.font = font
-    view.text = text
+    view.attributedText = attributedText
     super.updateView(view)
   }
   public override func sizeThatFits(_ size: CGSize) -> CGSize {
-    return (text as NSString).boundingRect(with: size, options: [], attributes: [.font: font], context: nil).size
+    return attributedText.boundingRect(with: size, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).size
   }
 }
 
