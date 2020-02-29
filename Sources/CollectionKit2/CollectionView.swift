@@ -142,6 +142,7 @@ public class CKData {
   }
 
   private var visibleIdentifiers: [String] = []
+  private var shouldSkipLayout = false
   
   init(view: ProviderDisplayableView) {
     self.view = view
@@ -209,16 +210,19 @@ public class CKData {
     defer {
       needsReload = false
       isReloading = false
+      shouldSkipLayout = false
     }
 
-    layoutNode = provider.layout(size: adjustedSize)
-    contentSize = layoutNode!.size * zoomScale
+    if !shouldSkipLayout {
+      layoutNode = provider.layout(size: adjustedSize)
+      contentSize = layoutNode!.size * zoomScale
 
-    let oldContentOffset = contentOffset
-    if let offset = contentOffsetAdjustFn?() {
-      contentOffset = offset
+      let oldContentOffset = contentOffset
+      if let offset = contentOffsetAdjustFn?() {
+        contentOffset = offset
+      }
+      contentOffsetChange = contentOffset - oldContentOffset
     }
-    contentOffsetChange = contentOffset - oldContentOffset
 
     _loadCells()
 
@@ -322,17 +326,7 @@ public class CKData {
   internal func updateWithExisting(provider: Provider, layoutNode: LayoutNode?) {
     self.provider = provider
     self.layoutNode = layoutNode
-    
-    // needsReload is set to true when assigning the provider. We want to skip reload so we set it back to false
-    needsReload = false
-    
-    // lastLoadBounds must be set to the size of the layout node in order to skip layout, if the size is different, then we
-    // will trigger another invalidateLayout
-    lastLoadBounds = CGRect(origin: .zero, size: layoutNode?.size ?? .zero)
-    
-    // finally we set needsLoadCell to true. we don't need to call setNeedsLayout because
-    // it is set when setting the provider
-    needsLoadCell = true
+    self.shouldSkipLayout = true
   }
 
   open func sizeThatFits(_ size: CGSize) -> CGSize {
