@@ -87,40 +87,42 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
     values[keyPath] = ValueHolder(keyPath: keyPath, value: value)
     return self
   }
-  
-  public func tintColor(_ tintColor: UIColor) -> Self {
+}
+
+public extension ViewAdapter {
+  func tintColor(_ tintColor: UIColor) -> Self {
     with(\.tintColor, tintColor)
   }
 
-  public func backgroundColor(_ color: UIColor) -> Self {
+  func backgroundColor(_ color: UIColor) -> Self {
     with(\.backgroundColor, color)
   }
 
-  public func scaleAspectFit() -> Self {
+  func scaleAspectFit() -> Self {
     with(\.contentMode, .scaleAspectFit)
   }
 
-  public func scaleAspectFill() -> Self {
+  func scaleAspectFill() -> Self {
     with(\.contentMode, .scaleAspectFill)
   }
 
-  public func alignCenter() -> Self {
+  func alignCenter() -> Self {
     with(\.contentMode, .center)
   }
 
-  public func cornerRadius(_ cornerRadius: CGFloat) -> Self {
+  func cornerRadius(_ cornerRadius: CGFloat) -> Self {
     with(\.layer.cornerRadius, cornerRadius)
   }
   
-  public func opacity(_ opacity: CGFloat) -> Self {
+  func opacity(_ opacity: CGFloat) -> Self {
     with(\.alpha, opacity)
   }
 
-  public func border(_ color: UIColor, width: CGFloat) -> Self {
+  func border(_ color: UIColor, width: CGFloat) -> Self {
     with(\.layer.borderColor, color.cgColor).with(\.layer.borderWidth, width)
   }
   
-  public func shadow(color: UIColor = UIColor.black.withAlphaComponent(0.33), radius: CGFloat, x: CGFloat = 0, y: CGFloat = 0) -> Self {
+  func shadow(color: UIColor = UIColor.black.withAlphaComponent(0.33), radius: CGFloat, x: CGFloat = 0, y: CGFloat = 0) -> Self {
     with(\.layer.shadowColor, color.cgColor)
       .with(\.layer.shadowRadius, radius)
       .with(\.layer.shadowOffset, CGSize(width: x, height: y))
@@ -128,3 +130,20 @@ open class ViewAdapter<View: UIView>: AnyViewProvider {
   }
 }
 
+public extension ViewAdapter where View: UILabel {
+  func color(_ color: UIColor) -> Self {
+    with(\.textColor, color)
+  }
+  func numberOfLines(_ lines: Int) -> Self {
+    with(\.numberOfLines, lines)
+  }
+  func textAlignment(_ textAlignment: NSTextAlignment) -> Self {
+    with(\.textAlignment, textAlignment)
+  }
+}
+
+public extension ViewAdapter where View: UIScrollView {
+  func delaysContentTouches(_ delaysContentTouches: Bool) -> Self {
+    with(\.delaysContentTouches, delaysContentTouches)
+  }
+}

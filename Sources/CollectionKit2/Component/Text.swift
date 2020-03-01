@@ -25,15 +25,3 @@ open class Text: ViewAdapter<UILabel> {
     return attributedText.boundingRect(with: size, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).size
   }
 }
-
-public extension Text {
-  func color(_ color: UIColor) -> Self {
-    with(\.textColor, color)
-  }
-  func numberOfLines(_ lines: Int) -> Self {
-    with(\.numberOfLines, lines)
-  }
-  func textAlignment(_ textAlignment: NSTextAlignment) -> Self {
-    with(\.textAlignment, textAlignment)
-  }
-}
