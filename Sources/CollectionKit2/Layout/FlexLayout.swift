@@ -99,13 +99,13 @@ extension StackLayout {
         nodes.append(SpaceLayoutNode(size: .zero))
       } else {
         let node = getLayoutNode(child: child, maxSize: CGSize(width: passThroughParentSize ? size.width : .infinity,
-                                                               height: size.height))
+                                                               height: fitCrossAxis ? .infinity : size.height))
         nodes.append(node)
         freezedWidth += node.size.width
       }
     }
 
-    let widthPerFlex: CGFloat = max(0, size.width - freezedWidth) / max(totalFlex, 1)
+    let widthPerFlex: CGFloat = size.width == .infinity ? 0 : max(0, size.width - freezedWidth) / max(totalFlex, 1)
     for i in fillIndexes {
       let child = children[i] as! Flex
       let size = getLayoutNode(child: child, maxSize: CGSize(width: widthPerFlex * child.flex,
@@ -113,6 +113,17 @@ extension StackLayout {
       let width = alwaysFillEmptySpaces ? max(widthPerFlex, size.size.width) : size.size.width
       nodes[i] = SizeOverrideLayoutNode(child: size, size: CGSize(width: width, height: size.size.height))
       freezedWidth += nodes[i].size.width
+    }
+    
+    if alignItems == .stretch, fitCrossAxis {
+      let upperBound = min(nodes.max(by: { a, b in
+        a.size.height < b.size.height
+      })?.size.height ?? size.height, size.height)
+      for (i, child) in children.enumerated() {
+        let node = getLayoutNode(child: child, maxSize: CGSize(width: passThroughParentSize ? size.width : .infinity,
+                                                               height: upperBound))
+        nodes[i] = node
+      }
     }
 
     return (nodes, freezedWidth - spacings)
