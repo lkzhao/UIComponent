@@ -36,11 +36,11 @@ extension Provider {
   public func insets(_ insetProvider: @escaping (CGSize) -> UIEdgeInsets) -> InsetLayout {
     return InsetLayout(insetProvider: insetProvider, child: self)
   }
-  public func view() -> ProviderDisplayableViewAdapter<CKView> {
-    return ProviderDisplayableViewAdapter<CKView>(self)
+  public func view(id: String = UUID().uuidString) -> ProviderDisplayableViewAdapter<CKView> {
+    return ProviderDisplayableViewAdapter<CKView>(id: id, provider: self)
   }
-  public func scrollView() -> ProviderDisplayableViewAdapter<CollectionView> {
-    return ProviderDisplayableViewAdapter<CollectionView>(self)
+  public func scrollView(id: String = UUID().uuidString) -> ProviderDisplayableViewAdapter<CollectionView> {
+    return ProviderDisplayableViewAdapter<CollectionView>(id: id, provider: self)
   }
   public func flex(_ weight: CGFloat = 1) -> Flex {
     return Flex(weight: weight, child: self)
@@ -60,9 +60,9 @@ extension ProviderWrapper {
 open class ProviderDisplayableViewAdapter<View: UIView & ProviderDisplayable>: ViewAdapter<View> {
   open var provider: Provider
   var cachedLayoutNode: LayoutNode?
-  public init(_ provider: Provider) {
+  public init(id: String = UUID().uuidString, provider: Provider) {
     self.provider = provider
-    super.init()
+    super.init(id: id)
   }
   open override func updateView(_ view: View) {
     view.ckData.updateWithExisting(provider: provider, layoutNode: cachedLayoutNode)
