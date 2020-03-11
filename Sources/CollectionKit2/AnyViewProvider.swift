@@ -43,6 +43,9 @@ extension AnyViewProvider {
   public func size(width: SizeStrategy = .fit, height: CGFloat) -> AnyViewProvider {
     return SizeOverrideProvider(child: self, width: width, height: .absolute(height))
   }
+  public func size(_ sizeProvider: @escaping (CGSize) -> CGSize) -> AnyViewProvider {
+    return SizeClosureProvider(child: self, sizeProvider: sizeProvider)
+  }
 }
 
 extension AnyViewProvider {
@@ -112,6 +115,36 @@ class SizeOverrideProvider: AnyViewProvider {
     }
 
     return result
+  }
+
+  func _makeView() -> UIView {
+    return child._makeView()
+  }
+  
+  func _updateView(_ view: UIView) {
+    child._updateView(view)
+  }
+}
+
+class SizeClosureProvider: AnyViewProvider {
+  var sizeProvider: (CGSize) -> CGSize
+  var child: AnyViewProvider
+  
+  var id: String {
+    return child.id
+  }
+  
+  var animator: Animator? {
+    return child.animator
+  }
+  
+  init(child: AnyViewProvider, sizeProvider: @escaping (CGSize) -> CGSize) {
+    self.child = child
+    self.sizeProvider = sizeProvider
+  }
+  
+  func sizeThatFits(_ size: CGSize) -> CGSize {
+    return sizeProvider(size)
   }
 
   func _makeView() -> UIView {
