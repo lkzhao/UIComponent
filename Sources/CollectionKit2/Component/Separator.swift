@@ -21,6 +21,6 @@ public class Separator: ViewAdapter<UIView> {
   }
 
   public override func sizeThatFits(_ size: CGSize) -> CGSize {
-    return CGSize(width: size.width, height: 1)
+    return CGSize(width: size.width.isFinite ? size.width : 0, height: 1)
   }
 }
