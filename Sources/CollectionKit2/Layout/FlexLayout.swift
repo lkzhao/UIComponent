@@ -26,8 +26,8 @@ public struct StackConfig {
   var spacing: CGFloat
   var alignItems: AlignItem
   var justifyContent: JustifyContent
-
-  var fitCrossAxis: Bool = false
+  var fitCrossAxis: Bool
+  
   var alwaysFillEmptySpaces: Bool = true
   var passThroughParentSize: Bool = false
 }
@@ -138,9 +138,10 @@ public struct HStack: StackLayout {
   public init(spacing: CGFloat = 0,
               justifyContent: JustifyContent = .start,
               alignItems: AlignItem = .start,
+              fitCrossAxis: Bool = false,
               children: [Provider]) {
     self.children = children
-    self.config = StackConfig(spacing: spacing, alignItems: alignItems, justifyContent: justifyContent)
+    self.config = StackConfig(spacing: spacing, alignItems: alignItems, justifyContent: justifyContent, fitCrossAxis: fitCrossAxis)
   }
 
   public var isVerticalLayout: Bool {
@@ -155,9 +156,10 @@ public struct VStack: StackLayout {
   public init(spacing: CGFloat = 0,
               justifyContent: JustifyContent = .start,
               alignItems: AlignItem = .start,
+              fitCrossAxis: Bool = false,
               children: [Provider]) {
     self.children = children
-    self.config = StackConfig(spacing: spacing, alignItems: alignItems, justifyContent: justifyContent)
+    self.config = StackConfig(spacing: spacing, alignItems: alignItems, justifyContent: justifyContent, fitCrossAxis: fitCrossAxis)
   }
 
   public var isVerticalLayout: Bool {
@@ -178,14 +180,14 @@ struct SizeOverrideLayoutNode: LayoutNode {
 }
 
 public extension VStack {
-  init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
-    self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, children: content().providers)
+  init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, fitCrossAxis: Bool = false, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
+    self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, fitCrossAxis: fitCrossAxis, children: content().providers)
   }
 }
 
 public extension HStack {
-  init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
-    self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, children: content().providers)
+  init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, fitCrossAxis: Bool = false, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
+    self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, fitCrossAxis: fitCrossAxis, children: content().providers)
   }
 }
 
