@@ -8,13 +8,15 @@
 import UIKit
 
 public struct ZStack: LayoutProvider {
-  public enum Alignment {
-    case topLeading, top, topTrailing
-    case leading, center, trailing
-    case bottomLeading, bottom, bottomTrailing
+  public enum VerticalAlignment {
+    case top, center, bottom, stretch
+  }
+  public enum HorizontalAlignment {
+    case leading, center, trailing, stretch
   }
 
-  public var alignment: Alignment = .center
+  public var verticalAlignment: VerticalAlignment = .center
+  public var horizontalAlignment: HorizontalAlignment = .center
   public var children: [Provider]
 
   public var isSortedLayout: Bool {
@@ -22,36 +24,42 @@ public struct ZStack: LayoutProvider {
   }
 
   public func simpleLayout(size: CGSize) -> ([LayoutNode], [CGRect]) {
-    let layoutNodes: [LayoutNode] = children.map { getLayoutNode(child: $0, maxSize: size) }
+    var layoutNodes: [LayoutNode] = children.map { getLayoutNode(child: $0, maxSize: size) }
     let width: CGFloat = layoutNodes.max { $0.size.width < $1.size.width }?.size.width ?? 0
     let height: CGFloat = layoutNodes.max { $0.size.height < $1.size.height }?.size.height ?? 0
-    let frames: [CGRect] = layoutNodes.map { node in
-      let x: CGFloat
-      let y: CGFloat
-      switch alignment {
-      case .topLeading, .top, .topTrailing:
-        y = 0
-      case .leading, .center, .trailing:
-        y = (height - node.size.height) / 2
-      case .bottomLeading, .bottom, .bottomTrailing:
-        y = height - node.size.height
+    let frames: [CGRect] = layoutNodes.enumerated().map { (idx, node) in
+      var result = CGRect(origin: .zero, size: node.size)
+      switch verticalAlignment {
+      case .top:
+        result.origin.y = 0
+      case .center:
+        result.origin.y = (height - node.size.height) / 2
+      case .bottom:
+        result.origin.y = height - node.size.height
+      case .stretch:
+        result.size.height = height
       }
-      switch alignment {
-      case .topLeading, .leading, .bottomLeading:
-        x = 0
-      case .top, .center, .bottom:
-        x = (width - node.size.width) / 2
-      case .topTrailing, .trailing, .bottomTrailing:
-        x = width - node.size.width
+      switch horizontalAlignment {
+      case .leading:
+        result.origin.x = 0
+      case .center:
+        result.origin.x = (width - node.size.width) / 2
+      case .trailing:
+        result.origin.x = width - node.size.width
+      case .stretch:
+        result.size.width = width
       }
-      return CGRect(x: x, y: y, width: node.size.width, height: node.size.height)
+      if node.size != result.size {
+        layoutNodes[idx] = getLayoutNode(child: children[idx], maxSize: result.size)
+      }
+      return result
     }
     return (layoutNodes, frames)
   }
 }
 
 public extension ZStack {
-  init(alignment: Alignment = .center, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
-    self.init(alignment: alignment, children: content().providers)
+  init(verticalAlignment: VerticalAlignment = .center, horizontalAlignment: HorizontalAlignment = .center, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
+    self.init(verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, children: content().providers)
   }
 }

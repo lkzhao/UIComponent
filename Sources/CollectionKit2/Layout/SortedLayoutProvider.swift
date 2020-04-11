@@ -8,9 +8,13 @@
 
 import UIKit
 
-public struct SlowLayoutNode: LayoutNode {
-  let children: [LayoutNode]
-  let frames: [CGRect]
+public protocol FrameReadableLayoutNode: LayoutNode {
+  var frames: [CGRect] { get }
+}
+
+public struct SlowLayoutNode: FrameReadableLayoutNode {
+  public let children: [LayoutNode]
+  public let frames: [CGRect]
   public let size: CGSize
 
   public func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
@@ -28,10 +32,10 @@ public struct SlowLayoutNode: LayoutNode {
   }
 }
 
-public struct HSortedLayoutNode: LayoutNode {
-  let children: [LayoutNode]
-  let frames: [CGRect]
-  let maxFrameLength: CGFloat
+public struct HSortedLayoutNode: FrameReadableLayoutNode {
+  public let children: [LayoutNode]
+  public let frames: [CGRect]
+  public let maxFrameLength: CGFloat
   public let size: CGSize
   
   public init(children: [LayoutNode], frames: [CGRect], size: CGSize) {
@@ -63,7 +67,7 @@ public struct HSortedLayoutNode: LayoutNode {
   }
 }
 
-public struct VSortedLayoutNode: LayoutNode {
+public struct VSortedLayoutNode: FrameReadableLayoutNode {
   public let children: [LayoutNode]
   public let frames: [CGRect]
   public let maxFrameLength: CGFloat
