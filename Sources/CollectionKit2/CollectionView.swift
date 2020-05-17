@@ -301,8 +301,10 @@ public class CKData {
       } else {
         cell = viewProvider._makeView()
         viewProvider._updateView(cell)
-        cell.bounds.size = frame.bounds.size
-        cell.center = frame.center
+        UIView.performWithoutAnimation {
+          cell.bounds.size = frame.bounds.size
+          cell.center = frame.center
+        }
         (viewProvider.animator ?? animator).insert(collectionView: view,
                                                    view: cell,
                                                    frame: frame)
