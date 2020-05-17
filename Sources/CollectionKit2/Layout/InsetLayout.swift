@@ -9,7 +9,7 @@
 import UIKit
 
 /// A layout provider wraps another provider with insets.
-open class InsetLayout: Provider {
+public struct InsetLayout: Provider {
 	public var insets: UIEdgeInsets
 	public var child: Provider
 	public var insetProvider: ((CGSize) -> UIEdgeInsets)?
@@ -25,14 +25,21 @@ open class InsetLayout: Provider {
 		self.child = child
 	}
 
-	open func layout(size: CGSize) -> CGSize {
-		insets = insetProvider?(size) ?? insets
-		return child.layout(size: size.inset(by: insets)).inset(by: -insets)
+	public func layout(size: CGSize) -> LayoutNode {
+    let insets = insetProvider?(size) ?? self.insets
+		return InsetLayoutNode(insets: insets, child: child.layout(size: size.inset(by: insets)))
 	}
+}
 
-	open func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-		return child.views(in: frame.inset(by: -insets)).map {
-			($0.0, $0.1 + CGPoint(x: insets.left, y: insets.top))
-		}
-	}
+struct InsetLayoutNode: LayoutNode {
+  let insets: UIEdgeInsets
+  let child: LayoutNode
+  var size: CGSize {
+    return child.size.inset(by: -insets)
+  }
+  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    child.views(in: frame.inset(by: -insets)).map {
+      ($0.0, $0.1 + CGPoint(x: insets.left, y: insets.top))
+    }
+  }
 }

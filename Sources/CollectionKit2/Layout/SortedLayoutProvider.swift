@@ -8,60 +8,96 @@
 
 import UIKit
 
-open class SortedLayoutProvider: LayoutProvider {
-	private var maxFrameLength: CGFloat = 0
-	open var isImplementedInVertical: Bool { return true }
+public protocol FrameReadableLayoutNode: LayoutNode {
+  var frames: [CGRect] { get }
+}
 
-	open override func doneLayout() {
-		if isTransposed == isImplementedInVertical {
-			maxFrameLength = frames.max { $0.width < $1.width }?.width ?? 0
-		} else {
-			maxFrameLength = frames.max { $0.height < $1.height }?.height ?? 0
-		}
-	}
+public struct SlowLayoutNode: FrameReadableLayoutNode {
+  public let children: [LayoutNode]
+  public let frames: [CGRect]
+  public let size: CGSize
 
-	open func visibleIndexes(in frame: CGRect) -> [Int] {
-		var results = [Int]()
-		if isTransposed == isImplementedInVertical {
-			var index = frames.binarySearch { $0.minX < frame.minX - maxFrameLength }
-			while index < frames.count {
-				let childFrame = frames[index]
-				if childFrame.minX >= frame.maxX {
-					break
-				}
-				if childFrame.maxX > frame.minX {
-					results.append(index)
-				}
-				index += 1
-			}
-		} else {
-			var index = frames.binarySearch { $0.minY < frame.minY - maxFrameLength }
-			while index < frames.count {
-				let childFrame = frames[index]
-				if childFrame.minY >= frame.maxY {
-					break
-				}
-				if childFrame.maxY > frame.minY {
-					results.append(index)
-				}
-				index += 1
-			}
-		}
-		return results
-	}
+  public func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    var result = [(AnyViewProvider, CGRect)]()
 
-	open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-		var result = [(ViewProvider, CGRect)]()
+    for (i, childFrame) in frames.enumerated() where frame.intersects(childFrame) {
+      let child = children[i]
+      let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map { viewProvider, frame in
+        (viewProvider, CGRect(origin: frame.origin + childFrame.origin, size: frame.size))
+      }
+      result.append(contentsOf: childResult)
+    }
 
-		for index in visibleIndexes(in: frame) {
-			let child = children[index]
-			let childFrame = frames[index]
-			let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map {
-				($0.0, CGRect(origin: $0.1.origin + childFrame.origin, size: $0.1.size))
-			}
-			result.append(contentsOf: childResult)
-		}
+    return result
+  }
+}
 
-		return result
-	}
+public struct HSortedLayoutNode: FrameReadableLayoutNode {
+  public let children: [LayoutNode]
+  public let frames: [CGRect]
+  public let maxFrameLength: CGFloat
+  public let size: CGSize
+  
+  public init(children: [LayoutNode], frames: [CGRect], size: CGSize) {
+    self.maxFrameLength = frames.max { $0.width < $1.width }?.width ?? 0
+    self.children = children
+    self.frames = frames
+    self.size = size
+  }
+  
+  public func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    var result = [(AnyViewProvider, CGRect)]()
+    var index = frames.binarySearch { $0.minX < frame.minX - maxFrameLength }
+    while index < frames.count {
+      let childFrame = frames[index]
+      if childFrame.minX >= frame.maxX {
+        break
+      }
+      if childFrame.maxX > frame.minX {
+        let child = children[index]
+        let childFrame = frames[index]
+        let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map {
+          ($0.0, CGRect(origin: $0.1.origin + childFrame.origin, size: $0.1.size))
+        }
+        result.append(contentsOf: childResult)
+      }
+      index += 1
+    }
+    return result
+  }
+}
+
+public struct VSortedLayoutNode: FrameReadableLayoutNode {
+  public let children: [LayoutNode]
+  public let frames: [CGRect]
+  public let maxFrameLength: CGFloat
+  public let size: CGSize
+  
+  public init(children: [LayoutNode], frames: [CGRect], size: CGSize) {
+    self.maxFrameLength = frames.max { $0.height < $1.height }?.height ?? 0
+    self.children = children
+    self.frames = frames
+    self.size = size
+  }
+  
+  public func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    var result = [(AnyViewProvider, CGRect)]()
+    var index = frames.binarySearch { $0.minY < frame.minY - maxFrameLength }
+    while index < frames.count {
+      let childFrame = frames[index]
+      if childFrame.minY >= frame.maxY {
+        break
+      }
+      if childFrame.maxY > frame.minY {
+        let child = children[index]
+        let childFrame = frames[index]
+        let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map {
+          ($0.0, CGRect(origin: $0.1.origin + childFrame.origin, size: $0.1.size))
+        }
+        result.append(contentsOf: childResult)
+      }
+      index += 1
+    }
+    return result
+  }
 }

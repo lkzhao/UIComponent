@@ -2,13 +2,16 @@ import XCTest
 @testable import CollectionKit2
 
 final class CollectionKit2Tests: XCTestCase {
-	func testExample() {
-		// This is an example of a functional test case.
-		// Use XCTAssert and related functions to verify your tests produce the correct
-		// results.
+	func testPerfHStackText() {
+    let collectionView = CollectionView()
+    measure {
+      collectionView.provider = HStack {
+        ForEach(0..<10000) { _ in
+          Text("Test")
+        }
+      }
+      collectionView.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 600))
+      collectionView.layoutIfNeeded()
+    }
 	}
-
-	static var allTests = [
-		("testExample", testExample),
-	]
 }

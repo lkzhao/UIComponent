@@ -13,6 +13,8 @@ public protocol CollectionReusableView: AnyObject {
 }
 
 open class CollectionReuseManager: NSObject {
+  static let shared = CollectionReuseManager()
+
 	/// Time it takes for CollectionReuseViewManager to
 	/// dump all reusableViews to save memory
 	public var lifeSpan: TimeInterval = 5.0
@@ -28,7 +30,8 @@ open class CollectionReuseManager: NSObject {
 
 	public func enqueue(identifier id: String? = nil,
 											view: UIView) {
-		view.reuseManager = nil
+    view.ckContext.reuseIdentifier = nil
+    view.ckContext.reuseManager = nil
 		let identifier = id ?? NSStringFromClass(type(of: view))
 		if removeFromCollectionViewWhenReuse {
 			view.removeFromSuperview()
@@ -58,7 +61,8 @@ open class CollectionReuseManager: NSObject {
 		if !removeFromCollectionViewWhenReuse {
 			view.isHidden = false
 		}
-		view.reuseManager = self
+		view.ckContext.reuseManager = self
+    view.ckContext.reuseIdentifier = identifier
 		return view
 	}
 

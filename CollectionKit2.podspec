@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "CollectionKit2"
-  s.version          = "0.2.0"
+  s.version          = "0.2.1"
   s.summary          = "A modern swift framework for building data-driven reusable collection view components."
 
   s.description      = <<-DESC
@@ -31,5 +31,5 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
 
-  s.source_files = 'Sources/CollectionKit2/**/*.swift'
+  s.source_files = 'Sources/**/*.swift'
 end

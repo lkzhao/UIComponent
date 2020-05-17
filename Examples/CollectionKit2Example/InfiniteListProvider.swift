@@ -9,59 +9,58 @@
 import CollectionKit2
 import UIKit
 
-class InfiniteListProvider: ProgressiveProvider {
-	var onUpdate: ((CGSize) -> Void)?
+class InfiniteListProvider: Provider {
+  let layoutNode = InfiniteListLayoutNode()
+  func layout(size: CGSize) -> LayoutNode {
+    layoutNode.boundingSize = size
+    return layoutNode
+  }
+}
 
-	var frames: [CGRect] = []
-	var calculatedWidth: CGFloat = 0
-	var calculatedHeight: CGFloat {
-		return frames.last?.maxY ?? 0
-	}
+class InfiniteListLayoutNode: LayoutNode {
+  var frames: [CGRect] = []
+  var boundingSize: CGSize = .zero {
+    didSet {
+      guard boundingSize.width != oldValue.width else { return }
+      frames.removeAll()
+      layoutUntil(height: boundingSize.height * 2)
+    }
+  }
+  var calculatedHeight: CGFloat {
+    frames.last?.maxY ?? 0
+  }
+  var size: CGSize {
+    CGSize(width: boundingSize.width, height: calculatedHeight)
+  }
+  func layoutUntil(height: CGFloat) {
+    while calculatedHeight < height {
+      let offsetY = calculatedHeight == 0 ? 0 : calculatedHeight + 4
+      frames.append(CGRect(x: 0, y: offsetY, width: boundingSize.width, height: 40))
+    }
+  }
+  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    // Make sure this runs at least at O(log(n)) time, otherwise there is almost no benefit to use
+    // ProgressiveProvider. Here, it is done using a binary search through the calculated frames
 
-	func layoutUntil(height: CGFloat) {
-		while calculatedHeight < height {
-			let offsetY = calculatedHeight == 0 ? 0 : calculatedHeight + 4
-			frames.append(CGRect(x: 0, y: offsetY, width: calculatedWidth, height: 40))
-		}
-	}
+    if frame.maxY + frame.height > calculatedHeight {
+      // need to leave some space for future scroll
+      layoutUntil(height: frame.maxY + frame.height)
+    }
 
-	func layout(size: CGSize) -> CGSize {
-		if size.width != calculatedWidth {
-			// clear calculated values
-			calculatedWidth = size.width
-			frames.removeAll()
-		}
-
-		layoutUntil(height: size.height * 2)
-		return CGSize(width: calculatedWidth, height: calculatedHeight)
-	}
-
-	func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-		// Make sure this runs at least at O(log(n)) time, otherwise there is almost no benefit to use
-		// ProgressiveProvider. Here, it is done using a binary search through the calculated frames
-
-		if frame.maxY + frame.height > calculatedHeight {
-			// need to leave some space for future scroll
-			layoutUntil(height: frame.maxY + frame.height)
-
-			// update the collectionView with new contentSize
-			onUpdate?(CGSize(width: calculatedWidth, height: calculatedHeight))
-		}
-
-		var results = [Int]()
-		var index = frames.binarySearch { $0.maxY < frame.minY }
-		while let childFrame = frames.get(index), childFrame.minY < frame.maxY {
-			results.append(index)
-			index += 1
-		}
-		return results.map { index in
-			let vp = ClosureViewProvider(key: "\(index)", update: { (view: UILabel) in
-				view.text = "Item \(index)"
+    var results = [Int]()
+    var index = frames.binarySearch { $0.maxY < frame.minY }
+    while let childFrame = frames.get(index), childFrame.minY < frame.maxY {
+      results.append(index)
+      index += 1
+    }
+    return results.map { index in
+      let vp = ClosureViewProvider(id: "\(index)", reuseKey: "infinite.label", update: { (view: UILabel) in
+        view.text = "Item \(index)"
       }, size: nil)
-			let frame = frames[index]
-			return (vp, frame)
-		}
-	}
+      let frame = frames[index]
+      return (vp, frame)
+    }
+  }
 }
 
 private extension Collection {

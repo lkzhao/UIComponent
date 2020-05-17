@@ -8,11 +8,16 @@
 
 import UIKit
 
-public class PageLayout: SortedLayoutProvider {
-	public override func simpleLayout(size: CGSize) -> [CGRect] {
-		return children.enumerated().map {
-			CGRect(origin: CGPoint(x: CGFloat($0) * size.width, y: 0),
-						 size: getSize(child: $1, maxSize: size))
-		}
-	}
+public struct PageLayout: LayoutProvider {
+  let children: [Provider]
+  public func simpleLayout(size: CGSize) -> ([LayoutNode], [CGRect]) {
+    var frames: [CGRect] = []
+    var nodes: [LayoutNode] = []
+    for (i, c) in children.enumerated() {
+      let node = getLayoutNode(child: c, maxSize: size)
+      frames.append(CGRect(origin: CGPoint(x: CGFloat(i) * size.width, y: 0), size: node.size))
+      nodes.append(node)
+    }
+    return (nodes, frames)
+  }
 }

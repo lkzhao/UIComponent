@@ -10,7 +10,7 @@ import CollectionKit2
 import UIKit
 
 class ViewController: UIViewController {
-	let collectionView = CollectionView()
+	var collectionView = CollectionView()
 
 	let reloadButton: UIButton = {
 		let button = UIButton()
@@ -38,33 +38,121 @@ class ViewController: UIViewController {
 		reloadButton.addTarget(self, action: #selector(reload), for: .touchUpInside)
 		view.addSubview(reloadButton)
 
-		let viewProvider1 = FillViewProvider(view: {
-			let v = UIView()
-			v.backgroundColor = .red
-			return v
-		}())
+    let v0 = UIView()
+    v0.backgroundColor = .black
+    let v1 = UIView()
+    v1.backgroundColor = .red
+    let v2 = UIView()
+    v2.backgroundColor = .blue
+    let v3 = UIView()
+    v3.backgroundColor = .green
 
-		let viewProvider2 = ClosureViewProvider(generate: { () -> UIView in
-			UIView()
-		}, update: { view in
-			view.backgroundColor = .blue
-		}) { (_) -> CGSize in
-			CGSize(width: 100, height: 200)
-		}
+//    collectionView.provider = VStack {
+//      HStack {
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v1)
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v2)
+//      }
+//      HStack {
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: UIView())
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: UIView())
+//      }
+//    }
+    
+//    collectionView.provider = VStack {
+//      ForEach(data[0]) { number in
+//        ClosureViewProvider(update: { (view: UILabel) in
+//          view.text = "\(number)"
+//        }, size: { _ in
+//          CGSize(width: 100, height: 100)
+//        })
+//      }
+//    }
+    
+//    collectionView.provider = VStack {
+//      HStack {
+//        Text("FLEX").color(.red).padding(20).view().backgroundColor(.black).flex()
+//        ForEach(0..<5) { number in
+//          VStack(alignItems: .center) {
+//            Text("\(number)")
+//            VSpace(50)
+//            Text("LOL").padding(10)
+//          }
+//        }
+//      }
+//      ViewAdapter(view: v1).size(width: .fill, height: .absolute(50.0))
+//      ViewAdapter(view: v2).size(width: .fill, height: .absolute(50.0))
+//    }
 
-		let viewProvider = FlowLayout(children: [viewProvider1, viewProvider2])
-		let provider = InsetLayout(insets: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8),
-															 child: HalfSizeProvider(provider: HalfSizeProvider(provider: HalfSizeProvider(provider: viewProvider1))))
+    struct User: ProviderWrapper {
+      let name: String
+      let image: UIImage
+      
+      var provider: Provider {
+        HStack(alignItems: .center) {
+          Image(image).tintColor(.darkGray)
+          HSpace(10)
+          Text(name)
+          Flex()
+        }.insets(20).view().backgroundColor(.white).cornerRadius(10).shadow(radius: 8)
+      }
+    }
 
-		let provider2 = viewProvider
-		collectionView.provider = provider
+    collectionView.provider = VStack(spacing: 10) {
+      User(name: "John Appleseed", image: UIImage(systemName: "person")!)
+      User(name: "Brian", image: UIImage(systemName: "person")!)
+      User(name: "Josh", image: UIImage(systemName: "person")!)
+      User(name: "Mason", image: UIImage(systemName: "person")!)
+    }.insets(10)
+    
+//    collectionView.provider = InfiniteListProvider()
 
-		let animator = AnimatedReloadAnimator(entryTransform: AnimatedReloadAnimator.fancyEntryTransform)
-		collectionView.animator = animator
+//    collectionView.provider = VStack(spacing: 10) {
+//      ForEach(0..<5) { number in
+//        Text("\(number)").backgroundColor(.red)
+//        Text("LOL").backgroundColor(.green)
+//      }
+//    }
+    
+//    let showV1 = true
+//    collectionView.provider = VStack {
+//      FlowLayout {
+//        User(name: "John Appleseed", image: UIImage(systemName: "person")!)
+//        User(name: "Brian", image: UIImage(systemName: "person")!)
+//        User(name: "Josh", image: UIImage(systemName: "person")!)
+//        User(name: "Mason", image: UIImage(systemName: "person")!)
+//      }
+//      UILabel().then {
+//        $0.font = UIFont.boldSystemFont(ofSize: 44)
+//        $0.textColor = .white
+//        $0.backgroundColor = .black
+//        $0.text = "Raw Label"
+//      }
+//      if showV1 {
+//        UILabel().then {
+//          $0.text = "Oh my gosh"
+//        }
+//      }
+//    }
+    
+    
+//    let shouldDisplayFirstRow = true
+//    collectionView.provider = VStack {
+//      if shouldDisplayFirstRow {
+//        SimpleViewProvider(width: .absolute(200), height: .absolute(100), view: v0)
+//      }
+//      HStack {
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v1)
+//        SimpleViewProvider(width: .absolute(100), height: .absolute(100), view: v2)
+//      }
+//      SimpleViewProvider(width: .absolute(200), height: .absolute(100), view: v3)
+//    }
 
-		DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-			self.collectionView.provider = provider2
-		}
+//		let animator = AnimatedReloadAnimator(entryTransform: AnimatedReloadAnimator.fancyEntryTransform)
+//		collectionView.animator = animator
+//
+//		DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//			self.collectionView.provider = provider2
+//		}
 
 		collectionView.isScrollEnabled = true
 		collectionView.alwaysBounceVertical = true
@@ -82,22 +170,41 @@ class ViewController: UIViewController {
 	}
 }
 
-class HalfSizeProvider: Provider {
-	private let provider: Provider
-	init(provider: Provider) {
-		self.provider = provider
-	}
+class TappableView: CKView {
+  var onTap: (() -> Void)? {
+    didSet {
+      if oldValue == nil, onTap != nil {
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTap)))
+      } else if onTap == nil, oldValue != nil {
+        for gesture in gestureRecognizers ?? [] where gesture is UITapGestureRecognizer {
+          removeGestureRecognizer(gesture)
+        }
+      }
+    }
+  }
 
-	var _size: CGSize = .zero
-	func layout(size: CGSize) -> CGSize {
-		_size = provider.layout(size: CGSize(width: size.width, height: size.height / 2))
-		return _size
-	}
+  @objc func didTap() {
+    onTap?()
+  }
+}
 
-	func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-		print("frame: \(frame)")
-		return provider.views(in: CGRect(origin: .zero, size: _size)).map { viewProvider, frame in
-			(viewProvider, frame)
-		}
-	}
+class TappableViewAdapter: ProviderDisplayableViewAdapter<TappableView> {
+  var onTap: () -> Void
+
+  init(id: String, onTap: @escaping () -> Void, provider: Provider) {
+    self.onTap = onTap
+    super.init(provider)
+    self.id = id
+  }
+
+  override func updateView(_ view: TappableView) {
+    view.onTap = onTap
+    super.updateView(view)
+  }
+}
+
+extension Provider {
+  func tappableView(id: String = UUID().uuidString, _ onTap: @escaping () -> Void) -> TappableViewAdapter {
+    return TappableViewAdapter(id: id, onTap: onTap, provider: self)
+  }
 }

@@ -8,31 +8,42 @@
 
 import UIKit
 
-open class VisibleFrameInset: SingleChildProvider {
+public struct VisibleFrameInset: Provider {
 	public var insets: UIEdgeInsets
 	public var insetProvider: ((CGSize) -> UIEdgeInsets)?
-	private var layoutSize: CGSize = .zero
+  public let child: Provider
 
 	public init(insets: UIEdgeInsets = .zero, child: Provider) {
 		self.insets = insets
-		super.init(child: child)
+    self.insetProvider = nil
+    self.child = child
 	}
 
 	public init(insetProvider: @escaping ((CGSize) -> UIEdgeInsets), child: Provider) {
 		self.insets = .zero
 		self.insetProvider = insetProvider
-		super.init(child: child)
+    self.child = child
 	}
 
-	open override func layout(size: CGSize) -> CGSize {
-		layoutSize = size
-		return super.layout(size: size)
+	public func layout(size: CGSize) -> LayoutNode {
+		return VisibleFrameInsetLayoutNode(insets: insets, insetProvider: insetProvider, child: child.layout(size: size))
 	}
+}
 
-	open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-		if let insetProvider = insetProvider {
-			insets = insetProvider(layoutSize)
-		}
-		return child.views(in: frame.inset(by: insets))
-	}
+struct VisibleFrameInsetLayoutNode: LayoutNode {
+  let insets: UIEdgeInsets
+  let insetProvider: ((CGSize) -> UIEdgeInsets)?
+  let child: LayoutNode
+  var size: CGSize {
+    return child.size
+  }
+  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    let insets: UIEdgeInsets
+    if let insetProvider = insetProvider {
+      insets = insetProvider(size)
+    } else {
+      insets = self.insets
+    }
+    return child.views(in: frame.inset(by: insets))
+  }
 }

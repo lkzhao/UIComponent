@@ -8,62 +8,74 @@
 
 import UIKit
 
-open class LayoutProvider: MultiChildProvider {
-	public private(set) var frames: [CGRect] = []
-	open var isTransposed: Bool { return false }
+public protocol LayoutProvider: Provider {
+	var isTransposed: Bool { get }
+  var isSortedLayout: Bool { get }
+  var isVerticalLayout: Bool { get }
 
-	open func simpleLayout(size _: CGSize) -> [CGRect] {
-		fatalError("Subclass should provide its own layout")
-	}
+	func simpleLayout(size: CGSize) -> ([LayoutNode], [CGRect])
+  func simpleLayoutWithCustomSize(size: CGSize) -> (([LayoutNode], [CGRect]), CGSize)
+}
 
-	open func simpleLayoutWithCustomSize(size: CGSize) -> ([CGRect], CGSize) {
-		let frames = simpleLayout(size: size)
-		let contentSize = frames.reduce(CGRect.zero) { old, item in
-			old.union(item)
-		}.size
-		return (frames, contentSize)
-	}
+extension LayoutProvider {
+  public var isTransposed: Bool { return false }
+  public var isSortedLayout: Bool { return true }
+  public var isVerticalLayout: Bool { return true }
+  
+  public func simpleLayout(size _: CGSize) -> ([LayoutNode], [CGRect]) {
+    fatalError("LayoutProvider subclass must implement either simpleLayout or simpleLayoutWithCustomSize")
+  }
 
-	open func doneLayout() {}
+  public func simpleLayoutWithCustomSize(size: CGSize) -> (([LayoutNode], [CGRect]), CGSize) {
+    let (nodes, frames) = simpleLayout(size: size)
+    let contentSize = frames.reduce(CGRect.zero) { old, item in
+      old.union(item)
+    }.size
+    return ((nodes, frames), contentSize)
+  }
 
-	open func getSize(child: Provider, maxSize: CGSize) -> CGSize {
-		let size: CGSize
-		if isTransposed {
-			size = child.layout(size: maxSize.transposed).transposed
-		} else {
-			size = child.layout(size: maxSize)
-		}
-		assert(size.width.isFinite, "\(child)'s width is invalid")
-		assert(size.height.isFinite, "\(child)'s height is invalid")
-		return size
-	}
+  public func getLayoutNode(child: Provider, maxSize: CGSize) -> LayoutNode {
+    let childNode: LayoutNode
+    if isTransposed {
+      childNode = TransposedLayoutNode(child: child.layout(size: maxSize.transposed))
+    } else {
+      childNode = child.layout(size: maxSize)
+    }
+    assert(childNode.size.width.isFinite, "\(child)'s width is invalid")
+    assert(childNode.size.height.isFinite, "\(child)'s height is invalid")
+    return childNode
+  }
 
-	open override func layout(size: CGSize) -> CGSize {
-		let contentSize: CGSize
-		if isTransposed {
-			let (_frames, _contentSize) = simpleLayoutWithCustomSize(size: size.transposed)
-			frames = _frames.map { $0.transposed }
-			contentSize = _contentSize.transposed
-		} else {
-			let (_frames, _contentSize) = simpleLayoutWithCustomSize(size: size)
-			frames = _frames
-			contentSize = _contentSize
-		}
-		doneLayout()
-		return contentSize
-	}
+  public func layout(size: CGSize) -> LayoutNode {
+    let nodes: [LayoutNode]
+    let frames: [CGRect]
+    let contentSize: CGSize
+    if isTransposed {
+      let ((_nodes, _frames), _contentSize) = simpleLayoutWithCustomSize(size: size.transposed)
+      nodes = _nodes.map { TransposedLayoutNode(child: $0) }
+      frames = _frames.map { $0.transposed }
+      contentSize = _contentSize.transposed
+    } else {
+      ((nodes, frames), contentSize) = simpleLayoutWithCustomSize(size: size)
+    }
+    if isSortedLayout {
+      if isVerticalLayout != isTransposed {
+        return VSortedLayoutNode(children: nodes, frames: frames, size: contentSize)
+      } else {
+        return HSortedLayoutNode(children: nodes, frames: frames, size: contentSize)
+      }
+    } else {
+      return SlowLayoutNode(children: nodes, frames: frames, size: contentSize)
+    }
+  }
+}
 
-	open override func views(in frame: CGRect) -> [(ViewProvider, CGRect)] {
-		var result = [(ViewProvider, CGRect)]()
-
-		for (i, childFrame) in frames.enumerated() where frame.intersects(childFrame) {
-			let child = children[i]
-			let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map { viewProvider, frame in
-				(viewProvider, CGRect(origin: frame.origin + childFrame.origin, size: frame.size))
-			}
-			result.append(contentsOf: childResult)
-		}
-
-		return result
-	}
+struct TransposedLayoutNode: LayoutNode {
+  let child: LayoutNode
+  var size: CGSize {
+    return child.size.transposed
+  }
+  func views(in frame: CGRect) -> [(AnyViewProvider, CGRect)] {
+    child.views(in: frame.transposed).map { ($0.0, $0.1.transposed) }
+  }
 }
