@@ -26,9 +26,9 @@ public struct StackConfig {
   var spacing: CGFloat
   var alignItems: AlignItem
   var justifyContent: JustifyContent
-  var fitCrossAxis: Bool
-  
-  var alwaysFillEmptySpaces: Bool = true
+
+  var fitCrossAxis: Bool = false
+  var fillEmptySpaces: Bool = true
   var passThroughParentSize: Bool = false
 }
 
@@ -54,13 +54,31 @@ extension StackLayout {
     get { config.fitCrossAxis }
     set { config.fitCrossAxis = newValue }
   }
-  public var alwaysFillEmptySpaces: Bool {
-    get { config.alwaysFillEmptySpaces }
-    set { config.alwaysFillEmptySpaces = newValue }
+  public var fillEmptySpaces: Bool {
+    get { config.fillEmptySpaces }
+    set { config.fillEmptySpaces = newValue }
   }
   public var passThroughParentSize: Bool {
     get { config.passThroughParentSize }
     set { config.passThroughParentSize = newValue }
+  }
+  
+  public func fillEmptySpaces(_ value: Bool) -> Self {
+    var copy = self
+    copy.fillEmptySpaces = value
+    return copy
+  }
+  
+  public func fitCrossAxis(_ value: Bool) -> Self {
+    var copy = self
+    copy.fitCrossAxis = value
+    return copy
+  }
+  
+  public func passThroughParentSize(_ value: Bool) -> Self {
+    var copy = self
+    copy.passThroughParentSize = value
+    return copy
   }
 
   public func simpleLayoutWithCustomSize(size: CGSize) -> (([LayoutNode], [CGRect]), CGSize) {
@@ -110,7 +128,7 @@ extension StackLayout {
       let child = children[i] as! Flex
       let size = getLayoutNode(child: child, maxSize: CGSize(width: widthPerFlex * child.flex,
                                                        height: size.height))
-      let width = alwaysFillEmptySpaces ? max(widthPerFlex, size.size.width) : size.size.width
+      let width = fillEmptySpaces ? max(widthPerFlex, size.size.width) : size.size.width
       nodes[i] = SizeOverrideLayoutNode(child: size, size: CGSize(width: width, height: size.size.height))
       freezedWidth += nodes[i].size.width
     }
@@ -138,10 +156,9 @@ public struct HStack: StackLayout {
   public init(spacing: CGFloat = 0,
               justifyContent: JustifyContent = .start,
               alignItems: AlignItem = .start,
-              fitCrossAxis: Bool = false,
               children: [Provider]) {
     self.children = children
-    self.config = StackConfig(spacing: spacing, alignItems: alignItems, justifyContent: justifyContent, fitCrossAxis: fitCrossAxis)
+    self.config = StackConfig(spacing: spacing, alignItems: alignItems, justifyContent: justifyContent)
   }
 
   public var isVerticalLayout: Bool {
@@ -156,10 +173,9 @@ public struct VStack: StackLayout {
   public init(spacing: CGFloat = 0,
               justifyContent: JustifyContent = .start,
               alignItems: AlignItem = .start,
-              fitCrossAxis: Bool = false,
               children: [Provider]) {
     self.children = children
-    self.config = StackConfig(spacing: spacing, alignItems: alignItems, justifyContent: justifyContent, fitCrossAxis: fitCrossAxis)
+    self.config = StackConfig(spacing: spacing, alignItems: alignItems, justifyContent: justifyContent)
   }
 
   public var isVerticalLayout: Bool {
@@ -180,14 +196,14 @@ struct SizeOverrideLayoutNode: LayoutNode {
 }
 
 public extension VStack {
-  init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, fitCrossAxis: Bool = false, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
-    self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, fitCrossAxis: fitCrossAxis, children: content().providers)
+  init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
+    self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, children: content().providers)
   }
 }
 
 public extension HStack {
-  init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, fitCrossAxis: Bool = false, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
-    self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, fitCrossAxis: fitCrossAxis, children: content().providers)
+  init(spacing: CGFloat = 0, justifyContent: JustifyContent = .start, alignItems: AlignItem = .start, @ProviderBuilder _ content: () -> ProviderBuilderComponent) {
+    self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, children: content().providers)
   }
 }
 

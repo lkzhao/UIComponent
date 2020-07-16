@@ -45,6 +45,18 @@ extension Provider {
   public func flex(_ weight: CGFloat = 1) -> Flex {
     return Flex(weight: weight, child: self)
   }
+  public func visibleInset(_ amount: CGFloat) -> VisibleFrameInset {
+    return VisibleFrameInset(insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount), child: self)
+  }
+  public func visibleInset(h: CGFloat = 0, v: CGFloat = 0) -> VisibleFrameInset {
+    return VisibleFrameInset(insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h), child: self)
+  }
+  public func visibleInset(_ insets: UIEdgeInsets) -> VisibleFrameInset {
+    return VisibleFrameInset(insets: insets, child: self)
+  }
+  public func visibleInset(_ insetProvider: @escaping (CGSize) -> UIEdgeInsets) -> VisibleFrameInset {
+    return VisibleFrameInset(insetProvider: insetProvider, child: self)
+  }
 }
 
 public protocol ProviderWrapper: Provider {
