@@ -18,17 +18,3 @@ public struct ForEach<S: Sequence, D>: ProviderBuilderComponent where S.Element 
     self.providers = providers
   }
 }
-
-public extension ForEach {
-  func join(@ProviderBuilder _ content: () -> ProviderBuilderComponent) -> Self {
-    var result: [Provider] = []
-    for i in 0..<providers.count - 1 {
-      result.append(providers[i])
-      result.append(contentsOf: content().providers)
-    }
-    if let lastProvider = providers.last {
-      result.append(lastProvider)
-    }
-    return ForEach(providers: result)
-  }
-}
