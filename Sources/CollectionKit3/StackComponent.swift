@@ -2,35 +2,117 @@
 //  File.swift
 //  
 //
-//  Created by Luke Zhao on 8/23/20.
+//  Created by Luke Zhao on 8/22/20.
 //
 
 import UIKit
 
-public enum FlexFit {
-  case tight, loose
+public protocol StackComponent: Component, BaseLayoutProtocol {
+  var spacing: CGFloat { get }
+  var justifyContent: MainAxisAlignment { get }
+  var alignItems: CrossAxisAlignment { get }
+  var children: [Component] { get }
 }
 
-public struct Flexible: Component {
-  public let flex: CGFloat
-  public let fit: FlexFit
-  public let child: Component
-  public func build() -> Element {
-    FlexibleElement(flex: flex, fit: fit, child: child.build())
+extension StackComponent {
+  public func layout(_ constraint: Constraint) -> Renderer {
+    let renderers = getRenderers(constraint)
+    let mainTotal = renderers.reduce(0) {
+      $0 + main($1.size)
+    }
+    
+    let (offset, distributedSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
+                                                               maxPrimary: main(constraint.maxSize),
+                                                               totalPrimary: mainTotal,
+                                                               minimunSpacing: spacing,
+                                                               numberOfItems: renderers.count)
+    
+    var primaryOffset = offset
+    var secondaryMax: CGFloat = 0
+    var positions: [CGPoint] = []
+    for child in renderers {
+      positions.append(point(main: primaryOffset, cross: 0))
+      primaryOffset += main(child.size) + distributedSpacing
+      secondaryMax = max(cross(child.size), secondaryMax)
+    }
+    let finalSize = size(main: primaryOffset - distributedSpacing, cross: secondaryMax)
+
+    return renderer(size: finalSize, children: renderers, positions: positions)
+  }
+  
+  func getRenderers(_ constraint: Constraint) -> [Renderer] {
+    var renderers: [Renderer?] = []
+    
+    let spacings = spacing * CGFloat(children.count - 1)
+    var mainFreezed: CGFloat = spacings
+    var flexCount: CGFloat = 0
+
+    let childConstraint = Constraint(maxSize: constraint.maxSize,
+                                     minSize: size(main: main(constraint.minSize),
+                                                   cross: alignItems == .stretch ? cross(constraint.maxSize) : cross(constraint.minSize)))
+    for child in children {
+      if let flexChild = child as? Flexible {
+        flexCount += flexChild.flex
+        renderers.append(nil)
+      } else {
+        let childRenderer = child.layout(childConstraint)
+        mainFreezed += main(childRenderer.size)
+        renderers.append(childRenderer)
+      }
+    }
+    
+    if flexCount > 0 {
+      let mainMax = main(constraint.maxSize)
+      let mainPerFlex = mainMax == .infinity ? 0 : max(0, mainMax - mainFreezed) / flexCount
+      for (index, child) in children.enumerated() {
+        if let child = child as? Flexible {
+          let mainReserved = mainPerFlex * child.flex
+          let constraint = Constraint(maxSize: size(main: mainReserved, cross: cross(constraint.maxSize)),
+                                      minSize: size(main: child.fit == .tight ? mainReserved : 0,
+                                                    cross: alignItems == .stretch ? cross(constraint.maxSize) : 0))
+          let renderer = child.layout(constraint)
+          if child.fit == .loose {
+            renderers[index] = SizeOverrideRenderer(child: renderer, size: size(main: mainReserved, cross: cross(renderer.size)))
+          } else {
+            renderers[index] = renderer
+          }
+          mainFreezed += mainReserved
+        }
+      }
+    }
+
+    return renderers.map { $0! }
   }
 }
 
-public extension Component {
-  func flex(_ flex: CGFloat = 1, fit: FlexFit = .tight) -> Flexible {
-    Flexible(flex: flex, fit: fit, child: self)
+public struct Row: StackComponent, VerticalLayoutProtocol {
+  public let spacing: CGFloat
+  public let justifyContent: MainAxisAlignment
+  public let alignItems: CrossAxisAlignment
+  public let children: [Component]
+}
+
+public struct Column: StackComponent, HorizontalLayoutProtocol {
+  public let spacing: CGFloat
+  public let justifyContent: MainAxisAlignment
+  public let alignItems: CrossAxisAlignment
+  public let children: [Component]
+}
+
+public extension Row {
+  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentBuilder _ content: () -> ComponentBuilderItem) {
+    self.init(spacing: spacing,
+              justifyContent: justifyContent,
+              alignItems: alignItems,
+              children: content().components)
   }
 }
 
-struct FlexibleElement: Element {
-  let flex: CGFloat
-  let fit: FlexFit
-  let child: Element
-  func layout(_ constraint: Constraint) -> Renderer {
-    child.layout(constraint)
+public extension Column {
+  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentBuilder _ content: () -> ComponentBuilderItem) {
+    self.init(spacing: spacing,
+              justifyContent: justifyContent,
+              alignItems: alignItems,
+              children: content().components)
   }
 }

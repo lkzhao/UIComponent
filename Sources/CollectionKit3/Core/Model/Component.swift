@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol Component: ComponentBuilderItem {
-  func build() -> Element
+  func layout(_ constraint: Constraint) -> Renderer
 }
 
 public extension Component {

@@ -83,12 +83,8 @@ extension ComponentDisplayable where Self: UIView {
 public class ComponentEngine {
   public weak var view: ComponentDisplayableView?
   public var component: Component? {
-    didSet {
-      element = component?.build()
-      setNeedsReload()
-    }
+    didSet { setNeedsReload() }
   }
-  public var element: Element?
   public var animator: Animator = Animator() {
     didSet { setNeedsReload() }
   }
@@ -208,7 +204,7 @@ public class ComponentEngine {
 
   // reload all frames. will automatically diff insertion & deletion
   public func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
-    guard let element = element, !isReloading else { return }
+    guard let component = component, !isReloading else { return }
     isReloading = true
     defer {
       needsReload = false
@@ -217,7 +213,7 @@ public class ComponentEngine {
     }
 
     if !shouldSkipLayout {
-      layoutNode = element.layout(Constraint(maxSize: adjustedSize, minSize: .zero))
+      layoutNode = component.layout(Constraint(maxSize: adjustedSize, minSize: .zero))
       contentSize = layoutNode!.size * zoomScale
 
       let oldContentOffset = contentOffset
@@ -233,7 +229,7 @@ public class ComponentEngine {
   }
 
   private func _loadCells() {
-    guard let view = view, !isLoadingCell, let element = element else { return }
+    guard let view = view, !isLoadingCell, let component = component else { return }
     isLoadingCell = true
     defer {
       needsLoadCell = false
@@ -244,7 +240,7 @@ public class ComponentEngine {
     if let currentLayoutNode = self.layoutNode {
       layoutNode = currentLayoutNode
     } else {
-      layoutNode = element.layout(Constraint(maxSize: adjustedSize, minSize: .zero))
+      layoutNode = component.layout(Constraint(maxSize: adjustedSize, minSize: .zero))
       contentSize = layoutNode.size * zoomScale
       self.layoutNode = layoutNode
     }

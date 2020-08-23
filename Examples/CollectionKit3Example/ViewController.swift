@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     collectionView.component = Column(spacing: 10, justifyContent: .spaceBetween) {
       Row(spacing: 20, justifyContent: .spaceBetween) {
         Text("Hello").id("test").with(\.textColor, .red)
-        text2.flex(fit: .loose)
+        text2.flex(fit: .tight)
         Text("Again")
       }
       Row {

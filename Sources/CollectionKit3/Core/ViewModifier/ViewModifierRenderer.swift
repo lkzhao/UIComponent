@@ -8,7 +8,6 @@
 import UIKit
 
 public struct ViewModifierRenderer<View, Value, Content: ViewRenderer>: ViewRenderer where Content.View == View {
-
   let content: Content
   let keyPath: ReferenceWritableKeyPath<View, Value>
   let value: Value
@@ -32,7 +31,6 @@ public struct ViewModifierRenderer<View, Value, Content: ViewRenderer>: ViewRend
 }
 
 public struct ViewIDModifierRenderer<View, Content: ViewRenderer>: ViewRenderer where Content.View == View {
-
   let content: Content
   public let id: String
 
