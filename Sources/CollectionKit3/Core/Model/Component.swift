@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol Component: ComponentBuilderItem {
+public protocol Component: ComponentFunctionBuilderItem {
   func layout(_ constraint: Constraint) -> Renderer
 }
 

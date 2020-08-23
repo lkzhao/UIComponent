@@ -30,6 +30,7 @@ class ViewController: UIViewController {
         Text("What")
         Text("Up")
       }.scrollView().with(\.backgroundColor, .blue).size(width: 100, height: 50)
+      CardWrapper(data: CardData(title: "Test", subtitle: "out this card"))
     }
 	}
 

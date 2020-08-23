@@ -22,7 +22,7 @@ public struct Column: StackComponent, HorizontalLayoutProtocol {
 }
 
 public extension Row {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentBuilder _ content: () -> ComponentBuilderItem) {
+  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentFunctionBuilder _ content: () -> ComponentFunctionBuilderItem) {
     self.init(spacing: spacing,
               justifyContent: justifyContent,
               alignItems: alignItems,
@@ -31,7 +31,7 @@ public extension Row {
 }
 
 public extension Column {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentBuilder _ content: () -> ComponentBuilderItem) {
+  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentFunctionBuilder _ content: () -> ComponentFunctionBuilderItem) {
     self.init(spacing: spacing,
               justifyContent: justifyContent,
               alignItems: alignItems,
