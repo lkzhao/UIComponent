@@ -17,48 +17,18 @@ class ViewController: UIViewController {
 		view.addSubview(collectionView)
     
     collectionView.contentInsetAdjustmentBehavior = .always
-    let text2 = Text("World", font: UIFont.boldSystemFont(ofSize: 20)).with(\.textColor, .blue).with(\.backgroundColor, .green)
-    collectionView.component = Column(spacing: 10, justifyContent: .spaceBetween) {
-      Row(spacing: 20, justifyContent: .spaceBetween) {
+    let text2 = Text("World", font: UIFont.boldSystemFont(ofSize: 20)).with(\.textColor, .blue).size(width: 50, height: 100).with(\.backgroundColor, .green)
+    collectionView.component = Column {
+      Row(spacing: 20, justifyContent: .spaceBetween, alignItems: .center) {
         Text("Hello").id("test").with(\.textColor, .red)
-        text2.flex(fit: .tight)
+        text2.inset(by: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)).view().with(\.backgroundColor, .red).with(\.clipsToBounds, true).size(width: 100, height: 100)
         Text("Again")
-      }
-      Row {
-        Text("Why")
-        Text("Not")
-      }
-      Row {
-        Text("Another")
-      }
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
-      Text("Another")
+      }.inset(by: UIEdgeInsets(top: 50, left: 20, bottom: 50, right: 20))
+      Row(spacing: 20, justifyContent: .spaceBetween, alignItems: .center) {
+        Text("Hey")
+        Text("What")
+        Text("Up")
+      }.scrollView().with(\.backgroundColor, .blue).size(width: 100, height: 50)
     }
 	}
 

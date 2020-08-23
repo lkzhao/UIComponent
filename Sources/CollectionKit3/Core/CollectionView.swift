@@ -89,7 +89,7 @@ public class ComponentEngine {
     didSet { setNeedsReload() }
   }
   
-  public private(set) var layoutNode: Renderer?
+  public private(set) var renderer: Renderer?
   
   public internal(set) var needsReload = true
   public internal(set) var needsLoadCell = false
@@ -186,7 +186,7 @@ public class ComponentEngine {
   }
 
   public func setNeedsInvalidateLayout() {
-    layoutNode = nil
+    renderer = nil
     setNeedsLoadCells()
   }
 
@@ -198,7 +198,7 @@ public class ComponentEngine {
   // re-layout, but not updating cells' contents
   public func invalidateLayout() {
     guard !isLoadingCell, !isReloading, hasReloaded else { return }
-    layoutNode = nil
+    renderer = nil
     _loadCells()
   }
 
@@ -213,8 +213,8 @@ public class ComponentEngine {
     }
 
     if !shouldSkipLayout {
-      layoutNode = component.layout(Constraint(maxSize: adjustedSize, minSize: .zero))
-      contentSize = layoutNode!.size * zoomScale
+      renderer = component.layout(Constraint(maxSize: adjustedSize, minSize: .zero))
+      contentSize = renderer!.size * zoomScale
 
       let oldContentOffset = contentOffset
       if let offset = contentOffsetAdjustFn?() {
@@ -236,23 +236,23 @@ public class ComponentEngine {
       isLoadingCell = false
     }
     
-    let layoutNode: Renderer
-    if let currentLayoutNode = self.layoutNode {
-      layoutNode = currentLayoutNode
+    let renderer: Renderer
+    if let currentRenderer = self.renderer {
+      renderer = currentRenderer
     } else {
-      layoutNode = component.layout(Constraint(maxSize: adjustedSize, minSize: .zero))
-      contentSize = layoutNode.size * zoomScale
-      self.layoutNode = layoutNode
+      renderer = component.layout(Constraint(maxSize: adjustedSize, minSize: .zero))
+      contentSize = renderer.size * zoomScale
+      self.renderer = renderer
     }
 
     animator.willUpdate(collectionView: view)
     let visibleFrame = contentView?.convert(bounds, from: view) ?? bounds
     
-    let newVisibleViewData = layoutNode.views(in: visibleFrame)
-    if contentSize != layoutNode.size * zoomScale {
-      // update contentSize if it is changed. Some layoutNodes update
+    let newVisibleViewData = renderer.views(in: visibleFrame)
+    if contentSize != renderer.size * zoomScale {
+      // update contentSize if it is changed. Some renderers update
       // its size when views(in: visibleFrame) is called. e.g. InfiniteLayout
-      contentSize = layoutNode.size * zoomScale
+      contentSize = renderer.size * zoomScale
     }
 
     // construct private identifiers
@@ -321,17 +321,17 @@ public class ComponentEngine {
     lastLoadBounds = bounds
   }
   
-  // This function assigns component with an already calculated layoutNode
+  // This function assigns component with an already calculated renderer
   // This is a performance hack that skips layout for the component if it has already
   // been layed out.
-  internal func updateWithExisting(component: Component, layoutNode: Renderer?) {
+  internal func updateWithExisting(component: Component, renderer: Renderer) {
     self.component = component
-    self.layoutNode = layoutNode
+    self.renderer = renderer
     self.shouldSkipLayout = true
   }
 
   open func sizeThatFits(_ size: CGSize) -> CGSize {
-    return layoutNode?.size ?? .zero
+    return component?.layout(Constraint(maxSize: size, minSize: .zero)).size ?? .zero
   }
 }
 

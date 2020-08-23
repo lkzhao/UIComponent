@@ -7,6 +7,38 @@
 
 import UIKit
 
+public struct Row: StackComponent, VerticalLayoutProtocol {
+  public let spacing: CGFloat
+  public let justifyContent: MainAxisAlignment
+  public let alignItems: CrossAxisAlignment
+  public let children: [Component]
+}
+
+public struct Column: StackComponent, HorizontalLayoutProtocol {
+  public let spacing: CGFloat
+  public let justifyContent: MainAxisAlignment
+  public let alignItems: CrossAxisAlignment
+  public let children: [Component]
+}
+
+public extension Row {
+  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentBuilder _ content: () -> ComponentBuilderItem) {
+    self.init(spacing: spacing,
+              justifyContent: justifyContent,
+              alignItems: alignItems,
+              children: content().components)
+  }
+}
+
+public extension Column {
+  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentBuilder _ content: () -> ComponentBuilderItem) {
+    self.init(spacing: spacing,
+              justifyContent: justifyContent,
+              alignItems: alignItems,
+              children: content().components)
+  }
+}
+
 public protocol StackComponent: Component, BaseLayoutProtocol {
   var spacing: CGFloat { get }
   var justifyContent: MainAxisAlignment { get }
@@ -20,6 +52,9 @@ extension StackComponent {
     let mainTotal = renderers.reduce(0) {
       $0 + main($1.size)
     }
+    let secondaryMax = renderers.reduce(0) {
+      max($0, cross($1.size))
+    }
     
     let (offset, distributedSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
                                                                maxPrimary: main(constraint.maxSize),
@@ -28,12 +63,21 @@ extension StackComponent {
                                                                numberOfItems: renderers.count)
     
     var primaryOffset = offset
-    var secondaryMax: CGFloat = 0
     var positions: [CGPoint] = []
     for child in renderers {
-      positions.append(point(main: primaryOffset, cross: 0))
+      let crossValue: CGFloat
+      switch alignItems {
+      case .start:
+        crossValue = 0
+      case .end:
+        crossValue = secondaryMax - cross(child.size)
+      case .center:
+        crossValue = (secondaryMax - cross(child.size)) / 2
+      case .stretch:
+        crossValue = 0
+      }
+      positions.append(point(main: primaryOffset, cross: crossValue))
       primaryOffset += main(child.size) + distributedSpacing
-      secondaryMax = max(cross(child.size), secondaryMax)
     }
     let finalSize = size(main: primaryOffset - distributedSpacing, cross: secondaryMax)
 
@@ -48,8 +92,7 @@ extension StackComponent {
     var flexCount: CGFloat = 0
 
     let childConstraint = Constraint(maxSize: constraint.maxSize,
-                                     minSize: size(main: main(constraint.minSize),
-                                                   cross: alignItems == .stretch ? cross(constraint.maxSize) : cross(constraint.minSize)))
+                                     minSize: size(main: 0, cross: alignItems == .stretch ? cross(constraint.maxSize) : cross(constraint.minSize)))
     for child in children {
       if let flexChild = child as? Flexible {
         flexCount += flexChild.flex
@@ -82,37 +125,5 @@ extension StackComponent {
     }
 
     return renderers.map { $0! }
-  }
-}
-
-public struct Row: StackComponent, VerticalLayoutProtocol {
-  public let spacing: CGFloat
-  public let justifyContent: MainAxisAlignment
-  public let alignItems: CrossAxisAlignment
-  public let children: [Component]
-}
-
-public struct Column: StackComponent, HorizontalLayoutProtocol {
-  public let spacing: CGFloat
-  public let justifyContent: MainAxisAlignment
-  public let alignItems: CrossAxisAlignment
-  public let children: [Component]
-}
-
-public extension Row {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentBuilder _ content: () -> ComponentBuilderItem) {
-    self.init(spacing: spacing,
-              justifyContent: justifyContent,
-              alignItems: alignItems,
-              children: content().components)
-  }
-}
-
-public extension Column {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentBuilder _ content: () -> ComponentBuilderItem) {
-    self.init(spacing: spacing,
-              justifyContent: justifyContent,
-              alignItems: alignItems,
-              children: content().components)
   }
 }
