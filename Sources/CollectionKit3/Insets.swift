@@ -7,11 +7,20 @@
 
 import UIKit
 
-public struct Insets: Component {
-  public let insets: UIEdgeInsets
-  public let child: Component
-  public func layout(_ constraint: Constraint) -> Renderer {
+struct Insets: Component {
+  let insets: UIEdgeInsets
+  let child: Component
+  func layout(_ constraint: Constraint) -> Renderer {
     InsetsRenderer(child: child.layout(constraint.inset(by: insets)), insets: insets)
+  }
+}
+
+struct DynamicInsets: Component {
+  let insetProvider: (Constraint) -> UIEdgeInsets
+  let child: Component
+  func layout(_ constraint: Constraint) -> Renderer {
+    let insets = insetProvider(constraint)
+    return InsetsRenderer(child: child.layout(constraint.inset(by: insets)), insets: insets)
   }
 }
 
@@ -29,7 +38,16 @@ struct InsetsRenderer: Renderer {
 }
 
 public extension Component {
-  func inset(by insets: UIEdgeInsets) -> Insets {
+  func inset(_ amount: CGFloat) -> Component {
+    Insets(insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount), child: self)
+  }
+  func inset(h: CGFloat = 0, v: CGFloat = 0) -> Component {
+    Insets(insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h), child: self)
+  }
+  func inset(by insets: UIEdgeInsets) -> Component {
     Insets(insets: insets, child: self)
+  }
+  func inset(_ insetProvider: @escaping (Constraint) -> UIEdgeInsets) -> Component {
+    DynamicInsets(insetProvider: insetProvider, child: self)
   }
 }
