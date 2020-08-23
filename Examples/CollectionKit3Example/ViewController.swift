@@ -24,6 +24,7 @@ class ViewController: UIViewController {
         text2.inset(by: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)).view().with(\.backgroundColor, .red).with(\.clipsToBounds, true).size(width: 100, height: 100)
         Text("Again")
       }.inset(by: UIEdgeInsets(top: 50, left: 20, bottom: 50, right: 20))
+      Space(width: 200, height: 44).view().with(\.backgroundColor, .green).flex()
       Row(spacing: 20, justifyContent: .spaceBetween, alignItems: .center) {
         Text("Hey")
         Text("What")
