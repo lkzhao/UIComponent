@@ -11,7 +11,7 @@ import CollectionKit3
 struct CardWrapper: ComponentBuilder {
   let data: CardData
   func build() -> Component {
-    Column {
+    VStack {
       Text(data.title)
       Text(data.subtitle)
     }

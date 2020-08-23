@@ -7,21 +7,21 @@
 
 import UIKit
 
-public struct Row: StackComponent, VerticalLayoutProtocol {
+public struct HStack: StackComponent, HorizontalLayoutProtocol {
   public let spacing: CGFloat
   public let justifyContent: MainAxisAlignment
   public let alignItems: CrossAxisAlignment
   public let children: [Component]
 }
 
-public struct Column: StackComponent, HorizontalLayoutProtocol {
+public struct VStack: StackComponent, VerticalLayoutProtocol {
   public let spacing: CGFloat
   public let justifyContent: MainAxisAlignment
   public let alignItems: CrossAxisAlignment
   public let children: [Component]
 }
 
-public extension Row {
+public extension HStack {
   init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentFunctionBuilder _ content: () -> ComponentFunctionBuilderItem) {
     self.init(spacing: spacing,
               justifyContent: justifyContent,
@@ -30,7 +30,7 @@ public extension Row {
   }
 }
 
-public extension Column {
+public extension VStack {
   init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentFunctionBuilder _ content: () -> ComponentFunctionBuilderItem) {
     self.init(spacing: spacing,
               justifyContent: justifyContent,

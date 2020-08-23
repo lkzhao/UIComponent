@@ -27,34 +27,9 @@ public protocol BaseLayoutProtocol {
 
 protocol VerticalLayoutProtocol: BaseLayoutProtocol {}
 
-extension VerticalLayoutProtocol {
-  @inline(__always) public func main(_ point: CGPoint) -> CGFloat {
-    point.x
-  }
-  @inline(__always) public func cross(_ point: CGPoint) -> CGFloat {
-    point.y
-  }
-  @inline(__always) public func main(_ size: CGSize) -> CGFloat {
-    size.width
-  }
-  @inline(__always) public func cross(_ size: CGSize) -> CGFloat {
-    size.height
-  }
-  @inline(__always) public func size(main: CGFloat, cross: CGFloat) -> CGSize {
-    CGSize(width: main, height: cross)
-  }
-  @inline(__always) public func point(main: CGFloat, cross: CGFloat) -> CGPoint {
-    CGPoint(x: main, y: cross)
-  }
-  @inline(__always) public func renderer(size: CGSize, children: [Renderer], positions: [CGPoint]) -> Renderer {
-    let max = main(children.max { main($0.size) < main($1.size) }?.size ?? .zero)
-    return RowRenderer(size: size, children: children, positions: positions, mainAxisMaxValue: max)
-  }
-}
-
 protocol HorizontalLayoutProtocol: BaseLayoutProtocol {}
 
-extension HorizontalLayoutProtocol {
+extension VerticalLayoutProtocol {
   @inline(__always) public func main(_ point: CGPoint) -> CGFloat {
     point.y
   }
@@ -75,7 +50,32 @@ extension HorizontalLayoutProtocol {
   }
   @inline(__always) public func renderer(size: CGSize, children: [Renderer], positions: [CGPoint]) -> Renderer {
     let max = main(children.max { main($0.size) < main($1.size) }?.size ?? .zero)
-    return ColumnRenderer(size: size, children: children, positions: positions, mainAxisMaxValue: max)
+    return VerticalRenderer(size: size, children: children, positions: positions, mainAxisMaxValue: max)
+  }
+}
+
+extension HorizontalLayoutProtocol {
+  @inline(__always) public func main(_ point: CGPoint) -> CGFloat {
+    point.x
+  }
+  @inline(__always) public func cross(_ point: CGPoint) -> CGFloat {
+    point.y
+  }
+  @inline(__always) public func main(_ size: CGSize) -> CGFloat {
+    size.width
+  }
+  @inline(__always) public func cross(_ size: CGSize) -> CGFloat {
+    size.height
+  }
+  @inline(__always) public func size(main: CGFloat, cross: CGFloat) -> CGSize {
+    CGSize(width: main, height: cross)
+  }
+  @inline(__always) public func point(main: CGFloat, cross: CGFloat) -> CGPoint {
+    CGPoint(x: main, y: cross)
+  }
+  @inline(__always) public func renderer(size: CGSize, children: [Renderer], positions: [CGPoint]) -> Renderer {
+    let max = main(children.max { main($0.size) < main($1.size) }?.size ?? .zero)
+    return HorizontalRenderer(size: size, children: children, positions: positions, mainAxisMaxValue: max)
   }
 }
 

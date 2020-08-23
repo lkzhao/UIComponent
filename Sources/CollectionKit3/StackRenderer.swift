@@ -14,37 +14,45 @@ public protocol StackRenderer: Renderer, BaseLayoutProtocol {
   var mainAxisMaxValue: CGFloat { get }
 }
 
-extension StackRenderer {
-  public func views(in frame: CGRect) -> [Renderable] {
-    var result = [Renderable]()
-    var index = positions.binarySearch { main($0) < main(frame.origin) - mainAxisMaxValue }
-    while index < positions.count {
+public extension StackRenderer {
+  func views(in frame: CGRect) -> [Renderable] {
+    guard var index = firstVisibleIndex(in: frame) else { return [] }
+    var result: [Renderable] = []
+    let endPoint = main(frame.origin) + main(frame.size)
+    while index < positions.count, main(positions[index]) < endPoint {
       let childFrame = CGRect(origin: positions[index], size: children[index].size)
-      if main(childFrame.origin) >= main(frame.origin) + main(frame.size) {
-        break
+      let childResult = children[index].views(in: frame.intersection(childFrame) - childFrame.origin).map {
+        Renderable(id: $0.id, animator: $0.animator, renderer: $0.renderer,
+                   frame: CGRect(origin: $0.frame.origin + childFrame.origin, size: $0.frame.size))
       }
-      if main(childFrame.origin) + main(childFrame.size) > main(frame.origin) {
-        let child = children[index]
-        let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map { info in
-          Renderable(id: info.id, animator: info.animator, renderer: info.renderer,
-                     frame: CGRect(origin: info.frame.origin + childFrame.origin, size: info.frame.size))
-        }
-        result.append(contentsOf: childResult)
-      }
+      result.append(contentsOf: childResult)
       index += 1
     }
     return result
   }
+
+  func firstVisibleIndex(in frame: CGRect) -> Int? {
+    let beginPoint = main(frame.origin) - mainAxisMaxValue
+    let endPoint = main(frame.origin) + main(frame.size)
+    var index = positions.binarySearch { main($0) < beginPoint }
+    while index < positions.count, main(positions[index]) < endPoint {
+      if main(positions[index]) + main(children[index].size) > main(frame.origin) {
+        return index
+      }
+      index += 1
+    }
+    return nil
+  }
 }
 
-public struct RowRenderer: StackRenderer, VerticalLayoutProtocol {
+public struct HorizontalRenderer: StackRenderer, HorizontalLayoutProtocol {
   public let size: CGSize
   public let children: [Renderer]
   public let positions: [CGPoint]
   public let mainAxisMaxValue: CGFloat
 }
 
-public struct ColumnRenderer: StackRenderer, HorizontalLayoutProtocol {
+public struct VerticalRenderer: StackRenderer, VerticalLayoutProtocol {
   public let size: CGSize
   public let children: [Renderer]
   public let positions: [CGPoint]

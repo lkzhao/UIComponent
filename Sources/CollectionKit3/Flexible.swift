@@ -25,3 +25,10 @@ public extension Component {
     Flexible(flex: flex, fit: fit, child: self)
   }
 }
+
+public typealias Spacer = Flexible
+public extension Spacer {
+  init() {
+    self.init(flex: 1, fit: .tight, child: Space())
+  }
+}

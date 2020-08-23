@@ -17,19 +17,29 @@ class ViewController: UIViewController {
 		view.addSubview(collectionView)
     
     collectionView.contentInsetAdjustmentBehavior = .always
-    let text2 = Text("World", font: UIFont.boldSystemFont(ofSize: 20)).with(\.textColor, .blue).size(width: 50, height: 100).with(\.backgroundColor, .green)
-    collectionView.component = Column {
-      Row(spacing: 20, justifyContent: .spaceBetween, alignItems: .center) {
-        Text("Hello").id("test").with(\.textColor, .red)
-        text2.inset(by: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)).view().with(\.backgroundColor, .red).with(\.clipsToBounds, true).size(width: 100, height: 100)
-        Text("Again")
-      }.inset(by: UIEdgeInsets(top: 50, left: 20, bottom: 50, right: 20))
-      Space(width: 200, height: 44).view().with(\.backgroundColor, .green).flex()
-      Row(spacing: 20, justifyContent: .spaceBetween, alignItems: .center) {
-        Text("Hey")
-        Text("What")
-        Text("Up")
-      }.scrollView().with(\.backgroundColor, .blue).size(width: 100, height: 50)
+    let text2 = Text("World", font: UIFont.boldSystemFont(ofSize: 20)).textColor(.blue).backgroundColor(.green)
+    collectionView.component = Waterfall {
+//      HStack(spacing: 20, justifyContent: .spaceBetween, alignItems: .center) {
+//        Text("Hello").id("test").with(\.textColor, .red)
+//        text2.inset(by: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)).view().backgroundColor(.red).clipsToBounds(true).size(width: 100, height: 100)
+//        Text("Again")
+//      }.inset(by: UIEdgeInsets(top: 50, left: 20, bottom: 50, right: 20))
+//      Spacer()
+//      HStack(spacing: 20, justifyContent: .spaceBetween, alignItems: .center) {
+//        Text("Hey")
+//        Text("What")
+//        Text("Up")
+//      }.scrollView().backgroundColor(.blue).size(width: 100, height: 50)
+      
+      CardWrapper(data: CardData(title: "Test", subtitle: "out this card"))
+      CardWrapper(data: CardData(title: "Test", subtitle: "out this card"))
+      CardWrapper(data: CardData(title: "Test", subtitle: "out this card"))
+      CardWrapper(data: CardData(title: "Test", subtitle: "out this card"))
+      CardWrapper(data: CardData(title: "Test", subtitle: "out this card"))
+      CardWrapper(data: CardData(title: "Test", subtitle: "out this card"))
+      CardWrapper(data: CardData(title: "Test", subtitle: "out this card"))
+      CardWrapper(data: CardData(title: "Test", subtitle: "out this card"))
+      CardWrapper(data: CardData(title: "Test", subtitle: "out this card"))
       CardWrapper(data: CardData(title: "Test", subtitle: "out this card"))
     }
 	}

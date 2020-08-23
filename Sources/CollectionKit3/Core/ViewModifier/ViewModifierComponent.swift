@@ -29,11 +29,16 @@ public struct ViewIDModifierComponent<View, Content: ViewComponent>: ViewCompone
   }
 }
 
-extension ViewComponent {
-  public func with<Value>(_ keyPath: ReferenceWritableKeyPath<R.View, Value>, _ value: Value) -> ViewModifierComponent<R.View, Value, Self> {
+public extension ViewComponent {
+  subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<R.View, Value>) -> (Value) -> ViewModifierComponent<R.View, Value, Self> {
+    return { value in
+      self.with(keyPath, value)
+    }
+  }
+  func with<Value>(_ keyPath: ReferenceWritableKeyPath<R.View, Value>, _ value: Value) -> ViewModifierComponent<R.View, Value, Self> {
     return ViewModifierComponent(content: self, keyPath: keyPath, value: value)
   }
-  public func id(_ id: String) -> ViewIDModifierComponent<R.View, Self> {
+  func id(_ id: String) -> ViewIDModifierComponent<R.View, Self> {
     return ViewIDModifierComponent(content: self, id: id)
   }
 }
