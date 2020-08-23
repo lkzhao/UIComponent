@@ -1,4 +1,4 @@
-# CollectionKit2
+# CollectionKit3
 
 ## Development
 

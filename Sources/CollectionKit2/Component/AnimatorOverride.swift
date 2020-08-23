@@ -1,6 +1,6 @@
 //
 //  AnimatorOverride.swift
-//  CollectionKit2
+//  CollectionKit3
 //
 //  Created by Luke Zhao on 2/12/20.
 //

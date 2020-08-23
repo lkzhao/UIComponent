@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol GenericValueHolder {
+  func write(to: AnyObject) -> GenericValueHolder
+}
+
 extension UIView {
 	private struct AssociatedKeys {
 		static var ckContext = "ckContext"
@@ -38,5 +42,5 @@ extension UIView {
 class CKContext {
   var reuseIdentifier: String?
   var reuseManager: CollectionReuseManager?
-  var valueResets: [AnyKeyPath: GenericValueHolder] = [:]
+  var renderer: AnyViewRenderer?
 }

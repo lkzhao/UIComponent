@@ -17,6 +17,10 @@ extension UIScrollView {
 		return visibleFrame.inset(by: contentInset)
 	}
 
+  public var adjustedSize: CGSize {
+    bounds.size.inset(by: adjustedContentInset)
+  }
+
 	public var offsetFrame: CGRect {
 		let contentInset: UIEdgeInsets
 		if #available(iOS 11.0, *) {

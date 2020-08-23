@@ -1,6 +1,6 @@
 //
 //  PageLayout.swift
-//  CollectionKit2
+//  CollectionKit3
 //
 //  Created by Luke Zhao on 2019-01-23.
 //  Copyright © 2019 Luke Zhao. All rights reserved.

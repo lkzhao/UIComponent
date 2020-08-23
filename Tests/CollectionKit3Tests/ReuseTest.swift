@@ -5,7 +5,7 @@
 //  Created by Luke Zhao on 2/15/20.
 //
 import XCTest
-@testable import CollectionKit2
+@testable import CollectionKit3
 
 final class ReuseTests: XCTestCase {
   var collectionView: CollectionView!

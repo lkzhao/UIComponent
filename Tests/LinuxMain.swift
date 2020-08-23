@@ -1,7 +1,7 @@
 import XCTest
 
-import CollectionKit2Tests
+import CollectionKit3Tests
 
 var tests = [XCTestCaseEntry]()
-tests += CollectionKit2Tests.allTests()
+tests += CollectionKit3Tests.allTests()
 XCTMain(tests)

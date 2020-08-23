@@ -1,7 +1,7 @@
 import XCTest
-@testable import CollectionKit2
+@testable import CollectionKit3
 
-final class CollectionKit2Tests: XCTestCase {
+final class CollectionKit3Tests: XCTestCase {
 	func testPerfHStackText() {
     let collectionView = CollectionView()
     measure {

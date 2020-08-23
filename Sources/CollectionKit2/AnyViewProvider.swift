@@ -1,6 +1,6 @@
 //
 //  AnyViewProvider.swift
-//  CollectionKit2
+//  CollectionKit3
 //
 //  Created by Honghao Zhang on 5/21/19.
 //  Copyright © 2019 Luke Zhao. All rights reserved.

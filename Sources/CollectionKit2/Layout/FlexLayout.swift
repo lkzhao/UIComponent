@@ -1,6 +1,6 @@
 //
 //  FlexLayout.swift
-//  CollectionKit2
+//  CollectionKit3
 //
 //  Created by Luke Zhao on 2019-01-02.
 //  Copyright © 2019 Luke Zhao. All rights reserved.
@@ -78,6 +78,24 @@ extension StackLayout {
   public func passThroughParentSize(_ value: Bool) -> Self {
     var copy = self
     copy.passThroughParentSize = value
+    return copy
+  }
+  
+  public func spacing(_ value: CGFloat) -> Self {
+    var copy = self
+    copy.spacing = value
+    return copy
+  }
+  
+  public func alignItems(_ value: AlignItem) -> Self {
+    var copy = self
+    copy.alignItems = value
+    return copy
+  }
+  
+  public func justifyContent(_ value: AlignContent) -> Self {
+    var copy = self
+    copy.justifyContent = value
     return copy
   }
 

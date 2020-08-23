@@ -1,6 +1,6 @@
 //
 //  VisibleFrameInset.swift
-//  CollectionKit2
+//  CollectionKit3
 //
 //  Created by Luke Zhao on 2019-01-07.
 //  Copyright © 2019 Luke Zhao. All rights reserved.

@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = "CollectionKit2"
+  s.name             = "CollectionKit3"
   s.version          = "0.3.0"
   s.summary          = "A modern swift framework for building data-driven reusable collection view components."
 
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
                         CollectionKit already provides many of the commonly used Providers out of the box. But you can still easily create reuseable Provider classes that generalizes on different types on data. Checkout examples down below!
                        DESC
 
-  s.homepage         = "https://github.com/lkzhao/CollectionKit2"
+  s.homepage         = "https://github.com/lkzhao/CollectionKit3"
   s.license          = 'MIT'
   s.author           = { "Luke" => "lzhaoyilun@gmail.com" }
   s.source           = { :git => "https://github.com/lkzhao/CollectionKit.git", :tag => s.version.to_s }

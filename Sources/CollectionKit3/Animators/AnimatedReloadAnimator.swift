@@ -23,7 +23,7 @@ public class AnimatedReloadAnimator: Animator {
 		super.init()
 	}
 
-	public override func delete(collectionView: ProviderDisplayableView, view: UIView) {
+	public override func delete(collectionView: ComponentDisplayableView, view: UIView) {
 		if collectionView.isReloading, collectionView.bounds.intersects(view.frame) {
 			UIView.animate(withDuration: 0.25, animations: {
 				view.layer.transform = self.entryTransform
@@ -40,7 +40,7 @@ public class AnimatedReloadAnimator: Animator {
 		}
 	}
 
-	public override func insert(collectionView: ProviderDisplayableView, view: UIView, frame: CGRect) {
+	public override func insert(collectionView: ComponentDisplayableView, view: UIView, frame: CGRect) {
 		view.bounds = frame.bounds
 		view.center = frame.center
 		if collectionView.isReloading, collectionView.hasReloaded, collectionView.bounds.intersects(frame) {
@@ -54,7 +54,7 @@ public class AnimatedReloadAnimator: Animator {
 		}
 	}
 
-	public override func update(collectionView _: ProviderDisplayableView, view: UIView, frame: CGRect) {
+	public override func update(collectionView _: ComponentDisplayableView, view: UIView, frame: CGRect) {
 		if view.center != frame.center {
 			UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: [.layoutSubviews], animations: {
 				view.center = frame.center
