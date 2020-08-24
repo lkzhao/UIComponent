@@ -16,3 +16,14 @@ public extension ComponentBuilder {
     build().layout(constraint)
   }
 }
+
+public protocol ViewComponentBuilder: ViewComponent {
+  associatedtype Content: ViewComponent
+  func build() -> Content
+}
+
+public extension ViewComponentBuilder {
+  func layout(_ constraint: Constraint) -> Content.R {
+    build().layout(constraint)
+  }
+}

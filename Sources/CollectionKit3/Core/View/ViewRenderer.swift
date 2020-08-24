@@ -7,6 +7,7 @@
 
 import UIKit
 
+@dynamicMemberLookup
 public protocol ViewRenderer: AnyViewRenderer {
   associatedtype View: UIView
   var reuseKey: String? { get }

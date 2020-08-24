@@ -8,18 +8,23 @@
 import UIKit
 
 public struct Constraint {
-  public var maxSize: CGSize
   public var minSize: CGSize
+  public var maxSize: CGSize
+  
+  public init(minSize: CGSize = .zero, maxSize: CGSize = CGSize(width: CGFloat.infinity, height: .infinity)) {
+    self.minSize = minSize
+    self.maxSize = maxSize
+  }
   
   public static func tight(_ size: CGSize) -> Constraint {
-    Constraint(maxSize: size, minSize: size)
+    Constraint(minSize: size, maxSize: size)
   }
   
   public func inset(by insets: UIEdgeInsets) -> Constraint {
-    Constraint(maxSize: CGSize(width: max(0, maxSize.width == .infinity ? .infinity : maxSize.width - insets.left - insets.right),
-                               height: max(0, maxSize.height == .infinity ? .infinity : maxSize.height - insets.top - insets.bottom)),
-               minSize: CGSize(width: max(0, minSize.width == .infinity ? .infinity : minSize.width - insets.left - insets.right),
-                               height: max(0, minSize.height == .infinity ? .infinity : minSize.height - insets.top - insets.bottom)))
+    Constraint(minSize: CGSize(width: max(0, minSize.width == .infinity ? .infinity : minSize.width - insets.left - insets.right),
+                               height: max(0, minSize.height == .infinity ? .infinity : minSize.height - insets.top - insets.bottom)),
+               maxSize: CGSize(width: max(0, maxSize.width == .infinity ? .infinity : maxSize.width - insets.left - insets.right),
+                               height: max(0, maxSize.height == .infinity ? .infinity : maxSize.height - insets.top - insets.bottom)))
   }
 }
 

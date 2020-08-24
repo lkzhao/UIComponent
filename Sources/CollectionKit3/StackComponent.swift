@@ -91,8 +91,8 @@ extension StackComponent {
     var mainFreezed: CGFloat = spacings
     var flexCount: CGFloat = 0
 
-    let childConstraint = Constraint(maxSize: constraint.maxSize,
-                                     minSize: size(main: 0, cross: alignItems == .stretch ? cross(constraint.maxSize) : cross(constraint.minSize)))
+    let childConstraint = Constraint(minSize: size(main: 0, cross: alignItems == .stretch ? cross(constraint.maxSize) : cross(constraint.minSize)),
+                                     maxSize: constraint.maxSize)
     for child in children {
       if let flexChild = child as? Flexible {
         flexCount += flexChild.flex
@@ -110,9 +110,9 @@ extension StackComponent {
       for (index, child) in children.enumerated() {
         if let child = child as? Flexible {
           let mainReserved = mainPerFlex * child.flex
-          let constraint = Constraint(maxSize: size(main: mainReserved, cross: cross(constraint.maxSize)),
-                                      minSize: size(main: child.fit == .tight ? mainReserved : 0,
-                                                    cross: alignItems == .stretch ? cross(constraint.maxSize) : 0))
+          let constraint = Constraint(minSize: size(main: child.fit == .tight ? mainReserved : 0,
+                                                    cross: alignItems == .stretch ? cross(constraint.maxSize) : 0),
+                                      maxSize: size(main: mainReserved, cross: cross(constraint.maxSize)))
           let renderer = child.layout(constraint)
           if child.fit == .loose {
             renderers[index] = SizeOverrideRenderer(child: renderer, size: size(main: mainReserved, cross: cross(renderer.size)))

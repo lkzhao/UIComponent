@@ -30,8 +30,8 @@ public extension WaterfallLayoutProtocol {
     }
 
     for child in children {
-      let renderer = child.layout(Constraint(maxSize: size(main: .infinity, cross: columnWidth),
-                                             minSize: size(main: 0, cross: columnWidth)))
+      let renderer = child.layout(Constraint(minSize: size(main: 0, cross: columnWidth),
+                                             maxSize: size(main: .infinity, cross: columnWidth)))
       let (columnIndex, offsetY) = getMinColomn()
       columnHeight[columnIndex] += main(renderer.size) + spacing
       renderers.append(renderer)

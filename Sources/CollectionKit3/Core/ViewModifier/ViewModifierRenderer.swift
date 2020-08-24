@@ -49,6 +49,11 @@ public struct ViewIDModifierRenderer<View, Content: ViewRenderer>: ViewRenderer 
 }
 
 extension ViewRenderer {
+  subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<View, Value>) -> (Value) -> ViewModifierRenderer<View, Value, Self> {
+    return { value in
+      self.with(keyPath, value)
+    }
+  }
   public func with<Value>(_ keyPath: ReferenceWritableKeyPath<View, Value>, _ value: Value) -> ViewModifierRenderer<View, Value, Self> {
     return ViewModifierRenderer(content: self, keyPath: keyPath, value: value)
   }

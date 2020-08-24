@@ -213,7 +213,7 @@ public class ComponentEngine {
     }
 
     if !shouldSkipLayout {
-      renderer = component.layout(Constraint(maxSize: adjustedSize, minSize: .zero))
+      renderer = component.layout(Constraint(maxSize: adjustedSize))
       contentSize = renderer!.size * zoomScale
 
       let oldContentOffset = contentOffset
@@ -240,7 +240,7 @@ public class ComponentEngine {
     if let currentRenderer = self.renderer {
       renderer = currentRenderer
     } else {
-      renderer = component.layout(Constraint(maxSize: adjustedSize, minSize: .zero))
+      renderer = component.layout(Constraint(maxSize: adjustedSize))
       contentSize = renderer.size * zoomScale
       self.renderer = renderer
     }
@@ -324,14 +324,14 @@ public class ComponentEngine {
   // This function assigns component with an already calculated renderer
   // This is a performance hack that skips layout for the component if it has already
   // been layed out.
-  internal func updateWithExisting(component: Component, renderer: Renderer) {
+  public func updateWithExisting(component: Component, renderer: Renderer) {
     self.component = component
     self.renderer = renderer
     self.shouldSkipLayout = true
   }
 
   open func sizeThatFits(_ size: CGSize) -> CGSize {
-    return component?.layout(Constraint(maxSize: size, minSize: .zero)).size ?? .zero
+    return component?.layout(Constraint(maxSize: size)).size ?? .zero
   }
 }
 

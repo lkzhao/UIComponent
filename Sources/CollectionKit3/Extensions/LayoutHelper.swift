@@ -25,9 +25,9 @@ public protocol BaseLayoutProtocol {
   @inline(__always) func renderer(size: CGSize, children: [Renderer], positions: [CGPoint]) -> Renderer
 }
 
-protocol VerticalLayoutProtocol: BaseLayoutProtocol {}
+public protocol VerticalLayoutProtocol: BaseLayoutProtocol {}
 
-protocol HorizontalLayoutProtocol: BaseLayoutProtocol {}
+public protocol HorizontalLayoutProtocol: BaseLayoutProtocol {}
 
 extension VerticalLayoutProtocol {
   @inline(__always) public func main(_ point: CGPoint) -> CGFloat {

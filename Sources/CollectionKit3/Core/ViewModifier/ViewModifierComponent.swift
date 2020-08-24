@@ -19,7 +19,6 @@ public struct ViewModifierComponent<View, Value, Content: ViewComponent>: ViewCo
 }
 
 public struct ViewIDModifierComponent<View, Content: ViewComponent>: ViewComponent where Content.R.View == View {
-  
   public typealias R = ViewIDModifierRenderer<View, Content.R>
   let content: Content
   let id: String

@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 @dynamicMemberLookup
 public protocol ViewComponent: Component {
   associatedtype R: ViewRenderer

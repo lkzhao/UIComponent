@@ -6,9 +6,10 @@
 //  Copyright © 2020 Luke Zhao. All rights reserved.
 //
 
+import UIKit
 import CollectionKit3
 
-struct CardWrapper: ComponentBuilder {
+struct CardBuilder: ComponentBuilder {
   let data: CardData
   func build() -> Component {
     VStack {
