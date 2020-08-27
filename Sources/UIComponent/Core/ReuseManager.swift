@@ -19,16 +19,15 @@ open class ReuseManager: NSObject {
 	/// cells will always be removed from ComponentView during reuse.
 	/// This is slower but it doesn't influence the `isHidden` property
 	/// of individual cells.
-	public var removeFromComponentViewWhenReuse = false
+	public var removeFromComponentViewWhenReuse = true
 
 	var reusableViews: [String: [UIView]] = [:]
 	var cleanupTimer: Timer?
 
-	public func enqueue(identifier id: String? = nil,
+	public func enqueue(identifier: String,
 											view: UIView) {
     view.ckContext.reuseIdentifier = nil
     view.ckContext.reuseManager = nil
-		let identifier = id ?? NSStringFromClass(type(of: view))
 		if removeFromComponentViewWhenReuse {
 			view.removeFromSuperview()
 		} else {

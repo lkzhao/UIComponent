@@ -42,5 +42,4 @@ extension UIView {
 class CKContext {
   var reuseIdentifier: String?
   var reuseManager: ReuseManager?
-  var renderer: AnyViewRenderer?
 }

@@ -48,6 +48,16 @@ public struct ViewAnimatorComponent<View, Content: ViewComponent>: ViewComponent
   }
 }
 
+public struct ViewReuseKeyComponent<View, Content: ViewComponent>: ViewComponent where Content.R.View == View {
+  public typealias R = ViewReuseKeyRenderer<View, Content.R>
+  let content: Content
+  let reuseKey: String?
+
+  public func layout(_ constraint: Constraint) -> R {
+    content.layout(constraint).reuseKey(reuseKey)
+  }
+}
+
 public extension ViewComponent {
   subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<R.View, Value>) -> (Value) -> ViewModifierComponent<R.View, Value, Self> {
     return { value in
@@ -62,6 +72,9 @@ public extension ViewComponent {
   }
   func animator(_ animator: Animator?) -> ViewAnimatorComponent<R.View, Self> {
     return ViewAnimatorComponent(content: self, animator: animator)
+  }
+  func reuseKey(_ reuseKey: String?) -> ViewReuseKeyComponent<R.View, Self> {
+    return ViewReuseKeyComponent(content: self, reuseKey: reuseKey)
   }
   func update(_ update: @escaping (R.View) -> Void) -> ViewUpdateComponent<R.View, Self> {
     return ViewUpdateComponent(content: self, update: update)
