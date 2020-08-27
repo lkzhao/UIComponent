@@ -38,7 +38,7 @@ public extension WaterfallLayoutProtocol {
       positions.append(point(main: offsetY, cross: CGFloat(columnIndex) * (columnWidth + spacing)))
     }
 
-    return renderer(size: size(main: columnHeight.max()!, cross: cross(constraint.maxSize)),
+    return renderer(size: size(main: max(0, columnHeight.max()! - spacing), cross: cross(constraint.maxSize)),
                     children: renderers,
                     positions: positions)
   }
