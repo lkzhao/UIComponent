@@ -1,7 +1,7 @@
 import XCTest
 
-import CollectionKit3Tests
+import UIComponentTests
 
 var tests = [XCTestCaseEntry]()
-tests += CollectionKit3Tests.allTests()
+tests += UIComponentTests.allTests()
 XCTMain(tests)

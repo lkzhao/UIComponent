@@ -1,4 +1,4 @@
-# CollectionKit3
+# UIComponent
 
 ## Development
 
