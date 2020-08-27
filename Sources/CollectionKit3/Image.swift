@@ -21,18 +21,16 @@ public struct Image: ViewComponent {
   }
 
   public func layout(_ constraint: Constraint) -> ImageRenderer {
-    ImageRenderer(image: image)
+    ImageRenderer(image: image, size: image.size.bound(to: constraint))
   }
 }
 
 public struct ImageRenderer: ViewRenderer {
-  public let image: UIImage
   public var id: String {
     "image-\(image.hash)"
   }
-  public var size: CGSize {
-    image.size
-  }
+  public let image: UIImage
+  public let size: CGSize
   public func updateView(_ view: UIImageView) {
     view.image = image
   }

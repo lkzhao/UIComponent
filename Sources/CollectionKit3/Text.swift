@@ -18,7 +18,7 @@ public struct Text: ViewComponent {
   public func layout(_ constraint: Constraint) -> TextRenderer {
     let size = attributedText.boundingRect(with: constraint.maxSize, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).size
     return TextRenderer(attributedText: attributedText,
-                        size: size.constraint(to: constraint))
+                        size: size.bound(to: constraint))
   }
 }
 

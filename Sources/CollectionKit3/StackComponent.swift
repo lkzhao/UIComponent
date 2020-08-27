@@ -12,6 +12,15 @@ public struct HStack: StackComponent, HorizontalLayoutProtocol {
   public let justifyContent: MainAxisAlignment
   public let alignItems: CrossAxisAlignment
   public let children: [Component]
+  public init(spacing: CGFloat = 0,
+              justifyContent: MainAxisAlignment = .start,
+              alignItems: CrossAxisAlignment = .start,
+              children: [Component] = []) {
+    self.spacing = spacing
+    self.justifyContent = justifyContent
+    self.alignItems = alignItems
+    self.children = children
+  }
 }
 
 public struct VStack: StackComponent, VerticalLayoutProtocol {
@@ -19,6 +28,15 @@ public struct VStack: StackComponent, VerticalLayoutProtocol {
   public let justifyContent: MainAxisAlignment
   public let alignItems: CrossAxisAlignment
   public let children: [Component]
+  public init(spacing: CGFloat = 0,
+              justifyContent: MainAxisAlignment = .start,
+              alignItems: CrossAxisAlignment = .start,
+              children: [Component] = []) {
+    self.spacing = spacing
+    self.justifyContent = justifyContent
+    self.alignItems = alignItems
+    self.children = children
+  }
 }
 
 public extension HStack {
@@ -52,7 +70,7 @@ extension StackComponent {
     let mainTotal = renderers.reduce(0) {
       $0 + main($1.size)
     }
-    let secondaryMax = renderers.reduce(0) {
+    let secondaryMax = renderers.reduce(CGFloat(0).clamp(cross(constraint.minSize), cross(constraint.maxSize))) {
       max($0, cross($1.size))
     }
     
@@ -79,7 +97,8 @@ extension StackComponent {
       positions.append(point(main: primaryOffset, cross: crossValue))
       primaryOffset += main(child.size) + distributedSpacing
     }
-    let finalSize = size(main: primaryOffset - distributedSpacing, cross: secondaryMax)
+    let finalSize = size(main: primaryOffset - distributedSpacing,
+                         cross: secondaryMax)
 
     return renderer(size: finalSize, children: renderers, positions: positions)
   }
@@ -91,8 +110,8 @@ extension StackComponent {
     var mainFreezed: CGFloat = spacings
     var flexCount: CGFloat = 0
 
-    let childConstraint = Constraint(minSize: size(main: 0, cross: alignItems == .stretch ? cross(constraint.maxSize) : cross(constraint.minSize)),
-                                     maxSize: constraint.maxSize)
+    let childConstraint = Constraint(minSize: size(main: 0, cross: alignItems == .stretch ? cross(constraint.maxSize) : 0),
+                                     maxSize: size(main: .infinity, cross: cross(constraint.maxSize)))
     for child in children {
       if let flexChild = child as? Flexible {
         flexCount += flexChild.flex

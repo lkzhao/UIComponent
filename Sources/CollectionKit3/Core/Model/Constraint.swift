@@ -29,7 +29,7 @@ public struct Constraint {
 }
 
 public extension CGSize {
-  func constraint(to constraint: Constraint) -> CGSize {
+  func bound(to constraint: Constraint) -> CGSize {
     CGSize(width: width.clamp(constraint.minSize.width, constraint.maxSize.width),
            height: height.clamp(constraint.minSize.height, constraint.maxSize.height))
   }

@@ -48,12 +48,22 @@ public struct Waterfall: WaterfallLayoutProtocol, VerticalLayoutProtocol {
   public var columns: Int
   public var spacing: CGFloat
   public var children: [Component]
+  public init(columns: Int = 2, spacing: CGFloat = 0, children: [Component] = []) {
+    self.columns = columns
+    self.spacing = spacing
+    self.children = children
+  }
 }
 
 public struct HorizontalWaterfall: WaterfallLayoutProtocol, HorizontalLayoutProtocol {
   public var columns: Int
   public var spacing: CGFloat
   public var children: [Component]
+  public init(columns: Int = 2, spacing: CGFloat = 0, children: [Component] = []) {
+    self.columns = columns
+    self.spacing = spacing
+    self.children = children
+  }
 }
 
 public extension Waterfall {

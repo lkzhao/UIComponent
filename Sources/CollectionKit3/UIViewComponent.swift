@@ -7,43 +7,40 @@
 
 import UIKit
 
-public struct ExistingViewComponent<View: UIView>: ViewComponent {
-  public let view: View
-  public init(view: View) {
+public struct SimpleViewComponent<View: UIView>: ViewComponent {
+  public let id: String
+  public let view: View?
+  public init(id: String? = nil, view: View? = nil) {
+    self.id = id ?? (view != nil ? "UIView-\(view!.hashValue)" : UUID().uuidString)
     self.view = view
   }
-  public func layout(_ constraint: Constraint) -> ExistingViewRenderer<View> {
-    ExistingViewRenderer(size: view.sizeThatFits(constraint.maxSize).constraint(to: constraint), view: view)
+  public func layout(_ constraint: Constraint) -> SimpleViewRenderer<View> {
+    SimpleViewRenderer(id: id, size: (view?.sizeThatFits(constraint.maxSize) ?? .zero).bound(to: constraint), view: view)
   }
 }
 
-public struct ExistingViewRenderer<View: UIView>: ViewRenderer {
-  public let id: String = UUID().uuidString
+public struct SimpleViewRenderer<View: UIView>: ViewRenderer {
+  public let id: String
   public let size: CGSize
-  public let view: UIView
-  public func makeView() -> UIView {
-    view
+  public let view: View?
+  public var reuseKey: String? {
+    return view == nil ? "\(type(of: self))" : nil
   }
-  public func updateView(_ view: UIView) {
+  public init(id: String, size: CGSize, view: View? = nil) {
+    self.id = id
+    self.size = size
+    self.view = view
+  }
+  public func makeView() -> View {
+    view ?? View()
+  }
+  public func updateView(_ view: View) {
     
   }
 }
 
 extension UIView: ViewComponent {
   public func layout(_ constraint: Constraint) -> some ViewRenderer {
-    ExistingViewRenderer(size: sizeThatFits(constraint.maxSize).constraint(to: constraint), view: self)
+    SimpleViewRenderer(id: "UIView-\(hashValue)",size: sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
   }
-}
-
-public struct UIViewComponent: ViewComponent {
-  public init() {}
-  public func layout(_ constraint: Constraint) -> UIViewRenderer {
-    UIViewRenderer(size: CGSize.zero.constraint(to: constraint))
-  }
-}
-
-public struct UIViewRenderer: ViewRenderer {
-  public let id: String = UUID().uuidString
-  public let size: CGSize
-  public func updateView(_ view: UIView) {}
 }

@@ -18,16 +18,18 @@ class ViewController: UIViewController {
     
     collectionView.contentInsetAdjustmentBehavior = .always
     collectionView.animator = AnimatedReloadAnimator()
-    collectionView.component = Flow(lineSpacing: 10, interitemSpacing: 20, justifyContent: .center, alignItems: .center) {
-      Space(width: 50, height: 50).view().backgroundColor(.black)
-      Space(width: 50, height: 150).view().backgroundColor(.green)
-      Space(width: 50, height: 50).view().backgroundColor(.red)
-      Space(width: 50, height: 50).view().backgroundColor(.black)
-      Space(width: 50, height: 50).view().backgroundColor(.green)
-      Space(width: 50, height: 50).view().backgroundColor(.red)
-      Space(width: 50, height: 50).view().backgroundColor(.black)
-      Space(width: 50, height: 50).view().backgroundColor(.green)
-      Space(width: 150, height: 50).view().backgroundColor(.red)
+    collectionView.component = ConstraintReader { constraint in
+      HStack(spacing: 10) {
+        HStack {
+          Space(width: 50, height: 150).view().size(width: .fill).constraint(constraint).backgroundColor(.black)
+          Space(width: 50, height: 150).view().backgroundColor(.green)
+          Space(width: 50, height: 50).view().backgroundColor(.red)
+        }.unboundedWidth().size(width: 120, height: 120)
+        HStack {
+          Space(width: 50, height: 150).view().backgroundColor(.green)
+          Space(width: 50, height: 50).view().backgroundColor(.red)
+        }
+      }
     }
 	}
 

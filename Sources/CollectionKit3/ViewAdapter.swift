@@ -12,7 +12,7 @@ public struct ComponentDisplayableViewComponent<View: ComponentDisplayableView>:
   let component: Component
   public func layout(_ constraint: Constraint) -> ComponentDisplayableViewRenderer<View> {
     let renderer = component.layout(constraint)
-    return ComponentDisplayableViewRenderer(id: id, size: renderer.size.constraint(to: constraint), component: component, renderer: renderer)
+    return ComponentDisplayableViewRenderer(id: id, size: renderer.size.bound(to: constraint), component: component, renderer: renderer)
   }
 }
 

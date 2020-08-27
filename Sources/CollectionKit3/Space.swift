@@ -16,7 +16,7 @@ public struct Space: Component {
     size = CGSize(width: width, height: height)
   }
   public func layout(_ constraint: Constraint) -> Renderer {
-    SpaceRenderer(size: size.constraint(to: constraint))
+    SpaceRenderer(size: size.bound(to: constraint))
   }
 }
 

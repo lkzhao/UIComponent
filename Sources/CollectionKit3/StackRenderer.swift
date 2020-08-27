@@ -58,3 +58,32 @@ public struct VerticalRenderer: StackRenderer, VerticalLayoutProtocol {
   public let positions: [CGPoint]
   public let mainAxisMaxValue: CGFloat
 }
+
+public struct SlowRenderer: Renderer {
+  public let size: CGSize
+  public let children: [Renderer]
+  public let positions: [CGPoint]
+  
+  public init(size: CGSize, children: [Renderer], positions: [CGPoint]) {
+    self.size = size
+    self.children = children
+    self.positions = positions
+  }
+  
+  public func views(in frame: CGRect) -> [Renderable] {
+    var result = [Renderable]()
+
+    for (i, origin) in positions.enumerated() {
+      let child = children[i]
+      let childFrame = CGRect(origin: origin, size: child.size)
+      if frame.intersects(childFrame) {
+        let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map {
+          Renderable(id: $0.id, animator: $0.animator, renderer: $0.renderer, frame: CGRect(origin: $0.frame.origin + childFrame.origin, size: $0.frame.size))
+        }
+        result.append(contentsOf: childResult)
+      }
+    }
+
+    return result
+  }
+}

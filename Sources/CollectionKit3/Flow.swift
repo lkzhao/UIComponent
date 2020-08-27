@@ -44,7 +44,7 @@ public struct Flow: Component, VerticalLayoutProtocol {
   }
   
   public func layout(_ constraint: Constraint) -> Renderer {
-    let childConstraint = Constraint(minSize: .zero, maxSize: constraint.maxSize)
+    let childConstraint = Constraint(minSize: .zero, maxSize: size(main: .infinity, cross: cross(constraint.maxSize)))
     var renderers: [Renderer] = children.map {
       $0.layout(childConstraint)
     }

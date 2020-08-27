@@ -13,6 +13,6 @@ public struct Separator: ViewComponentBuilder {
     self.color = color
   }
   public func build() -> some ViewComponent {
-    UIViewComponent().backgroundColor(color).size(width: .fill, height: 1)
+    SimpleViewComponent<UIView>().backgroundColor(color).size(width: .fill, height: 1)
   }
 }
