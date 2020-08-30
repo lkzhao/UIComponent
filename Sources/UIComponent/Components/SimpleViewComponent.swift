@@ -66,6 +66,6 @@ public struct SimpleViewRenderer<View: UIView>: ViewRenderer {
 
 extension UIView: ViewComponent {
   public func layout(_ constraint: Constraint) -> some ViewRenderer {
-    SimpleViewRenderer(id: "UIView-\(hashValue)",size: sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
+    SimpleViewRenderer(id: "UIView-\(hashValue)", size: sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
   }
 }

@@ -14,6 +14,9 @@ public struct ViewUpdateRenderer<View, Content: ViewRenderer>: ViewRenderer wher
   public var id: String {
     content.id
   }
+  public var reuseKey: String? {
+    content.reuseKey
+  }
   public var animator: Animator? {
     content.animator
   }
@@ -37,6 +40,9 @@ public struct ViewModifierRenderer<View, Value, Content: ViewRenderer>: ViewRend
   public var id: String {
     content.id
   }
+  public var reuseKey: String? {
+    content.reuseKey
+  }
   public var animator: Animator? {
     content.animator
   }
@@ -55,7 +61,10 @@ public struct ViewModifierRenderer<View, Value, Content: ViewRenderer>: ViewRend
 public struct ViewIDRenderer<View, Content: ViewRenderer>: ViewRenderer where Content.View == View {
   let content: Content
   public let id: String
-
+  
+  public var reuseKey: String? {
+    content.reuseKey
+  }
   public var size: CGSize {
     content.size
   }
@@ -75,6 +84,9 @@ public struct ViewAnimatorRenderer<View, Content: ViewRenderer>: ViewRenderer wh
   public let animator: Animator?
   public var id: String {
     content.id
+  }
+  public var reuseKey: String? {
+    content.reuseKey
   }
   public var size: CGSize {
     content.size
