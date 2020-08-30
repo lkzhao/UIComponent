@@ -15,6 +15,11 @@ public protocol StackRenderer: Renderer, BaseLayoutProtocol {
 }
 
 public extension StackRenderer {
+  func frame(at index: Int) -> CGRect? {
+    guard let size = children.get(index)?.size, let position = positions.get(index) else { return nil }
+    return CGRect(origin: position, size: size)
+  }
+
   func views(in frame: CGRect) -> [Renderable] {
     guard var index = firstVisibleIndex(in: frame) else { return [] }
     var result: [Renderable] = []

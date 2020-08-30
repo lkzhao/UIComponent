@@ -56,10 +56,12 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
         assertionFailure("Can't use percentage width an infinite x axis")
       }
     case .aspectPercentage(let value):
-      let maxHeight = maxSize.height
-      if maxHeight != .infinity {
-        maxSize.width = value * maxHeight
-        minSize.width = value * maxHeight
+      if case .absolute(let height) = height {
+        maxSize.width = value * height
+        minSize.width = value * height
+      } else if maxSize.height != .infinity {
+        maxSize.width = value * maxSize.height
+        minSize.width = value * maxSize.height
       } else {
         assertionFailure("Can't use aspectPercentage width an infinite y axis")
       }
@@ -86,10 +88,12 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
         assertionFailure("Can't use percentage height an infinite y axis")
       }
     case .aspectPercentage(let value):
-      let maxWidth = maxSize.width
-      if maxWidth != .infinity {
-        maxSize.height = value * maxWidth
-        minSize.height = value * maxWidth
+      if case .absolute(let width) = width {
+        maxSize.height = value * width
+        minSize.height = value * width
+      } else if maxSize.width != .infinity {
+        maxSize.height = value * maxSize.width
+        minSize.height = value * maxSize.width
       } else {
         assertionFailure("Can't use aspectPercentage height an infinite x axis")
       }
