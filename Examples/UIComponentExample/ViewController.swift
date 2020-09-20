@@ -17,19 +17,16 @@ class ViewController: UIViewController {
 		view.addSubview(componentView)
     
     componentView.contentInsetAdjustmentBehavior = .always
-    componentView.animator = AnimatedReloadAnimator()
-    componentView.component = ConstraintReader { constraint in
-      HStack(spacing: 10) {
-        HStack {
-          Space(width: 50, height: 150).view().size(width: .fill).constraint(constraint).backgroundColor(.black)
-          Space(width: 50, height: 150).view().backgroundColor(.green)
-          Space(width: 50, height: 50).view().backgroundColor(.red)
-        }.unboundedWidth().size(width: 120, height: 120)
-        HStack {
-          Space(width: 50, height: 150).view().backgroundColor(.green)
-          Space(width: 50, height: 50).view().backgroundColor(.red)
-        }
+    componentView.component = VStack {
+      Text("This is an example")
+      Text("This is an example", font: UIFont.systemFont(ofSize: 12))
+      HStack {
+        Image(systemName: "plus")
+        Text("Add")
       }
+      Space(height: 50)
+      Card(data: CardData(title: "Custom View Example",
+                          subtitle: "Checkout CustomViewExample.swift")).backgroundColor(.gray)
     }
 	}
 

@@ -42,8 +42,8 @@ class CardView: UIView {
   }
   override func layoutSubviews() {
     super.layoutSubviews()
-    titleLabel.frame = CGRect(x: 20, y: 20, width: bounds.width - 40, height: 40)
-    subtitleLabel.frame = CGRect(x: 20, y: 60, width: bounds.width - 40, height: 40)
+    titleLabel.frame = CGRect(x: 20, y: 10, width: bounds.width - 40, height: 40)
+    subtitleLabel.frame = CGRect(x: 20, y: 50, width: bounds.width - 40, height: 40)
   }
 }
 
