@@ -23,36 +23,36 @@ public struct ZStack: Component {
     var renderers: [Renderer] = children.map {
       $0.layout(constraint)
     }
-    let width: CGFloat = renderers.max { $0.size.width < $1.size.width }?.size.width ?? 0
-    let height: CGFloat = renderers.max { $0.size.height < $1.size.height }?.size.height ?? 0
+    let size = CGSize(width: renderers.max { $0.size.width < $1.size.width }?.size.width ?? 0,
+                      height: renderers.max { $0.size.height < $1.size.height }?.size.height ?? 0).bound(to: constraint)
     let positions: [CGPoint] = renderers.enumerated().map { (idx, node) in
       var result = CGRect(origin: .zero, size: node.size)
       switch verticalAlignment {
       case .top:
         result.origin.y = 0
       case .center:
-        result.origin.y = (height - node.size.height) / 2
+        result.origin.y = (size.height - node.size.height) / 2
       case .bottom:
-        result.origin.y = height - node.size.height
+        result.origin.y = size.height - node.size.height
       case .stretch:
-        result.size.height = height
+        result.size.height = size.height
       }
       switch horizontalAlignment {
       case .leading:
         result.origin.x = 0
       case .center:
-        result.origin.x = (width - node.size.width) / 2
+        result.origin.x = (size.width - node.size.width) / 2
       case .trailing:
-        result.origin.x = width - node.size.width
+        result.origin.x = size.width - node.size.width
       case .stretch:
-        result.size.width = width
+        result.size.width = size.width
       }
       if node.size != result.size {
         renderers[idx] = children[idx].layout(.tight(result.size))
       }
       return result.origin
     }
-    return SlowRenderer(size: CGSize(width: width, height: height), children: renderers, positions: positions)
+    return SlowRenderer(size: size, children: renderers, positions: positions)
   }
 }
 
