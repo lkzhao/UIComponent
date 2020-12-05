@@ -22,3 +22,9 @@ public struct LayoutReader: Component {
     return renderer
   }
 }
+
+public extension Component {
+  func layoutReader(_ reader: @escaping (Renderer) -> Void) -> LayoutReader {
+    LayoutReader(child: self, reader)
+  }
+}

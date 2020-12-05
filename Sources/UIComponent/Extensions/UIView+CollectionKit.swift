@@ -29,8 +29,10 @@ extension UIView {
     objc_setAssociatedObject(self, &AssociatedKeys.ckContext, context, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     return context
   }
+}
 
-	public func recycleForUIComponentReuse() {
+@objc extension UIView {
+	open func recycleForUIComponentReuse() {
     if let reuseIdentifier = _ckContext?.reuseIdentifier, let reuseManager = _ckContext?.reuseManager {
       reuseManager.enqueue(identifier: reuseIdentifier, view: self)
 		} else {

@@ -16,10 +16,10 @@ struct VisibleFrameInsets: Component {
 }
 
 struct DynamicVisibleFrameInset: Component {
-  let insetProvider: (Constraint) -> UIEdgeInsets
+  let insetProvider: (CGRect) -> UIEdgeInsets
   let child: Component
   func layout(_ constraint: Constraint) -> Renderer {
-    return VisibleFrameInsetRenderer(insets: insetProvider(constraint), child: child.layout(constraint))
+    return DynamicVisibleFrameInsetRenderer(insetProvider: insetProvider, child: child.layout(constraint))
   }
 }
 
@@ -34,6 +34,17 @@ struct VisibleFrameInsetRenderer: Renderer {
   }
 }
 
+struct DynamicVisibleFrameInsetRenderer: Renderer {
+  let insetProvider: (CGRect) -> UIEdgeInsets
+  let child: Renderer
+  var size: CGSize {
+    return child.size
+  }
+  func views(in frame: CGRect) -> [Renderable] {
+    return child.views(in: frame.inset(by: insetProvider(frame)))
+  }
+}
+
 public extension Component {
   func visibleInset(_ amount: CGFloat) -> Component {
     VisibleFrameInsets(insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount), child: self)
@@ -44,7 +55,7 @@ public extension Component {
   func visibleInset(_ insets: UIEdgeInsets) -> Component {
     VisibleFrameInsets(insets: insets, child: self)
   }
-  func visibleInset(_ insetProvider: @escaping (Constraint) -> UIEdgeInsets) -> Component {
+  func visibleInset(_ insetProvider: @escaping (CGRect) -> UIEdgeInsets) -> Component {
     DynamicVisibleFrameInset(insetProvider: insetProvider, child: self)
   }
 }
