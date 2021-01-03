@@ -247,6 +247,16 @@ public class ComponentEngine {
     visibleCells = newCells as! [UIView]
     lastLoadBounds = bounds
   }
+
+  // This is used to replace a cell's identifier with a new identifer
+  // Useful when a cell's identifier is going to change with the next
+  // reloadData, but you want to keep the same cell view.
+  public func replace(identifier: String, with newIdentifier: String) {
+    for (i, id) in visibleIdentifiers.enumerated() where id == identifier {
+      visibleIdentifiers[i] = newIdentifier
+      break
+    }
+  }
   
   // This function assigns component with an already calculated renderer
   // This is a performance hack that skips layout for the component if it has already
