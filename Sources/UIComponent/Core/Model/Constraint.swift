@@ -11,7 +11,8 @@ public struct Constraint {
   public var minSize: CGSize
   public var maxSize: CGSize
   
-  public init(minSize: CGSize = .zero, maxSize: CGSize = CGSize(width: CGFloat.infinity, height: .infinity)) {
+  public init(minSize: CGSize = CGSize(width: -CGFloat.infinity, height: -CGFloat.infinity),
+              maxSize: CGSize = CGSize(width: CGFloat.infinity, height: .infinity)) {
     self.minSize = minSize
     self.maxSize = maxSize
   }

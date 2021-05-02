@@ -110,7 +110,7 @@ extension StackComponent {
     var mainFreezed: CGFloat = spacings
     var flexCount: CGFloat = 0
 
-    let childConstraint = Constraint(minSize: size(main: 0, cross: alignItems == .stretch ? cross(constraint.maxSize) : 0),
+    let childConstraint = Constraint(minSize: size(main: -.infinity, cross: alignItems == .stretch ? cross(constraint.maxSize) : 0),
                                      maxSize: size(main: .infinity, cross: cross(constraint.maxSize)))
     for child in children {
       if let flexChild = child as? Flexible {

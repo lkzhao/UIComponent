@@ -42,12 +42,16 @@ public struct SimpleViewRenderer<View: UIView>: ViewRenderer {
     self.view = view
     self.generator = generator
   }
+  
+  public init(id: String, size: CGSize) {
+    self.init(id: id, size: size, view: nil, generator: nil)
+  }
 
-  public init(id: String, size: CGSize, view: View? = nil) {
+  public init(id: String, size: CGSize, view: View) {
     self.init(id: id, size: size, view: view, generator: nil)
   }
 
-  public init(id: String, size: CGSize, generator: (() -> View)? = nil) {
+  public init(id: String, size: CGSize, generator: @escaping (() -> View)) {
     self.init(id: id, size: size, view: nil, generator: generator)
   }
 

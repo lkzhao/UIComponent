@@ -25,6 +25,15 @@ public struct Separator: ViewComponentBuilder {
   }
 
   public func build() -> some ViewComponent {
-    SimpleViewComponent<UIView>(id: id).backgroundColor(color).size(width: .fill, height: 1)
+    SimpleViewComponent<UIView>(id: id).backgroundColor(color).constraint { constraint in
+      if constraint.minSize.height <= 0, constraint.maxSize.width != .infinity {
+        let size = CGSize(width: constraint.maxSize.width, height: 1)
+        return Constraint(minSize: size, maxSize: size)
+      } else if constraint.minSize.width <= 0, constraint.maxSize.height != .infinity {
+        let size = CGSize(width: 1, height: constraint.maxSize.height)
+        return Constraint(minSize: size, maxSize: size)
+      }
+      return constraint
+    }
   }
 }
