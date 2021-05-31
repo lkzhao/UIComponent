@@ -7,7 +7,7 @@
 
 import UIKit
 
-@_functionBuilder
+@resultBuilder
 public struct ComponentFunctionBuilder {
   public static func buildBlock(_ segments: ComponentFunctionBuilderItem...) -> ComponentFunctionBuilderItem {
     return segments.flatMap { $0.components }

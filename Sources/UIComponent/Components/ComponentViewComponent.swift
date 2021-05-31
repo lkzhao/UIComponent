@@ -10,6 +10,10 @@ import UIKit
 public struct ComponentDisplayableViewComponent<View: ComponentDisplayableView>: ViewComponent {
   let id: String
   let component: Component
+  public init(id: String, component: Component) {
+    self.id = id
+    self.component = component
+  }
   public func layout(_ constraint: Constraint) -> ComponentDisplayableViewRenderer<View> {
     let renderer = component.layout(constraint)
     return ComponentDisplayableViewRenderer(id: id, size: renderer.size.bound(to: constraint), component: component, renderer: renderer)

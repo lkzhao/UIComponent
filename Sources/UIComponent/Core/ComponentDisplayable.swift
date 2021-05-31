@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol ComponentDisplayable: class {
+public protocol ComponentDisplayable: AnyObject {
   var engine: ComponentEngine { get }
 }
 

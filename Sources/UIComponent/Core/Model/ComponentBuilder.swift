@@ -8,22 +8,22 @@
 import UIKit
 
 public protocol ComponentBuilder: Component {
-  func build() -> Component
+  func build(constraint: Constraint) -> Component
 }
 
 public extension ComponentBuilder {
   func layout(_ constraint: Constraint) -> Renderer {
-    build().layout(constraint)
+    build(constraint: constraint).layout(constraint)
   }
 }
 
 public protocol ViewComponentBuilder: ViewComponent {
   associatedtype Content: ViewComponent
-  func build() -> Content
+  func build(constraint: Constraint) -> Content
 }
 
 public extension ViewComponentBuilder {
   func layout(_ constraint: Constraint) -> Content.R {
-    build().layout(constraint)
+    build(constraint: constraint).layout(constraint)
   }
 }

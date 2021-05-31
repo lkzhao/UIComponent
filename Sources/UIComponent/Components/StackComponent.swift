@@ -66,12 +66,17 @@ public protocol StackComponent: Component, BaseLayoutProtocol {
 
 extension StackComponent {
   public func layout(_ constraint: Constraint) -> Renderer {
-    let renderers = getRenderers(constraint)
+    var renderers = getRenderers(constraint)
+    let crossMax = renderers.reduce(CGFloat(0).clamp(cross(constraint.minSize), cross(constraint.maxSize))) {
+      max($0, cross($1.size))
+    }
+    if cross(constraint.maxSize) == .infinity, alignItems == .stretch {
+      // when using alignItem = .stretch, we need to relayout child to stretch its cross axis
+      renderers = getRenderers(Constraint(minSize: constraint.minSize,
+                                          maxSize: size(main: main(constraint.maxSize), cross: crossMax)))
+    }
     let mainTotal = renderers.reduce(0) {
       $0 + main($1.size)
-    }
-    let secondaryMax = renderers.reduce(CGFloat(0).clamp(cross(constraint.minSize), cross(constraint.maxSize))) {
-      max($0, cross($1.size))
     }
     
     let (offset, distributedSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
@@ -88,17 +93,16 @@ extension StackComponent {
       case .start:
         crossValue = 0
       case .end:
-        crossValue = secondaryMax - cross(child.size)
+        crossValue = crossMax - cross(child.size)
       case .center:
-        crossValue = (secondaryMax - cross(child.size)) / 2
+        crossValue = (crossMax - cross(child.size)) / 2
       case .stretch:
         crossValue = 0
       }
       positions.append(point(main: primaryOffset, cross: crossValue))
       primaryOffset += main(child.size) + distributedSpacing
     }
-    let finalSize = size(main: primaryOffset - distributedSpacing,
-                         cross: secondaryMax)
+    let finalSize = size(main: primaryOffset - distributedSpacing, cross: crossMax)
 
     return renderer(size: finalSize, children: renderers, positions: positions)
   }
@@ -109,8 +113,9 @@ extension StackComponent {
     let spacings = spacing * CGFloat(children.count - 1)
     var mainFreezed: CGFloat = spacings
     var flexCount: CGFloat = 0
+    let crossMaxConstraint = cross(constraint.maxSize)
 
-    let childConstraint = Constraint(minSize: size(main: -.infinity, cross: alignItems == .stretch ? cross(constraint.maxSize) : 0),
+    let childConstraint = Constraint(minSize: size(main: -.infinity, cross: alignItems == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0),
                                      maxSize: size(main: .infinity, cross: cross(constraint.maxSize)))
     for child in children {
       if let flexChild = child as? Flexible {
