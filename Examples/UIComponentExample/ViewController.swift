@@ -26,7 +26,9 @@ class ViewController: UIViewController {
       }
       Space(height: 50)
       Card(data: CardData(title: "Custom View Example",
-                          subtitle: "Checkout CustomViewExample.swift")).backgroundColor(.gray)
+                          subtitle: "Checkout CustomViewExample.swift")).backgroundColor(.gray).tappableView() {
+                            print("Hello")
+                          }
     }
 	}
 

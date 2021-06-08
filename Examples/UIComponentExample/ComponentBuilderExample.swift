@@ -11,7 +11,7 @@ import UIComponent
 
 struct CardBuilder: ComponentBuilder {
   let data: CardData
-  func build() -> Component {
+  func build(constraint: Constraint) -> Component {
     VStack {
       Text(data.title)
       Text(data.subtitle)
