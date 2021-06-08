@@ -15,6 +15,7 @@
 		B10A123024F31D5E0076B038 /* CustomViewExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10A122F24F31D5E0076B038 /* CustomViewExample.swift */; };
 		B10A123224F31EAA0076B038 /* ComponentBuilderExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10A123124F31EAA0076B038 /* ComponentBuilderExample.swift */; };
 		B121A0A024F8771E00E59F78 /* UIComponent in Frameworks */ = {isa = PBXBuildFile; productRef = B121A09F24F8771E00E59F78 /* UIComponent */; };
+		B1B5C47B266FD2D50035CF02 /* TabBarExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */; };
 		B1CFF31A24F1D95700B6AF88 /* TappableViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CFF31924F1D95700B6AF88 /* TappableViewAdapter.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 		A304893321C347020026EDA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B10A122F24F31D5E0076B038 /* CustomViewExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewExample.swift; sourceTree = "<group>"; };
 		B10A123124F31EAA0076B038 /* ComponentBuilderExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentBuilderExample.swift; sourceTree = "<group>"; };
+		B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarExample.swift; sourceTree = "<group>"; };
 		B1CFF31924F1D95700B6AF88 /* TappableViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappableViewAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -77,6 +79,7 @@
 				A304892721C347010026EDA7 /* AppDelegate.swift */,
 				A304892921C347010026EDA7 /* ViewController.swift */,
 				B10A122F24F31D5E0076B038 /* CustomViewExample.swift */,
+				B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */,
 				B10A123124F31EAA0076B038 /* ComponentBuilderExample.swift */,
 				B1CFF31924F1D95700B6AF88 /* TappableViewAdapter.swift */,
 				A304892B21C347010026EDA7 /* Main.storyboard */,
@@ -162,6 +165,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1B5C47B266FD2D50035CF02 /* TabBarExample.swift in Sources */,
 				B10A123024F31D5E0076B038 /* CustomViewExample.swift in Sources */,
 				B1CFF31A24F1D95700B6AF88 /* TappableViewAdapter.swift in Sources */,
 				B10A123224F31EAA0076B038 /* ComponentBuilderExample.swift in Sources */,
