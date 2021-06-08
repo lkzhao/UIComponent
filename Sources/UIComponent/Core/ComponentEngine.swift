@@ -23,6 +23,7 @@ public class ComponentEngine {
   public private(set) var reloadCount = 0
   public private(set) var isLoadingCell = false
   public private(set) var isReloading = false
+  public var visibleFrameInsets: UIEdgeInsets = .zero
   public var hasReloaded: Bool { reloadCount > 0 }
 
   // visible identifiers for cells on screen
@@ -173,7 +174,7 @@ public class ComponentEngine {
     }
 
     animator.willUpdate(componentView: view)
-    let visibleFrame = contentView?.convert(bounds, from: view) ?? bounds
+    let visibleFrame = (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
     
     let newVisibleViewData = renderer.views(in: visibleFrame)
     if contentSize != renderer.size * zoomScale {

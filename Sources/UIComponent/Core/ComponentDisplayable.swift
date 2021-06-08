@@ -16,41 +16,45 @@ public typealias ComponentDisplayableView = ComponentDisplayable & UIView
 
 public extension ComponentDisplayable {
   var component: Component? {
-    get { return engine.component }
+    get { engine.component }
     set { engine.component = newValue }
   }
   var animator: Animator {
-    get { return engine.animator }
+    get { engine.animator }
     set { engine.animator = newValue }
   }
+  var visibleFrameInsets: UIEdgeInsets {
+    get { engine.visibleFrameInsets }
+    set { engine.visibleFrameInsets = newValue }
+  }
   var reloadCount: Int {
-    return engine.reloadCount
+    engine.reloadCount
   }
   var needsReload: Bool {
-    return engine.needsReload
+    engine.needsReload
   }
   var needsLoadCell: Bool {
-    return engine.needsLoadCell
+    engine.needsLoadCell
   }
   var isLoadingCell: Bool {
-    return engine.isLoadingCell
+    engine.isLoadingCell
   }
   var isReloading: Bool {
-    return engine.isReloading
+    engine.isReloading
   }
   var hasReloaded: Bool { reloadCount > 0 }
 
   var visibleCells: [UIView] {
-    return engine.visibleCells
+    engine.visibleCells
   }
   var visibleViewData: [Renderable] {
-    return engine.visibleViewData
+    engine.visibleViewData
   }
   var lastLoadBounds: CGRect {
-    return engine.lastLoadBounds
+    engine.lastLoadBounds
   }
   var contentOffsetChange: CGPoint {
-    return engine.contentOffsetChange
+    engine.contentOffsetChange
   }
   func setNeedsReload() {
     engine.setNeedsReload()
@@ -74,7 +78,7 @@ public extension ComponentDisplayable {
 
 extension ComponentDisplayable where Self: UIView {
   func cell(at point: CGPoint) -> UIView? {
-    return visibleCells.first {
+    visibleCells.first {
       $0.point(inside: $0.convert(point, from: self), with: nil)
     }
   }
