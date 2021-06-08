@@ -28,6 +28,12 @@ class ViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
+    TappableViewConfiguration.default = TappableViewConfiguration { view, isHighlighted in
+      let scale: CGFloat = isHighlighted ? 0.9 : 1.0
+      UIView.animate(withDuration: 0.2) {
+        view.transform = .identity.scaledBy(x: scale, y: scale)
+      }
+    }
 		view.addSubview(componentView)
     componentView.contentInsetAdjustmentBehavior = .always
     updateComponent()
