@@ -8,13 +8,11 @@
 
 import UIKit
 
-public protocol ComponentDisplayable: AnyObject {
+public protocol ComponentDisplayableView: UIView {
   var engine: ComponentEngine { get }
 }
 
-public typealias ComponentDisplayableView = ComponentDisplayable & UIView
-
-public extension ComponentDisplayable {
+public extension ComponentDisplayableView {
   var component: Component? {
     get { engine.component }
     set { engine.component = newValue }
@@ -76,7 +74,7 @@ public extension ComponentDisplayable {
   }
 }
 
-extension ComponentDisplayable where Self: UIView {
+extension ComponentDisplayableView {
   func cell(at point: CGPoint) -> UIView? {
     visibleCells.first {
       $0.point(inside: $0.convert(point, from: self), with: nil)

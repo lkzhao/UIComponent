@@ -7,7 +7,7 @@
 
 import UIKit
 
-open class ComponentView: UIView, ComponentDisplayable {
+open class ComponentView: UIView, ComponentDisplayableView {
   lazy public var engine: ComponentEngine = ComponentEngine(view: self)
 
   public convenience init(component: Component) {

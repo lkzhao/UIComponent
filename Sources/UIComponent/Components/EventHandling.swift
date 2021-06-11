@@ -64,7 +64,7 @@ extension Component {
   public func tappableView(id: String = UUID().uuidString,
                            configuration: TappableViewConfiguration? = nil,
                            _ onTap: @escaping (TappableView) -> Void) -> some ViewComponent {
-    ComponentWrapperViewComponent<TappableView>(id: id, component: self).onTap(onTap).configuration(configuration)
+    ComponentDisplayableViewComponent<TappableView>(id: id, component: self).onTap(onTap).configuration(configuration)
   }
   public func tappableView(id: String = UUID().uuidString,
                            configuration: TappableViewConfiguration? = nil,

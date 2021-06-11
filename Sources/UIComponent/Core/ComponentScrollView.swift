@@ -7,7 +7,7 @@
 
 import UIKit
 
-open class ComponentScrollView: UIScrollView, ComponentDisplayable {
+open class ComponentScrollView: UIScrollView, ComponentDisplayableView {
   lazy public var engine: ComponentEngine = ComponentEngine(view: self)
   
   public var contentView: UIView? {
