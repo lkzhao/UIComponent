@@ -9,7 +9,7 @@ import UIKit
 
 @resultBuilder
 public struct ComponentResultBuilder {
-  public static func buildExpression<A, B>(_ expression: ForEach<A, B>) -> [Component] {
+  public static func buildExpression(_ expression: Join) -> [Component] {
     expression.components
   }
   public static func buildExpression(_ expression: Component) -> [Component] {
@@ -32,20 +32,5 @@ public struct ComponentResultBuilder {
   }
   public static func buildLimitedAvailability(_ component: [Component]) -> [Component] {
     component
-  }
-}
-
-public extension Array where Element: Component {
-  func join(@ComponentResultBuilder _ content: () -> [Component]) -> [Component] {
-    let components = self
-    var result: [Component] = []
-    for i in 0..<components.count - 1 {
-      result.append(components[i])
-      result.append(contentsOf: content())
-    }
-    if let lastComponent = components.last {
-      result.append(lastComponent)
-    }
-    return result
   }
 }

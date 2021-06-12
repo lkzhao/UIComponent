@@ -44,12 +44,16 @@ class ViewController: UIViewController {
       VStack(spacing: 10) {
         Text("This is an example")
         Text("This is an example", font: UIFont.systemFont(ofSize: 12))
-        for card in cards {
-          Card(data: card)
-            .backgroundColor(.gray)
-            .tappableView {
-              print("Tapped \(card.title)")
-            }
+        Join {
+          for card in cards {
+            Card(data: card)
+              .backgroundColor(.gray)
+              .tappableView {
+                print("Tapped \(card.title)")
+              }
+          }
+        } separator: {
+          Text("test")
         }
         HStack {
           Image(systemName: "plus")

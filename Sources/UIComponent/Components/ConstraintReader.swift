@@ -7,7 +7,8 @@
 
 import UIKit
 
-/* Read incoming constraint and pass it to a Component builder block
+/**
+ Read incoming constraint and pass it to a Component builder block
  
  e.g Normally the following will fail because we are trying to fill an infinite x axis
 

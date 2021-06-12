@@ -35,3 +35,24 @@ public extension ViewRenderer {
     return updateView(view)
   }
 }
+
+extension ViewRenderer {
+  subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<View, Value>) -> (Value) -> ViewModifierRenderer<View, Value, Self> {
+    { with(keyPath, $0) }
+  }
+  public func with<Value>(_ keyPath: ReferenceWritableKeyPath<View, Value>, _ value: Value) -> ViewModifierRenderer<View, Value, Self> {
+    ViewModifierRenderer(content: self, keyPath: keyPath, value: value)
+  }
+  public func id(_ id: String) -> ViewIDRenderer<View, Self> {
+    ViewIDRenderer(content: self, id: id)
+  }
+  public func animator(_ animator: Animator?) -> ViewAnimatorRenderer<View, Self> {
+    ViewAnimatorRenderer(content: self, animator: animator)
+  }
+  public func reuseKey(_ reuseKey: String?) -> ViewReuseKeyRenderer<View, Self> {
+    ViewReuseKeyRenderer(content: self, reuseKey: reuseKey)
+  }
+  public func update(_ update: @escaping (View) -> Void) -> ViewUpdateRenderer<View, Self> {
+    ViewUpdateRenderer(content: self, update: update)
+  }
+}
