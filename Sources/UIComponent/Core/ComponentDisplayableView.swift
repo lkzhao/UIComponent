@@ -75,6 +75,11 @@ public extension ComponentDisplayableView {
     engine.lastRenderBounds
   }
   
+  /// contentOffset changes since the last reload
+  var contentOffsetDelta: CGPoint {
+    engine.contentOffsetDelta
+  }
+  
   /// mark this view as needing for a reload
   func setNeedsReload() {
     engine.setNeedsReload()

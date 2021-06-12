@@ -63,12 +63,15 @@ open class TappableView: ComponentView {
 extension Component {
   public func tappableView(id: String = UUID().uuidString,
                            configuration: TappableViewConfiguration? = nil,
-                           _ onTap: @escaping (TappableView) -> Void) -> some ViewComponent {
-    ComponentDisplayableViewComponent<TappableView>(id: id, component: self).onTap(onTap).configuration(configuration)
+                           _ onTap: @escaping (TappableView) -> Void) -> ViewModifierComponent<TappableView, ComponentDisplayableViewComponent<TappableView>, ViewUpdateRenderer<TappableView, ComponentDisplayableViewRenderer<TappableView>>> {
+    ComponentDisplayableViewComponent<TappableView>(id: id, component: self).update {
+      $0.onTap = onTap
+      $0.configuration = configuration
+    }
   }
   public func tappableView(id: String = UUID().uuidString,
                            configuration: TappableViewConfiguration? = nil,
-                           _ onTap: @escaping () -> Void) -> some ViewComponent {
+                           _ onTap: @escaping () -> Void) -> ViewModifierComponent<TappableView, ComponentDisplayableViewComponent<TappableView>, ViewUpdateRenderer<TappableView, ComponentDisplayableViewRenderer<TappableView>>> {
     tappableView(id: id, configuration: configuration) { _ in
       onTap()
     }

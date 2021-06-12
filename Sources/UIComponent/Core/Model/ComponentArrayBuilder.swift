@@ -15,6 +15,9 @@ public struct ComponentArrayBuilder {
   public static func buildExpression(_ expression: Component) -> [Component] {
     [expression]
   }
+  public static func buildExpression(_ expression: [Component]) -> [Component] {
+    expression
+  }
   public static func buildBlock(_ segments: [Component]...) -> [Component] {
     segments.flatMap { $0 }
   }

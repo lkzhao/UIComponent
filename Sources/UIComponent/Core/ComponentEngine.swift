@@ -266,7 +266,7 @@ public class ComponentEngine {
   /// This function assigns component with an already calculated renderer
   /// This is a performance hack that skips layout for the component if it has already
   /// been layed out.
-  func updateWithExisting(component: Component, renderer: Renderer) {
+  public func updateWithExisting(component: Component, renderer: Renderer) {
     self.component = component
     self.renderer = renderer
     self.reloadCount += 1
