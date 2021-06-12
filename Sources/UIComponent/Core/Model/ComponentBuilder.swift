@@ -8,11 +8,11 @@
 import UIKit
 
 public protocol ComponentBuilder: Component {
-  func build(constraint: Constraint) -> Component
+  func build() -> Component
 }
 
 public extension ComponentBuilder {
   func layout(_ constraint: Constraint) -> Renderer {
-    build(constraint: constraint).layout(constraint)
+    build().layout(constraint)
   }
 }

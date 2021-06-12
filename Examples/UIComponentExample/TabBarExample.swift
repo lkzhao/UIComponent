@@ -16,7 +16,7 @@ public struct TabBarItem {
 
 public struct TabBar: ComponentBuilder {
   public let items: [TabBarItem]
-  public func build(constraint: Constraint) -> Component {
+  public func build() -> Component {
     HStack(justifyContent: .spaceEvenly, alignItems: .center) {
       for item in items {
         Image(item.image).contentMode(.center).size(CGSize(width: 44, height: 44)).tappableView(item.handler)
