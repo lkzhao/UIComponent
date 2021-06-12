@@ -29,7 +29,7 @@ public class AnimatedReloadAnimator: Animator {
 				view.layer.transform = self.entryTransform
 				view.alpha = 0
 			}, completion: { _ in
-				if !componentView.visibleCells.contains(view) {
+				if !componentView.visibleViews.contains(view) {
 					view.transform = CGAffineTransform.identity
 					view.alpha = 1
 					view.recycleForUIComponentReuse()

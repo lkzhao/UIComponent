@@ -7,35 +7,53 @@
 
 import UIKit
 
+/// Main class that powers rendering components
+///
+/// This object manages a ``ComponentDisplayableView`` and handles rendering the component
+/// to the view. See ``ComponentView`` for a sample implementation
 public class ComponentEngine {
-  public weak var view: ComponentDisplayableView?
-  public var component: Component? {
-    didSet { setNeedsReload() }
-  }
-  public var animator: Animator = Animator() {
+  /// view that is managed by this engine.
+  weak var view: ComponentDisplayableView?
+  
+  /// component for rendering
+  var component: Component? {
     didSet { setNeedsReload() }
   }
   
-  public private(set) var renderer: Renderer?
+  /// default animator for the components rendered by this engine
+  var animator: Animator = Animator() {
+    didSet { setNeedsReload() }
+  }
   
-  public internal(set) var needsReload = true
-  public internal(set) var needsLoadCell = false
-  public private(set) var reloadCount = 0
-  public private(set) var isLoadingCell = false
-  public private(set) var isReloading = false
-  public var visibleFrameInsets: UIEdgeInsets = .zero
-  public var hasReloaded: Bool { reloadCount > 0 }
+  /// Current renderer. This is nil before the layout is done. And it will cache the current Renderer once the layout is done.
+  var renderer: Renderer?
+  
+  /// internal states
+  var needsReload = true
+  var needsRender = false
+  var reloadCount = 0
+  var isRendering = false
+  var isReloading = false
+  
+  /// visible frame insets. this will be applied to the visibleFrame that is used to retrieve views for the view port.
+  var visibleFrameInsets: UIEdgeInsets = .zero
+  
+  /// simple flag indicating whether or not this engine has rendered
+  var hasReloaded: Bool { reloadCount > 0 }
 
-  // visible identifiers for cells on screen
-  public private(set) var visibleCells: [UIView] = []
-  public private(set) var visibleViewData: [Renderable] = []
+  /// visible cells and view data for the views displayed on screen
+  var visibleViews: [UIView] = []
+  var visibleRenderable: [Renderable] = []
 
-  public private(set) var lastLoadBounds: CGRect = .zero
-  public private(set) var contentOffsetChange: CGPoint = .zero
-
-  public var centerContentViewVertically = false
-  public var centerContentViewHorizontally = true
-  public var contentView: UIView? {
+  /// last reload bounds
+  var lastRenderBounds: CGRect = .zero
+  
+  /// contentOffset changes since the last reload
+  var contentOffsetDelta: CGPoint = .zero
+  
+  /// Used to support zooming. setting a ``contentView`` will make the render
+  /// all views inside the content view.
+  var contentView: UIView? {
     didSet {
       oldValue?.removeFromSuperview()
       if let contentView = contentView {
@@ -43,33 +61,36 @@ public class ComponentEngine {
       }
     }
   }
-  public var contentSize: CGSize = .zero {
+  
+  /// contentView layout configurations
+  var centerContentViewVertically = false
+  var centerContentViewHorizontally = true
+  
+  /// internal helpers for updating the component view
+  var contentSize: CGSize = .zero {
     didSet {
       (view as? UIScrollView)?.contentSize = contentSize
     }
   }
-  public var contentOffset: CGPoint {
+  var contentOffset: CGPoint {
     get { return view?.bounds.origin ?? .zero }
     set { view?.bounds.origin = newValue }
   }
-  public var contentInset: UIEdgeInsets {
+  var contentInset: UIEdgeInsets {
     guard let view = view as? UIScrollView else { return .zero }
     return view.adjustedContentInset
   }
-  public var bounds: CGRect {
+  var bounds: CGRect {
     guard let view = view else { return .zero }
     return view.bounds
   }
-  public var adjustedSize: CGSize {
+  var adjustedSize: CGSize {
     bounds.size.inset(by: contentInset)
   }
-  public var zoomScale: CGFloat {
+  var zoomScale: CGFloat {
     guard let view = view as? UIScrollView else { return 1 }
     return view.zoomScale
   }
-
-  private var visibleIdentifiers: [String] = []
-  private var shouldSkipLayout = false
   
   init(view: ComponentDisplayableView) {
     self.view = view
@@ -78,16 +99,16 @@ public class ComponentEngine {
   func layoutSubview() {
     if needsReload {
       reloadData()
-    } else if bounds.size != lastLoadBounds.size {
+    } else if bounds.size != lastRenderBounds.size {
       invalidateLayout()
-    } else if bounds != lastLoadBounds || needsLoadCell {
-      _loadCells()
+    } else if bounds != lastRenderBounds || needsRender {
+      render()
     }
     contentView?.frame = CGRect(origin: .zero, size: contentSize)
     ensureZoomViewIsCentered()
   }
 
-  public func ensureZoomViewIsCentered() {
+  func ensureZoomViewIsCentered() {
     guard let contentView = contentView else { return }
     let boundsSize: CGRect
     boundsSize = bounds.inset(by: contentInset)
@@ -108,60 +129,48 @@ public class ComponentEngine {
     contentView.frame = frameToCenter
   }
 
-  public func setNeedsReload() {
+  func setNeedsReload() {
     needsReload = true
     view?.setNeedsLayout()
   }
 
-  public func setNeedsInvalidateLayout() {
+  func setNeedsInvalidateLayout() {
     renderer = nil
-    setNeedsLoadCells()
+    setNeedsRender()
   }
 
-  public func setNeedsLoadCells() {
-    needsLoadCell = true
+  func setNeedsRender() {
+    needsRender = true
     view?.setNeedsLayout()
   }
 
   // re-layout, but not updating cells' contents
-  public func invalidateLayout() {
-    guard !isLoadingCell, !isReloading, hasReloaded else { return }
+  func invalidateLayout() {
+    guard !isRendering, !isReloading, hasReloaded else { return }
     renderer = nil
-    _loadCells()
+    render()
   }
 
   // reload all frames. will automatically diff insertion & deletion
-  public func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
-    guard let component = component, !isReloading else { return }
+  func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
+    guard !isReloading else { return }
     isReloading = true
     defer {
+      reloadCount += 1
       needsReload = false
       isReloading = false
-      shouldSkipLayout = false
     }
-
-    if !shouldSkipLayout {
-      renderer = component.layout(Constraint(maxSize: adjustedSize))
-      contentSize = renderer!.size * zoomScale
-
-      let oldContentOffset = contentOffset
-      if let offset = contentOffsetAdjustFn?() {
-        contentOffset = offset
-      }
-      contentOffsetChange = contentOffset - oldContentOffset
-    }
-
-    _loadCells()
-
-    reloadCount += 1
+    
+    renderer = nil
+    render(contentOffsetAdjustFn: contentOffsetAdjustFn, updateExistingView: true)
   }
 
-  private func _loadCells() {
-    guard let view = view, !isLoadingCell, let component = component else { return }
-    isLoadingCell = true
+  func render(contentOffsetAdjustFn: (() -> CGPoint)? = nil, updateExistingView: Bool = false) {
+    guard let componentView = view, !isRendering, let component = component else { return }
+    isRendering = true
     defer {
-      needsLoadCell = false
-      isLoadingCell = false
+      needsRender = false
+      isRendering = false
     }
     
     let renderer: Renderer
@@ -172,11 +181,17 @@ public class ComponentEngine {
       contentSize = renderer.size * zoomScale
       self.renderer = renderer
     }
+    
+    let oldContentOffset = contentOffset
+    if let offset = contentOffsetAdjustFn?() {
+      contentOffset = offset
+    }
+    contentOffsetDelta = contentOffset - oldContentOffset
 
-    animator.willUpdate(componentView: view)
+    animator.willUpdate(componentView: componentView)
     let visibleFrame = (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
     
-    let newVisibleViewData = renderer.views(in: visibleFrame)
+    var newVisibleRenderable = renderer.views(in: visibleFrame)
     if contentSize != renderer.size * zoomScale {
       // update contentSize if it is changed. Some renderers update
       // its size when views(in: visibleFrame) is called. e.g. InfiniteLayout
@@ -185,90 +200,82 @@ public class ComponentEngine {
 
     // construct private identifiers
     var newIdentifierSet = [String: Int]()
-    let newIdentifiers: [String] = newVisibleViewData.enumerated().map { index, viewData in
-      let identifier = viewData.id
-      var finalIdentifier = identifier
+    for (index, viewData) in newVisibleRenderable.enumerated() {
       var count = 1
-      while newIdentifierSet[finalIdentifier] != nil {
-        finalIdentifier = identifier + String(count)
+      while newIdentifierSet[newVisibleRenderable[index].id] != nil {
+        newVisibleRenderable[index].id = viewData.id + String(count)
         count += 1
       }
-      newIdentifierSet[finalIdentifier] = index
-      return finalIdentifier
+      newIdentifierSet[newVisibleRenderable[index].id] = index
     }
 
-    var newCells = [UIView?](repeating: nil, count: newVisibleViewData.count)
+    var newViews = [UIView?](repeating: nil, count: newVisibleRenderable.count)
 
     // 1st pass, delete all removed cells and move existing cells
-    for index in 0 ..< visibleCells.count {
-      let identifier = visibleIdentifiers[index]
-      let cell = visibleCells[index]
+    for index in 0 ..< visibleViews.count {
+      let identifier = visibleRenderable[index].id
+      let cell = visibleViews[index]
       if let index = newIdentifierSet[identifier] {
-        newCells[index] = cell
+        newViews[index] = cell
       } else {
-        (visibleViewData[index].animator ?? animator)?.delete(componentView: view,
-                                                              view: cell)
+        (visibleRenderable[index].animator ?? animator)?.delete(componentView: componentView, view: cell)
       }
     }
 
     // 2nd pass, insert new views
-    for (index, viewData) in newVisibleViewData.enumerated() {
-      let cell: UIView
+    for (index, viewData) in newVisibleRenderable.enumerated() {
+      let view: UIView
       let frame = viewData.frame
-      if let existingCell = newCells[index] {
-        cell = existingCell
-        if isReloading {
-          // cell was on screen before reload, need to update the view.
-          viewData.renderer._updateView(cell)
-          (viewData.animator ?? animator).shift(componentView: view,
-                                                delta: contentOffsetChange,
-                                                view: cell,
-                                                frame: frame)
+      if let existingView = newViews[index] {
+        view = existingView
+        if updateExistingView {
+          // view was on screen before reload, need to update the view.
+          viewData.renderer._updateView(view)
+          (viewData.animator ?? animator).shift(componentView: componentView, delta: contentOffsetDelta,
+                                                view: view, frame: frame)
         }
       } else {
-        cell = viewData.renderer._makeView()
-        viewData.renderer._updateView(cell)
+        view = viewData.renderer._makeView()
+        viewData.renderer._updateView(view)
         UIView.performWithoutAnimation {
-          cell.bounds.size = frame.bounds.size
-          cell.center = frame.center
+          view.bounds.size = frame.bounds.size
+          view.center = frame.center
         }
-        (viewData.animator ?? animator).insert(componentView: view,
-                                               view: cell,
-                                               frame: frame)
-        newCells[index] = cell
+        (viewData.animator ?? animator).insert(componentView: componentView, view: view, frame: frame)
+        newViews[index] = view
       }
-      (viewData.animator ?? animator).update(componentView: view,
-                                             view: cell,
-                                             frame: frame)
-      (contentView ?? view).insertSubview(cell, at: index)
+      (viewData.animator ?? animator).update(componentView: componentView, view: view, frame: frame)
+      (contentView ?? componentView).insertSubview(view, at: index)
     }
 
-    visibleIdentifiers = newIdentifiers
-    visibleViewData = newVisibleViewData
-    visibleCells = newCells as! [UIView]
-    lastLoadBounds = bounds
+    visibleRenderable = newVisibleRenderable
+    visibleViews = newViews as! [UIView]
+    lastRenderBounds = bounds
   }
 
-  // This is used to replace a cell's identifier with a new identifer
-  // Useful when a cell's identifier is going to change with the next
-  // reloadData, but you want to keep the same cell view.
-  public func replace(identifier: String, with newIdentifier: String) {
-    for (i, id) in visibleIdentifiers.enumerated() where id == identifier {
-      visibleIdentifiers[i] = newIdentifier
+  /// This is used to replace a cell's identifier with a new identifer
+  /// Useful when a cell's identifier is going to change with the next
+  /// reloadData, but you want to keep the same cell view.
+  func replace(identifier: String, with newIdentifier: String) {
+    for (i, viewData) in visibleRenderable.enumerated() where viewData.id == identifier {
+      visibleRenderable[i].id = newIdentifier
       break
     }
   }
   
-  // This function assigns component with an already calculated renderer
-  // This is a performance hack that skips layout for the component if it has already
-  // been layed out.
-  public func updateWithExisting(component: Component, renderer: Renderer) {
+  /// This function assigns component with an already calculated renderer
+  /// This is a performance hack that skips layout for the component if it has already
+  /// been layed out.
+  func updateWithExisting(component: Component, renderer: Renderer) {
     self.component = component
     self.renderer = renderer
-    self.shouldSkipLayout = true
+    self.reloadCount += 1
+    self.needsReload = false
+    self.needsRender = true
   }
 
-  open func sizeThatFits(_ size: CGSize) -> CGSize {
+  /// calculate the size for the current component
+  func sizeThatFits(_ size: CGSize) -> CGSize {
     return component?.layout(Constraint(maxSize: size)).size ?? .zero
   }
 }

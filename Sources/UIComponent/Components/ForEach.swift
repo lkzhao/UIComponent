@@ -7,11 +7,11 @@
 
 import Foundation
 
-public struct ForEach<S: Sequence, D>: ComponentFunctionBuilderItem where S.Element == D {
+public struct ForEach<S: Sequence, D> where S.Element == D {
   public var components: [Component]
   
-  public init(_ data: S, @ComponentFunctionBuilder _ content: (D) -> ComponentFunctionBuilderItem) {
-    components = data.flatMap { content($0).components }
+  public init(_ data: S, @ComponentResultBuilder _ content: (D) -> [Component]) {
+    components = data.flatMap { content($0) }
   }
   
   private init(components: [Component]) {

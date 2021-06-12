@@ -44,7 +44,7 @@ class ViewController: UIViewController {
       VStack(spacing: 10) {
         Text("This is an example")
         Text("This is an example", font: UIFont.systemFont(ofSize: 12))
-        ForEach(cards) { card in
+        for card in cards {
           Card(data: card)
             .backgroundColor(.gray)
             .tappableView {
