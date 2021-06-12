@@ -10,7 +10,7 @@ import UIComponent
 import UIKit
 
 class ViewController: UIViewController {
-	let componentView = ComponentScrollView()
+  let componentView = ComponentScrollView()
   
   var cards: [CardData] = [
     CardData(title: "Custom View Example", subtitle: "Checkout CustomViewExample.swift"),
@@ -26,18 +26,18 @@ class ViewController: UIViewController {
     }
   }
 
-	override func viewDidLoad() {
-		super.viewDidLoad()
+  override func viewDidLoad() {
+    super.viewDidLoad()
     TappableViewConfiguration.default = TappableViewConfiguration { view, isHighlighted in
       let scale: CGFloat = isHighlighted ? 0.9 : 1.0
       UIView.animate(withDuration: 0.2) {
         view.transform = .identity.scaledBy(x: scale, y: scale)
       }
     }
-		view.addSubview(componentView)
+    view.addSubview(componentView)
     componentView.contentInsetAdjustmentBehavior = .always
     updateComponent()
-	}
+  }
   
   func updateComponent() {
     componentView.component = VStack {
@@ -78,8 +78,9 @@ class ViewController: UIViewController {
     }
   }
 
-	override func viewDidLayoutSubviews() {
-		super.viewDidLayoutSubviews()
-		componentView.frame = view.bounds
-	}
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    componentView.frame = view.bounds
+  }
 }
+
