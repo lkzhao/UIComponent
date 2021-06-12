@@ -5,7 +5,7 @@
 //  Created by Luke Zhao on 8/23/20.
 //
 
-import UIKit
+import Foundation
 
 public protocol ComponentBuilder: Component {
   func build() -> Component

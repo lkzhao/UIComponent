@@ -10,9 +10,3 @@ import Foundation
 public protocol Component {
   func layout(_ constraint: Constraint) -> Renderer
 }
-
-public extension Component {
-  var components: [Component] {
-    return [self]
-  }
-}
