@@ -53,7 +53,7 @@ class ViewController: UIViewController {
               }
           }
         } separator: {
-          Text("test")
+          Separator(color: .red)
         }
         HStack {
           Image(systemName: "plus")
