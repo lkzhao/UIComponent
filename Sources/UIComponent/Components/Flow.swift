@@ -121,7 +121,7 @@ public struct Flow: Component, VerticalLayoutProtocol {
 
 
 public extension Flow {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentResultBuilder _ content: () -> [Component]) {
+  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(spacing: spacing,
               justifyContent: justifyContent,
               alignItems: alignItems,
@@ -135,14 +135,14 @@ public extension Flow {
        justifyContent: MainAxisAlignment = .start,
        alignItems: CrossAxisAlignment = .start,
        alignContent: MainAxisAlignment = .start,
-       @ComponentResultBuilder _ content: () -> [Component]) {
+       @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(lineSpacing: lineSpacing, interitemSpacing: interitemSpacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: content())
   }
   init(spacing: CGFloat = 0,
        justifyContent: MainAxisAlignment = .start,
        alignItems: CrossAxisAlignment = .start,
        alignContent: MainAxisAlignment = .start,
-       @ComponentResultBuilder _ content: () -> [Component]) {
+       @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: content())
   }
 }

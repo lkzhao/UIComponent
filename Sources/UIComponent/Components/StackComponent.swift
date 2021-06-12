@@ -40,7 +40,7 @@ public struct VStack: StackComponent, VerticalLayoutProtocol {
 }
 
 public extension HStack {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentResultBuilder _ content: () -> [Component]) {
+  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(spacing: spacing,
               justifyContent: justifyContent,
               alignItems: alignItems,
@@ -49,7 +49,7 @@ public extension HStack {
 }
 
 public extension VStack {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentResultBuilder _ content: () -> [Component]) {
+  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(spacing: spacing,
               justifyContent: justifyContent,
               alignItems: alignItems,

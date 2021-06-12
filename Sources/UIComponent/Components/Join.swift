@@ -10,7 +10,7 @@ import Foundation
 public struct Join {
   public var components: [Component]
   
-  public init(@ComponentResultBuilder _ content: () -> [Component], @ComponentResultBuilder separator: () -> [Component]) {
+  public init(@ComponentArrayBuilder _ content: () -> [Component], @ComponentArrayBuilder separator: () -> [Component]) {
     var result: [Component] = []
     let components = content()
     for i in 0..<components.count - 1 {

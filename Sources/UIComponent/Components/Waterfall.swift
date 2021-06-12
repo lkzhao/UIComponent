@@ -67,13 +67,13 @@ public struct HorizontalWaterfall: WaterfallLayoutProtocol, HorizontalLayoutProt
 }
 
 public extension Waterfall {
-  init(columns: Int = 2, spacing: CGFloat = 0, @ComponentResultBuilder _ content: () -> [Component]) {
+  init(columns: Int = 2, spacing: CGFloat = 0, @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(columns: columns, spacing: spacing, children: content())
   }
 }
 
 public extension HorizontalWaterfall {
-  init(columns: Int = 2, spacing: CGFloat = 0, @ComponentResultBuilder _ content: () -> [Component]) {
+  init(columns: Int = 2, spacing: CGFloat = 0, @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(columns: columns, spacing: spacing, children: content())
   }
 }

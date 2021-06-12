@@ -59,7 +59,7 @@ public struct ZStack: Component {
 public extension ZStack {
   init(verticalAlignment: VerticalAlignment = .center,
        horizontalAlignment: HorizontalAlignment = .center,
-       @ComponentResultBuilder _ content: () -> [Component]) {
+       @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, children: content())
   }
 }

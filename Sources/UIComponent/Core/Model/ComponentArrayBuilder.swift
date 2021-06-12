@@ -1,5 +1,5 @@
 //
-//  ComponentResultBuilder.swift
+//  ComponentArrayBuilder.swift
 //  
 //
 //  Created by Luke Zhao on 8/22/20.
@@ -8,7 +8,7 @@
 import UIKit
 
 @resultBuilder
-public struct ComponentResultBuilder {
+public struct ComponentArrayBuilder {
   public static func buildExpression(_ expression: Join) -> [Component] {
     expression.components
   }
