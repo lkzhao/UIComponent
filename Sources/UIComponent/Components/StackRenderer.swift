@@ -27,7 +27,9 @@ public extension StackRenderer {
     while index < positions.count, main(positions[index]) < endPoint {
       let childFrame = CGRect(origin: positions[index], size: children[index].size)
       let childResult = children[index].views(in: frame.intersection(childFrame) - childFrame.origin).map {
-        Renderable(id: $0.id, animator: $0.animator, renderer: $0.renderer,
+        Renderable(id: $0.id,
+                   keyPath: "\(type(of: self))-\(index)." + $0.keyPath,
+                   animator: $0.animator, renderer: $0.renderer,
                    frame: CGRect(origin: $0.frame.origin + childFrame.origin, size: $0.frame.size))
       }
       result.append(contentsOf: childResult)
@@ -83,7 +85,11 @@ public struct SlowRenderer: Renderer {
       let childFrame = CGRect(origin: origin, size: child.size)
       if frame.intersects(childFrame) {
         let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map {
-          Renderable(id: $0.id, animator: $0.animator, renderer: $0.renderer, frame: CGRect(origin: $0.frame.origin + childFrame.origin, size: $0.frame.size))
+          Renderable(id: $0.id,
+                     keyPath: "slow-\(i)." + $0.keyPath,
+                     animator: $0.animator,
+                     renderer: $0.renderer,
+                     frame: CGRect(origin: $0.frame.origin + childFrame.origin, size: $0.frame.size))
         }
         result.append(contentsOf: childResult)
       }

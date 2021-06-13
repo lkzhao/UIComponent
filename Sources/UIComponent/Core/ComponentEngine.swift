@@ -202,18 +202,22 @@ public class ComponentEngine {
     var newIdentifierSet = [String: Int]()
     for (index, viewData) in newVisibleRenderable.enumerated() {
       var count = 1
-      while newIdentifierSet[newVisibleRenderable[index].id] != nil {
-        newVisibleRenderable[index].id = viewData.id + String(count)
+      let initialId = viewData.id ?? viewData.keyPath
+      var finalId = initialId
+      while newIdentifierSet[finalId] != nil {
+        assertionFailure("There are two view with the same id/keyPath \"\(finalId)\". This could cause undefined behavior.")
+        finalId = initialId + String(count)
+        newVisibleRenderable[index].id = finalId
         count += 1
       }
-      newIdentifierSet[newVisibleRenderable[index].id] = index
+      newIdentifierSet[finalId] = index
     }
 
     var newViews = [UIView?](repeating: nil, count: newVisibleRenderable.count)
 
     // 1st pass, delete all removed cells and move existing cells
     for index in 0 ..< visibleViews.count {
-      let identifier = visibleRenderable[index].id
+      let identifier = visibleRenderable[index].id ?? visibleRenderable[index].keyPath
       let cell = visibleViews[index]
       if let index = newIdentifierSet[identifier] {
         newViews[index] = cell

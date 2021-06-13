@@ -15,17 +15,15 @@ public struct Separator: ViewComponentBuilder {
       return UIColor.lightGray
     }
   }()
-  
-  public let id: String
+
   public let color: UIColor
 
-  public init(id: String = UUID().uuidString, color: UIColor = Separator.defaultSeparatorColor) {
-    self.id = id
+  public init(color: UIColor = Separator.defaultSeparatorColor) {
     self.color = color
   }
 
   public func build() -> some ViewComponent {
-    SimpleViewComponent<UIView>(id: id).backgroundColor(color).constraint { constraint in
+    SimpleViewComponent<UIView>().backgroundColor(color).constraint { constraint in
       if constraint.minSize.height <= 0, constraint.maxSize.width != .infinity {
         let size = CGSize(width: constraint.maxSize.width, height: 1 / UIScreen.main.scale)
         return Constraint(minSize: size, maxSize: size)

@@ -23,7 +23,6 @@ public struct Text: ViewComponent {
 
 public struct TextRenderer: ViewRenderer {
   public let attributedText: NSAttributedString
-  public let id: String = UUID().uuidString
   public let size: CGSize
   public func updateView(_ label: UILabel) {
     label.attributedText = attributedText

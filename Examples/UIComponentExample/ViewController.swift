@@ -46,21 +46,19 @@ class ViewController: UIViewController {
         Text("This is an example", font: UIFont.systemFont(ofSize: 12))
         Join {
           for card in cards {
-            Card(data: card)
-              .backgroundColor(.gray)
-              .tappableView {
-                print("Tapped \(card.title)")
-              }
+            Card(data: card).tappableView {
+              print("Tapped \(card.title)")
+            }
+          }
+          HStack(spacing: 10, justifyContent: .center, alignItems: .center) {
+            Image(systemName: "plus")
+            Text("Add")
+          }.inset(20).size(width: .fill).tappableView { [unowned self] in
+            self.cards.append(CardData(title: "New Item \(self.cards.count)",
+                                       subtitle: "New Item \(self.cards.count)"))
           }
         } separator: {
-          Separator(color: .red)
-        }
-        HStack {
-          Image(systemName: "plus")
-          Text("Add")
-        }.tappableView { [unowned self] in
-          self.cards.append(CardData(title: "New Item \(self.cards.count)",
-                                     subtitle: "New Item \(self.cards.count)"))
+          Separator(color: .separator)
         }
         Space(height: 100)
       }.scrollView().flex()

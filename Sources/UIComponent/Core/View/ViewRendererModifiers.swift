@@ -11,7 +11,7 @@ public struct ViewUpdateRenderer<View, Content: ViewRenderer>: ViewRenderer wher
   let content: Content
   let update: (View) -> Void
   
-  public var id: String {
+  public var id: String? {
     content.id
   }
   public var reuseKey: String? {
@@ -37,7 +37,7 @@ public struct ViewModifierRenderer<View, Value, Content: ViewRenderer>: ViewRend
   let keyPath: ReferenceWritableKeyPath<View, Value>
   let value: Value
   
-  public var id: String {
+  public var id: String? {
     content.id
   }
   public var reuseKey: String? {
@@ -60,7 +60,7 @@ public struct ViewModifierRenderer<View, Value, Content: ViewRenderer>: ViewRend
 
 public struct ViewIDRenderer<View, Content: ViewRenderer>: ViewRenderer where Content.View == View {
   let content: Content
-  public let id: String
+  public let id: String?
   
   public var reuseKey: String? {
     content.reuseKey
@@ -82,7 +82,7 @@ public struct ViewIDRenderer<View, Content: ViewRenderer>: ViewRenderer where Co
 public struct ViewAnimatorRenderer<View, Content: ViewRenderer>: ViewRenderer where Content.View == View {
   let content: Content
   public let animator: Animator?
-  public var id: String {
+  public var id: String? {
     content.id
   }
   public var reuseKey: String? {
@@ -102,7 +102,7 @@ public struct ViewAnimatorRenderer<View, Content: ViewRenderer>: ViewRenderer wh
 public struct ViewReuseKeyRenderer<View, Content: ViewRenderer>: ViewRenderer where Content.View == View {
   let content: Content
   public let reuseKey: String?
-  public var id: String {
+  public var id: String? {
     content.id
   }
   public var animator: Animator? {

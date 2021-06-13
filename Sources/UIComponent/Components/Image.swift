@@ -27,9 +27,6 @@ public struct Image: ViewComponent {
 }
 
 public struct ImageRenderer: ViewRenderer {
-  public var id: String {
-    "image-\(image.hash)"
-  }
   public let image: UIImage
   public let size: CGSize
   public func updateView(_ view: UIImageView) {

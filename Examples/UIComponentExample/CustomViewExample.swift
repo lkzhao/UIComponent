@@ -10,7 +10,7 @@ import UIKit
 import UIComponent
 
 struct CardData {
-  let id: String = UUID().uuidString
+  let id: String = "card-\(UUID().uuidString)"
   let title: String
   let subtitle: String
 }
@@ -56,7 +56,7 @@ struct Card: ViewComponent {
 
 struct CardViewRenderer: ViewRenderer {
   let data: CardData
-  var id: String {
+  var id: String? {
     data.id
   }
   let size: CGSize

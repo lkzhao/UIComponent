@@ -8,20 +8,19 @@
 import UIKit
 
 public struct ComponentDisplayableViewComponent<View: ComponentDisplayableView>: ViewComponent {
-  let id: String
   let component: Component
-  public init(id: String, component: Component) {
-    self.id = id
+  public init(component: Component) {
     self.component = component
   }
   public func layout(_ constraint: Constraint) -> ComponentDisplayableViewRenderer<View> {
     let renderer = component.layout(constraint)
-    return ComponentDisplayableViewRenderer(id: id, size: renderer.size.bound(to: constraint), component: component, renderer: renderer)
+    return ComponentDisplayableViewRenderer(size: renderer.size.bound(to: constraint),
+                                            component: component,
+                                            renderer: renderer)
   }
 }
 
 public struct ComponentDisplayableViewRenderer<View: ComponentDisplayableView>: ViewRenderer {
-  public let id: String
   public let size: CGSize
   let component: Component
   let renderer: Renderer
@@ -31,11 +30,11 @@ public struct ComponentDisplayableViewRenderer<View: ComponentDisplayableView>: 
 }
 
 public extension Component {
-  func view(id: String = UUID().uuidString) -> ComponentDisplayableViewComponent<ComponentView> {
-    ComponentDisplayableViewComponent(id: id, component: self)
+  func view() -> ComponentDisplayableViewComponent<ComponentView> {
+    ComponentDisplayableViewComponent(component: self)
   }
-  func scrollView(id: String = UUID().uuidString) -> ComponentDisplayableViewComponent<ComponentScrollView> {
-    ComponentDisplayableViewComponent(id: id, component: self)
+  func scrollView() -> ComponentDisplayableViewComponent<ComponentScrollView> {
+    ComponentDisplayableViewComponent(component: self)
   }
 }
 
