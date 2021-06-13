@@ -22,10 +22,16 @@ public struct ComponentDisplayableViewComponent<View: ComponentDisplayableView>:
 
 public struct ComponentDisplayableViewRenderer<View: ComponentDisplayableView>: ViewRenderer {
   public let size: CGSize
-  let component: Component
-  let renderer: Renderer
+  public let component: Component
+  public let renderer: Renderer
+  public var id: String? {
+    (renderer as? AnyViewRenderer)?.id ?? nil
+  }
+  public var keyPath: String {
+    "\(type(of: self))." + ((renderer as? AnyViewRenderer)?.keyPath ?? "\(type(of: renderer))")
+  }
   public func updateView(_ view: View) {
-    view.engine.updateWithExisting(component: component, renderer: renderer)
+    view.engine.reloadWithExisting(component: component, renderer: renderer)
   }
 }
 

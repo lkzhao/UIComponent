@@ -31,6 +31,7 @@ public class ComponentEngine {
   /// internal states
   var needsReload = true
   var needsRender = false
+  var shouldUpdateViewOnNextRender = false
   var reloadCount = 0
   var isRendering = false
   var isReloading = false
@@ -162,13 +163,15 @@ public class ComponentEngine {
     }
     
     renderer = nil
-    render(contentOffsetAdjustFn: contentOffsetAdjustFn, updateExistingView: true)
+    shouldUpdateViewOnNextRender = true
+    render(contentOffsetAdjustFn: contentOffsetAdjustFn)
   }
 
-  func render(contentOffsetAdjustFn: (() -> CGPoint)? = nil, updateExistingView: Bool = false) {
+  func render(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
     guard let componentView = view, !isRendering, let component = component else { return }
     isRendering = true
     defer {
+      shouldUpdateViewOnNextRender = false
       needsRender = false
       isRendering = false
     }
@@ -212,6 +215,7 @@ public class ComponentEngine {
       }
       newIdentifierSet[finalId] = index
     }
+    print(newIdentifierSet)
 
     var newViews = [UIView?](repeating: nil, count: newVisibleRenderable.count)
 
@@ -232,7 +236,7 @@ public class ComponentEngine {
       let frame = viewData.frame
       if let existingView = newViews[index] {
         view = existingView
-        if updateExistingView {
+        if shouldUpdateViewOnNextRender {
           // view was on screen before reload, need to update the view.
           viewData.renderer._updateView(view)
           (viewData.animator ?? animator).shift(componentView: componentView, delta: contentOffsetDelta,
@@ -270,12 +274,13 @@ public class ComponentEngine {
   /// This function assigns component with an already calculated renderer
   /// This is a performance hack that skips layout for the component if it has already
   /// been layed out.
-  public func updateWithExisting(component: Component, renderer: Renderer) {
+  public func reloadWithExisting(component: Component, renderer: Renderer) {
     self.component = component
     self.renderer = renderer
-    self.reloadCount += 1
-    self.needsReload = false
-    self.needsRender = true
+    reloadCount += 1
+    shouldUpdateViewOnNextRender = true
+    needsReload = false
+    needsRender = true
   }
 
   /// calculate the size for the current component

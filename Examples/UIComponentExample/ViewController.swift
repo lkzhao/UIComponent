@@ -28,6 +28,7 @@ class ViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    componentView.animator = AnimatedReloadAnimator()
     TappableViewConfiguration.default = TappableViewConfiguration { view, isHighlighted in
       let scale: CGFloat = isHighlighted ? 0.9 : 1.0
       UIView.animate(withDuration: 0.2) {
@@ -41,38 +42,23 @@ class ViewController: UIViewController {
   
   func updateComponent() {
     componentView.component = VStack {
-      VStack(spacing: 10) {
-        Text("This is an example")
-        Text("This is an example", font: UIFont.systemFont(ofSize: 12))
-        Join {
-          for card in cards {
-            Card(data: card).tappableView {
-              print("Tapped \(card.title)")
-            }
+      Join {
+        for (index, card) in cards.enumerated() {
+          Card(data: card).tappableView { [unowned self] in
+            print("Tapped \(card.title)")
+            self.cards.remove(at: index)
           }
-          HStack(spacing: 10, justifyContent: .center, alignItems: .center) {
-            Image(systemName: "plus")
-            Text("Add")
-          }.inset(20).size(width: .fill).tappableView { [unowned self] in
-            self.cards.append(CardData(title: "New Item \(self.cards.count)",
-                                       subtitle: "New Item \(self.cards.count)"))
-          }
-        } separator: {
-          Separator(color: .separator)
         }
-        Space(height: 100)
-      }.scrollView().flex()
-      TabBar(items: [
-        TabBarItem(image: UIImage(systemName: "circle")!, handler: {
-          print("Tap tab 1")
-        }),
-        TabBarItem(image: UIImage(systemName: "triangle")!, handler: {
-          print("Tap tab 2")
-        }),
-        TabBarItem(image: UIImage(systemName: "square")!, handler: {
-          print("Tap tab 3")
-        })
-      ])
+        HStack(spacing: 10, justifyContent: .center, alignItems: .center) {
+          Image(systemName: "plus")
+          Text("Add")
+        }.inset(20).size(width: .fill).tappableView { [unowned self] in
+          self.cards.append(CardData(title: "New Item \(self.cards.count)",
+                                     subtitle: "New Item \(self.cards.count)"))
+        }.id("new-button")
+      } separator: {
+        Separator(color: .separator)
+      }
     }
   }
 
