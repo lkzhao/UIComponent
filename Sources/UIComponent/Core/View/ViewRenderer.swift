@@ -10,16 +10,12 @@ import UIKit
 @dynamicMemberLookup
 public protocol ViewRenderer: AnyViewRenderer {
   associatedtype View: UIView
-  var reuseKey: String? { get }
   func makeView() -> View
   func updateView(_ view: View)
 }
 
 public extension ViewRenderer {
   // MARK: Default
-  var reuseKey: String? {
-    "\(type(of: self))"
-  }
   func makeView() -> View {
     View()
   }

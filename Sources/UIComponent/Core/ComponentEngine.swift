@@ -208,7 +208,7 @@ public class ComponentEngine {
       let initialId = viewData.id ?? viewData.keyPath
       var finalId = initialId
       while newIdentifierSet[finalId] != nil {
-        assertionFailure("There are two view with the same id/keyPath \"\(finalId)\". This could cause undefined behavior.")
+//        assertionFailure("There are two view with the same id/keyPath \"\(finalId)\". This could cause undefined behavior.")
         finalId = initialId + String(count)
         newVisibleRenderable[index].id = finalId
         count += 1

@@ -29,6 +29,12 @@ public struct SimpleViewRenderer<View: UIView>: ViewRenderer {
   public let size: CGSize
   public let view: View?
   public let generator: (() -> View)?
+  public var id: String? {
+    if let view = view {
+      return "view-at-\(Unmanaged.passUnretained(view).toOpaque())"
+    }
+    return nil
+  }
   public var reuseKey: String? {
     return view == nil ? "\(type(of: self))" : nil
   }

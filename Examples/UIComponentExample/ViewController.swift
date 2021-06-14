@@ -12,15 +12,10 @@ import UIKit
 class ViewController: UIViewController {
   let componentView = ComponentScrollView()
   
-  var cards: [CardData] = [
-    CardData(title: "Custom View Example", subtitle: "Checkout CustomViewExample.swift"),
-    CardData(title: "Item 2", subtitle: "Item 2"),
-    CardData(title: "Item 3", subtitle: "Item 3"),
-    CardData(title: "Item 4", subtitle: "Item 4"),
-    CardData(title: "Item 5", subtitle: "Item 5"),
-    CardData(title: "Item 6", subtitle: "Item 6"),
-    CardData(title: "Item 7", subtitle: "Item 7")
-  ] {
+  var newCardIndex = 7
+  var cards: [CardData] = (1..<7).map({
+    CardData(title: "Item \($0)", subtitle: "Description \($0)")
+  }) {
     didSet {
       updateComponent()
     }
@@ -42,23 +37,20 @@ class ViewController: UIViewController {
   
   func updateComponent() {
     componentView.component = VStack {
-      Join {
-        for (index, card) in cards.enumerated() {
-          Card(data: card).tappableView { [unowned self] in
-            print("Tapped \(card.title)")
-            self.cards.remove(at: index)
-          }
+      for (index, card) in cards.enumerated() {
+        Card(data: card).tappableView { [unowned self] in
+          print("Tapped \(card.title)")
+          self.cards.remove(at: index)
         }
-        HStack(spacing: 10, justifyContent: .center, alignItems: .center) {
-          Image(systemName: "plus")
-          Text("Add")
-        }.inset(20).size(width: .fill).tappableView { [unowned self] in
-          self.cards.append(CardData(title: "New Item \(self.cards.count)",
-                                     subtitle: "New Item \(self.cards.count)"))
-        }.id("new-button")
-      } separator: {
-        Separator(color: .separator)
       }
+      HStack(spacing: 10, justifyContent: .center, alignItems: .center) {
+        Image(systemName: "plus")
+        Text("Add")
+      }.inset(20).size(width: .fill).tappableView { [unowned self] in
+        self.cards.append(CardData(title: "Item \(self.newCardIndex)",
+                                   subtitle: "Description \(self.newCardIndex)"))
+        self.newCardIndex += 1
+      }.id("new-button")
     }
   }
 
