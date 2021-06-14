@@ -33,11 +33,11 @@ public extension ViewRenderer {
 }
 
 extension ViewRenderer {
-  subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<View, Value>) -> (Value) -> ViewModifierRenderer<View, Value, Self> {
+  subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<View, Value>) -> (Value) -> ViewKeyPathUpdateRenderer<View, Value, Self> {
     { with(keyPath, $0) }
   }
-  public func with<Value>(_ keyPath: ReferenceWritableKeyPath<View, Value>, _ value: Value) -> ViewModifierRenderer<View, Value, Self> {
-    ViewModifierRenderer(content: self, keyPath: keyPath, value: value)
+  public func with<Value>(_ keyPath: ReferenceWritableKeyPath<View, Value>, _ value: Value) -> ViewKeyPathUpdateRenderer<View, Value, Self> {
+    ViewKeyPathUpdateRenderer(content: self, keyPath: keyPath, value: value)
   }
   public func id(_ id: String) -> ViewIDRenderer<View, Self> {
     ViewIDRenderer(content: self, id: id)

@@ -62,14 +62,14 @@ open class TappableView: ComponentView {
 
 extension Component {
   public func tappableView(configuration: TappableViewConfiguration? = nil,
-                           _ onTap: @escaping (TappableView) -> Void) -> ViewModifierComponent<TappableView, ComponentDisplayableViewComponent<TappableView>, ViewUpdateRenderer<TappableView, ComponentDisplayableViewRenderer<TappableView>>> {
+                           _ onTap: @escaping (TappableView) -> Void) -> ViewUpdateComponent<ComponentDisplayableViewComponent<TappableView>> {
     ComponentDisplayableViewComponent<TappableView>(component: self).update {
       $0.onTap = onTap
       $0.configuration = configuration
     }
   }
   public func tappableView(configuration: TappableViewConfiguration? = nil,
-                           _ onTap: @escaping () -> Void) -> ViewModifierComponent<TappableView, ComponentDisplayableViewComponent<TappableView>, ViewUpdateRenderer<TappableView, ComponentDisplayableViewRenderer<TappableView>>> {
+                           _ onTap: @escaping () -> Void) -> ViewUpdateComponent<ComponentDisplayableViewComponent<TappableView>> {
     tappableView(configuration: configuration) { _ in
       onTap()
     }

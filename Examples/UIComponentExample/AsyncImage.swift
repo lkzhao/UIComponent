@@ -22,7 +22,7 @@ struct AsyncImage: ViewComponentBuilder {
     self.url = url
   }
   
-  func build() -> some ViewComponent {
+  func build() -> ViewUpdateComponent<SimpleViewComponent<UIImageView>> {
     SimpleViewComponent<UIImageView>().update {
       $0.kf.setImage(with: url)
     }

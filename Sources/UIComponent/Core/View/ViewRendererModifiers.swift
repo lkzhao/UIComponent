@@ -43,7 +43,7 @@ public struct ViewUpdateRenderer<View, Content: ViewRenderer>: ViewRendererWrapp
   }
 }
 
-public struct ViewModifierRenderer<View, Value, Content: ViewRenderer>: ViewRendererWrapper where Content.View == View {
+public struct ViewKeyPathUpdateRenderer<View, Value, Content: ViewRenderer>: ViewRendererWrapper where Content.View == View {
   public let content: Content
   public let keyPath: ReferenceWritableKeyPath<View, Value>
   public let value: Value
