@@ -37,6 +37,7 @@ class ViewController: UIViewController {
   
   func updateComponent() {
     componentView.component = VStack {
+      AsyncImage("https://unsplash.com/photos/Yn0l7uwBrpw/download?force=true&w=1920")!.size(width: .fill, height: .aspectPercentage(9 / 16))
       for (index, card) in cards.enumerated() {
         Card(data: card).tappableView { [unowned self] in
           print("Tapped \(card.title)")

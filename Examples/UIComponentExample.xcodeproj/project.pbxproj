@@ -15,6 +15,8 @@
 		B10A123024F31D5E0076B038 /* CustomViewExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10A122F24F31D5E0076B038 /* CustomViewExample.swift */; };
 		B10A123224F31EAA0076B038 /* ComponentBuilderExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10A123124F31EAA0076B038 /* ComponentBuilderExample.swift */; };
 		B121A0A024F8771E00E59F78 /* UIComponent in Frameworks */ = {isa = PBXBuildFile; productRef = B121A09F24F8771E00E59F78 /* UIComponent */; };
+		B16EA6A02677E262005CFB18 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B16EA69F2677E262005CFB18 /* Kingfisher */; };
+		B16EA6A22677E26F005CFB18 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16EA6A12677E26F005CFB18 /* AsyncImage.swift */; };
 		B1B5C47B266FD2D50035CF02 /* TabBarExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +31,7 @@
 		A304893321C347020026EDA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B10A122F24F31D5E0076B038 /* CustomViewExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewExample.swift; sourceTree = "<group>"; };
 		B10A123124F31EAA0076B038 /* ComponentBuilderExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentBuilderExample.swift; sourceTree = "<group>"; };
+		B16EA6A12677E26F005CFB18 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarExample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -37,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B16EA6A02677E262005CFB18 /* Kingfisher in Frameworks */,
 				B121A0A024F8771E00E59F78 /* UIComponent in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,6 +81,7 @@
 				A304892721C347010026EDA7 /* AppDelegate.swift */,
 				A304892921C347010026EDA7 /* ViewController.swift */,
 				B10A122F24F31D5E0076B038 /* CustomViewExample.swift */,
+				B16EA6A12677E26F005CFB18 /* AsyncImage.swift */,
 				B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */,
 				B10A123124F31EAA0076B038 /* ComponentBuilderExample.swift */,
 				A304892B21C347010026EDA7 /* Main.storyboard */,
@@ -105,6 +110,7 @@
 			name = UIComponentExample;
 			packageProductDependencies = (
 				B121A09F24F8771E00E59F78 /* UIComponent */,
+				B16EA69F2677E262005CFB18 /* Kingfisher */,
 			);
 			productName = CollectionKit3;
 			productReference = A304892421C347010026EDA7 /* UIComponentExample.app */;
@@ -135,6 +141,9 @@
 				Base,
 			);
 			mainGroup = A304891B21C347010026EDA7;
+			packageReferences = (
+				B16EA69E2677E262005CFB18 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = A304892521C347010026EDA7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -165,6 +174,7 @@
 				B1B5C47B266FD2D50035CF02 /* TabBarExample.swift in Sources */,
 				B10A123024F31D5E0076B038 /* CustomViewExample.swift in Sources */,
 				B10A123224F31EAA0076B038 /* ComponentBuilderExample.swift in Sources */,
+				B16EA6A22677E26F005CFB18 /* AsyncImage.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
 				A304892821C347010026EDA7 /* AppDelegate.swift in Sources */,
 			);
@@ -371,10 +381,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		B16EA69E2677E262005CFB18 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		B121A09F24F8771E00E59F78 /* UIComponent */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = UIComponent;
+		};
+		B16EA69F2677E262005CFB18 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B16EA69E2677E262005CFB18 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
