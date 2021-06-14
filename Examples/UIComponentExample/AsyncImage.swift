@@ -10,7 +10,7 @@ import UIComponent
 import UIKit
 import Kingfisher
 
-struct AsyncImage: ViewComponentBuilder {
+public struct AsyncImage: ViewComponentBuilder {
   public let url: URL
   
   public init(_ url: URL) {
@@ -22,7 +22,7 @@ struct AsyncImage: ViewComponentBuilder {
     self.url = url
   }
   
-  func build() -> ViewUpdateComponent<SimpleViewComponent<UIImageView>> {
+  public func build() -> ViewUpdateComponent<SimpleViewComponent<UIImageView>> {
     SimpleViewComponent<UIImageView>().update {
       $0.kf.setImage(with: url)
     }
