@@ -12,12 +12,18 @@
 		A304892D21C347010026EDA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A304892B21C347010026EDA7 /* Main.storyboard */; };
 		A304892F21C347020026EDA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A304892E21C347020026EDA7 /* Assets.xcassets */; };
 		A304893221C347020026EDA7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A304893021C347020026EDA7 /* LaunchScreen.storyboard */; };
-		B10A123024F31D5E0076B038 /* CustomViewExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10A122F24F31D5E0076B038 /* CustomViewExample.swift */; };
-		B10A123224F31EAA0076B038 /* ComponentBuilderExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10A123124F31EAA0076B038 /* ComponentBuilderExample.swift */; };
+		B10A123224F31EAA0076B038 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10A123124F31EAA0076B038 /* Helpers.swift */; };
 		B121A0A024F8771E00E59F78 /* UIComponent in Frameworks */ = {isa = PBXBuildFile; productRef = B121A09F24F8771E00E59F78 /* UIComponent */; };
 		B16EA6A02677E262005CFB18 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B16EA69F2677E262005CFB18 /* Kingfisher */; };
 		B16EA6A22677E26F005CFB18 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16EA6A12677E26F005CFB18 /* AsyncImage.swift */; };
 		B1B5C47B266FD2D50035CF02 /* TabBarExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */; };
+		B1CC3F632677FCFD005BCE8C /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F622677FCFD005BCE8C /* CardViewController.swift */; };
+		B1CC3F652677FD99005BCE8C /* ComponentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F642677FD99005BCE8C /* ComponentViewController.swift */; };
+		B1CC3F672677FF79005BCE8C /* AsyncImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F662677FF79005BCE8C /* AsyncImageViewController.swift */; };
+		B1CC3F6E26789C55005BCE8C /* CardViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F6D26789C55005BCE8C /* CardViewController2.swift */; };
+		B1CC3F7026789E1F005BCE8C /* CardViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */; };
+		B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7126789F07005BCE8C /* AddCardButton.swift */; };
+		B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7326789F3D005BCE8C /* CardData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,10 +35,16 @@
 		A304892E21C347020026EDA7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A304893121C347020026EDA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A304893321C347020026EDA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B10A122F24F31D5E0076B038 /* CustomViewExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewExample.swift; sourceTree = "<group>"; };
-		B10A123124F31EAA0076B038 /* ComponentBuilderExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentBuilderExample.swift; sourceTree = "<group>"; };
+		B10A123124F31EAA0076B038 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		B16EA6A12677E26F005CFB18 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarExample.swift; sourceTree = "<group>"; };
+		B1CC3F622677FCFD005BCE8C /* CardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
+		B1CC3F642677FD99005BCE8C /* ComponentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentViewController.swift; sourceTree = "<group>"; };
+		B1CC3F662677FF79005BCE8C /* AsyncImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageViewController.swift; sourceTree = "<group>"; };
+		B1CC3F6D26789C55005BCE8C /* CardViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController2.swift; sourceTree = "<group>"; };
+		B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController3.swift; sourceTree = "<group>"; };
+		B1CC3F7126789F07005BCE8C /* AddCardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardButton.swift; sourceTree = "<group>"; };
+		B1CC3F7326789F3D005BCE8C /* CardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,18 +90,64 @@
 		A304892621C347010026EDA7 /* UIComponentExample */ = {
 			isa = PBXGroup;
 			children = (
-				A304892721C347010026EDA7 /* AppDelegate.swift */,
 				A304892921C347010026EDA7 /* ViewController.swift */,
-				B10A122F24F31D5E0076B038 /* CustomViewExample.swift */,
-				B16EA6A12677E26F005CFB18 /* AsyncImage.swift */,
-				B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */,
-				B10A123124F31EAA0076B038 /* ComponentBuilderExample.swift */,
+				B1CC3F6C267800B9005BCE8C /* Examples */,
+				B1CC3F682677FFCC005BCE8C /* Supporting Files */,
+			);
+			path = UIComponentExample;
+			sourceTree = "<group>";
+		};
+		B1CC3F682677FFCC005BCE8C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A304892721C347010026EDA7 /* AppDelegate.swift */,
+				B1CC3F642677FD99005BCE8C /* ComponentViewController.swift */,
+				B10A123124F31EAA0076B038 /* Helpers.swift */,
 				A304892B21C347010026EDA7 /* Main.storyboard */,
 				A304892E21C347020026EDA7 /* Assets.xcassets */,
 				A304893021C347020026EDA7 /* LaunchScreen.storyboard */,
 				A304893321C347020026EDA7 /* Info.plist */,
 			);
-			path = UIComponentExample;
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B1CC3F692678008F005BCE8C /* Card */ = {
+			isa = PBXGroup;
+			children = (
+				B1CC3F622677FCFD005BCE8C /* CardViewController.swift */,
+				B1CC3F6D26789C55005BCE8C /* CardViewController2.swift */,
+				B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */,
+				B1CC3F7126789F07005BCE8C /* AddCardButton.swift */,
+				B1CC3F7326789F3D005BCE8C /* CardData.swift */,
+			);
+			path = Card;
+			sourceTree = "<group>";
+		};
+		B1CC3F6A2678009C005BCE8C /* AsyncImage */ = {
+			isa = PBXGroup;
+			children = (
+				B1CC3F662677FF79005BCE8C /* AsyncImageViewController.swift */,
+				B16EA6A12677E26F005CFB18 /* AsyncImage.swift */,
+			);
+			path = AsyncImage;
+			sourceTree = "<group>";
+		};
+		B1CC3F6B267800AA005BCE8C /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		B1CC3F6C267800B9005BCE8C /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				B1CC3F692678008F005BCE8C /* Card */,
+				B1CC3F6A2678009C005BCE8C /* AsyncImage */,
+				B1CC3F6B267800AA005BCE8C /* TabBar */,
+			);
+			path = Examples;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -172,11 +230,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1B5C47B266FD2D50035CF02 /* TabBarExample.swift in Sources */,
-				B10A123024F31D5E0076B038 /* CustomViewExample.swift in Sources */,
-				B10A123224F31EAA0076B038 /* ComponentBuilderExample.swift in Sources */,
+				B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */,
+				B1CC3F632677FCFD005BCE8C /* CardViewController.swift in Sources */,
+				B1CC3F652677FD99005BCE8C /* ComponentViewController.swift in Sources */,
+				B1CC3F672677FF79005BCE8C /* AsyncImageViewController.swift in Sources */,
+				B10A123224F31EAA0076B038 /* Helpers.swift in Sources */,
 				B16EA6A22677E26F005CFB18 /* AsyncImage.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
 				A304892821C347010026EDA7 /* AppDelegate.swift in Sources */,
+				B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */,
+				B1CC3F7026789E1F005BCE8C /* CardViewController3.swift in Sources */,
+				B1CC3F6E26789C55005BCE8C /* CardViewController2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,7 +389,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "$(SRCROOT)/UIComponentExample/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/UIComponentExample/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -344,7 +408,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "$(SRCROOT)/UIComponentExample/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/UIComponentExample/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

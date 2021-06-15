@@ -277,6 +277,7 @@ public class ComponentEngine {
   public func reloadWithExisting(component: Component, renderer: Renderer) {
     self.component = component
     self.renderer = renderer
+    lastRenderBounds = CGRect(origin: .zero, size: renderer.size)
     reloadCount += 1
     shouldUpdateViewOnNextRender = true
     needsReload = false

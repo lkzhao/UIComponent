@@ -10,7 +10,7 @@ import UIKit
 public struct Separator: ViewComponentBuilder {
   public static var defaultSeparatorColor: UIColor = {
     if #available(iOS 13, *) {
-      return UIColor.systemGroupedBackground
+      return UIColor.separator
     } else {
       return UIColor.lightGray
     }

@@ -24,3 +24,23 @@ public struct TabBar: ComponentBuilder {
     }.size(height: 44)
   }
 }
+
+class TabBarViewController: ComponentViewController {
+  override var component: Component {
+    VStack {
+      Spacer()
+      TabBar(items: [
+        TabBarItem(image: UIImage(systemName: "circle")!) {
+          print("Tapped Circle")
+        },
+        TabBarItem(image: UIImage(systemName: "triangle")!) {
+          print("Tapped Triangle")
+        },
+        TabBarItem(image: UIImage(systemName: "square")!) {
+          print("Tapped Square")
+        }
+      ]).view().backgroundColor(.systemGroupedBackground)
+    }
+  }
+}
+

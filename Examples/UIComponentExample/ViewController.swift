@@ -9,55 +9,34 @@
 import UIComponent
 import UIKit
 
-class ViewController: UIViewController {
-  let componentView = ComponentScrollView()
-  
-  var newCardIndex = 7
-  var cards: [CardData] = (1..<7).map({
-    CardData(title: "Item \($0)", subtitle: "Description \($0)")
-  }) {
-    didSet {
-      updateComponent()
-    }
-  }
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    componentView.animator = AnimatedReloadAnimator()
-    TappableViewConfiguration.default = TappableViewConfiguration { view, isHighlighted in
-      let scale: CGFloat = isHighlighted ? 0.9 : 1.0
-      UIView.animate(withDuration: 0.2) {
-        view.transform = .identity.scaledBy(x: scale, y: scale)
+class ViewController: ComponentViewController {
+  override var component: Component {
+    VStack {
+      Join {
+        ExampleItem(name: "Card Example", viewController: CardViewController())
+        ExampleItem(name: "Card Example 2", viewController: CardViewController2())
+        ExampleItem(name: "Card Example 3", viewController: CardViewController3())
+        ExampleItem(name: "AsyncImage Example", viewController: AsyncImageViewController())
+        ExampleItem(name: "Tab Bar Example", viewController: TabBarViewController())
+      } separator: {
+        Separator()
       }
     }
-    view.addSubview(componentView)
-    componentView.contentInsetAdjustmentBehavior = .always
-    updateComponent()
-  }
-  
-  func updateComponent() {
-    componentView.component = VStack {
-      AsyncImage("https://unsplash.com/photos/Yn0l7uwBrpw/download?force=true&w=1920")!.size(width: .fill, height: .aspectPercentage(9 / 16))
-      for (index, card) in cards.enumerated() {
-        Card(data: card).tappableView { [unowned self] in
-          print("Tapped \(card.title)")
-          self.cards.remove(at: index)
-        }
-      }
-      HStack(spacing: 10, justifyContent: .center, alignItems: .center) {
-        Image(systemName: "plus")
-        Text("Add")
-      }.inset(20).size(width: .fill).tappableView { [unowned self] in
-        self.cards.append(CardData(title: "Item \(self.newCardIndex)",
-                                   subtitle: "Description \(self.newCardIndex)"))
-        self.newCardIndex += 1
-      }.id("new-button")
-    }
-  }
-
-  override func viewDidLayoutSubviews() {
-    super.viewDidLayoutSubviews()
-    componentView.frame = view.bounds
   }
 }
 
+struct ExampleItem: ComponentBuilder {
+  let name: String
+  let viewController: () -> UIViewController
+  init(name: String, viewController: @autoclosure @escaping () -> UIViewController) {
+    self.name = name
+    self.viewController = viewController
+  }
+  func build() -> Component {
+    VStack {
+      Text(name)
+    }.inset(20).tappableView {
+      $0.present(viewController())
+    }
+  }
+}

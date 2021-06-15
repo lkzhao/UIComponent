@@ -9,7 +9,7 @@
 import UIKit
 
 public class AnimatedReloadAnimator: Animator {
-	public static let defaultEntryTransform: CATransform3D = CATransform3DTranslate(CATransform3DScale(CATransform3DIdentity, 0.8, 0.8, 1), 0, 0, 0)
+	public static let defaultEntryTransform: CATransform3D = CATransform3DTranslate(CATransform3DScale(CATransform3DIdentity, 0.8, 0.8, 1), 0, 0, -10)
 	public static let fancyEntryTransform: CATransform3D = {
 		var trans = CATransform3DIdentity
 		trans.m34 = -1 / 500
