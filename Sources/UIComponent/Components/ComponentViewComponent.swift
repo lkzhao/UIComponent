@@ -13,11 +13,13 @@ public struct ComponentDisplayableViewComponent<View: ComponentDisplayableView>:
     self.component = component
   }
   public func layout(_ constraint: Constraint) -> ComponentDisplayableViewRenderer<View> {
-    ComponentDisplayableViewRenderer(component: component, renderer: component.layout(constraint))
+    let renderer = component.layout(constraint)
+    return ComponentDisplayableViewRenderer(size: renderer.size.bound(to: constraint), component: component, renderer: renderer)
   }
 }
 
 public struct ComponentDisplayableViewRenderer<View: ComponentDisplayableView>: ViewRenderer {
+  public let size: CGSize
   public let component: Component
   public let renderer: Renderer
   
@@ -35,9 +37,6 @@ public struct ComponentDisplayableViewRenderer<View: ComponentDisplayableView>: 
   }
   public var keyPath: String {
     "\(type(of: self))." + (viewRenderer?.keyPath ?? "\(type(of: renderer))")
-  }
-  public var size: CGSize {
-    renderer.size
   }
   public func updateView(_ view: View) {
     view.engine.reloadWithExisting(component: component, renderer: renderer)
