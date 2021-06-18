@@ -102,9 +102,9 @@ extension StackComponent {
       positions.append(point(main: primaryOffset, cross: crossValue))
       primaryOffset += main(child.size) + distributedSpacing
     }
-    let finalMain = primaryOffset - distributedSpacing
-    let finalSize = size(main: max(finalMain, justifyContent == .start ? finalMain : main(constraint.maxSize)),
-                         cross: crossMax)
+    let intrisicMain = primaryOffset - distributedSpacing
+    let finalMain = justifyContent != .start && main(constraint.maxSize) != .infinity ? main(constraint.maxSize) : intrisicMain
+    let finalSize = size(main: finalMain, cross: crossMax)
 
     return renderer(size: finalSize, children: renderers, positions: positions)
   }

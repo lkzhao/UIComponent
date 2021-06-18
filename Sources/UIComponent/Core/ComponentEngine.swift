@@ -215,7 +215,7 @@ public class ComponentEngine {
       }
       newIdentifierSet[finalId] = index
     }
-    print(newIdentifierSet)
+//    print(newIdentifierSet)
 
     var newViews = [UIView?](repeating: nil, count: newVisibleRenderable.count)
 
