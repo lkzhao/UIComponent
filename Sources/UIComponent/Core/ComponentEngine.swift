@@ -31,7 +31,7 @@ public class ComponentEngine {
   /// internal states
   var needsReload = true
   var needsRender = false
-  var shouldUpdateViewOnNextRender = false
+  var shouldSkipNextLayout = false
   var reloadCount = 0
   var isRendering = false
   var isReloading = false
@@ -162,16 +162,17 @@ public class ComponentEngine {
       isReloading = false
     }
     
-    renderer = nil
-    shouldUpdateViewOnNextRender = true
-    render(contentOffsetAdjustFn: contentOffsetAdjustFn)
+    if !shouldSkipNextLayout {
+      renderer = nil
+    }
+    shouldSkipNextLayout = false
+    render(contentOffsetAdjustFn: contentOffsetAdjustFn, updateViews: true)
   }
 
-  func render(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
+  func render(contentOffsetAdjustFn: (() -> CGPoint)? = nil, updateViews: Bool = false) {
     guard let componentView = view, !isRendering, let component = component else { return }
     isRendering = true
     defer {
-      shouldUpdateViewOnNextRender = false
       needsRender = false
       isRendering = false
     }
@@ -236,7 +237,7 @@ public class ComponentEngine {
       let frame = viewData.frame
       if let existingView = newViews[index] {
         view = existingView
-        if shouldUpdateViewOnNextRender {
+        if updateViews {
           // view was on screen before reload, need to update the view.
           viewData.renderer._updateView(view)
           (viewData.animator ?? animator).shift(componentView: componentView, delta: contentOffsetDelta,
@@ -244,11 +245,11 @@ public class ComponentEngine {
         }
       } else {
         view = viewData.renderer._makeView()
-        viewData.renderer._updateView(view)
         UIView.performWithoutAnimation {
           view.bounds.size = frame.bounds.size
           view.center = frame.center
         }
+        viewData.renderer._updateView(view)
         (viewData.animator ?? animator).insert(componentView: componentView, view: view, frame: frame)
         newViews[index] = view
       }
@@ -277,11 +278,7 @@ public class ComponentEngine {
   public func reloadWithExisting(component: Component, renderer: Renderer) {
     self.component = component
     self.renderer = renderer
-    lastRenderBounds = CGRect(origin: .zero, size: renderer.size)
-    reloadCount += 1
-    shouldUpdateViewOnNextRender = true
-    needsReload = false
-    needsRender = true
+    self.shouldSkipNextLayout = true
   }
 
   /// calculate the size for the current component
