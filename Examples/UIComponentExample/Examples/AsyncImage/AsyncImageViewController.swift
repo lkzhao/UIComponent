@@ -37,7 +37,7 @@ class AsyncImageViewController: ComponentViewController {
         AsyncImage(image.url)
           .size(width: .fill, height: .aspectPercentage(image.size.height / image.size.width))
           .with(\.hero.id, image.url.absoluteString)
-          .with(\.hero.modifiers, [.duration(0.5), .forceNonFade])
+          .with(\.hero.modifiers, [.forceNonFade])
           .tappableView {
             let detailVC = AsyncImageDetailViewController()
             detailVC.image = image
@@ -68,7 +68,6 @@ class AsyncImageDetailViewController: ComponentViewController {
       AsyncImage(image.url)
         .size(width: .fill, height: .aspectPercentage(image.size.height / image.size.width))
         .heroID(image.url.absoluteString)
-        .heroModifiers([.duration(0.5)])
         .tappableView {
           $0.parentViewController?.navigationController?.popViewController(animated: true)
         }
