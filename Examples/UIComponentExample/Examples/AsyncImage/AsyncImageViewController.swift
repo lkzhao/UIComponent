@@ -36,8 +36,8 @@ class AsyncImageViewController: ComponentViewController {
       for image in images {
         AsyncImage(image.url)
           .size(width: .fill, height: .aspectPercentage(image.size.height / image.size.width))
-          .with(\.hero.id, image.url.absoluteString)
-          .with(\.hero.modifiers, [.forceNonFade])
+          .heroID(image.url.absoluteString)
+          .heroModifiers([.forceNonFade])
           .tappableView {
             let detailVC = AsyncImageDetailViewController()
             detailVC.image = image
