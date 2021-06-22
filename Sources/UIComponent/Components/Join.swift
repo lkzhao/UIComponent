@@ -7,8 +7,8 @@
 
 import Foundation
 
-public struct Join {
-  public var components: [Component]
+public struct Join: ComponentArrayContainer {
+  public let components: [Component]
   
   public init(@ComponentArrayBuilder _ content: () -> [Component], @ComponentArrayBuilder separator: () -> [Component]) {
     var result: [Component] = []

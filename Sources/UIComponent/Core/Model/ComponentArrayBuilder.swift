@@ -9,7 +9,7 @@ import Foundation
 
 @resultBuilder
 public struct ComponentArrayBuilder {
-  public static func buildExpression(_ expression: Join) -> [Component] {
+  public static func buildExpression(_ expression: ComponentArrayContainer) -> [Component] {
     expression.components
   }
   public static func buildExpression(_ expression: Component) -> [Component] {
