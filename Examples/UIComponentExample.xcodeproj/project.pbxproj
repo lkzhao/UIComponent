@@ -24,7 +24,23 @@
 		B1CC3F7026789E1F005BCE8C /* CardViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */; };
 		B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7126789F07005BCE8C /* AddCardButton.swift */; };
 		B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7326789F3D005BCE8C /* CardData.swift */; };
+		B1F1BF182682747C003BA4AD /* Hero in Frameworks */ = {isa = PBXBuildFile; productRef = B1F1BF172682747C003BA4AD /* Hero */; };
+		B1F1BF192682747C003BA4AD /* Hero in Embed Frameworks */ = {isa = PBXBuildFile; productRef = B1F1BF172682747C003BA4AD /* Hero */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B1F1BF1A2682747C003BA4AD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B1F1BF192682747C003BA4AD /* Hero in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		024B130A23E7B312004F4D00 /* CollectionKit3 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CollectionKit3; path = ..; sourceTree = "<group>"; };
@@ -53,6 +69,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B16EA6A02677E262005CFB18 /* Kingfisher in Frameworks */,
+				B1F1BF182682747C003BA4AD /* Hero in Frameworks */,
 				B121A0A024F8771E00E59F78 /* UIComponent in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -160,6 +177,7 @@
 				A304892021C347010026EDA7 /* Sources */,
 				A304892121C347010026EDA7 /* Frameworks */,
 				A304892221C347010026EDA7 /* Resources */,
+				B1F1BF1A2682747C003BA4AD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -169,6 +187,7 @@
 			packageProductDependencies = (
 				B121A09F24F8771E00E59F78 /* UIComponent */,
 				B16EA69F2677E262005CFB18 /* Kingfisher */,
+				B1F1BF172682747C003BA4AD /* Hero */,
 			);
 			productName = CollectionKit3;
 			productReference = A304892421C347010026EDA7 /* UIComponentExample.app */;
@@ -201,6 +220,7 @@
 			mainGroup = A304891B21C347010026EDA7;
 			packageReferences = (
 				B16EA69E2677E262005CFB18 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				B1F1BF162682747C003BA4AD /* XCRemoteSwiftPackageReference "Hero" */,
 			);
 			productRefGroup = A304892521C347010026EDA7 /* Products */;
 			projectDirPath = "";
@@ -454,6 +474,14 @@
 				minimumVersion = 6.3.0;
 			};
 		};
+		B1F1BF162682747C003BA4AD /* XCRemoteSwiftPackageReference "Hero" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/HeroTransitions/Hero";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -465,6 +493,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B16EA69E2677E262005CFB18 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		B1F1BF172682747C003BA4AD /* Hero */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B1F1BF162682747C003BA4AD /* XCRemoteSwiftPackageReference "Hero" */;
+			productName = Hero;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
