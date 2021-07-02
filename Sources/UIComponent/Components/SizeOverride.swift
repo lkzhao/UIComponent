@@ -13,6 +13,13 @@ public enum SizeStrategy {
 
 public protocol ConstraintTransformer {
   func calculate(_ constraint: Constraint) -> Constraint
+  func bound(size: CGSize, to constraint: Constraint) -> CGSize
+}
+
+public extension ConstraintTransformer {
+  func bound(size: CGSize, to constraint: Constraint) -> CGSize {
+    size.bound(to: constraint)
+  }
 }
 
 struct BlockConstraintTransformer: ConstraintTransformer {
@@ -100,6 +107,25 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
     }
     return Constraint(minSize: minSize, maxSize: maxSize)
   }
+  
+  func bound(size: CGSize, to constraint: Constraint) -> CGSize {
+    var boundSize = size.bound(to: constraint)
+    // if size strategy is fit, we don't force the size component to be bound to the constraint
+    // this is useful for VStack and HStack to have intrisic width/height even when a size modifier
+    // is applied to them.
+    // e.g.
+    //   HStack {
+    //     ...
+    //   }.size(height: 44)
+    // will have unlimited width, but height will be locked at 44
+    if case .fit = width {
+      boundSize.width = size.width
+    }
+    if case .fit = height {
+      boundSize.height = size.height
+    }
+    return boundSize
+  }
 }
 
 struct SizeOverrideRenderer: Renderer {
@@ -116,7 +142,7 @@ struct ConstraintOverrideComponent: Component {
   func layout(_ constraint: Constraint) -> Renderer {
     let finalConstraint = transformer.calculate(constraint)
     let renderer = child.layout(finalConstraint)
-    return SizeOverrideRenderer(child: renderer, size: renderer.size.bound(to: finalConstraint))
+    return SizeOverrideRenderer(child: renderer, size: transformer.bound(size: renderer.size, to:finalConstraint))
   }
 }
 

@@ -103,7 +103,7 @@ extension StackComponent {
       primaryOffset += main(child.size) + distributedSpacing
     }
     let intrisicMain = primaryOffset - distributedSpacing
-    let finalMain = justifyContent != .start && main(constraint.maxSize) != .infinity ? main(constraint.maxSize) : intrisicMain
+    let finalMain = justifyContent != .start && main(constraint.maxSize) != .infinity ? max(main(constraint.maxSize), intrisicMain) : intrisicMain
     let finalSize = size(main: finalMain, cross: crossMax)
 
     return renderer(size: finalSize, children: renderers, positions: positions)
