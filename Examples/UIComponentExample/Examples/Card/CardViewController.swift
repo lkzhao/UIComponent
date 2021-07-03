@@ -32,8 +32,9 @@ private class CardView: UIView {
     backgroundColor = .systemBackground
     layer.cornerRadius = 8
     layer.shadowColor = UIColor.black.cgColor
-    layer.shadowRadius = 8
+    layer.shadowRadius = 4
     layer.shadowOpacity = 0.2
+    layer.shadowOffset = CGSize(width: 0, height: 2)
     addSubview(titleLabel)
     addSubview(subtitleLabel)
     addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTap)))

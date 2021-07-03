@@ -1,3 +1,0 @@
-# Run swiftformat.
-format:
-	@swiftformat .

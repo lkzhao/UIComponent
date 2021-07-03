@@ -17,11 +17,11 @@ public struct TabBarItem {
 public struct TabBar: ComponentBuilder {
   public let items: [TabBarItem]
   public func build() -> Component {
-    HStack(justifyContent: .spaceEvenly, alignItems: .center) {
-      for item in items {
-        Image(item.image).contentMode(.center).size(CGSize(width: 44, height: 44)).tappableView(item.handler)
-      }
-    }.size(height: 44)
+    VStack {
+      Text("Title", font: UIFont.boldSystemFont(ofSize: 24))
+      Text("Subtitle")
+      Image(systemName: "plus")
+    }
   }
 }
 

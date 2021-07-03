@@ -35,7 +35,8 @@ class CardViewController2: ComponentViewController {
         }.id(card.id)
         .backgroundColor(.systemBackground)
         .with(\.layer.shadowColor, UIColor.black.cgColor)
-        .with(\.layer.shadowRadius, 8)
+        .with(\.layer.shadowRadius, 4)
+        .with(\.layer.shadowOffset, CGSize(width: 0, height: 2))
         .with(\.layer.shadowOpacity, 0.2)
         .with(\.layer.cornerRadius, 8)
       }
