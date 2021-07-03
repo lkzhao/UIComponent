@@ -4,30 +4,35 @@
 
 **SwiftUI** still haven't satisfied my requirements. So I build this.
 
-This framework allows you to build UI based on UIKit using syntax similar to SwiftUI.
-
-You can think about this as an improved collection view that is much easier to use than the default `UICollectionView`.
+This framework allows you to build UI using UIKit with syntax similar to SwiftUI. You can think about this as an improved `UICollectionView`.
 
 It also has the following properties:
 * Great performance through global cell reuse.
-* Built in layouts
+* Built in layouts including `Stack`, `Flow`, & `Waterfall`.
 * Declaritive API based on `resultBuilder` and modifier syntax.
 * Work seemless with existing UIKit views, viewControllers, and transitions.
-* `dynamicMemberLookup` support for all `ViewComponent`s which can help you easily update your UIKit views.
+* `dynamicMemberLookup` support for all ViewComponents which can help you easily update your UIKit views.
 * `Animator` API to apply animations when cells are being moved, updated, inserted, or deleted.
 * Simple architecture for anyone to be able to understand.
-* Easily create your own Components.
+* Easy to create your own Components.
 * No state management or two-way binding.
 
-If you want to checkout a production app using this framework. Please see the [Noto](https://apps.apple.com/us/app/noto-elegant-note/id1459055246) app. It uses **UIComponent** for all of the UI including text editing. The text editing view is a `ComponentScrollView` with each line rendered as a cell through a custom component.
+## Production Apps that use UIComponent
+* ### [Noto](https://apps.apple.com/us/app/noto-elegant-note/id1459055246)
+  Noto uses **UIComponent** for all of the UI including the text editor. The text editor view is a `ComponentScrollView` with each line rendered as a cell through a custom component. This app showcases the level of flexibility that this framework has compares to SwiftUI. I personally use some SwiftUI in my app, but most of the time, I fallback to UIKit to drill down the exact look and feel that I want while also provide great performance. 
+ 
+  <em>Definitely let me know if you know how to create a custom text view using SwiftUI, if that ever becomes a reality, I would probably switch completely.</em>
+
+* ### [Ink](https://apps.apple.com/us/app/ink-note-sketch-annotation/id1499301117)
 
 ## How to use
 
 At its core, it provides two `UIView` subclass: `ComponentView` and `ComponentScrollView`.
 
-These two classes takes in a `component` parameter where you use to construct your UI using declarative syntax. You can also apply modifiers to these components and create the look and feel you want.
+These two classes takes in a `component` parameter where you use to construct your UI using declarative syntax. You can also apply modifiers to these components to treak them further.
 
 For example:
+<img align="right"  width=140 src="https://user-images.githubusercontent.com/3359850/124366505-35c54500-dc05-11eb-8611-d70437c627c7.gif" />
 ```swift
 componentView.component =  VStack(spacing: 8) {
   for (index, cardData) in cards.enumerated() {
@@ -43,39 +48,38 @@ componentView.component =  VStack(spacing: 8) {
 }.inset(20)
 ```
 
-Result:
-
-
-Checkout the example project for more indepth examples.
+Checkout the example project for more in-depth examples.
 
 ## Built in components
 
 ### Layouts
 
-* VStack
-* HStack
-* Waterfall
-* Flow
+* `VStack`
+* `HStack`
+* `Waterfall`
+* `Flow`
 
 ### View
 
-* Text
-* Image
-* Separator
+* `Text`
+* `Image`
+* `Separator`
 
 ### Utility
 
-* ForEach
-* Space
-* Join
+* `ForEach`
+* `Space`
+* `Join`
 
 ### Useful modifiers
 
-* .inset()
-* .size()
-* .background()
-* .overlay()
-* .flex()
-* .view()
-* .tappableView()
-* .scrollView()
+* `.inset()`
+* `.size()`
+* `.background()`
+* `.overlay()`
+* `.flex()`
+* `.view()`
+* `.tappableView()`
+* `.scrollView()`
+
+## WIP
