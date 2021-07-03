@@ -37,7 +37,7 @@ extension ViewRenderer {
     { with(keyPath, $0) }
   }
   public func with<Value>(_ keyPath: ReferenceWritableKeyPath<View, Value>, _ value: Value) -> ViewKeyPathUpdateRenderer<View, Value, Self> {
-    ViewKeyPathUpdateRenderer(content: self, keyPath: keyPath, value: value)
+    ViewKeyPathUpdateRenderer(content: self, valueKeyPath: keyPath, value: value)
   }
   public func id(_ id: String) -> ViewIDRenderer<View, Self> {
     ViewIDRenderer(content: self, id: id)

@@ -26,7 +26,9 @@ final class ReuseTests: XCTestCase {
     let existingLabel = componentView.subviews.first as? UILabel
     XCTAssertNotNil(existingLabel)
     XCTAssertEqual(existingLabel?.text, "1")
-    componentView.component = Text("2")
+    componentView.component = VStack {
+      Text("2")
+    }
     componentView.reloadData()
     XCTAssertEqual(componentView.subviews.count, 1)
     let newLabel = componentView.subviews.first as? UILabel
@@ -62,7 +64,9 @@ final class ReuseTests: XCTestCase {
     let existingLabel = componentView.subviews.first as? UILabel
     XCTAssertNotNil(existingLabel)
     XCTAssertEqual(existingLabel?.text, "1")
-    componentView.component = Text("2").reuseKey(nil)
+    componentView.component = VStack {
+      Text("2").reuseKey(nil)
+    }
     componentView.reloadData()
     XCTAssertEqual(componentView.subviews.count, 1)
     let newLabel = componentView.subviews.first as? UILabel
@@ -73,14 +77,14 @@ final class ReuseTests: XCTestCase {
     XCTAssertNotEqual(existingLabel, newLabel)
   }
 
-  func testReuseWithSimpleViewComponent() {
-    componentView.component = SimpleViewComponent<UILabel>().text("1").backgroundColor(.red)
+  func testReuseWithSameAttributes() {
+    componentView.component = Text("1").backgroundColor(.red)
     componentView.reloadData()
     XCTAssertEqual(componentView.subviews.count, 1)
     let existingLabel = componentView.subviews.first as? UILabel
     XCTAssertNotNil(existingLabel)
     XCTAssertEqual(existingLabel?.text, "1")
-    componentView.component = SimpleViewComponent<UILabel>().text("2").backgroundColor(.blue)
+    componentView.component = Text("2").backgroundColor(.blue)
     componentView.reloadData()
     XCTAssertEqual(componentView.subviews.count, 1)
     let newLabel = componentView.subviews.first as? UILabel
@@ -91,15 +95,15 @@ final class ReuseTests: XCTestCase {
     XCTAssertEqual(existingLabel, newLabel)
   }
 
-  func testNoReuseWithSimpleViewComponentWithDifferentAttributes() {
-    componentView.component = SimpleViewComponent<UILabel>().text("1").textColor(.red)
+  func testNoReuseWithDifferentAttributes() {
+    componentView.component = Text("1").textColor(.red)
     componentView.reloadData()
     XCTAssertEqual(componentView.subviews.count, 1)
     let existingLabel = componentView.subviews.first as? UILabel
     XCTAssertNotNil(existingLabel)
     XCTAssertEqual(existingLabel?.text, "1")
     XCTAssertEqual(existingLabel?.textColor, .red)
-    componentView.component = SimpleViewComponent<UILabel>().text("2")
+    componentView.component = Text("2")
     componentView.reloadData()
     XCTAssertEqual(componentView.subviews.count, 1)
     let newLabel = componentView.subviews.first as? UILabel

@@ -16,9 +16,13 @@ extension ViewRendererWrapper {
   public var id: String? {
     content.id
   }
-  public var reuseKey: String? {
-    content.reuseKey
-  }
+  // We shouldn't implement reuseKey: String? and pass the content's reuseKey.
+  // because the types are different, we should generate a new reuseKey based
+  // on the current ViewRendererWrapper type
+  //
+  // public var reuseKey: String? { // DONT UNCOMMENT
+  //   content.reuseKey
+  // }
   public var animator: Animator? {
     content.animator
   }
@@ -45,12 +49,12 @@ public struct ViewUpdateRenderer<View, Content: ViewRenderer>: ViewRendererWrapp
 
 public struct ViewKeyPathUpdateRenderer<View, Value, Content: ViewRenderer>: ViewRendererWrapper where Content.View == View {
   public let content: Content
-  public let keyPath: ReferenceWritableKeyPath<View, Value>
+  public let valueKeyPath: ReferenceWritableKeyPath<View, Value>
   public let value: Value
   
   public func updateView(_ view: View) {
     content.updateView(view)
-    view[keyPath: keyPath] = value
+    view[keyPath: valueKeyPath] = value
   }
 }
 

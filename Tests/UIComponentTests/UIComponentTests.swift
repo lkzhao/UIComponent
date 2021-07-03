@@ -6,7 +6,7 @@ final class UIComponentTests: XCTestCase {
     let componentView = ComponentView()
     measure {
       componentView.component = HStack {
-        ForEach(0..<10000) { _ in
+        for _ in 0..<10000 {
           Text("Test")
         }
       }
