@@ -6,7 +6,7 @@
 
 This framework allows you to build UI using UIKit with syntax similar to SwiftUI. You can think about this as an improved `UICollectionView`.
 
-It also has the following properties:
+### Highlights:
 * Great performance through global cell reuse.
 * Built in layouts including `Stack`, `Flow`, & `Waterfall`.
 * Declaritive API based on `resultBuilder` and modifier syntax.
