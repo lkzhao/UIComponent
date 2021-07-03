@@ -8,13 +8,17 @@
 import UIKit
 
 public struct TappableViewConfiguration {
-  public static var `default` = TappableViewConfiguration(onHighlightChanged: nil)
+  public static var `default` = TappableViewConfiguration(onHighlightChanged: nil, didTap: nil)
   
   // place to apply highlight state or animation to the TappableView
   public var onHighlightChanged: ((TappableView, Bool) -> Void)?
   
-  public init(onHighlightChanged: ((TappableView, Bool) -> Void)?) {
+  // hook before the actual onTap is called
+  public var didTap: ((TappableView) -> Void)?
+  
+  public init(onHighlightChanged: ((TappableView, Bool) -> Void)? = nil, didTap: ((TappableView) -> Void)? = nil) {
     self.onHighlightChanged = onHighlightChanged
+    self.didTap = didTap
   }
 }
 
@@ -56,6 +60,8 @@ open class TappableView: ComponentView {
   }
 
   @objc open func didTap() {
+    let config = configuration ?? TappableViewConfiguration.default
+    config.didTap?(self)
     onTap?(self)
   }
 }
