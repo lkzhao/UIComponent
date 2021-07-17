@@ -41,17 +41,25 @@ class CardViewController3: ComponentViewController {
   
   override var component: Component {
     VStack(spacing: 8) {
-      for (index, card) in cards.enumerated() {
-        Card(card: card) { [unowned self] in
-          print("Tapped \(card.title)")
-          self.cards.remove(at: index)
-        }
-      }
-      AddCardButton { [unowned self] in
-        self.cards.append(CardData(title: "Item \(self.newCardIndex)",
-                                   subtitle: "Description \(self.newCardIndex)"))
-        self.newCardIndex += 1
-      }
+      HStack(spacing: 10, alignItems: .center, wrapper: .wrap) {
+        Text("long long long long long long long long long long long long text").size(width: .percentage(0.8))
+        Image(systemName: "plus")
+        Text("this new text").backgroundColor(.systemBlue).textColor(.white)
+        Text("this new text").backgroundColor(.systemPink).textColor(.white)
+        Text("thisasdasdasfafsdf").backgroundColor(.systemTeal).textColor(.white)
+      }.scrollView().backgroundColor(.systemRed)
+      
+//      for (index, card) in cards.enumerated() {
+//        Card(card: card) { [unowned self] in
+//          print("Tapped \(card.title)")
+//          self.cards.remove(at: index)
+//        }
+//      }
+//      AddCardButton { [unowned self] in
+//        self.cards.append(CardData(title: "Item \(self.newCardIndex)",
+//                                   subtitle: "Description \(self.newCardIndex)"))
+//        self.newCardIndex += 1
+//      }
     }.inset(20)
   }
 }
