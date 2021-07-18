@@ -92,7 +92,7 @@ extension StackComponent {
       $0 + main($1.size)
     }
     
-    let (offset, distributedSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
+    var (offset, distributedSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
                                                                maxPrimary: main(constraint.maxSize),
                                                                totalPrimary: mainTotal,
                                                                minimunSpacing: spacing,
@@ -100,9 +100,14 @@ extension StackComponent {
     var rowFrames = [[(point: CGPoint, size: CGSize)]]()
     let crossMax: CGFloat
     if wrapper == .wrap {
+        
+        // wrap reset distributedSpacing offset
+        offset = 0
+        distributedSpacing = spacing
+        
         var primaryOffset = offset
         var primaryCross: CGFloat = 0
-        
+
         var leftMain: CGFloat = main(constraint.maxSize) - offset
         
         var tempFrames = [(point: CGPoint, size: CGSize)]()
