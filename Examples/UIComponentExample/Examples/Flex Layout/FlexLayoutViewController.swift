@@ -80,7 +80,7 @@ class FlexLayoutViewController: ComponentViewController {
                 Box("\(index)")
               }
             }.size(height: 300)
-          }.inset(10).view().styleColor(.systemGray2)
+          }.inset(10).view().styleColor(.systemGray4)
           Spacer()
           VStack {
             Space(height: 10)
@@ -90,7 +90,7 @@ class FlexLayoutViewController: ComponentViewController {
                 Box("\(index)")
               }
             }.inset(v: 10).scrollView().showsVerticalScrollIndicator(false).contentInset(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).size(height: 320)
-          }.inset(h: 10).view().styleColor(.systemGray2)
+          }.inset(h: 10).view().styleColor(.systemGray4)
         }
       }.inset(10).view().styleColor(.systemGroupedBackground)
       
