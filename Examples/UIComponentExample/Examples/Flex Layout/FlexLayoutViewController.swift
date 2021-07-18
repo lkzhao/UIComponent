@@ -41,7 +41,7 @@ class FlexLayoutViewController: ComponentViewController {
   
   override var component: Component {
     return VStack(spacing: 20) {
-//      Space(height: 10)
+      
       Text("Flex layouts", font: .systemFont(ofSize: 20, weight: .bold)).textColor(.label).textAlignment(.center).size(width: .fill)
       VStack {
         Text("HStack wrap")
@@ -117,7 +117,7 @@ class FlexLayoutViewController: ComponentViewController {
           Box()
           Box()
           Box(height: 100)
-        }.scrollView().showsHorizontalScrollIndicator(false)
+        }
       }.inset(10).view().styleColor(.systemTeal)
       
       VStack {
@@ -132,7 +132,7 @@ class FlexLayoutViewController: ComponentViewController {
           Box()
           Box()
           Box(height: 100)
-        }.scrollView().showsHorizontalScrollIndicator(false)
+        }
       }.inset(10).view().styleColor(.systemTeal)
     
       VStack {
@@ -147,7 +147,7 @@ class FlexLayoutViewController: ComponentViewController {
           Box()
           Box()
           Box(height: 100)
-        }.scrollView().showsHorizontalScrollIndicator(false)
+        }
       }.inset(10).view().styleColor(.systemTeal)
       
       VStack {
@@ -162,7 +162,7 @@ class FlexLayoutViewController: ComponentViewController {
           Box()
           Box()
           Box(height: 100)
-        }.scrollView().showsHorizontalScrollIndicator(false)
+        }
       }.inset(10).view().styleColor(.systemTeal)
       
       VStack {
@@ -177,7 +177,7 @@ class FlexLayoutViewController: ComponentViewController {
           Box()
           Box()
           Box(height: 100)
-        }.scrollView().showsHorizontalScrollIndicator(false)
+        }
       }.inset(10).view().styleColor(.systemTeal)
       
       VStack {
@@ -192,7 +192,7 @@ class FlexLayoutViewController: ComponentViewController {
           Box()
           Box()
           Box(height: 100)
-        }.scrollView().showsHorizontalScrollIndicator(false)
+        }
       }.inset(10).view().styleColor(.systemTeal)
       
       VStack {
@@ -207,7 +207,7 @@ class FlexLayoutViewController: ComponentViewController {
           Box()
           Box()
           Box(height: 100)
-        }.scrollView().showsHorizontalScrollIndicator(false)
+        }
       }.inset(10).view().styleColor(.systemTeal)
       
       VStack {
@@ -222,9 +222,8 @@ class FlexLayoutViewController: ComponentViewController {
           Box()
           Box()
           Box(height: 100)
-        }.scrollView().showsHorizontalScrollIndicator(false)
+        }
       }.inset(10).view().styleColor(.systemRed)
-      
       
     }.inset(10)
     
