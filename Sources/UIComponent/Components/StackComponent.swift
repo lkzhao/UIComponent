@@ -76,8 +76,8 @@ public protocol StackComponent: Component, BaseLayoutProtocol {
 extension StackComponent {
   public func layout(_ constraint: Constraint) -> Renderer {
     
-    func frame(child: Renderer, primaryCross: CGFloat) -> (CGPoint, CGSize) {
-         (point(main: main(child.size) + distributedSpacing, cross: primaryCross), child.size)
+    func frame(child: Renderer, primaryCross: CGFloat, primaryOffset: CGFloat) -> (CGPoint, CGSize) {
+         (point(main: primaryOffset, cross: primaryCross), child.size)
     }
     func maxSize(_ l: (CGPoint, CGSize), _ r: (CGPoint, CGSize)) -> (CGPoint, CGSize) {
         if cross(l.1) > cross(r.1) {
@@ -97,37 +97,39 @@ extension StackComponent {
                                                                totalPrimary: mainTotal,
                                                                minimunSpacing: spacing,
                                                                numberOfItems: renderers.count)
+    var rowFrames = [[(point: CGPoint, size: CGSize)]]()
     let crossMax: CGFloat
     if wrapper == .wrap {
         var primaryOffset = offset
         var primaryCross: CGFloat = 0
         
-        var leftMain: CGFloat = main(constraint.maxSize) - primaryOffset
+        var leftMain: CGFloat = main(constraint.maxSize) - offset
         
         var tempFrames = [(point: CGPoint, size: CGSize)]()
         
         for (index, child) in renderers.enumerated() {
-            if leftMain >= main(child.size) + distributedSpacing {
-//                print("不用换行")
-                
-            } else {
-//                print("换行")
-                primaryOffset = offset
-                let max = tempFrames.reduce((CGPoint.zero, CGSize.zero), {
-                    maxSize($0, $1)
-                })
+            if (main(child.size) + distributedSpacing) > leftMain {
+                let max = tempFrames.reduce((CGPoint.zero, CGSize.zero), { maxSize($0, $1) })
                 primaryCross += (distributedSpacing + cross(max.1))
+                rowFrames.append(tempFrames)
+                // reset
                 tempFrames = []
-                leftMain = main(constraint.maxSize) - primaryOffset
+                primaryOffset = offset
+                leftMain = main(constraint.maxSize) - offset
             }
-            tempFrames.append(frame(child: child, primaryCross: primaryCross))
+            tempFrames.append(frame(child: child, primaryCross: primaryCross, primaryOffset: primaryOffset))
             primaryOffset += main(child.size) + distributedSpacing
-            leftMain -= primaryOffset
+            leftMain = (main(constraint.maxSize) - offset) - primaryOffset
             if index == renderers.count - 1 {
-                primaryCross += cross(child.size)
+                rowFrames.append(tempFrames)
+                tempFrames = []
             }
         }
-        crossMax = primaryCross
+        
+        crossMax = rowFrames.reduce(CGFloat(0)) { result, frames in
+            let rowMaxCross = frames.reduce(CGFloat(0), { max($0, cross($1.size))})
+            return result + distributedSpacing + rowMaxCross
+        } - distributedSpacing // remove last spacing
     } else {
         crossMax = renderers.reduce(CGFloat(0).clamp(cross(constraint.minSize), cross(constraint.maxSize))) {
             max($0, cross($1.size))
@@ -139,17 +141,12 @@ extension StackComponent {
                                           maxSize: size(main: main(constraint.maxSize), cross: crossMax)))
     }
     
+    
     var primaryOffset = offset
-    var primaryCross: CGFloat = 0
-    
     var positions: [CGPoint] = []
-    var leftMain: CGFloat = main(constraint.maxSize) - primaryOffset
-    
-    var tempFrames = [(point: CGPoint, size: CGSize)]()
-    var tempMain : [CGFloat] = []
     
     for child in renderers {
-      let crossValue: CGFloat
+      var crossValue: CGFloat
       switch alignItems {
       case .start:
         crossValue = 0
@@ -160,38 +157,86 @@ extension StackComponent {
       case .stretch:
         crossValue = 0
       }
-        
-        if wrapper == .wrap {
-            if leftMain >= main(child.size) + distributedSpacing {
-                print("不用换行")
-                positions.append(point(main: primaryOffset, cross: primaryCross))
-            } else {
-                print("换行")
-                primaryOffset = offset
-                let max = tempFrames.reduce((CGPoint.zero, CGSize.zero), {
-                    maxSize($0, $1)
-                })
-                primaryCross += (distributedSpacing + cross(max.1))
-                positions.append(point(main: primaryOffset, cross: primaryCross))
-                tempMain.append(tempFrames.reduce(CGFloat(0), {
-                    $0 + main($1.1) + distributedSpacing
-                }))
-                // clean frames
-                tempFrames = []
-                leftMain = main(constraint.maxSize) - primaryOffset
-            }
-            tempFrames.append(frame(child: child, primaryCross: primaryCross))
-        } else {
-            positions.append(point(main: primaryOffset, cross: crossValue))
-        }
+      if wrapper == .noWrap {
+        positions.append(point(main: primaryOffset, cross: crossValue))
+      }
       primaryOffset += main(child.size) + distributedSpacing
-      leftMain -= primaryOffset
     }
-    let intrisicMain = wrapper == .noWrap ? primaryOffset : (tempMain.max() ?? 0) - distributedSpacing
+    
+    let mainMax = rowFrames.reduce(CGFloat(0)) {
+        max($0, $1.reduce(CGFloat(0), { $0 + main($1.size) + distributedSpacing }))
+    }
+    if wrapper == .wrap {
+        // Align each row
+        let tempFrame = rowFrames
+        for (row, frames) in tempFrame.enumerated() {
+            let maxCurrenRowCrossSize = frames.reduce(CGFloat(0), { max($0, cross($1.size)) })
+            let maxTotalRowMainSize = frames.reduce(CGFloat(0), { $0 + main($1.size) })
+            var adjustFrames = frames
+            if justifyContent == .end {
+                let offset = main(constraint.maxSize) - (maxTotalRowMainSize + (distributedSpacing * CGFloat(frames.count - 1)))
+                adjustFrames = adjustFrames.map { frame -> (CGPoint, CGSize) in
+                    return (point(main: offset + main(frame.point), cross: cross(frame.point)), frame.size)
+                }
+            } else if justifyContent == .center {
+                let leftOverPrimary = main(constraint.maxSize) - maxTotalRowMainSize
+                let offset = (leftOverPrimary - distributedSpacing * CGFloat(frames.count - 1)) / 2
+                adjustFrames = adjustFrames.map { frame -> (CGPoint, CGSize) in
+                    return (point(main: offset + main(frame.point), cross: cross(frame.point)), frame.size)
+                }
+            } else if justifyContent == .spaceBetween {
+                let leftOverPrimary = main(constraint.maxSize) - maxTotalRowMainSize
+                guard frames.count > 1 else { break }
+                let spacing = leftOverPrimary / CGFloat(frames.count - 1)
+                adjustFrames = adjustFrames.enumerated().map { (index, frame) -> (CGPoint, CGSize) in
+                    // clear spacing
+                    var main = main(frame.point) - (distributedSpacing * CGFloat(index))
+                    // added new spacing
+                    main += CGFloat(index) * spacing
+                    return (point(main: main, cross: cross(frame.point)), frame.size)
+                }
+            } else if justifyContent == .spaceEvenly {
+                let leftOverPrimary = main(constraint.maxSize) - maxTotalRowMainSize
+                let spacing = leftOverPrimary / CGFloat(frames.count+1)
+                adjustFrames = adjustFrames.enumerated().map { (index, frame) -> (CGPoint, CGSize) in
+                    // clear spacing
+                    var main = main(frame.point) - (distributedSpacing * CGFloat(index))
+                    // added new spacing
+                    main += CGFloat(index+1) * spacing
+                    return (point(main: main, cross: cross(frame.point)), frame.size)
+                }
+            } else if justifyContent == .spaceAround {
+                let leftOverPrimary = main(constraint.maxSize) - maxTotalRowMainSize
+                let spacing = leftOverPrimary / CGFloat(frames.count)
+                adjustFrames = adjustFrames.enumerated().map { (index, frame) -> (CGPoint, CGSize) in
+                    // clear spacing
+                    var main = main(frame.point) - (distributedSpacing * CGFloat(index))
+                    // added new spacing
+                    if index == 0 {
+                        main += spacing/2
+                    } else {
+                        main += (CGFloat(index) * spacing) + (spacing/2)
+                    }
+                    return (point(main: main, cross: cross(frame.point)), frame.size)
+                }
+            }
+            if alignItems == .end {
+                adjustFrames = adjustFrames.map { frame -> (CGPoint, CGSize) in
+                    return (point(main: main(frame.point), cross: (maxCurrenRowCrossSize - cross(frame.size)) + cross(frame.point)), frame.size)
+                }
+            } else if alignItems == .center {
+                adjustFrames = adjustFrames.map { frame -> (CGPoint, CGSize) in
+                    return (point(main: main(frame.point), cross: ((maxCurrenRowCrossSize - cross(frame.size)) / 2) + cross(frame.point)), frame.size)
+                }
+            }
+            rowFrames[row] = adjustFrames
+        }
+    }
+    let intrisicMain = wrapper == .noWrap ? primaryOffset : mainMax - distributedSpacing
     let finalMain = justifyContent != .start && main(constraint.maxSize) != .infinity ? max(main(constraint.maxSize), intrisicMain) : intrisicMain
     let finalSize = size(main: finalMain, cross: crossMax)
 
-    return renderer(size: finalSize, children: renderers, positions: positions)
+    return renderer(size: finalSize, children: renderers, positions: wrapper == .wrap ? rowFrames.reduce([CGPoint](), { $0 + $1.map{$0.point} }) : positions)
   }
   
   func getRenderers(_ constraint: Constraint) -> [Renderer] {

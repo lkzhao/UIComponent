@@ -26,6 +26,7 @@
 		B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7326789F3D005BCE8C /* CardData.swift */; };
 		B1F1BF182682747C003BA4AD /* Hero in Frameworks */ = {isa = PBXBuildFile; productRef = B1F1BF172682747C003BA4AD /* Hero */; };
 		B1F1BF192682747C003BA4AD /* Hero in Embed Frameworks */ = {isa = PBXBuildFile; productRef = B1F1BF172682747C003BA4AD /* Hero */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,6 +62,7 @@
 		B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController3.swift; sourceTree = "<group>"; };
 		B1CC3F7126789F07005BCE8C /* AddCardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardButton.swift; sourceTree = "<group>"; };
 		B1CC3F7326789F3D005BCE8C /* CardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
+		F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexLayoutViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,11 +162,20 @@
 		B1CC3F6C267800B9005BCE8C /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				F88E832326A3E70C009E7720 /* Flex Layout */,
 				B1CC3F692678008F005BCE8C /* Card */,
 				B1CC3F6A2678009C005BCE8C /* AsyncImage */,
 				B1CC3F6B267800AA005BCE8C /* TabBar */,
 			);
 			path = Examples;
+			sourceTree = "<group>";
+		};
+		F88E832326A3E70C009E7720 /* Flex Layout */ = {
+			isa = PBXGroup;
+			children = (
+				F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */,
+			);
+			path = "Flex Layout";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -252,6 +263,7 @@
 				B1B5C47B266FD2D50035CF02 /* TabBarExample.swift in Sources */,
 				B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */,
 				B1CC3F632677FCFD005BCE8C /* CardViewController.swift in Sources */,
+				F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */,
 				B1CC3F652677FD99005BCE8C /* ComponentViewController.swift in Sources */,
 				B1CC3F672677FF79005BCE8C /* AsyncImageViewController.swift in Sources */,
 				B10A123224F31EAA0076B038 /* Helpers.swift in Sources */,
