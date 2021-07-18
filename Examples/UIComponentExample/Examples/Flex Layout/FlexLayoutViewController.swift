@@ -11,13 +11,15 @@ import UIComponent
 
 class Box: ComponentBuilder {
   let height: CGFloat
-  init(height: CGFloat = 50) {
+  let text: String
+  init(_ text: String, height: CGFloat = 50) {
     self.height = height
+    self.text = text
   }
   func build() -> Component {
     SimpleViewComponent<UIView>()
       .size(width: 50, height: height)
-      .styleColor(.systemBlue)
+      .styleColor(.systemBlue).overlay(Text(text).textColor(.white).textAlignment(.center).size(width: .fill, height: .fill))
   }
   
   
@@ -39,34 +41,23 @@ class FlexLayoutViewController: ComponentViewController {
   
   override var component: Component {
     return VStack(spacing: 20) {
-      
       Text("Flex layouts", font: .systemFont(ofSize: 20, weight: .bold)).textColor(.label).textAlignment(.center).size(width: .fill)
       VStack {
         Text("HStack wrap")
         Space(height: 10)
         HStack(spacing: 10, wrapper: .wrap) {
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
+          for index in 0...10 {
+            Box("\(index)")
+          }
         }
       }.inset(10).view().styleColor(.systemGray)
       
       VStack {
         Text("HStack noWrap(can scroll horizontally)").inset(10)
         HStack(spacing: 10, wrapper: .noWrap) {
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
+          for index in 0...10 {
+            Box("\(index)")
+          }
         }.scrollView().showsHorizontalScrollIndicator(false).contentInset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         Space(height: 10)
       }.view().styleColor(.systemGray)
@@ -76,14 +67,9 @@ class FlexLayoutViewController: ComponentViewController {
           Text("VStack wrap")
           Space(height: 10)
           VStack(spacing: 10, wrapper: .wrap) {
-            Box()
-            Box()
-            Box()
-            Box()
-            Box()
-            Box()
-            Box()
-            Box()
+            for index in 0...10 {
+              Box("\(index)")
+            }
           }.size(height: 300)
         }.inset(10).view().styleColor(.systemOrange)
         
@@ -91,146 +77,50 @@ class FlexLayoutViewController: ComponentViewController {
           Text("VStack noWrap")
           Space(height: 10)
           VStack(spacing: 20, wrapper: .noWrap) {
-            Box()
-            Box()
-            Box()
-            Box()
-            Box()
-            Box()
-            Box()
-            Box()
+            for index in 0...10 {
+              Box("\(index)")
+            }
           }.size(height: 300)
         }.inset(10).view().styleColor(.systemOrange)
       }
       
-      VStack {
-        Text("HStack alignItems end")
-        Space(height: 10)
-        HStack(spacing: 10, alignItems: .end, wrapper: .wrap) {
-          Box(height: 100)
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box(height: 100)
-        }
-      }.inset(10).view().styleColor(.systemTeal)
-      
-      VStack {
-        Text("HStack alignItems center")
-        Space(height: 10)
-        HStack(spacing: 10, alignItems: .center, wrapper: .wrap) {
-          Box(height: 100)
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box(height: 100)
-        }
-      }.inset(10).view().styleColor(.systemTeal)
-    
-      VStack {
-        Text("HStack justifyContent end")
-        Space(height: 10)
-        HStack(spacing: 10, justifyContent: .end, wrapper: .wrap) {
-          Box(height: 100)
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box(height: 100)
-        }
-      }.inset(10).view().styleColor(.systemTeal)
-      
-      VStack {
-        Text("HStack justifyContent center")
-        Space(height: 10)
-        HStack(spacing: 10, justifyContent: .center, wrapper: .wrap) {
-          Box(height: 100)
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box(height: 100)
-        }
-      }.inset(10).view().styleColor(.systemTeal)
-      
-      VStack {
-        Text("HStack justifyContent spaceBetween")
-        Space(height: 10)
-        HStack(spacing: 10, justifyContent: .spaceBetween, wrapper: .wrap) {
-          Box(height: 100)
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box(height: 100)
-        }
-      }.inset(10).view().styleColor(.systemTeal)
-      
-      VStack {
-        Text("HStack justifyContent spaceAround")
-        Space(height: 10)
-        HStack(spacing: 10, justifyContent: .spaceAround, wrapper: .wrap) {
-          Box(height: 100)
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box(height: 100)
-        }
-      }.inset(10).view().styleColor(.systemTeal)
-      
-      VStack {
-        Text("HStack justifyContent spaceEvenly")
-        Space(height: 10)
-        HStack(spacing: 10, justifyContent: .spaceEvenly, wrapper: .wrap) {
-          Box(height: 100)
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box(height: 100)
-        }
-      }.inset(10).view().styleColor(.systemTeal)
-      
-      VStack {
-        Text("HStack justifyContent start")
-        Space(height: 10)
-        HStack(spacing: 10, justifyContent: .start, wrapper: .wrap) {
-          Box(height: 100)
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box()
-          Box(height: 100)
-        }
-      }.inset(10).view().styleColor(.systemRed)
+      genHStack(wrapper: .wrap, justifyContent: .start, alignItems: .end)
+      genHStack(wrapper: .wrap, justifyContent: .start, alignItems: .start)
+      genHStack(wrapper: .wrap, justifyContent: .end, alignItems: .start)
+      genHStack(wrapper: .wrap, justifyContent: .center, alignItems: .start)
+      genHStack(wrapper: .wrap, justifyContent: .spaceBetween, alignItems: .start)
+      genHStack(wrapper: .wrap, justifyContent: .spaceAround, alignItems: .start)
+      genHStack(wrapper: .wrap, justifyContent: .spaceEvenly, alignItems: .start)
       
     }.inset(10)
     
     
   }
   
+  func genHStack(wrapper: Wrapper, justifyContent: MainAxisAlignment, alignItems: CrossAxisAlignment) -> Component {
+    VStack(spacing: 10) {
+      Text("HStack\njustifyContent: .\(justifyContent)\nalignItems: .\(alignItems)\nwrapper: .\(wrapper)")
+      HStack(spacing: 10, justifyContent: justifyContent, alignItems: alignItems, wrapper: wrapper) {
+        for index in 0...10 {
+          if index == 0 {
+            Box("\(index)", height: 100)
+          } else if index == 9 {
+            Box("\(index)", height: 100)
+          } else {
+            Box("\(index)")
+          }
+        }
+      }.inset(10).view().styleColor(.systemTeal)
+    }.inset(10)
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
+    /*
+     
+     
+     */
   }
   
   
