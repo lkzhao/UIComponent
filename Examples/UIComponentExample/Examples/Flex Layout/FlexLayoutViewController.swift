@@ -15,11 +15,9 @@ class Box: ComponentBuilder {
     self.height = height
   }
   func build() -> Component {
-    ZStack {
-      SimpleViewComponent<UIView>()
-        .size(width: 50, height: height)
-        .styleColor(.systemBlue)
-    }
+    SimpleViewComponent<UIView>()
+      .size(width: 50, height: height)
+      .styleColor(.systemBlue)
   }
   
   
