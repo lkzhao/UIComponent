@@ -57,8 +57,7 @@ class FlexLayoutViewController: ComponentViewController {
       }.inset(10).view().styleColor(.systemGray)
       
       VStack {
-        Text("HStack noWrap(can scroll horizontally)")
-        Space(height: 10)
+        Text("HStack noWrap(can scroll horizontally)").inset(10)
         HStack(spacing: 10, wrapper: .noWrap) {
           Box()
           Box()
@@ -68,8 +67,9 @@ class FlexLayoutViewController: ComponentViewController {
           Box()
           Box()
           Box()
-        }.scrollView().showsHorizontalScrollIndicator(false)
-      }.inset(10).view().styleColor(.systemGray)
+        }.scrollView().showsHorizontalScrollIndicator(false).contentInset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+        Space(height: 10)
+      }.view().styleColor(.systemGray)
       
       HStack (spacing: 10) {
         VStack {
