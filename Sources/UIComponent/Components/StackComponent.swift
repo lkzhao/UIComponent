@@ -136,15 +136,9 @@ extension StackComponent {
       for (index, child) in children.enumerated() {
         if let child = child as? Flexible {
           let mainReserved = mainPerFlex * child.flex
-          let constraint = Constraint(minSize: size(main: child.fit == .tight ? mainReserved : 0,
-                                                    cross: alignItems == .stretch ? cross(constraint.maxSize) : 0),
+          let constraint = Constraint(minSize: size(main: mainReserved, cross: alignItems == .stretch ? cross(constraint.maxSize) : 0),
                                       maxSize: size(main: mainReserved, cross: cross(constraint.maxSize)))
-          let renderer = child.layout(constraint)
-          if child.fit == .loose {
-            renderers[index] = SizeOverrideRenderer(child: renderer, size: size(main: mainReserved, cross: cross(renderer.size)))
-          } else {
-            renderers[index] = renderer
-          }
+          renderers[index] = child.layout(constraint)
           mainFreezed += mainReserved
         }
       }

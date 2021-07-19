@@ -44,19 +44,21 @@ public struct Flow: Component, VerticalLayoutProtocol {
   }
   
   public func layout(_ constraint: Constraint) -> Renderer {
-    let childConstraint = Constraint(minSize: .zero, maxSize: size(main: .infinity, cross: cross(constraint.maxSize)))
+    let crossMax = cross(constraint.maxSize)
+    let childConstraint = Constraint(minSize: .zero, maxSize: size(main: .infinity, cross: crossMax))
     var renderers: [Renderer] = children.map {
       $0.layout(childConstraint)
     }
     var positions: [CGPoint] = []
     
+    // calculate line size base on item sizes
     var lineData: [(lineSize: CGSize, count: Int)] = []
     var currentLineItemCount = 0
     var currentLineWidth: CGFloat = 0
     var currentLineMaxHeight: CGFloat = 0
     var totalHeight: CGFloat = 0
     for renderer in renderers {
-      if currentLineWidth + cross(renderer.size) > cross(constraint.maxSize), currentLineItemCount != 0 {
+      if currentLineWidth + cross(renderer.size) > crossMax, currentLineItemCount != 0 {
         lineData.append((lineSize: size(main: currentLineMaxHeight,
                                         cross: currentLineWidth - CGFloat(currentLineItemCount) * interitemSpacing),
                          count: currentLineItemCount))
@@ -82,20 +84,44 @@ public struct Flow: Component, VerticalLayoutProtocol {
                                                             minimunSpacing: lineSpacing,
                                                             numberOfItems: lineData.count)
 
-    var index = 0
-    for (lineSize, count) in lineData {
+    // layout each line
+    var lineStartIndex = 0
+    for (var lineSize, count) in lineData {
+      let range = lineStartIndex ..< (lineStartIndex + count)
+      
+      // resize flex items
+      let flexCount = children[range].reduce(0) { result, next in
+        result + ((next as? Flexible)?.flex ?? 0)
+      }
+      if flexCount > 0, crossMax != .infinity {
+        let crossPerFlex = max(0, crossMax - cross(lineSize)) / flexCount
+        for index in range {
+          let child = children[index]
+          if let child = child as? Flexible {
+            let crossReserved = crossPerFlex * child.flex + cross(renderers[index].size)
+            let constraint = Constraint(minSize: size(main: alignItems == .stretch ? main(lineSize) : 0, cross: crossReserved),
+                                        maxSize: size(main: .infinity, cross: crossReserved))
+            renderers[index] = child.layout(constraint)
+          }
+        }
+        lineSize = size(main: main(lineSize), cross: crossMax)
+      }
+      
+      // distribute on the cross axis
       var (crossOffset, crossSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
-                                                                maxPrimary: cross(constraint.maxSize),
+                                                                maxPrimary: crossMax,
                                                                 totalPrimary: cross(lineSize),
                                                                 minimunSpacing: interitemSpacing,
                                                                 numberOfItems: count)
 
-      for (itemIndex, var child) in renderers[index ..< (index + count)].enumerated() {
+      // finally, layout all of the items on this line
+      for (itemIndex, var child) in renderers[lineStartIndex ..< (lineStartIndex + count)].enumerated() {
+        let childComponent = children[lineStartIndex + itemIndex]
         if alignItems == .stretch, main(child.size) != main(lineSize) {
           // relayout items with a fixed main size
-          child = children[index + itemIndex].layout(Constraint(minSize: size(main: main(lineSize), cross: 0),
-                                                                maxSize: size(main: main(lineSize), cross: cross(constraint.maxSize))))
-          renderers[index + itemIndex] = child
+          child = childComponent.layout(Constraint(minSize: size(main: main(lineSize), cross: 0),
+                                                   maxSize: size(main: main(lineSize), cross: crossMax)))
+          renderers[lineStartIndex + itemIndex] = child
         }
         let alignValue: CGFloat
         switch alignItems {
@@ -111,10 +137,12 @@ public struct Flow: Component, VerticalLayoutProtocol {
       }
   
       mainOffset += main(lineSize) + mainSpacing
-      index += count
+      lineStartIndex += count
     }
     
-    let finalSize = size(main: mainOffset - mainSpacing, cross: cross(constraint.maxSize))
+    let intrisicMain = mainOffset - mainSpacing
+    let finalMain = alignContent != .start && main(constraint.maxSize) != .infinity ? max(main(constraint.maxSize), intrisicMain) : intrisicMain
+    let finalSize = size(main: finalMain, cross: crossMax)
     return renderer(size: finalSize, children: renderers, positions: positions)
   }
 }

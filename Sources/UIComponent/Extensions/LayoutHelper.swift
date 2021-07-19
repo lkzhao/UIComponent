@@ -7,11 +7,11 @@
 
 import UIKit
 
-public enum MainAxisAlignment {
+public enum MainAxisAlignment: CaseIterable {
   case start, end, center, spaceBetween, spaceAround, spaceEvenly
 }
 
-public enum CrossAxisAlignment {
+public enum CrossAxisAlignment: CaseIterable {
   case start, end, center, stretch
 }
 
