@@ -13,7 +13,6 @@ public protocol FlexLayoutComponent: Component, BaseLayoutProtocol {
   var justifyContent: MainAxisAlignment { get }
   var alignItems: CrossAxisAlignment { get }
   var alignContent: MainAxisAlignment { get }
-  var tailJustifyContent: MainAxisAlignment? { get }
   var children: [Component] { get }
   
   init(lineSpacing: CGFloat,
@@ -21,7 +20,6 @@ public protocol FlexLayoutComponent: Component, BaseLayoutProtocol {
        justifyContent: MainAxisAlignment,
        alignItems: CrossAxisAlignment,
        alignContent: MainAxisAlignment,
-       tailJustifyContent: MainAxisAlignment?,
        children: [Component])
 }
 
@@ -31,17 +29,15 @@ public extension FlexLayoutComponent {
        justifyContent: MainAxisAlignment = .start,
        alignItems: CrossAxisAlignment = .start,
        alignContent: MainAxisAlignment = .start,
-       tailJustifyContent: MainAxisAlignment? = nil,
        @ComponentArrayBuilder _ content: () -> [Component]) {
-    self.init(lineSpacing: lineSpacing, interitemSpacing: interitemSpacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, tailJustifyContent: tailJustifyContent, children: content())
+    self.init(lineSpacing: lineSpacing, interitemSpacing: interitemSpacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: content())
   }
   init(spacing: CGFloat = 0,
        justifyContent: MainAxisAlignment = .start,
        alignItems: CrossAxisAlignment = .start,
        alignContent: MainAxisAlignment = .start,
-       tailJustifyContent: MainAxisAlignment? = nil,
        @ComponentArrayBuilder _ content: () -> [Component]) {
-    self.init(lineSpacing: spacing, interitemSpacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, tailJustifyContent: tailJustifyContent, children: content())
+    self.init(lineSpacing: spacing, interitemSpacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: content())
   }
 }
 
@@ -111,9 +107,7 @@ extension FlexLayoutComponent {
       }
       
       // distribute on the cross axis
-      let isLastLine = range.upperBound >= children.count
-      let lineJustifyContent = isLastLine ? tailJustifyContent ?? justifyContent : justifyContent
-      var (crossOffset, crossSpacing) = LayoutHelper.distribute(justifyContent: lineJustifyContent,
+      var (crossOffset, crossSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
                                                                 maxPrimary: crossMax,
                                                                 totalPrimary: cross(lineSize),
                                                                 minimunSpacing: interitemSpacing,

@@ -22,14 +22,12 @@ public struct FlexColumn: FlexLayoutComponent, HorizontalLayoutProtocol {
               justifyContent: MainAxisAlignment = .start,
               alignItems: CrossAxisAlignment = .start,
               alignContent: MainAxisAlignment = .start,
-              tailJustifyContent: MainAxisAlignment? = nil,
               children: [Component]) {
     self.lineSpacing = lineSpacing
     self.interitemSpacing = interitemSpacing
     self.justifyContent = justifyContent
     self.alignItems = alignItems
     self.alignContent = alignContent
-    self.tailJustifyContent = tailJustifyContent
     self.children = children
   }
 }
