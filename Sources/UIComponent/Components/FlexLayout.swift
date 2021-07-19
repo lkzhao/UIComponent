@@ -43,8 +43,9 @@ public extension FlexLayoutComponent {
 
 extension FlexLayoutComponent {
   public func layout(_ constraint: Constraint) -> Renderer {
+    let mainMax = main(constraint.maxSize)
     let crossMax = cross(constraint.maxSize)
-    let childConstraint = Constraint(minSize: .zero, maxSize: size(main: .infinity, cross: crossMax))
+    let childConstraint = Constraint(minSize: CGSize(width: -.infinity, height: -.infinity), maxSize: size(main: .infinity, cross: crossMax))
     var renderers: [Renderer] = children.map {
       $0.layout(childConstraint)
     }
@@ -78,7 +79,7 @@ extension FlexLayoutComponent {
     }
     
     var (mainOffset, mainSpacing) = LayoutHelper.distribute(justifyContent: alignContent,
-                                                            maxPrimary: main(constraint.maxSize),
+                                                            maxPrimary: mainMax,
                                                             totalPrimary: totalHeight,
                                                             minimunSpacing: lineSpacing,
                                                             numberOfItems: lineData.count)
@@ -118,7 +119,7 @@ extension FlexLayoutComponent {
         let childComponent = children[lineStartIndex + itemIndex]
         if alignItems == .stretch, main(child.size) != main(lineSize) {
           // relayout items with a fixed main size
-          child = childComponent.layout(Constraint(minSize: size(main: main(lineSize), cross: 0),
+          child = childComponent.layout(Constraint(minSize: size(main: main(lineSize), cross: -.infinity),
                                                    maxSize: size(main: main(lineSize), cross: crossMax)))
           renderers[lineStartIndex + itemIndex] = child
         }
@@ -140,7 +141,7 @@ extension FlexLayoutComponent {
     }
     
     let intrisicMain = mainOffset - mainSpacing
-    let finalMain = alignContent != .start && main(constraint.maxSize) != .infinity ? max(main(constraint.maxSize), intrisicMain) : intrisicMain
+    let finalMain = alignContent != .start && mainMax != .infinity ? max(mainMax, intrisicMain) : intrisicMain
     let finalSize = size(main: finalMain, cross: crossMax)
     return renderer(size: finalSize, children: renderers, positions: positions)
   }
