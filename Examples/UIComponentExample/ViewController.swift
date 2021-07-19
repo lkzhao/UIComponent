@@ -19,6 +19,7 @@ class ViewController: ComponentViewController {
         ExampleItem(name: "AsyncImage Example", viewController: UINavigationController(rootViewController: AsyncImageViewController()))
         ExampleItem(name: "Tab Bar Example", viewController: TabBarViewController())
         ExampleItem(name: "Flow Example", viewController: FlowViewController())
+        ExampleItem(name: "Flex Layout Example", viewController: FlexLayoutViewController())
       } separator: {
         Separator()
       }

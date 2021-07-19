@@ -15,6 +15,10 @@ public enum CrossAxisAlignment: CaseIterable {
   case start, end, center, stretch
 }
 
+public enum Wrapper {
+    case wrap, noWrap
+}
+
 public protocol BaseLayoutProtocol {
   @inline(__always) func main(_ size: CGPoint) -> CGFloat
   @inline(__always) func cross(_ size: CGPoint) -> CGFloat
