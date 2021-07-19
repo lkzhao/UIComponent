@@ -14,7 +14,6 @@
 		A304893221C347020026EDA7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A304893021C347020026EDA7 /* LaunchScreen.storyboard */; };
 		B10A123224F31EAA0076B038 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10A123124F31EAA0076B038 /* Helpers.swift */; };
 		B121A0A024F8771E00E59F78 /* UIComponent in Frameworks */ = {isa = PBXBuildFile; productRef = B121A09F24F8771E00E59F78 /* UIComponent */; };
-		B1406F7F26A510ED0053E175 /* FlowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1406F7E26A510ED0053E175 /* FlowViewController.swift */; };
 		B16EA6A02677E262005CFB18 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B16EA69F2677E262005CFB18 /* Kingfisher */; };
 		B16EA6A22677E26F005CFB18 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16EA6A12677E26F005CFB18 /* AsyncImage.swift */; };
 		B1B5C47B266FD2D50035CF02 /* TabBarExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */; };
@@ -54,7 +53,6 @@
 		A304893121C347020026EDA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A304893321C347020026EDA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B10A123124F31EAA0076B038 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
-		B1406F7E26A510ED0053E175 /* FlowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowViewController.swift; sourceTree = "<group>"; };
 		B16EA6A12677E26F005CFB18 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarExample.swift; sourceTree = "<group>"; };
 		B1CC3F622677FCFD005BCE8C /* CardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
@@ -118,14 +116,6 @@
 			path = UIComponentExample;
 			sourceTree = "<group>";
 		};
-		B1406F7D26A510DA0053E175 /* Flow */ = {
-			isa = PBXGroup;
-			children = (
-				B1406F7E26A510ED0053E175 /* FlowViewController.swift */,
-			);
-			path = Flow;
-			sourceTree = "<group>";
-		};
 		B1CC3F682677FFCC005BCE8C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -172,7 +162,6 @@
 		B1CC3F6C267800B9005BCE8C /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				B1406F7D26A510DA0053E175 /* Flow */,
 				F88E832326A3E70C009E7720 /* Flex Layout */,
 				B1CC3F692678008F005BCE8C /* Card */,
 				B1CC3F6A2678009C005BCE8C /* AsyncImage */,
@@ -284,7 +273,6 @@
 				B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */,
 				B1CC3F7026789E1F005BCE8C /* CardViewController3.swift in Sources */,
 				B1CC3F6E26789C55005BCE8C /* CardViewController2.swift in Sources */,
-				B1406F7F26A510ED0053E175 /* FlowViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

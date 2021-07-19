@@ -7,42 +7,45 @@
 
 import UIKit
 
-public struct Flow: Component, VerticalLayoutProtocol {
-  public var lineSpacing: CGFloat
-  public var interitemSpacing: CGFloat
-
-  public var alignContent: MainAxisAlignment
-  public var alignItems: CrossAxisAlignment
-  public var justifyContent: MainAxisAlignment
-  public var children: [Component]
-
-  public init(lineSpacing: CGFloat = 0,
-              interitemSpacing: CGFloat = 0,
-              justifyContent: MainAxisAlignment = .start,
-              alignItems: CrossAxisAlignment = .start,
-              alignContent: MainAxisAlignment = .start,
-              children: [Component]) {
-    self.lineSpacing = lineSpacing
-    self.interitemSpacing = interitemSpacing
-    self.justifyContent = justifyContent
-    self.alignItems = alignItems
-    self.alignContent = alignContent
-    self.children = children
-  }
-
-  public init(spacing: CGFloat,
-              justifyContent: MainAxisAlignment = .start,
-              alignItems: CrossAxisAlignment = .start,
-              alignContent: MainAxisAlignment = .start,
-              children: [Component]) {
-    self.init(lineSpacing: spacing,
-              interitemSpacing: spacing,
-              justifyContent: justifyContent,
-              alignItems: alignItems,
-              alignContent: alignContent,
-              children: children)
-  }
+public protocol FlexLayoutComponent: Component, BaseLayoutProtocol {
+  var lineSpacing: CGFloat { get }
+  var interitemSpacing: CGFloat { get }
+  var justifyContent: MainAxisAlignment { get }
+  var alignItems: CrossAxisAlignment { get }
+  var alignContent: MainAxisAlignment { get }
+  var tailJustifyContent: MainAxisAlignment? { get }
+  var children: [Component] { get }
   
+  init(lineSpacing: CGFloat,
+       interitemSpacing: CGFloat,
+       justifyContent: MainAxisAlignment,
+       alignItems: CrossAxisAlignment,
+       alignContent: MainAxisAlignment,
+       tailJustifyContent: MainAxisAlignment?,
+       children: [Component])
+}
+
+public extension FlexLayoutComponent {
+  init(lineSpacing: CGFloat = 0,
+       interitemSpacing: CGFloat = 0,
+       justifyContent: MainAxisAlignment = .start,
+       alignItems: CrossAxisAlignment = .start,
+       alignContent: MainAxisAlignment = .start,
+       tailJustifyContent: MainAxisAlignment? = nil,
+       @ComponentArrayBuilder _ content: () -> [Component]) {
+    self.init(lineSpacing: lineSpacing, interitemSpacing: interitemSpacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, tailJustifyContent: tailJustifyContent, children: content())
+  }
+  init(spacing: CGFloat = 0,
+       justifyContent: MainAxisAlignment = .start,
+       alignItems: CrossAxisAlignment = .start,
+       alignContent: MainAxisAlignment = .start,
+       tailJustifyContent: MainAxisAlignment? = nil,
+       @ComponentArrayBuilder _ content: () -> [Component]) {
+    self.init(lineSpacing: spacing, interitemSpacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, tailJustifyContent: tailJustifyContent, children: content())
+  }
+}
+
+extension FlexLayoutComponent {
   public func layout(_ constraint: Constraint) -> Renderer {
     let crossMax = cross(constraint.maxSize)
     let childConstraint = Constraint(minSize: .zero, maxSize: size(main: .infinity, cross: crossMax))
@@ -108,7 +111,9 @@ public struct Flow: Component, VerticalLayoutProtocol {
       }
       
       // distribute on the cross axis
-      var (crossOffset, crossSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
+      let isLastLine = range.upperBound >= children.count
+      let lineJustifyContent = isLastLine ? tailJustifyContent ?? justifyContent : justifyContent
+      var (crossOffset, crossSpacing) = LayoutHelper.distribute(justifyContent: lineJustifyContent,
                                                                 maxPrimary: crossMax,
                                                                 totalPrimary: cross(lineSize),
                                                                 minimunSpacing: interitemSpacing,
@@ -144,33 +149,5 @@ public struct Flow: Component, VerticalLayoutProtocol {
     let finalMain = alignContent != .start && main(constraint.maxSize) != .infinity ? max(main(constraint.maxSize), intrisicMain) : intrisicMain
     let finalSize = size(main: finalMain, cross: crossMax)
     return renderer(size: finalSize, children: renderers, positions: positions)
-  }
-}
-
-
-public extension Flow {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
-    self.init(spacing: spacing,
-              justifyContent: justifyContent,
-              alignItems: alignItems,
-              children: content())
-  }
-}
-
-public extension Flow {
-  init(lineSpacing: CGFloat = 0,
-       interitemSpacing: CGFloat = 0,
-       justifyContent: MainAxisAlignment = .start,
-       alignItems: CrossAxisAlignment = .start,
-       alignContent: MainAxisAlignment = .start,
-       @ComponentArrayBuilder _ content: () -> [Component]) {
-    self.init(lineSpacing: lineSpacing, interitemSpacing: interitemSpacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: content())
-  }
-  init(spacing: CGFloat = 0,
-       justifyContent: MainAxisAlignment = .start,
-       alignItems: CrossAxisAlignment = .start,
-       alignContent: MainAxisAlignment = .start,
-       @ComponentArrayBuilder _ content: () -> [Component]) {
-    self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: content())
   }
 }
