@@ -117,8 +117,8 @@ extension StackComponent {
     var flexCount: CGFloat = 0
     let crossMaxConstraint = cross(constraint.maxSize)
 
-    let childConstraint = Constraint(minSize: size(main: -.infinity, cross: alignItems == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : -.infinity),
-                                     maxSize: constraint.maxSize)
+    let childConstraint = Constraint(minSize: size(main: -.infinity, cross: alignItems == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0),
+                                     maxSize: size(main: .infinity, cross: cross(constraint.maxSize)))
     for child in children {
       if let flexChild = child as? Flexible {
         flexCount += flexChild.flex
