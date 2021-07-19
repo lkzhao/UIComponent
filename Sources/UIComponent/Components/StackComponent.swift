@@ -73,53 +73,38 @@ public protocol StackComponent: Component, BaseLayoutProtocol {
   var wrapper : Wrapper { get }
 }
 
+fileprivate typealias FrameWrap = (frame: CGRect, child: Renderer)
+
 extension StackComponent {
   public func layout(_ constraint: Constraint) -> Renderer {
     
-    func frame(child: Renderer, primaryCross: CGFloat, primaryOffset: CGFloat) -> (CGPoint, CGSize) {
-         (point(main: primaryOffset, cross: primaryCross), child.size)
-    }
-    func maxSize(_ l: (CGPoint, CGSize), _ r: (CGPoint, CGSize)) -> (CGPoint, CGSize) {
-        if cross(l.1) > cross(r.1) {
-            return l
-        } else {
-            return r
-        }
-    }
+    // quick funcs
+    func frame(child: Renderer, primaryCross: CGFloat, primaryOffset: CGFloat) -> FrameWrap { (CGRect(origin: point(main: primaryOffset, cross: primaryCross), size: child.size), child) }
+    func maxCrossSize(_ l: CGRect, _ r: CGRect) -> CGRect { cross(l.size) > cross(r.size) ? l : r }
+    func combinationFrameWrap(_ origin: CGPoint, _ size: CGSize, _ render: Renderer) -> FrameWrap { (CGRect(origin: origin, size: size), render) }
     
-    var renderers = getRenderers(constraint)
-    let mainTotal = renderers.reduce(0) {
-      $0 + main($1.size)
-    }
+    var renderers: [Renderer] = getRenderers(constraint)
     
-    var (offset, distributedSpacing) = LayoutHelper.distribute(justifyContent: justifyContent,
-                                                               maxPrimary: main(constraint.maxSize),
-                                                               totalPrimary: mainTotal,
-                                                               minimunSpacing: spacing,
-                                                               numberOfItems: renderers.count)
-    var rowFrames = [[(point: CGPoint, size: CGSize)]]()
+    var (offset, distributedSpacing): (CGFloat, CGFloat) = (0, spacing)
+    var rowFrames = [[FrameWrap]]()
     let crossMax: CGFloat
     if wrapper == .wrap {
         
-        // wrap reset distributedSpacing offset
-        offset = 0
-        distributedSpacing = spacing
-        
-        var primaryOffset = offset
+        var primaryOffset: CGFloat = 0
         var primaryCross: CGFloat = 0
 
         var leftMain: CGFloat = main(constraint.maxSize) - offset
         
-        var tempFrames = [(point: CGPoint, size: CGSize)]()
+        var tempFrames = [FrameWrap]()
         
         for (index, child) in renderers.enumerated() {
             if (main(child.size) + distributedSpacing) > leftMain {
-                let max = tempFrames.reduce((CGPoint.zero, CGSize.zero), { maxSize($0, $1) })
-                primaryCross += (distributedSpacing + cross(max.1))
+                let max = tempFrames.map{$0.0}.reduce(CGRect.zero, { maxCrossSize($0, $1) })
+                primaryCross += (distributedSpacing + cross(max.size))
                 rowFrames.append(tempFrames)
                 // reset
                 tempFrames = []
-                primaryOffset = offset
+                primaryOffset = 0
                 leftMain = main(constraint.maxSize) - offset
             }
             tempFrames.append(frame(child: child, primaryCross: primaryCross, primaryOffset: primaryOffset))
@@ -132,10 +117,23 @@ extension StackComponent {
         }
         
         crossMax = rowFrames.reduce(CGFloat(0)) { result, frames in
-            let rowMaxCross = frames.reduce(CGFloat(0), { max($0, cross($1.size))})
+            let rowMaxCross = frames.reduce(CGFloat(0), { max($0, cross($1.1.size))})
             return result + distributedSpacing + rowMaxCross
         } - distributedSpacing // remove last spacing
     } else {
+        renderers = getRenderers(constraint)
+        
+        let mainTotal = renderers.reduce(0) {
+          $0 + main($1.size)
+        }
+        
+        let p = LayoutHelper.distribute(justifyContent: justifyContent,
+                                            maxPrimary: main(constraint.maxSize),
+                                          totalPrimary: mainTotal,
+                                        minimunSpacing: spacing,
+                                         numberOfItems: renderers.count)
+        offset = p.offset
+        distributedSpacing = p.spacing
         crossMax = renderers.reduce(CGFloat(0).clamp(cross(constraint.minSize), cross(constraint.maxSize))) {
             max($0, cross($1.size))
         }
@@ -169,69 +167,69 @@ extension StackComponent {
     }
     
     let mainMax = rowFrames.reduce(CGFloat(0)) {
-        max($0, $1.reduce(CGFloat(0), { $0 + main($1.size) + distributedSpacing }))
+        max($0, $1.reduce(CGFloat(0), { $0 + main($1.0.size) + distributedSpacing }))
     }
     if wrapper == .wrap {
         // Align each row
         let tempFrame = rowFrames
         for (row, frames) in tempFrame.enumerated() {
-            let maxCurrenRowCrossSize = frames.reduce(CGFloat(0), { max($0, cross($1.size)) })
-            let maxTotalRowMainSize = frames.reduce(CGFloat(0), { $0 + main($1.size) })
+            let maxCurrenRowCrossSize = frames.reduce(CGFloat(0), { max($0, cross($1.0.size)) })
+            let maxTotalRowMainSize = frames.reduce(CGFloat(0), { $0 + main($1.0.size) })
             var adjustFrames = frames
             if justifyContent == .end {
                 let offset = main(constraint.maxSize) - (maxTotalRowMainSize + (distributedSpacing * CGFloat(frames.count - 1)))
-                adjustFrames = adjustFrames.map { frame -> (CGPoint, CGSize) in
-                    return (point(main: offset + main(frame.point), cross: cross(frame.point)), frame.size)
+                adjustFrames = adjustFrames.map { frame -> FrameWrap in
+                    return combinationFrameWrap(point(main: offset + main(frame.0.origin), cross: cross(frame.0.origin)), frame.0.size, frame.1)
                 }
             } else if justifyContent == .center {
                 let leftOverPrimary = main(constraint.maxSize) - maxTotalRowMainSize
                 let offset = (leftOverPrimary - distributedSpacing * CGFloat(frames.count - 1)) / 2
-                adjustFrames = adjustFrames.map { frame -> (CGPoint, CGSize) in
-                    return (point(main: offset + main(frame.point), cross: cross(frame.point)), frame.size)
+                adjustFrames = adjustFrames.map { frame -> FrameWrap in
+                    return combinationFrameWrap(point(main: offset + main(frame.0.origin), cross: cross(frame.0.origin)), frame.0.size, frame.1)
                 }
             } else if justifyContent == .spaceBetween {
                 let leftOverPrimary = main(constraint.maxSize) - maxTotalRowMainSize
                 guard frames.count > 1 else { break }
                 let spacing = leftOverPrimary / CGFloat(frames.count - 1)
-                adjustFrames = adjustFrames.enumerated().map { (index, frame) -> (CGPoint, CGSize) in
+                adjustFrames = adjustFrames.enumerated().map { (index, frame) -> FrameWrap in
                     // clear spacing
-                    var main = main(frame.point) - (distributedSpacing * CGFloat(index))
+                    var main = main(frame.0.origin) - (distributedSpacing * CGFloat(index))
                     // added new spacing
                     main += CGFloat(index) * spacing
-                    return (point(main: main, cross: cross(frame.point)), frame.size)
+                    return combinationFrameWrap(point(main: main, cross: cross(frame.0.origin)), frame.0.size, frame.1)
                 }
             } else if justifyContent == .spaceEvenly {
                 let leftOverPrimary = main(constraint.maxSize) - maxTotalRowMainSize
                 let spacing = leftOverPrimary / CGFloat(frames.count+1)
-                adjustFrames = adjustFrames.enumerated().map { (index, frame) -> (CGPoint, CGSize) in
+                adjustFrames = adjustFrames.enumerated().map { (index, frame) -> FrameWrap in
                     // clear spacing
-                    var main = main(frame.point) - (distributedSpacing * CGFloat(index))
+                    var main = main(frame.0.origin) - (distributedSpacing * CGFloat(index))
                     // added new spacing
                     main += CGFloat(index+1) * spacing
-                    return (point(main: main, cross: cross(frame.point)), frame.size)
+                    return combinationFrameWrap(point(main: main, cross: cross(frame.0.origin)), frame.0.size, frame.1)
                 }
             } else if justifyContent == .spaceAround {
                 let leftOverPrimary = main(constraint.maxSize) - maxTotalRowMainSize
                 let spacing = leftOverPrimary / CGFloat(frames.count)
-                adjustFrames = adjustFrames.enumerated().map { (index, frame) -> (CGPoint, CGSize) in
+                adjustFrames = adjustFrames.enumerated().map { (index, frame) -> FrameWrap in
                     // clear spacing
-                    var main = main(frame.point) - (distributedSpacing * CGFloat(index))
+                    var main = main(frame.0.origin) - (distributedSpacing * CGFloat(index))
                     // added new spacing
                     if index == 0 {
                         main += spacing/2
                     } else {
                         main += (CGFloat(index) * spacing) + (spacing/2)
                     }
-                    return (point(main: main, cross: cross(frame.point)), frame.size)
+                    return combinationFrameWrap(point(main: main, cross: cross(frame.0.origin)), frame.0.size, frame.1)
                 }
             }
             if alignItems == .end {
-                adjustFrames = adjustFrames.map { frame -> (CGPoint, CGSize) in
-                    return (point(main: main(frame.point), cross: (maxCurrenRowCrossSize - cross(frame.size)) + cross(frame.point)), frame.size)
+                adjustFrames = adjustFrames.map { frame -> FrameWrap in
+                    return combinationFrameWrap(point(main: main(frame.0.origin), cross: (maxCurrenRowCrossSize - cross(frame.0.size)) + cross(frame.0.origin)), frame.0.size, frame.1)
                 }
             } else if alignItems == .center {
-                adjustFrames = adjustFrames.map { frame -> (CGPoint, CGSize) in
-                    return (point(main: main(frame.point), cross: ((maxCurrenRowCrossSize - cross(frame.size)) / 2) + cross(frame.point)), frame.size)
+                adjustFrames = adjustFrames.map { frame -> FrameWrap in
+                    return combinationFrameWrap(point(main: main(frame.0.origin), cross: ((maxCurrenRowCrossSize - cross(frame.0.size)) / 2) + cross(frame.0.origin)), frame.0.size, frame.1)
                 }
             }
             rowFrames[row] = adjustFrames
@@ -241,7 +239,7 @@ extension StackComponent {
     let finalMain = justifyContent != .start && main(constraint.maxSize) != .infinity ? max(main(constraint.maxSize), intrisicMain) : intrisicMain
     let finalSize = size(main: finalMain, cross: crossMax)
 
-    return renderer(size: finalSize, children: renderers, positions: wrapper == .wrap ? rowFrames.reduce([CGPoint](), { $0 + $1.map{$0.point} }) : positions)
+    return renderer(size: finalSize, children: renderers, positions: wrapper == .wrap ? rowFrames.reduce([CGPoint](), { $0 + $1.map{$0.0.origin} }) : positions)
   }
   
   func getRenderers(_ constraint: Constraint) -> [Renderer] {
