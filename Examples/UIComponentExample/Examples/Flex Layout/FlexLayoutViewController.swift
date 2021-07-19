@@ -110,15 +110,15 @@ class FlexLayoutViewController: ComponentViewController {
     VStack(spacing: 10) {
       Text("HStack\njustifyContent: .\(justifyContent)\nalignItems: .\(alignItems)\nwrapper: .\(wrapper)")
       HStack(spacing: 10, justifyContent: justifyContent, alignItems: alignItems, wrapper: wrapper) {
-        for index in 0...10 {
-          if index == 0 {
-            Box("\(index)", height: 100)
-          } else if index == 9 {
+        Box("0", height: 100)
+        for index in 1..<10 {
+          if index == 8 {
             Box("\(index)", height: 100)
           } else {
             Box("\(index)")
           }
         }
+        Box("10", height: 100)
       }.inset(10).view().styleColor(.systemTeal)
     }.inset(10).view().styleColor(.systemGroupedBackground)
   }
