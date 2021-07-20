@@ -72,7 +72,7 @@ class FlexLayoutViewController: ComponentViewController {
             Image(systemName: "display.2")
             Space().size(width: .aspectPercentage(1), height: .fill).inset(10).styleColor(.systemBlue)
             VStack(justifyContent: .spaceAround) {
-              Text("Very powerful layout system...")
+              Text("这里可以占满一行(This can occupy one line)...").numberOfLines(2).flex()
               HStack(spacing: 5, alignItems: .center) {
                 Text("long long long long long Text").numberOfLines(1).flex()
                 Image(systemName: "checkmark.shield.fill")
