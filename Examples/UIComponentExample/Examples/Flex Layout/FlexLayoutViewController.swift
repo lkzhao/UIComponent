@@ -49,11 +49,22 @@ class FlexLayoutViewController: ComponentViewController {
         VStack(spacing: 10) {
           HStack(spacing: 10, alignItems: .center) {
             Image(systemName: "person.circle.fill").size(width: 100, height: .aspectPercentage(1))
-            VStack(spacing: 5) {
-              Text("nickname")
-              HStack(justifyContent: .spaceBetween, alignItems: .center) {
-                Text("introduce myself...", font: .systemFont(ofSize: 13, weight: .light)).textColor(.secondaryLabel)
-                Text("gender: 👨")
+            HStack(spacing: 5, justifyContent: .spaceBetween, alignItems: .center) {
+              VStack(spacing: 5) {
+                Text("nickname")
+                HStack(justifyContent: .spaceBetween, alignItems: .center) {
+                  Text("introduce myself...", font: .systemFont(ofSize: 13, weight: .light)).textColor(.secondaryLabel)
+                  Text("gender: 👨").font(.systemFont(ofSize: 13, weight: .thin))
+                }
+              }.flex()
+              VStack(justifyContent: .spaceEvenly) {
+                Join {
+                  Image(systemName: "sun.dust")
+                  Image(systemName: "sun.haze")
+                  Image(systemName: "cloud.bolt.rain.fill")
+                } separator: {
+                  Space(height: 5)
+                }
               }
             }
           }
@@ -68,7 +79,7 @@ class FlexLayoutViewController: ComponentViewController {
               }
             }.flex()
           }.size(height: 100).inset(10).styleColor(.systemGroupedBackground)
-        }
+        }.view()
       }
       
       VStack(spacing: 10) {
