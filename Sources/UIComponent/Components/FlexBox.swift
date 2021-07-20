@@ -71,7 +71,7 @@ extension FlexBox {
         var freezeMainSize: CGFloat = 0
         var renderers: [Renderer] = children.map { child in
             let rend = child.layout(constraint)
-            freezeMainSize += main(childConstraint.maxSize)
+            freezeMainSize += main(rend.size)
             childConstraint.maxSize = size(main: main(childConstraint.maxSize) - main(rend.size), cross: cross(childConstraint.maxSize))
             return rend
         }
