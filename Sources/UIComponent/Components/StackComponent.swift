@@ -136,7 +136,7 @@ extension StackComponent {
         mainFreezed += main(childRenderer.size)
         renderers.append(childRenderer)
         if bound {
-            childConstraint.maxSize = size(main: main(childConstraint.maxSize) - main(childRenderer.size), cross: cross(childConstraint.maxSize))
+            childConstraint.maxSize = size(main: main(constraint.maxSize) - mainFreezed, cross: cross(childConstraint.maxSize))
         }
       }
     }
