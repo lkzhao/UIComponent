@@ -42,45 +42,8 @@ class FlexLayoutViewController: ComponentViewController {
   
   override var component: Component {
     
-    VStack(spacing: 20, bound: false) {
+    VStack(spacing: 20) {
       Text("Flex layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
-      VStack(spacing: 10) {
-        Text("H/VStack适用于更加复杂subviews布局")
-        VStack(spacing: 10) {
-          HStack(spacing: 10, alignItems: .center) {
-            Image(systemName: "person.circle.fill").size(width: 100, height: .aspectPercentage(1))
-            HStack(spacing: 5, justifyContent: .spaceBetween, alignItems: .center) {
-              VStack(spacing: 5) {
-                Text("nickname")
-                HStack(justifyContent: .spaceBetween, alignItems: .center) {
-                  Text("introduce myself...", font: .systemFont(ofSize: 13, weight: .light)).textColor(.secondaryLabel)
-                  Text("gender: 👨").font(.systemFont(ofSize: 13, weight: .thin))
-                }
-              }.flex()
-              VStack(justifyContent: .spaceEvenly) {
-                Join {
-                  Image(systemName: "sun.dust")
-                  Image(systemName: "sun.haze")
-                  Image(systemName: "cloud.bolt.rain.fill")
-                } separator: {
-                  Space(height: 5)
-                }
-              }
-            }
-          }
-          HStack(spacing: 10, alignItems: .center) {
-            Image(systemName: "display.2")
-            Space().size(width: .aspectPercentage(1), height: .fill).inset(10).styleColor(.systemBlue)
-            VStack(justifyContent: .spaceAround) {
-              Text("这里可以占满一行(This can occupy one line)...").numberOfLines(2).flex()
-              HStack(spacing: 5, alignItems: .center) {
-                Text("long long long long long Text").numberOfLines(1).flex()
-                Image(systemName: "checkmark.shield.fill")
-              }
-            }.flex()
-          }.size(height: 100).inset(10).styleColor(.systemGroupedBackground)
-        }.view()
-      }
       
       VStack(spacing: 10) {
         Text("Horizontal layouts")
@@ -95,7 +58,7 @@ class FlexLayoutViewController: ComponentViewController {
         
         VStack {
           Text("HStack (can scroll horizontally)").inset(top: 10, left: 10, bottom: 0, right: 10)
-          HStack(spacing: 10, bound: false) {
+          HStack(spacing: 10) {
             for index in 0...10 {
               Box(index)
             }
@@ -119,7 +82,7 @@ class FlexLayoutViewController: ComponentViewController {
           VStack {
             Space(height: 10)
             Text("VStack")
-            VStack(spacing: 10, bound: false) {
+            VStack(spacing: 10) {
               for index in 0...10 {
                 Box(index)
               }
