@@ -124,20 +124,17 @@ extension FlexLayoutComponent {
           renderers[lineStartIndex + itemIndex] = child
         }
         var alignValue: CGFloat = 0
-        switch alignItems {
+        var aligenItem = alignItems
+          if let flex = self.children[lineStartIndex + itemIndex] as? Flexible, let aligenSelf = flex.alignSelf {
+              aligenItem = aligenSelf
+          }
+        switch aligenItem {
         case .start, .stretch:
           alignValue = 0
         case .end:
           alignValue = main(lineSize) - main(child.size)
         case .center:
           alignValue = (main(lineSize) - main(child.size)) / 2
-        }
-        if let flex = self.children[lineStartIndex + itemIndex] as? Flexible {
-            if flex.alignSelf == .end {
-                alignValue = main(lineSize) - main(child.size)
-            } else if flex.alignSelf == .center {
-                alignValue = (main(lineSize) - main(child.size)) / 2
-            }
         }
         positions.append(point(main: mainOffset + alignValue, cross: crossOffset))
         crossOffset += cross(child.size) + crossSpacing

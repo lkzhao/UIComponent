@@ -89,7 +89,11 @@ extension StackComponent {
     var positions: [CGPoint] = []
     for (index, child) in renderers.enumerated() {
       var crossValue: CGFloat = 0
-      switch alignItems {
+      var aligenItem = alignItems
+        if let flex = self.children[index] as? Flexible, let aligenSelf = flex.alignSelf {
+            aligenItem = aligenSelf
+        }
+      switch aligenItem {
       case .start:
         crossValue = 0
       case .end:
@@ -99,13 +103,6 @@ extension StackComponent {
       case .stretch:
         crossValue = 0
       }
-        if let c = self.children[index] as? Flexible {
-            if c.alignSelf == .end {
-                crossValue = crossMax - cross(child.size)
-            } else if c.alignSelf == .center {
-                crossValue = (crossMax - cross(child.size)) / 2
-            }
-        }
       positions.append(point(main: primaryOffset, cross: crossValue))
       primaryOffset += main(child.size) + distributedSpacing
     }
