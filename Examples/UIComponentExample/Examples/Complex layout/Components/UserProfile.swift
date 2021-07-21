@@ -28,11 +28,6 @@ struct UserProfile: ComponentBuilder {
   let introduce: String
   let gender: String
   let showWeather: Bool
-  func a() {
-    let view = UIView()
-    view.layer.borderWidth = 2
-    view.layer.borderColor = UIColor.white.cgColor
-  }
   
   func build() -> Component {
     VStack(spacing: 5) {
