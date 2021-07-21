@@ -39,7 +39,7 @@ struct UserProfile: ComponentBuilder {
           .update{$0.layer.cornerRadius = $0.frame.height/2}
           .with(\.layer.borderWidth, 2)
           .with(\.layer.borderColor, UIColor.white.cgColor)
-          .shadowAvatar()
+          .shadowAvatar().tappableView {}
         HStack(spacing: 5, justifyContent: .spaceBetween, alignItems: .center) {
           VStack(spacing: 5) {
             Text(userName)

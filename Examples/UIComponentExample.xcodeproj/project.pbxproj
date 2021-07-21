@@ -30,6 +30,8 @@
 		F8E3DD1426A7BC5F0062E58F /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1126A7BC5F0062E58F /* Cell.swift */; };
 		F8E3DD1526A7BC5F0062E58F /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */; };
 		F8E3DD1626A7BC5F0062E58F /* ComplexLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1326A7BC5F0062E58F /* ComplexLayoutViewController.swift */; };
+		F8E3DD1826A7BE300062E58F /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1726A7BE300062E58F /* Modifiers.swift */; };
+		F8E3DD1A26A7BEB60062E58F /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1926A7BEB60062E58F /* Box.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -69,6 +71,8 @@
 		F8E3DD1126A7BC5F0062E58F /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		F8E3DD1326A7BC5F0062E58F /* ComplexLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplexLayoutViewController.swift; sourceTree = "<group>"; };
+		F8E3DD1726A7BE300062E58F /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
+		F8E3DD1926A7BEB60062E58F /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,11 +131,13 @@
 			children = (
 				A304892721C347010026EDA7 /* AppDelegate.swift */,
 				B1CC3F642677FD99005BCE8C /* ComponentViewController.swift */,
+				F8E3DD1726A7BE300062E58F /* Modifiers.swift */,
 				B10A123124F31EAA0076B038 /* Helpers.swift */,
 				A304892B21C347010026EDA7 /* Main.storyboard */,
 				A304892E21C347020026EDA7 /* Assets.xcassets */,
 				A304893021C347020026EDA7 /* LaunchScreen.storyboard */,
 				A304893321C347020026EDA7 /* Info.plist */,
+				F8E3DD1926A7BEB60062E58F /* Box.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -294,8 +300,10 @@
 				B1CC3F652677FD99005BCE8C /* ComponentViewController.swift in Sources */,
 				B1CC3F672677FF79005BCE8C /* AsyncImageViewController.swift in Sources */,
 				B10A123224F31EAA0076B038 /* Helpers.swift in Sources */,
+				F8E3DD1A26A7BEB60062E58F /* Box.swift in Sources */,
 				B16EA6A22677E26F005CFB18 /* AsyncImage.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
+				F8E3DD1826A7BE300062E58F /* Modifiers.swift in Sources */,
 				F8E3DD1426A7BC5F0062E58F /* Cell.swift in Sources */,
 				A304892821C347010026EDA7 /* AppDelegate.swift in Sources */,
 				B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */,

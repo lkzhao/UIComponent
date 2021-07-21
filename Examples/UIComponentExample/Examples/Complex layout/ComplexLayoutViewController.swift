@@ -13,24 +13,33 @@ class ComplexLayoutViewController: ComponentViewController {
   
   var showWeather: Bool = false
   
-  static let originalIds = [Cell.Context(fillColor: .systemRed, id: "1"),
-                     Cell.Context(fillColor: .systemBlue, id: "2"),
-                     Cell.Context(fillColor: .systemPink, id: "3"),
-                     Cell.Context(fillColor: .systemTeal, id: "4"),
-                     Cell.Context(fillColor: .systemGreen, id: "5")]
+  static let originalIds = [Cell.Context(fillColor: colors.randomElement()!, id: "1"),
+                     Cell.Context(fillColor: colors.randomElement()!, id: "2"),
+                     Cell.Context(fillColor: colors.randomElement()!, id: "3"),
+                     Cell.Context(fillColor: colors.randomElement()!, id: "4"),
+                     Cell.Context(fillColor: colors.randomElement()!, id: "5")]
+  static let colors: [UIColor] = [.systemRed, .systemBlue, .systemPink, .systemTeal, .systemGray, .systemFill, .systemGreen, .systemGreen, .systemYellow, .systemPurple, .systemOrange]
   
   var ids = originalIds
   
+  lazy var waterfallData: [(CGSize, UIColor)] = {
+    var sizes = [(CGSize, UIColor)]()
+    for _ in 1 ... 30 {
+      sizes.append((CGSize(width: Int(arc4random_uniform(300 - 100)) + 100, height: Int(arc4random_uniform(300 - 100)) + 100), ComplexLayoutViewController.colors.randomElement()!))
+    }
+    return sizes
+  }()
+  
   lazy var resetButton: UIButton = {
     let button = UIButton(type: .system)
-    button.setTitle("reset", for: .normal)
+    button.setTitle("Reset", for: .normal)
     button.addTarget(self, action: #selector(self.resetIds), for: .touchUpInside)
     return button
   }()
   
   lazy var shuffledBuuton: UIButton = {
     let button = UIButton(type: .system)
-    button.setTitle("shuffled", for: .normal)
+    button.setTitle("Shuffled", for: .normal)
     button.addTarget(self, action: #selector(self.resetIds), for: .touchUpInside)
     return button
   }()
@@ -38,7 +47,7 @@ class ComplexLayoutViewController: ComponentViewController {
   
   override var component: Component {
     VStack(spacing: 20) {
-      Text("Complex layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill).inset(top:20, left: 20)
+      Text("Complex layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
       VStack(spacing: 10) {
         UserProfile(avatar: "https://unsplash.com/photos/Yn0l7uwBrpw/download?force=true&w=640",
                     userName: "Jack",
@@ -50,12 +59,12 @@ class ComplexLayoutViewController: ComponentViewController {
           self.showWeather = !self.showWeather
           self.reloadComponent()
         }
-      }.inset(20)
+      }
       
       VStack(spacing: 10) {
         HStack(spacing: 10, alignItems: .center) {
           if ids.isEmpty {
-            Text("No data", font: .systemFont(ofSize: 17, weight: .medium))
+            Text("No data", font: .systemFont(ofSize: 17, weight: .medium)).flex()
           } else {
             for (offset, element) in ids.enumerated() {
               Cell(data: element).tappableView { [weak self] in
@@ -65,13 +74,35 @@ class ComplexLayoutViewController: ComponentViewController {
               }
             }
           }
-        }.inset(h: 20).scrollView().showsHorizontalScrollIndicator(false).animator(AnimatedReloadAnimator())
+        }.inset(h: 20).inset(top: 10).scrollView().showsHorizontalScrollIndicator(false).animator(AnimatedReloadAnimator())
         HStack(spacing: 10) {
           SimpleViewComponent<UIButton>(view: resetButton).isEnabled(self.ids.count != 5).inset(left: 20)
           SimpleViewComponent<UIButton>(view: shuffledBuuton).isEnabled(self.ids.count != 0)
         }
-      }
-    }
+      }.inset(v: 10).styleColor(.systemGroupedBackground)
+      
+      Text("Waterfall", font: .boldSystemFont(ofSize: 20))
+      VStack(spacing: 10) {
+        Text("Horizontal waterfall").inset(left: 10)
+        HorizontalWaterfall(columns: 3, spacing: 5) {
+          for (index, data) in self.waterfallData.enumerated() {
+            let size = data.0
+            Space().size(width: .aspectPercentage(size.width/size.height), height: .fill).styleColor(data.1).overlay(Text("\(index)").textAlignment(.center))
+          }
+        }.inset(h: 10).size(height: .absolute(300)).scrollView().showsHorizontalScrollIndicator(false)
+      }.inset(v: 10).styleColor(.systemGroupedBackground)
+      
+      VStack(spacing: 10) {
+        Text("Vertical waterfall").inset(left: 10)
+        Waterfall(columns: 3, spacing: 5) {
+          for (index, data) in self.waterfallData.enumerated() {
+            let size = data.0
+            Space().size(width: .fill, height: .aspectPercentage(size.height/size.width)).styleColor(data.1).overlay(Text("\(index)").textAlignment(.center))
+          }
+        }.inset(h: 10).size(width: .fill)
+      }.inset(v: 10).styleColor(.systemGroupedBackground)
+      
+    }.inset(20)
   }
   
   
