@@ -14,13 +14,17 @@ class ComplexLayoutViewController: ComponentViewController {
   var showWeather: Bool = false
   
   static let originalIds = [Cell.Context(fillColor: colors.randomElement()!, id: "1"),
-                     Cell.Context(fillColor: colors.randomElement()!, id: "2"),
-                     Cell.Context(fillColor: colors.randomElement()!, id: "3"),
-                     Cell.Context(fillColor: colors.randomElement()!, id: "4"),
-                     Cell.Context(fillColor: colors.randomElement()!, id: "5")]
+                            Cell.Context(fillColor: colors.randomElement()!, id: "2"),
+                            Cell.Context(fillColor: colors.randomElement()!, id: "3"),
+                            Cell.Context(fillColor: colors.randomElement()!, id: "4"),
+                            Cell.Context(fillColor: colors.randomElement()!, id: "5")]
   static let colors: [UIColor] = [.systemRed, .systemBlue, .systemPink, .systemTeal, .systemGray, .systemFill, .systemGreen, .systemGreen, .systemYellow, .systemPurple, .systemOrange]
   
-  var ids = originalIds
+  var ids = originalIds {
+    didSet {
+      reloadComponent()
+    }
+  }
   
   lazy var waterfallData: [(CGSize, UIColor)] = {
     var sizes = [(CGSize, UIColor)]()
@@ -62,23 +66,23 @@ class ComplexLayoutViewController: ComponentViewController {
       }
       
       VStack(spacing: 10) {
+        Text("Horizontal list").inset(left: 10)
         HStack(spacing: 10, alignItems: .center) {
           if ids.isEmpty {
-            Text("No data", font: .systemFont(ofSize: 17, weight: .medium)).flex()
+            Text("No data here", font: .systemFont(ofSize: 17, weight: .medium)).flex()
           } else {
             for (offset, element) in ids.enumerated() {
               Cell(data: element).tappableView { [weak self] in
                 guard let self = self else { return }
                 self.ids.remove(at: offset)
-                self.reloadComponent()
               }
             }
           }
-        }.inset(h: 20).inset(top: 10).scrollView().showsHorizontalScrollIndicator(false).animator(AnimatedReloadAnimator())
+        }.inset(h: 10).inset(top: 5).scrollView().showsHorizontalScrollIndicator(false).animator(AnimatedReloadAnimator())
         HStack(spacing: 10) {
-          SimpleViewComponent<UIButton>(view: resetButton).isEnabled(self.ids.count != 5).inset(left: 20)
+          SimpleViewComponent<UIButton>(view: resetButton).isEnabled(self.ids.count != 5)
           SimpleViewComponent<UIButton>(view: shuffledBuuton).isEnabled(self.ids.count != 0)
-        }
+        }.inset(left: 10)
       }.inset(v: 10).styleColor(.systemGroupedBackground)
       
       Text("Waterfall", font: .boldSystemFont(ofSize: 20))
@@ -105,32 +109,17 @@ class ComplexLayoutViewController: ComponentViewController {
     }.inset(20)
   }
   
-  
-  
   override func viewDidLoad() {
     super.viewDidLoad()
     componentView.animator = AnimatedReloadAnimator()
   }
   
-  
   @objc func resetIds() {
     ids = ComplexLayoutViewController.originalIds.shuffled()
-    self.reloadComponent()
   }
   
   @objc func shuffled() {
     ids = ids.shuffled()
-    self.reloadComponent()
   }
-  
-  /*
-   // MARK: - Navigation
-   
-   // In a storyboard-based application, you will often want to do a little preparation before navigation
-   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-   // Get the new view controller using segue.destination.
-   // Pass the selected object to the new view controller.
-   }
-   */
   
 }
