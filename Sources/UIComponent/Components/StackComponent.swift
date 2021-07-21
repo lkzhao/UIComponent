@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Luke Zhao on 8/22/20.
 //
@@ -8,7 +8,6 @@
 import UIKit
 
 public struct HStack: StackComponent, HorizontalLayoutProtocol {
-  public let bound: Bool
   public let spacing: CGFloat
   public let justifyContent: MainAxisAlignment
   public let alignItems: CrossAxisAlignment
@@ -16,18 +15,15 @@ public struct HStack: StackComponent, HorizontalLayoutProtocol {
   public init(spacing: CGFloat = 0,
               justifyContent: MainAxisAlignment = .start,
               alignItems: CrossAxisAlignment = .start,
-              bound: Bool = true,
               children: [Component] = []) {
     self.spacing = spacing
     self.justifyContent = justifyContent
     self.alignItems = alignItems
-    self.bound = bound
     self.children = children
   }
 }
 
 public struct VStack: StackComponent, VerticalLayoutProtocol {
-  public let bound: Bool
   public let spacing: CGFloat
   public let justifyContent: MainAxisAlignment
   public let alignItems: CrossAxisAlignment
@@ -35,32 +31,28 @@ public struct VStack: StackComponent, VerticalLayoutProtocol {
   public init(spacing: CGFloat = 0,
               justifyContent: MainAxisAlignment = .start,
               alignItems: CrossAxisAlignment = .start,
-              bound: Bool = true,
               children: [Component] = []) {
     self.spacing = spacing
     self.justifyContent = justifyContent
     self.alignItems = alignItems
-    self.bound = bound
     self.children = children
   }
 }
 
 public extension HStack {
-    init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, bound: Bool = true, @ComponentArrayBuilder _ content: () -> [Component]) {
+  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(spacing: spacing,
               justifyContent: justifyContent,
               alignItems: alignItems,
-              bound: bound,
               children: content())
   }
 }
 
 public extension VStack {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, bound: Bool = true, @ComponentArrayBuilder _ content: () -> [Component]) {
+  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(spacing: spacing,
               justifyContent: justifyContent,
               alignItems: alignItems,
-              bound: bound,
               children: content())
   }
 }
@@ -70,7 +62,6 @@ public protocol StackComponent: Component, BaseLayoutProtocol {
   var justifyContent: MainAxisAlignment { get }
   var alignItems: CrossAxisAlignment { get }
   var children: [Component] { get }
-  var bound: Bool { get }
 }
 
 extension StackComponent {
@@ -114,6 +105,7 @@ extension StackComponent {
     let intrisicMain = primaryOffset - distributedSpacing
     let finalMain = justifyContent != .start && main(constraint.maxSize) != .infinity ? max(main(constraint.maxSize), intrisicMain) : intrisicMain
     let finalSize = size(main: finalMain, cross: crossMax)
+
     return renderer(size: finalSize, children: renderers, positions: positions)
   }
   
@@ -125,8 +117,8 @@ extension StackComponent {
     var flexCount: CGFloat = 0
     let crossMaxConstraint = cross(constraint.maxSize)
 
-    var childConstraint = Constraint(minSize: size(main: -.infinity, cross: alignItems == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0),
-                                     maxSize: size(main: bound ? main(constraint.maxSize) : .infinity, cross: cross(constraint.maxSize)))
+    let childConstraint = Constraint(minSize: size(main: -.infinity, cross: alignItems == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0),
+                                     maxSize: size(main: .infinity, cross: cross(constraint.maxSize)))
     for child in children {
       if let flexChild = child as? Flexible {
         flexCount += flexChild.flex
@@ -135,9 +127,6 @@ extension StackComponent {
         let childRenderer = child.layout(childConstraint)
         mainFreezed += main(childRenderer.size)
         renderers.append(childRenderer)
-        if bound {
-            childConstraint.maxSize = size(main: main(constraint.maxSize) - mainFreezed, cross: cross(childConstraint.maxSize))
-        }
       }
     }
     
