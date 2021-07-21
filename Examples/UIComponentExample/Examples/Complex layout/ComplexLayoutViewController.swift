@@ -65,7 +65,7 @@ class ComplexLayoutViewController: ComponentViewController {
               }
             }
           }
-        }.inset(h: 20).scrollView().animator(AnimatedReloadAnimator())
+        }.inset(h: 20).scrollView().showsHorizontalScrollIndicator(false).animator(AnimatedReloadAnimator())
         HStack(spacing: 10) {
           SimpleViewComponent<UIButton>(view: resetButton).isEnabled(self.ids.count != 5).inset(left: 20)
           SimpleViewComponent<UIButton>(view: shuffledBuuton).isEnabled(self.ids.count != 0)
