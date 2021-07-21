@@ -7,14 +7,9 @@
 
 import UIKit
 
-public enum FlexItemAlign: CaseIterable {
-    case start, end, center, stretch, auto
-}
-
-
 public struct Flexible: Component {
   public let flex: CGFloat
-  public let alignSelf: FlexItemAlign
+  public let alignSelf: CrossAxisAlignment?
   public let child: Component
   public func layout(_ constraint: Constraint) -> Renderer {
     child.layout(constraint)
@@ -22,7 +17,7 @@ public struct Flexible: Component {
 }
 
 public extension Component {
-  func flex(_ flex: CGFloat = 1, alignSelf: FlexItemAlign = .auto) -> Flexible {
+  func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> Flexible {
     Flexible(flex: flex, alignSelf: alignSelf, child: self)
   }
 }
@@ -30,6 +25,6 @@ public extension Component {
 public typealias Spacer = Flexible
 public extension Spacer {
   init() {
-    self.init(flex: 1, alignSelf: .auto, child: Space())
+    self.init(flex: 1, alignSelf: nil, child: Space())
   }
 }

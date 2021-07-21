@@ -134,7 +134,7 @@ class FlexLayoutViewController: ComponentViewController {
       VStack(spacing: 10) {
         Text("Flex align-self", font: .boldSystemFont(ofSize: 20))
         
-        for align in FlexItemAlign.allCases {
+        for align in CrossAxisAlignment.allCases {
           Text("number 1 align-self \(align)").size(width: .fill)
           Flow {
             Box(1).flex(alignSelf: align)
