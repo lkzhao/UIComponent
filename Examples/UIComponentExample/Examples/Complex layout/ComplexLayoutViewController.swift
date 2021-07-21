@@ -26,6 +26,16 @@ class ComplexLayoutViewController: ComponentViewController {
     }
   }
   
+  var tags: [(String, UIColor)] = [("SwiftUI", .systemRed),
+                                   ("UIComponent", .systemPink),
+                                   ("Vue", .systemGreen),
+                                   ("Flex Layout", .systemTeal),
+                                   ("Java", .systemOrange)] {
+    didSet {
+      reloadComponent()
+    }
+  }
+  
   lazy var waterfallData: [(CGSize, UIColor)] = {
     var sizes = [(CGSize, UIColor)]()
     for _ in 1 ... 30 {
@@ -51,7 +61,7 @@ class ComplexLayoutViewController: ComponentViewController {
   
   override var component: Component {
     VStack(spacing: 20) {
-      Text("Complex layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
+      Text("Complex layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill).id("label")
       VStack(spacing: 10) {
         UserProfile(avatar: "https://unsplash.com/photos/Yn0l7uwBrpw/download?force=true&w=640",
                     userName: "Jack",
@@ -62,8 +72,56 @@ class ComplexLayoutViewController: ComponentViewController {
           guard let self = self else { return }
           self.showWeather = !self.showWeather
           self.reloadComponent()
-        }
+        }.id("2")
       }
+      
+      Text("Tag view", font: .boldSystemFont(ofSize: 20)).id("label2")
+      VStack(spacing: 10) {
+        Text("Tags row")
+        Flow(spacing: 5, alignItems: .center) {
+          if tags.isEmpty {
+            Text("Empty Tag")
+          } else {
+            for (index, tag) in tags.enumerated() {
+              Text(tag.0, font: .systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.1).tappableView { [weak self] in
+                guard let self = self else { return }
+                self.tags.remove(at: index)
+              }.id(tag.0)
+            }
+          }
+          HStack(alignItems: .center) {
+            Image(systemName: "plus")
+            Text("Add new", font: .systemFont(ofSize: 14, weight: .regular)).textColor(.systemBlue)
+          }.inset(h: 10, v: 5).styleColor(.systemGray5).tappableView {
+            self.showAlert()
+          }
+        }
+        Separator()
+        Text("Tags column")
+        FlexColumn(spacing: 5) {
+          if tags.isEmpty {
+            Text("Empty Tag")
+          } else {
+            for (index, tag) in tags.enumerated() {
+              Text(tag.0, font: .systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.1).tappableView { [weak self] in
+                guard let self = self else { return }
+                self.tags.remove(at: index)
+              }.id(tag.0)
+            }
+          }
+          HStack(alignItems: .center) {
+            Image(systemName: "plus")
+            Text("Add new", font: .systemFont(ofSize: 14, weight: .regular)).textColor(.systemBlue)
+          }.inset(h: 10, v: 5).styleColor(.systemGray5).tappableView {
+            self.showAlert()
+          }
+        }.size(height: 150)
+        
+        Text("Shuffled tags").textColor(.systemBlue).tappableView { [weak self] in
+          guard let self = self else {return}
+          self.tags = self.tags.shuffled()
+        }
+      }.inset(10).styleColor(.systemGroupedBackground).id("tag")
       
       VStack(spacing: 10) {
         Text("Horizontal list").inset(left: 10)
@@ -83,9 +141,9 @@ class ComplexLayoutViewController: ComponentViewController {
           SimpleViewComponent<UIButton>(view: resetButton).isEnabled(self.ids.count != 5)
           SimpleViewComponent<UIButton>(view: shuffledBuuton).isEnabled(self.ids.count != 0)
         }.inset(left: 10)
-      }.inset(v: 10).styleColor(.systemGroupedBackground)
+      }.inset(v: 10).styleColor(.systemGroupedBackground).id("horizontal")
       
-      Text("Waterfall", font: .boldSystemFont(ofSize: 20))
+      Text("Waterfall", font: .boldSystemFont(ofSize: 20)).id("label3")
       VStack(spacing: 10) {
         Text("Horizontal waterfall").inset(left: 10)
         HorizontalWaterfall(columns: 3, spacing: 5) {
@@ -94,7 +152,7 @@ class ComplexLayoutViewController: ComponentViewController {
             Space().size(width: .aspectPercentage(size.width/size.height), height: .fill).styleColor(data.1).overlay(Text("\(index)").textAlignment(.center))
           }
         }.inset(h: 10).size(height: .absolute(300)).scrollView().showsHorizontalScrollIndicator(false)
-      }.inset(v: 10).styleColor(.systemGroupedBackground)
+      }.inset(v: 10).styleColor(.systemGroupedBackground).id("Waterfall1")
       
       VStack(spacing: 10) {
         Text("Vertical waterfall").inset(left: 10)
@@ -104,7 +162,7 @@ class ComplexLayoutViewController: ComponentViewController {
             Space().size(width: .fill, height: .aspectPercentage(size.height/size.width)).styleColor(data.1).overlay(Text("\(index)").textAlignment(.center))
           }
         }.inset(h: 10).size(width: .fill)
-      }.inset(v: 10).styleColor(.systemGroupedBackground)
+      }.inset(v: 10).styleColor(.systemGroupedBackground).id("Waterfall2")
       
     }.inset(20)
   }
@@ -120,6 +178,35 @@ class ComplexLayoutViewController: ComponentViewController {
   
   @objc func shuffled() {
     ids = ids.shuffled()
+  }
+  
+  func showAlert() {
+    let alertController = UIAlertController(title: "Tag",
+                                            message: "Create new label",
+                                            preferredStyle: .alert)
+    
+    let cancelAction = UIAlertAction(
+      title: "Cancel",
+      style: .cancel,
+      handler: nil)
+    alertController.addAction(cancelAction)
+    
+    let confirmAction = UIAlertAction(
+      title: "Confirm",
+      style: .default,
+      handler: { action in
+        guard let textField = (alertController.textFields?.first), let text = textField.text, !text.isEmpty else { return }
+        self.tags.append((text, ComplexLayoutViewController.colors.randomElement()!))
+      })
+    alertController.addAction(confirmAction)
+    alertController.addTextField { textField in
+      textField.placeholder = "Enter new tag name"
+    }
+    
+    present(alertController,
+            animated: true,
+            completion: nil)
+    
   }
   
 }

@@ -10,9 +10,9 @@ import UIComponent
 import Kingfisher
 import UIKit.UIImageView
 
-extension Component {
-  fileprivate func shadowAvatar() -> ViewUpdateComponent<ComponentDisplayableViewComponent<ComponentView>> {
-    view().update{
+extension ViewComponent {
+  fileprivate func shadowAvatar() -> ViewUpdateComponent<Self> {
+    update{
       $0.layer.shadowColor = UIColor.black.withAlphaComponent(0.2).cgColor
       $0.layer.shadowOffset = CGSize(width: 0, height: 3)
       $0.layer.shadowRadius = 6
@@ -39,18 +39,18 @@ struct UserProfile: ComponentBuilder {
           .update{$0.layer.cornerRadius = $0.frame.height/2}
           .with(\.layer.borderWidth, 2)
           .with(\.layer.borderColor, UIColor.white.cgColor)
-          .shadowAvatar().tappableView {}
+          .tappableView {}.shadowAvatar()
         HStack(spacing: 5, justifyContent: .spaceBetween, alignItems: .center) {
           VStack(spacing: 5) {
             Text(userName)
             HStack(justifyContent: .spaceBetween, alignItems: .center) {
               Text(introduce.isEmpty ? "introduce myself..." : introduce, font: .systemFont(ofSize: 13, weight: .light)).textColor(.secondaryLabel)
-              Image(systemName: "chevron.right")
+              Image(systemName: "chevron.right").tintColor(.systemGray)
             }
             Text("gender: \(gender)").font(.systemFont(ofSize: 12, weight: .light)).textColor(.secondaryLabel)
           }.flex()
         }.flex()
-      }.inset(15).styleColor(.systemGroupedBackground)//.flex()
+      }.inset(15).styleColor(.systemGroupedBackground).id("user-info")
       if showWeather {
         HStack(justifyContent: .spaceEvenly, alignItems: .center) {
           Spacer()
