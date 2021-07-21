@@ -160,6 +160,21 @@ class FlexLayoutViewController: ComponentViewController {
         }.size(width: 190).inset(10).styleColor(.systemGroupedBackground)
       }
       
+      VStack(spacing: 10) {
+        Text("Flex align-self", font: .boldSystemFont(ofSize: 20))
+        
+        for align in FlexItemAlign.allCases {
+          Text("number 1 align-self \(align)").size(width: .fill)
+          Flow {
+            Box(1).flex(alignSelf: align)
+            Box(2, height: 60)
+            Box(3, height: 70)
+            Box(4, height: 80)
+          }.size(width: 190).inset(10).styleColor(.systemGroupedBackground)
+        }
+        
+      }
+      
     }.inset(20)
   }
 }
