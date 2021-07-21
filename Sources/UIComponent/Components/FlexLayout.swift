@@ -99,7 +99,7 @@ extension FlexLayoutComponent {
           let child = children[index]
           if let child = child as? Flexible {
             let crossReserved = crossPerFlex * child.flex + cross(renderers[index].size)
-            let constraint = Constraint(minSize: size(main: alignItems == .stretch ? main(lineSize) : 0, cross: crossReserved),
+            let constraint = Constraint(minSize: size(main: (alignItems == .stretch || child.alignSelf == .stretch) ? main(lineSize) : 0, cross: crossReserved),
                                         maxSize: size(main: .infinity, cross: crossReserved))
             renderers[index] = child.layout(constraint)
           }
@@ -123,7 +123,7 @@ extension FlexLayoutComponent {
                                                    maxSize: size(main: main(lineSize), cross: crossMax)))
           renderers[lineStartIndex + itemIndex] = child
         }
-        let alignValue: CGFloat
+        var alignValue: CGFloat = 0
         switch alignItems {
         case .start, .stretch:
           alignValue = 0
@@ -131,6 +131,13 @@ extension FlexLayoutComponent {
           alignValue = main(lineSize) - main(child.size)
         case .center:
           alignValue = (main(lineSize) - main(child.size)) / 2
+        }
+        if let flex = self.children[lineStartIndex + itemIndex] as? Flexible {
+            if flex.alignSelf == .end {
+                alignValue = main(lineSize) - main(child.size)
+            } else if flex.alignSelf == .center {
+                alignValue = (main(lineSize) - main(child.size)) / 2
+            }
         }
         positions.append(point(main: mainOffset + alignValue, cross: crossOffset))
         crossOffset += cross(child.size) + crossSpacing

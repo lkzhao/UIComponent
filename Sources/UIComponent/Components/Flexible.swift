@@ -7,7 +7,7 @@
 
 import UIKit
 
-public enum FlexItemAlign {
+public enum FlexItemAlign: CaseIterable {
     case start, end, center, stretch, auto
 }
 

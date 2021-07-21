@@ -87,8 +87,8 @@ extension StackComponent {
     
     var primaryOffset = offset
     var positions: [CGPoint] = []
-    for child in renderers {
-      let crossValue: CGFloat
+    for (index, child) in renderers.enumerated() {
+      var crossValue: CGFloat = 0
       switch alignItems {
       case .start:
         crossValue = 0
@@ -99,6 +99,13 @@ extension StackComponent {
       case .stretch:
         crossValue = 0
       }
+        if let c = self.children[index] as? Flexible {
+            if c.alignSelf == .end {
+                crossValue = crossMax - cross(child.size)
+            } else if c.alignSelf == .center {
+                crossValue = (crossMax - cross(child.size)) / 2
+            }
+        }
       positions.append(point(main: primaryOffset, cross: crossValue))
       primaryOffset += main(child.size) + distributedSpacing
     }
@@ -136,7 +143,7 @@ extension StackComponent {
       for (index, child) in children.enumerated() {
         if let child = child as? Flexible {
           let mainReserved = mainPerFlex * child.flex
-          let constraint = Constraint(minSize: size(main: mainReserved, cross: alignItems == .stretch ? cross(constraint.maxSize) : 0),
+            let constraint = Constraint(minSize: size(main: mainReserved, cross: (alignItems == .stretch || child.alignSelf == .stretch) ? cross(constraint.maxSize) : 0),
                                       maxSize: size(main: mainReserved, cross: cross(constraint.maxSize)))
           renderers[index] = child.layout(constraint)
           mainFreezed += mainReserved
