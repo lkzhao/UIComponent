@@ -8,8 +8,9 @@
 
 import UIComponent
 import UIKit.UIScreen
+
 struct Cell: ComponentBuilder {
-  let id: String
+  let data: Context
   func build() -> Component {
     HStack(spacing: 10, alignItems: .center) {
       Image(systemName: "display.2")
@@ -21,7 +22,14 @@ struct Cell: ComponentBuilder {
           Image(systemName: "checkmark.shield.fill")
         }.flex()
       }.flex()
-    }.inset(10).size(width: UIScreen.main.bounds.width - 40, height: 100).styleColor(.systemGroupedBackground).id(id)
+    }.inset(10).size(width: UIScreen.main.bounds.width - 40, height: 100).styleColor(data.fillColor).id(data.id)
   }
   
+}
+
+extension Cell {
+  struct Context {
+    var fillColor: UIColor
+    var id: String
+  }
 }
