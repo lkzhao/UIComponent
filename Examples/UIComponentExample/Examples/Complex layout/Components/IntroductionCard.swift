@@ -32,8 +32,8 @@ struct IntroductionCard: ComponentBuilder {
   let tapHandler: (Bool) -> Void
   
   func build() -> Component {
-    HStack(spacing: 15) {
-      VStack(spacing: 10, justifyContent: .spaceBetween, alignItems: .center) {
+    HStack(spacing: 15, alignItems: .stretch) {
+      VStack(justifyContent: .spaceBetween, alignItems: .center) {
         AsyncImage(URL(string: "https://unsplash.com/photos/MR2A97jFDAs/download?force=true&w=640")!).size(width: 50, height: 50).update{$0.layer.cornerRadius = 50/2}.clipsToBounds(true)
         Image(systemName: expand ? "rectangle.compress.vertical" : "rectangle.expand.vertical").tappableView {
           tapHandler(expand)
@@ -45,7 +45,7 @@ struct IntroductionCard: ComponentBuilder {
         if expand {
           Text(longText, font: .systemFont(ofSize: 13)).textColor(.secondaryLabel)
         } else {
-          Text(longText, font: .systemFont(ofSize: 13)).textColor(.secondaryLabel).numberOfLines(2).size(height: 40)
+          Text(longText, font: .systemFont(ofSize: 13)).textColor(.secondaryLabel).numberOfLines(2).size(height: 35)
         }
       }.flex()
     }.inset(10).shadow().with(\.animator, AnimatedReloadAnimator()).flex()
