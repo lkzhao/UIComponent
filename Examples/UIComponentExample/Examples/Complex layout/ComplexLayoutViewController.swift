@@ -152,7 +152,7 @@ class ComplexLayoutViewController: ComponentViewController {
         }.inset(left: 10)
       }.inset(v: 10).styleColor(.systemGroupedBackground).id("horizontal")
       
-      Text("Waterfall", font: .boldSystemFont(ofSize: 20)).id("label3")
+      Text("Waterfall layouts", font: .boldSystemFont(ofSize: 20)).id("label3")
       VStack(spacing: 10) {
         Text("Horizontal waterfall").inset(left: 10)
         HorizontalWaterfall(columns: 3, spacing: 5) {
