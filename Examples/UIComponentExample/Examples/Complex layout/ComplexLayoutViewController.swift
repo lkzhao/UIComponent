@@ -99,8 +99,8 @@ class ComplexLayoutViewController: ComponentViewController {
           HStack(alignItems: .center) {
             Image(systemName: "plus")
             Text("Add new", font: .systemFont(ofSize: 14, weight: .regular)).textColor(.systemBlue)
-          }.inset(h: 10, v: 5).styleColor(.systemGray5).tappableView {
-            self.showAlert()
+          }.inset(h: 10, v: 5).styleColor(.systemGray5).tappableView { [weak self] in
+            self?.showAlert()
           }
         }.view().with(\.animator, AnimatedReloadAnimator())
         Separator()
@@ -119,8 +119,8 @@ class ComplexLayoutViewController: ComponentViewController {
           HStack(alignItems: .center) {
             Image(systemName: "plus")
             Text("Add new", font: .systemFont(ofSize: 14, weight: .regular)).textColor(.systemBlue)
-          }.inset(h: 10, v: 5).styleColor(.systemGray5).tappableView {
-            self.showAlert()
+          }.inset(h: 10, v: 5).styleColor(.systemGray5).tappableView { [weak self] in
+            self?.showAlert()
           }
         }.size(height: 150).view().with(\.animator, AnimatedReloadAnimator())
         
@@ -145,8 +145,8 @@ class ComplexLayoutViewController: ComponentViewController {
           }
         }.inset(h: 10).inset(top: 5).scrollView().showsHorizontalScrollIndicator(false).with(\.animator, AnimatedReloadAnimator())
         HStack(spacing: 10) {
-          SimpleViewComponent<UIButton>(view: resetButton).isEnabled(self.ids.count != 5)
-          SimpleViewComponent<UIButton>(view: shuffledBuuton).isEnabled(self.ids.count != 0)
+          SimpleViewComponent<UIButton>(view: resetButton).isEnabled(self.ids.count != 5).id("reset")
+          SimpleViewComponent<UIButton>(view: shuffledBuuton).isEnabled(self.ids.count != 0).id("shuffled")
         }.inset(left: 10)
       }.inset(v: 10).styleColor(.systemGroupedBackground).id("horizontal")
       
