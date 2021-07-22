@@ -28,26 +28,35 @@ struct IntroductionCard: ComponentBuilder {
     """
   
   
-  let expand: Bool
-  let tapHandler: (Bool) -> Void
+  let isExpand: Bool
+  let tapHandler: () -> Void
   
   func build() -> Component {
     HStack(spacing: 15, alignItems: .stretch) {
-      VStack(justifyContent: .spaceBetween, alignItems: .center) {
+      VStack(spacing: 5, alignItems: .center) {
         AsyncImage(URL(string: "https://unsplash.com/photos/MR2A97jFDAs/download?force=true&w=640")!).size(width: 50, height: 50).update{$0.layer.cornerRadius = 50/2}.clipsToBounds(true)
-        Image(systemName: expand ? "rectangle.compress.vertical" : "rectangle.expand.vertical").tappableView {
-          tapHandler(expand)
+        Text("isExpand: \(isExpand)", font: .systemFont(ofSize: 10, weight: .light))
+        Spacer()
+        Image(systemName: isExpand ? "rectangle.compress.vertical" : "rectangle.expand.vertical").tappableView {
+          tapHandler()
         }
       }
       VStack(spacing: 5) {
         Text("UIComponent", font: .boldSystemFont(ofSize: 17))
         Text("Powerful layout", font: .systemFont(ofSize: 14)).textColor(.link)
-        if expand {
+        if isExpand {
           Text(longText, font: .systemFont(ofSize: 13)).textColor(.secondaryLabel)
         } else {
           Text(longText, font: .systemFont(ofSize: 13)).textColor(.secondaryLabel).numberOfLines(2).size(height: 35)
         }
       }.flex()
-    }.inset(10).shadow().with(\.animator, AnimatedReloadAnimator()).flex()
+    }.inset(10).defaultShadow().with(\.animator, AnimatedReloadAnimator()).flex()
+  }
+}
+
+extension IntroductionCard {
+  init(_ isExpand: Bool, tapHandler: @escaping () -> Void) {
+    self.isExpand = isExpand
+    self.tapHandler = tapHandler
   }
 }

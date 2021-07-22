@@ -20,7 +20,7 @@ extension Component {
     }
   }
   
-  func shadow() -> ViewUpdateComponent<ComponentDisplayableViewComponent<ComponentView>> {
+  func defaultShadow() -> ViewUpdateComponent<ComponentDisplayableViewComponent<ComponentView>> {
     view().update {
       $0.backgroundColor = .white
       $0.layer.cornerRadius = 10

@@ -1,5 +1,5 @@
 //
-//  Cell.swift
+//  HorizontalCartItem.swift
 //  UIComponentExample
 //
 //  Created by y H on 2021/7/21.
@@ -9,13 +9,15 @@
 import UIComponent
 import UIKit.UIScreen
 
-struct Cell: ComponentBuilder {
+struct HorizontalCartItem: ComponentBuilder {
+  
   let data: Context
+  
   func build() -> Component {
     HStack(spacing: 10, alignItems: .center) {
       VStack(spacing: 5, alignItems: .center) {
         Image(systemName: "hand.tap")
-        Text("Tap delete", font: .systemFont(ofSize: 10))
+        Text("Tap to delete", font: .systemFont(ofSize: 10))
       }
       Space().size(width: .aspectPercentage(1), height: .fill).inset(10).styleColor(.systemBlue)
       VStack(justifyContent: .spaceAround) {
@@ -25,14 +27,14 @@ struct Cell: ComponentBuilder {
           Image(systemName: "checkmark.shield.fill")
         }.flex()
       }.flex()
-    }.inset(10).size(width: UIScreen.main.bounds.width - 80, height: 100).styleColor(data.fillColor).id(data.id)
+    }.inset(10).size(width: UIScreen.main.bounds.width - 80, height: 100).styleColor(data.fillColor).id(data.id.uuidString)
   }
   
 }
 
-extension Cell {
-  struct Context {
-    var fillColor: UIColor
-    var id: String
+extension HorizontalCartItem {
+  struct Context: Equatable {
+    let fillColor: UIColor
+    let id = UUID()
   }
 }
