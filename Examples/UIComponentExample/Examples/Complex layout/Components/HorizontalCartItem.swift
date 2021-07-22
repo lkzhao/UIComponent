@@ -8,6 +8,7 @@
 
 import UIComponent
 import UIKit.UIScreen
+import UIKit.UITraitCollection
 
 struct HorizontalCartItem: ComponentBuilder {
   
@@ -27,9 +28,8 @@ struct HorizontalCartItem: ComponentBuilder {
           Image(systemName: "checkmark.shield.fill")
         }.flex()
       }.flex()
-    }.inset(10).size(width: UIScreen.main.bounds.width - 80, height: 100).styleColor(data.fillColor).id(data.id.uuidString)
+    }.inset(10).size(width: 300, height: 100).styleColor(data.fillColor).id(data.id.uuidString)
   }
-  
 }
 
 extension HorizontalCartItem {
