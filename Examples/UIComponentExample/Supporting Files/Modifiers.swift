@@ -22,7 +22,7 @@ extension Component {
   
   func defaultShadow() -> ViewUpdateComponent<ComponentDisplayableViewComponent<ComponentView>> {
     view().update {
-      $0.backgroundColor = .secondarySystemBackground
+      $0.backgroundColor = .systemBackground
       $0.layer.cornerRadius = 10
       $0.layer.cornerCurve = .continuous
       $0.layer.shadowColor = UIColor.black.withAlphaComponent(0.1).cgColor
