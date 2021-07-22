@@ -26,6 +26,7 @@
 		B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7326789F3D005BCE8C /* CardData.swift */; };
 		B1F1BF182682747C003BA4AD /* Hero in Frameworks */ = {isa = PBXBuildFile; productRef = B1F1BF172682747C003BA4AD /* Hero */; };
 		B1F1BF192682747C003BA4AD /* Hero in Embed Frameworks */ = {isa = PBXBuildFile; productRef = B1F1BF172682747C003BA4AD /* Hero */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */; };
 		F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */; };
 		F8E3DD1426A7BC5F0062E58F /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1126A7BC5F0062E58F /* Cell.swift */; };
 		F8E3DD1526A7BC5F0062E58F /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */; };
@@ -67,6 +68,7 @@
 		B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController3.swift; sourceTree = "<group>"; };
 		B1CC3F7126789F07005BCE8C /* AddCardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardButton.swift; sourceTree = "<group>"; };
 		B1CC3F7326789F3D005BCE8C /* CardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
+		F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionCard.swift; sourceTree = "<group>"; };
 		F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexLayoutViewController.swift; sourceTree = "<group>"; };
 		F8E3DD1126A7BC5F0062E58F /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 			children = (
 				F8E3DD1126A7BC5F0062E58F /* Cell.swift */,
 				F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */,
+				F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				B1B5C47B266FD2D50035CF02 /* TabBarExample.swift in Sources */,
 				B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */,
 				F8E3DD1526A7BC5F0062E58F /* UserProfile.swift in Sources */,
+				F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */,
 				F8E3DD1626A7BC5F0062E58F /* ComplexLayoutViewController.swift in Sources */,
 				B1CC3F632677FCFD005BCE8C /* CardViewController.swift in Sources */,
 				F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */,

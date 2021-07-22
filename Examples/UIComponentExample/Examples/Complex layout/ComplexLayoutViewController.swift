@@ -27,14 +27,16 @@ class ComplexLayoutViewController: ComponentViewController {
   }
   
   var tags: [(String, UIColor)] = [("SwiftUI", .systemRed),
+                                   ("Hello", .systemOrange),
                                    ("UIComponent", .systemPink),
                                    ("Vue", .systemGreen),
-                                   ("Flex Layout", .systemTeal),
-                                   ("Java", .systemOrange)] {
+                                   ("Flex Layout", .systemTeal)] {
     didSet {
       reloadComponent()
     }
   }
+  
+  var expand = false
   
   lazy var waterfallData: [(CGSize, UIColor)] = {
     var sizes = [(CGSize, UIColor)]()
@@ -75,6 +77,11 @@ class ComplexLayoutViewController: ComponentViewController {
         }.id("2")
       }
       
+      IntroductionCard(expand: expand) { [weak self] value in
+        self?.expand = !value
+        self?.reloadComponent()
+      }
+      
       Text("Tag view", font: .boldSystemFont(ofSize: 20)).id("label2")
       VStack(spacing: 10) {
         Text("Tags row")
@@ -95,7 +102,7 @@ class ComplexLayoutViewController: ComponentViewController {
           }.inset(h: 10, v: 5).styleColor(.systemGray5).tappableView {
             self.showAlert()
           }
-        }
+        }.view().with(\.animator, AnimatedReloadAnimator())
         Separator()
         Text("Tags column")
         FlexColumn(spacing: 5) {
@@ -115,7 +122,7 @@ class ComplexLayoutViewController: ComponentViewController {
           }.inset(h: 10, v: 5).styleColor(.systemGray5).tappableView {
             self.showAlert()
           }
-        }.size(height: 150)
+        }.size(height: 150).view().with(\.animator, AnimatedReloadAnimator())
         
         Text("Shuffled tags").textColor(.systemBlue).tappableView { [weak self] in
           guard let self = self else {return}
@@ -136,7 +143,7 @@ class ComplexLayoutViewController: ComponentViewController {
               }
             }
           }
-        }.inset(h: 10).inset(top: 5).scrollView().showsHorizontalScrollIndicator(false).animator(AnimatedReloadAnimator())
+        }.inset(h: 10).inset(top: 5).scrollView().showsHorizontalScrollIndicator(false).with(\.animator, AnimatedReloadAnimator())
         HStack(spacing: 10) {
           SimpleViewComponent<UIButton>(view: resetButton).isEnabled(self.ids.count != 5)
           SimpleViewComponent<UIButton>(view: shuffledBuuton).isEnabled(self.ids.count != 0)

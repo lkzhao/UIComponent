@@ -31,7 +31,9 @@ struct UserProfile: ComponentBuilder {
   
   func build() -> Component {
     VStack(spacing: 5) {
+      
       HStack(spacing: 10, alignItems: .center) {
+        
         SimpleViewComponent<UIImageView>().update{$0.kf.setImage(with: URL(string: avatar), placeholder: UIImage(systemName: "person.circle.fill"))}
           .contentMode(.scaleAspectFill)
           .clipsToBounds(true)
@@ -39,20 +41,28 @@ struct UserProfile: ComponentBuilder {
           .update{$0.layer.cornerRadius = $0.frame.height/2}
           .with(\.layer.borderWidth, 2)
           .with(\.layer.borderColor, UIColor.white.cgColor)
-          .tappableView {}.shadowAvatar()
+          .shadowAvatar()
+        
         HStack(spacing: 5, justifyContent: .spaceBetween, alignItems: .center) {
+          
           VStack(spacing: 5) {
+            
             Text(userName)
+            
             HStack(justifyContent: .spaceBetween, alignItems: .center) {
               Text(introduce.isEmpty ? "introduce myself..." : introduce, font: .systemFont(ofSize: 13, weight: .light)).textColor(.secondaryLabel)
               Image(systemName: "chevron.right").tintColor(.systemGray)
             }
+            
             Text("gender: \(gender)").font(.systemFont(ofSize: 12, weight: .light)).textColor(.secondaryLabel)
+            
           }.flex()
         }.flex()
       }.inset(15).styleColor(.systemGroupedBackground).id("user-info")
+      
       if showWeather {
         HStack(justifyContent: .spaceEvenly, alignItems: .center) {
+          
           Spacer()
           Text("Weather forecast: ")
           HStack/* Can also be used this way HStack(spacing: 10) */ {
@@ -64,8 +74,10 @@ struct UserProfile: ComponentBuilder {
               Space(width: 10)
             }
           }.inset(h: 5, v: 5).styleColor(.systemGroupedBackground)
+          
         }
       }
     }.inset(5)
+    
   }
 }
