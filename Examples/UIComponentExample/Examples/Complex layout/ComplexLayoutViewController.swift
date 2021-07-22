@@ -14,11 +14,11 @@ class ComplexLayoutViewController: ComponentViewController {
   typealias Tag = (name: String, color: UIColor)
   typealias WaterfallItem = (size: CGSize, color: UIColor)
   
-  static let defaultHorizontalData = [HorizontalCartItem.Context(fillColor: colors.randomElement()!),
-                                      HorizontalCartItem.Context(fillColor: colors.randomElement()!),
-                                      HorizontalCartItem.Context(fillColor: colors.randomElement()!),
-                                      HorizontalCartItem.Context(fillColor: colors.randomElement()!),
-                                      HorizontalCartItem.Context(fillColor: colors.randomElement()!)]
+  static let defaultHorizontalData = [HorizontalCardItem.Context(fillColor: colors.randomElement()!),
+                                      HorizontalCardItem.Context(fillColor: colors.randomElement()!),
+                                      HorizontalCardItem.Context(fillColor: colors.randomElement()!),
+                                      HorizontalCardItem.Context(fillColor: colors.randomElement()!),
+                                      HorizontalCardItem.Context(fillColor: colors.randomElement()!)]
   static let colors: [UIColor] = [.systemRed, .systemBlue, .systemPink, .systemTeal, .systemGray, .systemFill, .systemGreen, .systemGreen, .systemYellow, .systemPurple, .systemOrange]
   
   var horizontalData = defaultHorizontalData {
@@ -140,7 +140,7 @@ class ComplexLayoutViewController: ComponentViewController {
             Text("No data here", font: .systemFont(ofSize: 17, weight: .medium)).flex()
           } else {
             for (offset, element) in horizontalData.enumerated() {
-              HorizontalCartItem(data: element).tappableView { [unowned self] in
+              HorizontalCardItem(data: element).tappableView { [unowned self] in
                 self.horizontalData.remove(at: offset)
               }
             }

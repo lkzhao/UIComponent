@@ -1,5 +1,5 @@
 //
-//  HorizontalCartItem.swift
+//  HorizontalCardItem.swift
 //  UIComponentExample
 //
 //  Created by y H on 2021/7/21.
@@ -10,7 +10,7 @@ import UIComponent
 import UIKit.UIScreen
 import UIKit.UITraitCollection
 
-struct HorizontalCartItem: ComponentBuilder {
+struct HorizontalCardItem: ComponentBuilder {
   
   let data: Context
   
@@ -32,7 +32,7 @@ struct HorizontalCartItem: ComponentBuilder {
   }
 }
 
-extension HorizontalCartItem {
+extension HorizontalCardItem {
   struct Context: Equatable {
     let fillColor: UIColor
     let id = UUID()
