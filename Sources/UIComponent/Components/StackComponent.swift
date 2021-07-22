@@ -89,11 +89,8 @@ extension StackComponent {
     var positions: [CGPoint] = []
     for (index, child) in renderers.enumerated() {
       var crossValue: CGFloat = 0
-      var aligenItem = alignItems
-        if let flex = self.children[index] as? Flexible, let aligenSelf = flex.alignSelf {
-            aligenItem = aligenSelf
-        }
-      switch aligenItem {
+      let alignChild = (children[index] as? Flexible)?.alignSelf ?? alignItems
+      switch alignChild {
       case .start:
         crossValue = 0
       case .end:
@@ -139,8 +136,9 @@ extension StackComponent {
       let mainPerFlex = mainMax == .infinity ? 0 : max(0, mainMax - mainFreezed) / flexCount
       for (index, child) in children.enumerated() {
         if let child = child as? Flexible {
+          let alignChild = child.alignSelf ?? alignItems
           let mainReserved = mainPerFlex * child.flex
-            let constraint = Constraint(minSize: size(main: mainReserved, cross: (alignItems == .stretch || child.alignSelf == .stretch) ? cross(constraint.maxSize) : 0),
+          let constraint = Constraint(minSize: size(main: mainReserved, cross: (alignChild == .stretch) ? cross(constraint.maxSize) : 0),
                                       maxSize: size(main: mainReserved, cross: cross(constraint.maxSize)))
           renderers[index] = child.layout(constraint)
           mainFreezed += mainReserved

@@ -98,8 +98,9 @@ extension FlexLayoutComponent {
         for index in range {
           let child = children[index]
           if let child = child as? Flexible {
+            let alignChild = child.alignSelf ?? alignItems
             let crossReserved = crossPerFlex * child.flex + cross(renderers[index].size)
-            let constraint = Constraint(minSize: size(main: (alignItems == .stretch || child.alignSelf == .stretch) ? main(lineSize) : 0, cross: crossReserved),
+            let constraint = Constraint(minSize: size(main: (alignChild == .stretch) ? main(lineSize) : 0, cross: crossReserved),
                                         maxSize: size(main: .infinity, cross: crossReserved))
             renderers[index] = child.layout(constraint)
           }
@@ -124,11 +125,8 @@ extension FlexLayoutComponent {
           renderers[lineStartIndex + itemIndex] = child
         }
         var alignValue: CGFloat = 0
-        var aligenItem = alignItems
-          if let flex = self.children[lineStartIndex + itemIndex] as? Flexible, let aligenSelf = flex.alignSelf {
-              aligenItem = aligenSelf
-          }
-        switch aligenItem {
+        let alignChild = (childComponent as? Flexible)?.alignSelf ?? alignItems
+        switch alignChild {
         case .start, .stretch:
           alignValue = 0
         case .end:
