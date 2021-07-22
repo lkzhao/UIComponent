@@ -14,22 +14,22 @@ class ComplexLayoutViewController: ComponentViewController {
   typealias Tag = (name: String, color: UIColor)
   typealias WaterfallItem = (size: CGSize, color: UIColor)
   
-  static let originalIds = [HorizontalCartItem.Context(fillColor: colors.randomElement()!),
-                            HorizontalCartItem.Context(fillColor: colors.randomElement()!),
-                            HorizontalCartItem.Context(fillColor: colors.randomElement()!),
-                            HorizontalCartItem.Context(fillColor: colors.randomElement()!),
-                            HorizontalCartItem.Context(fillColor: colors.randomElement()!)]
+  static let defaultHorizontalData = [HorizontalCartItem.Context(fillColor: colors.randomElement()!),
+                                      HorizontalCartItem.Context(fillColor: colors.randomElement()!),
+                                      HorizontalCartItem.Context(fillColor: colors.randomElement()!),
+                                      HorizontalCartItem.Context(fillColor: colors.randomElement()!),
+                                      HorizontalCartItem.Context(fillColor: colors.randomElement()!)]
   static let colors: [UIColor] = [.systemRed, .systemBlue, .systemPink, .systemTeal, .systemGray, .systemFill, .systemGreen, .systemGreen, .systemYellow, .systemPurple, .systemOrange]
   
-  var ids = originalIds {
+  var horizontalData = defaultHorizontalData {
     didSet {
       reloadComponent()
     }
   }
   
-  var tags: [Tag] = [("SwiftUI", .systemRed),
-                     ("Hello", .systemOrange),
+  var tags: [Tag] = [("Hello", .systemOrange),
                      ("UIComponent", .systemPink),
+                     ("SwiftUI", .systemRed),
                      ("Vue", .systemGreen),
                      ("Flex Layout", .systemTeal)] {
     didSet {
@@ -137,19 +137,19 @@ class ComplexLayoutViewController: ComponentViewController {
       VStack(spacing: 10) {
         Text("Horizontal list").inset(left: 10)
         HStack(spacing: 10, alignItems: .center) {
-          if ids.isEmpty {
+          if horizontalData.isEmpty {
             Text("No data here", font: .systemFont(ofSize: 17, weight: .medium)).flex()
           } else {
-            for (offset, element) in ids.enumerated() {
+            for (offset, element) in horizontalData.enumerated() {
               HorizontalCartItem(data: element).tappableView { [unowned self] in
-                self.ids.remove(at: offset)
+                self.horizontalData.remove(at: offset)
               }
             }
           }
         }.inset(h: 10).inset(top: 5).scrollView().showsHorizontalScrollIndicator(false).with(\.animator, AnimatedReloadAnimator())
         HStack(spacing: 10) {
-          SimpleViewComponent<UIButton>(view: resetButton).isEnabled(self.ids.count != 5).id("reset")
-          SimpleViewComponent<UIButton>(view: shuffleButton).isEnabled(self.ids.count != 0).id("shuffled")
+          SimpleViewComponent<UIButton>(view: resetButton).isEnabled(self.horizontalData.count != 5).id("reset")
+          SimpleViewComponent<UIButton>(view: shuffleButton).isEnabled(self.horizontalData.count != 0).id("shuffled")
         }.inset(left: 10)
       }.inset(v: 10).styleColor(.systemGroupedBackground).id("horizontal")
       
@@ -183,11 +183,11 @@ class ComplexLayoutViewController: ComponentViewController {
   }
   
   @objc func resetIds() {
-    ids = ComplexLayoutViewController.originalIds.shuffled()
+    horizontalData = ComplexLayoutViewController.defaultHorizontalData.shuffled()
   }
   
   @objc func shuffled() {
-    ids = ids.shuffled()
+    horizontalData = horizontalData.shuffled()
   }
   
   func showAlert() {

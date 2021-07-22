@@ -44,8 +44,8 @@ struct UserProfile: ComponentBuilder {
           .with(\.layer.borderWidth, 2)
           .with(\.layer.borderColor, UIColor.white.cgColor)
           .view()
-          .shadowAvatar()
           .id("avatar")
+          .shadowAvatar()
         
         HStack(spacing: 5, justifyContent: .spaceBetween, alignItems: .center) {
           

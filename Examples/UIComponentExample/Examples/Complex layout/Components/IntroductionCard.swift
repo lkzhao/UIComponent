@@ -35,7 +35,7 @@ struct IntroductionCard: ComponentBuilder {
     HStack(spacing: 15, alignItems: .stretch) {
       VStack(spacing: 5, alignItems: .center) {
         AsyncImage(URL(string: "https://unsplash.com/photos/MR2A97jFDAs/download?force=true&w=640")!).size(width: 50, height: 50).update{$0.layer.cornerRadius = 50/2}.clipsToBounds(true)
-        Text("isExpand: \(isExpand)", font: .systemFont(ofSize: 10, weight: .light))
+        Text("isExpand: \(isExpand)", font: .systemFont(ofSize: 10, weight: .light)).id("label.state.\(isExpand)")
         Spacer()
         Image(systemName: isExpand ? "rectangle.compress.vertical" : "rectangle.expand.vertical").tappableView {
           tapHandler()
@@ -50,7 +50,7 @@ struct IntroductionCard: ComponentBuilder {
           Text(longText, font: .systemFont(ofSize: 13)).textColor(.secondaryLabel).numberOfLines(2).size(height: 35)
         }
       }.flex()
-    }.inset(10).defaultShadow().with(\.animator, AnimatedReloadAnimator()).flex()
+    }.inset(10).defaultShadow().with(\.animator, AnimatedReloadAnimator()).id("introduction")
   }
 }
 
