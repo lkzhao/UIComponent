@@ -60,17 +60,16 @@ class ComplexLayoutViewController: ComponentViewController {
   lazy var resetButton: UIButton = {
     let button = UIButton(type: .system)
     button.setTitle("Reset", for: .normal)
-    button.addTarget(self, action: #selector(self.resetIds), for: .touchUpInside)
+    button.addTarget(self, action: #selector(self.resetHorizontalData), for: .touchUpInside)
     return button
   }()
   
   lazy var shuffleButton: UIButton = {
     let button = UIButton(type: .system)
     button.setTitle("Shuffle", for: .normal)
-    button.addTarget(self, action: #selector(self.resetIds), for: .touchUpInside)
+    button.addTarget(self, action: #selector(self.shuffle), for: .touchUpInside)
     return button
   }()
-  
   
   override var component: Component {
     VStack(spacing: 20) {
@@ -182,11 +181,11 @@ class ComplexLayoutViewController: ComponentViewController {
     componentView.animator = AnimatedReloadAnimator()
   }
   
-  @objc func resetIds() {
+  @objc func resetHorizontalData() {
     horizontalData = ComplexLayoutViewController.defaultHorizontalData.shuffled()
   }
   
-  @objc func shuffled() {
+  @objc func shuffle() {
     horizontalData = horizontalData.shuffled()
   }
   
