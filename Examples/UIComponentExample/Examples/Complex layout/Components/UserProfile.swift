@@ -37,7 +37,7 @@ struct UserProfile: ComponentBuilder {
           .contentMode(.scaleAspectFill)
           .clipsToBounds(true)
           .size(width: 100, height: .aspectPercentage(1))
-          .update{
+          .update {
             $0.layer.cornerRadius = $0.frame.height/2
             $0.kf.setImage(with: URL(string: avatar), placeholder: UIImage(systemName: "person.circle.fill"))
           }
