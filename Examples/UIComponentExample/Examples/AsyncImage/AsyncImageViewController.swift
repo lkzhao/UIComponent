@@ -8,7 +8,6 @@
 
 import UIComponent
 import UIKit
-import Hero
 
 struct ImageData {
   let url: URL
@@ -36,12 +35,9 @@ class AsyncImageViewController: ComponentViewController {
       for image in images {
         AsyncImage(image.url)
           .size(width: .fill, height: .aspectPercentage(image.size.height / image.size.width))
-          .heroID(image.url.absoluteString)
-          .heroModifiers([.forceNonFade])
           .tappableView {
             let detailVC = AsyncImageDetailViewController()
             detailVC.image = image
-            $0.parentViewController?.navigationController?.isHeroEnabled = true
             $0.parentViewController?.navigationController?.pushViewController(detailVC, animated: true)
           }
       }
@@ -50,7 +46,6 @@ class AsyncImageViewController: ComponentViewController {
   
   init() {
     super.init(nibName: nil, bundle: nil)
-    isHeroEnabled = true
     title = "Async Image"
   }
   
@@ -67,25 +62,10 @@ class AsyncImageDetailViewController: ComponentViewController {
     VStack {
       AsyncImage(image.url)
         .size(width: .fill, height: .aspectPercentage(image.size.height / image.size.width))
-        .heroID(image.url.absoluteString)
         .tappableView {
           $0.parentViewController?.navigationController?.popViewController(animated: true)
         }
     }
-  }
-  
-  init() {
-    super.init(nibName: nil, bundle: nil)
-    isHeroEnabled = true
-  }
-  
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    self.view.heroModifiers = [.fade]
   }
 }
 

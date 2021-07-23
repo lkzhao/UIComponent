@@ -16,15 +16,14 @@ struct HorizontalCardItem: ComponentBuilder {
   
   func build() -> Component {
     HStack(spacing: 10, alignItems: .center) {
-      VStack(spacing: 5, alignItems: .center) {
+      VStack(spacing: 5, justifyContent: .center, alignItems: .center) {
         Image(systemName: "hand.tap")
         Text("Tap to delete", font: .systemFont(ofSize: 10))
-      }
-      Space().size(width: .aspectPercentage(1), height: .fill).inset(10).styleColor(.systemBlue)
+      }.inset(10).size(width: .aspectPercentage(1), height: .fill).styleColor(data.fillColor)
       VStack(justifyContent: .spaceAround) {
-        Text("This can occupy one line").numberOfLines(2).flex()
+        Text("This is a title").flex()
         HStack(spacing: 5, alignItems: .center) {
-          Text("long long long long long Text", font: .systemFont(ofSize: 14)).textColor(.secondaryLabel).numberOfLines(1).flex()
+          Text("This is a description", font: .systemFont(ofSize: 14)).textColor(.secondaryLabel).flex()
           Image(systemName: "checkmark.shield.fill")
         }.flex()
       }.flex()
@@ -34,7 +33,7 @@ struct HorizontalCardItem: ComponentBuilder {
 
 extension HorizontalCardItem {
   struct Context: Equatable {
-    let fillColor: UIColor
     let id = UUID()
+    let fillColor = UIColor.randomSystemColor()
   }
 }

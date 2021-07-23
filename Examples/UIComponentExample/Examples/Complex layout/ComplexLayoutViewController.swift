@@ -12,16 +12,12 @@ import UIKit.UIButton
 class ComplexLayoutViewController: ComponentViewController {
   
   typealias Tag = (name: String, color: UIColor)
-  typealias WaterfallItem = (size: CGSize, color: UIColor)
   
-  static let defaultHorizontalData = [HorizontalCardItem.Context(fillColor: colors.randomElement()!),
-                                      HorizontalCardItem.Context(fillColor: colors.randomElement()!),
-                                      HorizontalCardItem.Context(fillColor: colors.randomElement()!),
-                                      HorizontalCardItem.Context(fillColor: colors.randomElement()!),
-                                      HorizontalCardItem.Context(fillColor: colors.randomElement()!)]
-  static let colors: [UIColor] = [.systemRed, .systemBlue, .systemPink, .systemTeal, .systemGray, .systemFill, .systemGreen, .systemGreen, .systemYellow, .systemPurple, .systemOrange]
+  static let defaultHorizontalListData: [HorizontalCardItem.Context] = (0..<10).map { _ in
+    HorizontalCardItem.Context()
+  }
   
-  var horizontalData = defaultHorizontalData {
+  var horizontalListData = defaultHorizontalListData {
     didSet {
       reloadComponent()
     }
@@ -49,25 +45,17 @@ class ComplexLayoutViewController: ComponentViewController {
     }
   }
   
-  lazy var waterfallData: [WaterfallItem] = {
-    var sizes = [(CGSize, UIColor)]()
-    for _ in 1 ... 30 {
-      sizes.append((CGSize(width: Int(arc4random_uniform(300 - 100)) + 100, height: Int(arc4random_uniform(300 - 100)) + 100), ComplexLayoutViewController.colors.randomElement()!))
-    }
-    return sizes
-  }()
-  
   lazy var resetButton: UIButton = {
     let button = UIButton(type: .system)
     button.setTitle("Reset", for: .normal)
-    button.addTarget(self, action: #selector(self.resetHorizontalData), for: .touchUpInside)
+    button.addTarget(self, action: #selector(resetHorizontalListData), for: .touchUpInside)
     return button
   }()
   
   lazy var shuffleButton: UIButton = {
     let button = UIButton(type: .system)
     button.setTitle("Shuffle", for: .normal)
-    button.addTarget(self, action: #selector(self.shuffle), for: .touchUpInside)
+    button.addTarget(self, action: #selector(shuffleHorizontalListData), for: .touchUpInside)
     return button
   }()
   
@@ -77,14 +65,23 @@ class ComplexLayoutViewController: ComponentViewController {
       VStack(spacing: 10) {
         UserProfile(avatar: "https://unsplash.com/photos/Yn0l7uwBrpw/download?force=true&w=640",
                     userName: "Jack",
-                    introduce: "This is simply amazing",
-                    showWeather: showWeather)
+                    introduce: "This is simply amazing")
+        if showWeather {
+          HStack(justifyContent: .end, alignItems: .center) {
+            Text("Weather forecast: ")
+            HStack(spacing: 10) {
+              Image(systemName: "sun.dust")
+              Image(systemName: "sun.haze")
+              Image(systemName: "cloud.bolt.rain.fill")
+            }.inset(5).styleColor(.systemGroupedBackground)
+          }
+        }
         Text(showWeather ? "Hide weather" : "Show weather").textColor(.systemBlue).tappableView { [unowned self] in
           self.showWeather.toggle()
-        }.id("2")
+        }.id("weather-toggle")
       }
-      
-      IntroductionCard(isExpanded) { [unowned self] in
+
+      IntroductionCard(isExpanded: isExpanded) { [unowned self] in
         self.isExpanded.toggle()
       }
       
@@ -105,7 +102,7 @@ class ComplexLayoutViewController: ComponentViewController {
             Image(systemName: "plus")
             Text("Add new", font: .systemFont(ofSize: 14, weight: .regular)).textColor(.systemBlue)
           }.inset(h: 10, v: 5).styleColor(.systemGray5).tappableView { [unowned self] in
-            self.showAlert()
+            self.didTapAddTag()
           }
         }.view().with(\.animator, AnimatedReloadAnimator())
         Separator()
@@ -115,18 +112,18 @@ class ComplexLayoutViewController: ComponentViewController {
             Text("Empty Tag")
           } else {
             for (index, tag) in tags.enumerated() {
-              Text(tag.0, font: .systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.1).tappableView { [unowned self] in
+              Text(tag.name, font: .systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.color).tappableView { [unowned self] in
                 self.tags.remove(at: index)
-              }.id(tag.0)
+              }.id(tag.name)
             }
           }
           HStack(alignItems: .center) {
             Image(systemName: "plus")
             Text("Add new", font: .systemFont(ofSize: 14, weight: .regular)).textColor(.systemBlue)
           }.inset(h: 10, v: 5).styleColor(.systemGray5).tappableView { [unowned self] in
-            self.showAlert()
+            self.didTapAddTag()
           }
-        }.size(height: 150).view().with(\.animator, AnimatedReloadAnimator())
+        }.size(height: 130).view().with(\.animator, AnimatedReloadAnimator())
         
         Text("Shuffle tags").textColor(.systemBlue).tappableView { [unowned self] in
           self.tags = self.tags.shuffled()
@@ -136,43 +133,21 @@ class ComplexLayoutViewController: ComponentViewController {
       VStack(spacing: 10) {
         Text("Horizontal list").inset(left: 10)
         HStack(spacing: 10, alignItems: .center) {
-          if horizontalData.isEmpty {
+          if horizontalListData.isEmpty {
             Text("No data here", font: .systemFont(ofSize: 17, weight: .medium)).flex()
           } else {
-            for (offset, element) in horizontalData.enumerated() {
+            for (offset, element) in horizontalListData.enumerated() {
               HorizontalCardItem(data: element).tappableView { [unowned self] in
-                self.horizontalData.remove(at: offset)
+                self.horizontalListData.remove(at: offset)
               }
             }
           }
-        }.inset(h: 10).inset(top: 5).scrollView().showsHorizontalScrollIndicator(false).with(\.animator, AnimatedReloadAnimator())
+        }.inset(top: 5, left: 10, bottom: 0, right: 10).visibleInset(-200).scrollView().showsHorizontalScrollIndicator(false).with(\.animator, AnimatedReloadAnimator())
         HStack(spacing: 10) {
-          SimpleViewComponent<UIButton>(view: resetButton).isEnabled(self.horizontalData.count != 5).id("reset")
-          SimpleViewComponent<UIButton>(view: shuffleButton).isEnabled(self.horizontalData.count != 0).id("shuffled")
+          SimpleViewComponent<UIButton>(view: resetButton).isEnabled(horizontalListData != ComplexLayoutViewController.defaultHorizontalListData).id("reset")
+          SimpleViewComponent<UIButton>(view: shuffleButton).isEnabled(!horizontalListData.isEmpty).id("shuffled")
         }.inset(left: 10)
       }.inset(v: 10).styleColor(.systemGroupedBackground).id("horizontal")
-      
-      Text("Waterfall layouts", font: .boldSystemFont(ofSize: 20)).id("label3")
-      VStack(spacing: 10) {
-        Text("Horizontal waterfall").inset(left: 10)
-        HorizontalWaterfall(columns: 3, spacing: 5) {
-          for (index, data) in self.waterfallData.enumerated() {
-            let size = data.0
-            Space().size(width: .aspectPercentage(size.width/size.height), height: .fill).styleColor(data.1).overlay(Text("\(index)").textAlignment(.center))
-          }
-        }.inset(h: 10).size(height: .absolute(300)).scrollView().showsHorizontalScrollIndicator(false)
-      }.inset(v: 10).styleColor(.systemGroupedBackground).id("Waterfall1")
-      
-      VStack(spacing: 10) {
-        Text("Vertical waterfall").inset(left: 10)
-        Waterfall(columns: 3, spacing: 5) {
-          for (index, data) in self.waterfallData.enumerated() {
-            let size = data.size
-            Space().size(width: .fill, height: .aspectPercentage(size.height/size.width)).styleColor(data.color).overlay(Text("\(index)").textAlignment(.center))
-          }
-        }.inset(h: 10).size(width: .fill)
-      }.inset(v: 10).styleColor(.systemGroupedBackground).id("Waterfall2")
-      
     }.inset(20)
   }
   
@@ -181,15 +156,15 @@ class ComplexLayoutViewController: ComponentViewController {
     componentView.animator = AnimatedReloadAnimator()
   }
   
-  @objc func resetHorizontalData() {
-    horizontalData = ComplexLayoutViewController.defaultHorizontalData.shuffled()
+  @objc func resetHorizontalListData() {
+    horizontalListData = ComplexLayoutViewController.defaultHorizontalListData
   }
   
-  @objc func shuffle() {
-    horizontalData = horizontalData.shuffled()
+  @objc func shuffleHorizontalListData() {
+    horizontalListData = horizontalListData.shuffled()
   }
   
-  func showAlert() {
+  func didTapAddTag() {
     let alertController = UIAlertController(title: "Tag",
                                             message: "Create new label",
                                             preferredStyle: .alert)
@@ -203,9 +178,9 @@ class ComplexLayoutViewController: ComponentViewController {
     let confirmAction = UIAlertAction(
       title: "Confirm",
       style: .default,
-      handler: { action in
+      handler: { [unowned self] action in
         guard let textField = (alertController.textFields?.first), let text = textField.text, !text.isEmpty else { return }
-        self.tags.append((text, ComplexLayoutViewController.colors.randomElement()!))
+        self.tags.append((text, .randomSystemColor()))
       })
     alertController.addAction(confirmAction)
     alertController.addTextField { textField in
@@ -217,5 +192,4 @@ class ComplexLayoutViewController: ComponentViewController {
             completion: nil)
     
   }
-  
 }

@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "Hero",
-        "repositoryURL": "https://github.com/HeroTransitions/Hero",
-        "state": {
-          "branch": null,
-          "revision": "efa709686035831b23b7bf58f652b0c4b892aa1d",
-          "version": "1.6.1"
-        }
-      },
-      {
         "package": "Kingfisher",
         "repositoryURL": "https://github.com/onevcat/Kingfisher",
         "state": {

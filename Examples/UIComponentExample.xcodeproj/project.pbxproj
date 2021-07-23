@@ -16,7 +16,7 @@
 		B121A0A024F8771E00E59F78 /* UIComponent in Frameworks */ = {isa = PBXBuildFile; productRef = B121A09F24F8771E00E59F78 /* UIComponent */; };
 		B16EA6A02677E262005CFB18 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B16EA69F2677E262005CFB18 /* Kingfisher */; };
 		B16EA6A22677E26F005CFB18 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16EA6A12677E26F005CFB18 /* AsyncImage.swift */; };
-		B1B5C47B266FD2D50035CF02 /* TabBarExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */; };
+		B1B079EE26AB398E003BEAFB /* WaterfallLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B079ED26AB398E003BEAFB /* WaterfallLayoutViewController.swift */; };
 		B1CC3F632677FCFD005BCE8C /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F622677FCFD005BCE8C /* CardViewController.swift */; };
 		B1CC3F652677FD99005BCE8C /* ComponentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F642677FD99005BCE8C /* ComponentViewController.swift */; };
 		B1CC3F672677FF79005BCE8C /* AsyncImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F662677FF79005BCE8C /* AsyncImageViewController.swift */; };
@@ -24,8 +24,6 @@
 		B1CC3F7026789E1F005BCE8C /* CardViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */; };
 		B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7126789F07005BCE8C /* AddCardButton.swift */; };
 		B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7326789F3D005BCE8C /* CardData.swift */; };
-		B1F1BF182682747C003BA4AD /* Hero in Frameworks */ = {isa = PBXBuildFile; productRef = B1F1BF172682747C003BA4AD /* Hero */; };
-		B1F1BF192682747C003BA4AD /* Hero in Embed Frameworks */ = {isa = PBXBuildFile; productRef = B1F1BF172682747C003BA4AD /* Hero */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */; };
 		F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */; };
 		F8E3DD1426A7BC5F0062E58F /* HorizontalCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1126A7BC5F0062E58F /* HorizontalCardItem.swift */; };
@@ -42,7 +40,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				B1F1BF192682747C003BA4AD /* Hero in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -60,7 +57,7 @@
 		A304893321C347020026EDA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B10A123124F31EAA0076B038 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		B16EA6A12677E26F005CFB18 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
-		B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarExample.swift; sourceTree = "<group>"; };
+		B1B079ED26AB398E003BEAFB /* WaterfallLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterfallLayoutViewController.swift; sourceTree = "<group>"; };
 		B1CC3F622677FCFD005BCE8C /* CardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
 		B1CC3F642677FD99005BCE8C /* ComponentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentViewController.swift; sourceTree = "<group>"; };
 		B1CC3F662677FF79005BCE8C /* AsyncImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageViewController.swift; sourceTree = "<group>"; };
@@ -83,7 +80,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B16EA6A02677E262005CFB18 /* Kingfisher in Frameworks */,
-				B1F1BF182682747C003BA4AD /* Hero in Frameworks */,
 				B121A0A024F8771E00E59F78 /* UIComponent in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -128,6 +124,14 @@
 			path = UIComponentExample;
 			sourceTree = "<group>";
 		};
+		B1B079EC26AB397A003BEAFB /* WaterfallLayout */ = {
+			isa = PBXGroup;
+			children = (
+				B1B079ED26AB398E003BEAFB /* WaterfallLayoutViewController.swift */,
+			);
+			path = WaterfallLayout;
+			sourceTree = "<group>";
+		};
 		B1CC3F682677FFCC005BCE8C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,22 +169,14 @@
 			path = AsyncImage;
 			sourceTree = "<group>";
 		};
-		B1CC3F6B267800AA005BCE8C /* TabBar */ = {
-			isa = PBXGroup;
-			children = (
-				B1B5C47A266FD2D50035CF02 /* TabBarExample.swift */,
-			);
-			path = TabBar;
-			sourceTree = "<group>";
-		};
 		B1CC3F6C267800B9005BCE8C /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				F8E3DD0F26A7BC5F0062E58F /* Complex layout */,
-				F88E832326A3E70C009E7720 /* Flex Layout */,
 				B1CC3F692678008F005BCE8C /* Card */,
 				B1CC3F6A2678009C005BCE8C /* AsyncImage */,
-				B1CC3F6B267800AA005BCE8C /* TabBar */,
+				F88E832326A3E70C009E7720 /* Flex Layout */,
+				B1B079EC26AB397A003BEAFB /* WaterfallLayout */,
+				F8E3DD0F26A7BC5F0062E58F /* Complex layout */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -232,7 +228,6 @@
 			packageProductDependencies = (
 				B121A09F24F8771E00E59F78 /* UIComponent */,
 				B16EA69F2677E262005CFB18 /* Kingfisher */,
-				B1F1BF172682747C003BA4AD /* Hero */,
 			);
 			productName = CollectionKit3;
 			productReference = A304892421C347010026EDA7 /* UIComponentExample.app */;
@@ -265,7 +260,6 @@
 			mainGroup = A304891B21C347010026EDA7;
 			packageReferences = (
 				B16EA69E2677E262005CFB18 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				B1F1BF162682747C003BA4AD /* XCRemoteSwiftPackageReference "Hero" */,
 			);
 			productRefGroup = A304892521C347010026EDA7 /* Products */;
 			projectDirPath = "";
@@ -294,11 +288,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1B5C47B266FD2D50035CF02 /* TabBarExample.swift in Sources */,
 				B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */,
 				F8E3DD1526A7BC5F0062E58F /* UserProfile.swift in Sources */,
 				F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */,
 				F8E3DD1626A7BC5F0062E58F /* ComplexLayoutViewController.swift in Sources */,
+				B1B079EE26AB398E003BEAFB /* WaterfallLayoutViewController.swift in Sources */,
 				B1CC3F632677FCFD005BCE8C /* CardViewController.swift in Sources */,
 				F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */,
 				B1CC3F652677FD99005BCE8C /* ComponentViewController.swift in Sources */,
@@ -526,14 +520,6 @@
 				minimumVersion = 6.3.0;
 			};
 		};
-		B1F1BF162682747C003BA4AD /* XCRemoteSwiftPackageReference "Hero" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/HeroTransitions/Hero";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.6.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -545,11 +531,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B16EA69E2677E262005CFB18 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
-		};
-		B1F1BF172682747C003BA4AD /* Hero */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B1F1BF162682747C003BA4AD /* XCRemoteSwiftPackageReference "Hero" */;
-			productName = Hero;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
