@@ -9,6 +9,7 @@ import UIKit
 
 public struct Flexible: Component {
   public let flex: CGFloat
+  public let alignSelf: CrossAxisAlignment?
   public let child: Component
   public func layout(_ constraint: Constraint) -> Renderer {
     child.layout(constraint)
@@ -16,14 +17,14 @@ public struct Flexible: Component {
 }
 
 public extension Component {
-  func flex(_ flex: CGFloat = 1) -> Flexible {
-    Flexible(flex: flex, child: self)
+  func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> Flexible {
+    Flexible(flex: flex, alignSelf: alignSelf, child: self)
   }
 }
 
 public typealias Spacer = Flexible
 public extension Spacer {
   init() {
-    self.init(flex: 1, child: Space())
+    self.init(flex: 1, alignSelf: nil, child: Space())
   }
 }

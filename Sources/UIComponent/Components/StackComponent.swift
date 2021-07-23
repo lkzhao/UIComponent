@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Luke Zhao on 8/22/20.
 //
@@ -87,9 +87,10 @@ extension StackComponent {
     
     var primaryOffset = offset
     var positions: [CGPoint] = []
-    for child in renderers {
-      let crossValue: CGFloat
-      switch alignItems {
+    for (index, child) in renderers.enumerated() {
+      var crossValue: CGFloat = 0
+      let alignChild = (children[index] as? Flexible)?.alignSelf ?? alignItems
+      switch alignChild {
       case .start:
         crossValue = 0
       case .end:
@@ -135,8 +136,9 @@ extension StackComponent {
       let mainPerFlex = mainMax == .infinity ? 0 : max(0, mainMax - mainFreezed) / flexCount
       for (index, child) in children.enumerated() {
         if let child = child as? Flexible {
+          let alignChild = child.alignSelf ?? alignItems
           let mainReserved = mainPerFlex * child.flex
-          let constraint = Constraint(minSize: size(main: mainReserved, cross: alignItems == .stretch ? cross(constraint.maxSize) : 0),
+          let constraint = Constraint(minSize: size(main: mainReserved, cross: (alignChild == .stretch) ? cross(constraint.maxSize) : 0),
                                       maxSize: size(main: mainReserved, cross: cross(constraint.maxSize)))
           renderers[index] = child.layout(constraint)
           mainFreezed += mainReserved

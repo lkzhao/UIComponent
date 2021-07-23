@@ -9,38 +9,10 @@
 import UIKit
 import UIComponent
 
-class Box: ComponentBuilder {
-  let width: CGFloat
-  let height: CGFloat
-  let text: String
-  init(_ text: String, width: CGFloat = 50, height: CGFloat = 50) {
-    self.width = width
-    self.height = height
-    self.text = text
-  }
-  convenience init(_ index: Int, width: CGFloat = 50, height: CGFloat = 50) {
-    self.init("\(index)", width: width, height: height)
-  }
-  func build() -> Component {
-    Space(width: width, height: height).styleColor(.systemBlue).overlay(Text(text).textColor(.white).textAlignment(.center).size(width: .fill, height: .fill))
-  }
-}
-
-extension Component {
-  func styleColor(_ tintColor: UIColor) -> ViewUpdateComponent<ComponentDisplayableViewComponent<ComponentView>> {
-    view().update {
-      $0.backgroundColor = tintColor.withAlphaComponent(0.5)
-      $0.layer.cornerRadius = 10
-      $0.layer.cornerCurve = .continuous
-      $0.layer.borderWidth = 2
-      $0.layer.borderColor = tintColor.cgColor
-    }
-  }
-}
-
 class FlexLayoutViewController: ComponentViewController {
   
   override var component: Component {
+    
     VStack(spacing: 20) {
       Text("Flex layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
       
@@ -158,6 +130,22 @@ class FlexLayoutViewController: ComponentViewController {
           Box(5).flex()
         }.size(width: 190).inset(10).styleColor(.systemGroupedBackground)
       }
+      
+      VStack(spacing: 10) {
+        Text("Flex align-self", font: .boldSystemFont(ofSize: 20))
+        
+        for align in CrossAxisAlignment.allCases {
+          Text("number 1 align-self \(align)").size(width: .fill)
+          Flow {
+            Box(1).flex(alignSelf: align)
+            Box(2, height: 60)
+            Box(3, height: 70)
+            Box(4, height: 80)
+          }.size(width: 190).inset(10).styleColor(.systemGroupedBackground)
+        }
+        
+      }
+      
     }.inset(20)
   }
 }
