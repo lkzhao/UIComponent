@@ -30,6 +30,12 @@ struct InsetsRenderer: Renderer {
   var size: CGSize {
     return child.size.inset(by: -insets)
   }
+  var children: [Renderer] {
+    [child]
+  }
+  var positions: [CGPoint] {
+    [CGPoint(x: insets.left, y: insets.top)]
+  }
   func views(in frame: CGRect) -> [Renderable] {
     child.views(in: frame.inset(by: -insets)).map {
       Renderable(id: $0.id,

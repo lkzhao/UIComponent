@@ -142,7 +142,10 @@ class ComplexLayoutViewController: ComponentViewController {
               }
             }
           }
-        }.inset(top: 5, left: 10, bottom: 0, right: 10).visibleInset(-200).scrollView().showsHorizontalScrollIndicator(false).with(\.animator, AnimatedReloadAnimator())
+        }.inset(top: 5, left: 10, bottom: 0, right: 10).visibleInset(-200).scrollView().onFirstReload { scrollView in
+          let cellFrame = scrollView.frame(id: ComplexLayoutViewController.defaultHorizontalListData[5].id)!
+          scrollView.scrollRectToVisible(CGRect(center: cellFrame.center, size: scrollView.bounds.size), animated: false) // scroll to item 5 as the center
+        }.showsHorizontalScrollIndicator(false).with(\.animator, AnimatedReloadAnimator())
         HStack(spacing: 10) {
           SimpleViewComponent<UIButton>(view: resetButton).isEnabled(horizontalListData != ComplexLayoutViewController.defaultHorizontalListData).id("reset")
           SimpleViewComponent<UIButton>(view: shuffleButton).isEnabled(!horizontalListData.isEmpty).id("shuffled")

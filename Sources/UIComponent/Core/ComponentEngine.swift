@@ -52,6 +52,8 @@ public class ComponentEngine {
   /// contentOffset changes since the last reload
   var contentOffsetDelta: CGPoint = .zero
   
+  var onFirstReload: (() -> Void)?
+  
   /// Used to support zooming. setting a ``contentView`` will make the render
   /// all views inside the content view.
   var contentView: UIView? {
@@ -160,6 +162,9 @@ public class ComponentEngine {
       reloadCount += 1
       needsReload = false
       isReloading = false
+      if let onFirstReload = onFirstReload, reloadCount == 1 {
+        onFirstReload()
+      }
     }
     
     if !shouldSkipNextLayout {

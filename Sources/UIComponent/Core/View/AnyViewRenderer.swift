@@ -21,6 +21,8 @@ public extension AnyViewRenderer {
   var animator: Animator? { nil }
   var keyPath: String { "\(type(of: self))" }
   var reuseKey: String? { "\(type(of: self))" }
+  var children: [Renderer] { [] }
+  var positions: [CGPoint] { [] }
 
   func views(in frame: CGRect) -> [Renderable] {
     let childFrame = CGRect(origin: .zero, size: size)

@@ -102,10 +102,13 @@ public extension ComponentDisplayableView {
   }
 }
 
-extension ComponentDisplayableView {
+public extension ComponentDisplayableView {
   func view(at point: CGPoint) -> UIView? {
     visibleViews.first {
       $0.point(inside: $0.convert(point, from: self), with: nil)
     }
+  }
+  func frame(id: String) -> CGRect? {
+    engine.renderer?.frame(id: id)
   }
 }

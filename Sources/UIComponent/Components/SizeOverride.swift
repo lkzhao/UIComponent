@@ -131,6 +131,12 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
 struct SizeOverrideRenderer: Renderer {
   let child: Renderer
   let size: CGSize
+  var children: [Renderer] {
+    [child]
+  }
+  var positions: [CGPoint] {
+    [.zero]
+  }
   func views(in frame: CGRect) -> [Renderable] {
     child.views(in: frame)
   }

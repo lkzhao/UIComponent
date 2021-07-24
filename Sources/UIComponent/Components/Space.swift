@@ -22,6 +22,8 @@ public struct Space: Component {
 
 struct SpaceRenderer: Renderer {
   let size: CGSize
+  var children: [Renderer] { [] }
+  var positions: [CGPoint] { [] }
   func views(in frame: CGRect) -> [Renderable] {
     []
   }

@@ -29,6 +29,12 @@ struct VisibleFrameInsetRenderer: Renderer {
   var size: CGSize {
     child.size
   }
+  var children: [Renderer] {
+    [child]
+  }
+  var positions: [CGPoint] {
+    [.zero]
+  }
   func views(in frame: CGRect) -> [Renderable] {
     child.views(in: frame.inset(by: insets))
   }
@@ -39,6 +45,12 @@ struct DynamicVisibleFrameInsetRenderer: Renderer {
   let child: Renderer
   var size: CGSize {
     child.size
+  }
+  var children: [Renderer] {
+    [child]
+  }
+  var positions: [CGPoint] {
+    [.zero]
   }
   func views(in frame: CGRect) -> [Renderable] {
     child.views(in: frame.inset(by: insetProvider(frame)))
