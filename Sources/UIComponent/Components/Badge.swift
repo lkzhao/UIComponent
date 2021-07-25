@@ -34,7 +34,7 @@ public struct Badge: Component {
             let y = childRenderer.size.height - (badgeRenderer.size.height / 2)
             beagePosition = CGPoint(x: x + offset.x, y: y - offset.y)
         case .bottomRight:
-            let x = badgeRenderer.size.width - (badgeRenderer.size.width / 2)
+            let x = childRenderer.size.width - (badgeRenderer.size.width / 2)
             let y = childRenderer.size.height - (badgeRenderer.size.height / 2)
             beagePosition = CGPoint(x: x, y: y) - offset
         }
