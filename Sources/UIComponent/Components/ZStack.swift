@@ -8,15 +8,8 @@
 import UIKit
 
 public struct ZStack: Component {
-  public enum VerticalAlignment {
-    case top, center, bottom, stretch
-  }
-  public enum HorizontalAlignment {
-    case leading, center, trailing, stretch
-  }
-
-  public var verticalAlignment: VerticalAlignment = .center
-  public var horizontalAlignment: HorizontalAlignment = .center
+  public var verticalAlignment: CrossAxisAlignment = .center
+  public var horizontalAlignment: CrossAxisAlignment = .center
   public var children: [Component]
 
   public func layout(_ constraint: Constraint) -> Renderer {
@@ -28,21 +21,21 @@ public struct ZStack: Component {
     let positions: [CGPoint] = renderers.enumerated().map { (idx, node) in
       var result = CGRect(origin: .zero, size: node.size)
       switch verticalAlignment {
-      case .top:
+      case .start:
         result.origin.y = 0
       case .center:
         result.origin.y = (size.height - node.size.height) / 2
-      case .bottom:
+      case .end:
         result.origin.y = size.height - node.size.height
       case .stretch:
         result.size.height = size.height
       }
       switch horizontalAlignment {
-      case .leading:
+      case .start:
         result.origin.x = 0
       case .center:
         result.origin.x = (size.width - node.size.width) / 2
-      case .trailing:
+      case .end:
         result.origin.x = size.width - node.size.width
       case .stretch:
         result.size.width = size.width
@@ -57,8 +50,8 @@ public struct ZStack: Component {
 }
 
 public extension ZStack {
-  init(verticalAlignment: VerticalAlignment = .center,
-       horizontalAlignment: HorizontalAlignment = .center,
+  init(verticalAlignment: CrossAxisAlignment = .center,
+       horizontalAlignment: CrossAxisAlignment = .center,
        @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, children: content())
   }
