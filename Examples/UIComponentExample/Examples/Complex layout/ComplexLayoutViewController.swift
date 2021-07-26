@@ -151,7 +151,29 @@ class ComplexLayoutViewController: ComponentViewController {
           SimpleViewComponent<UIButton>(view: shuffleButton).isEnabled(!horizontalListData.isEmpty).id("shuffled")
         }.inset(left: 10)
       }.inset(v: 10).styleColor(.systemGroupedBackground).id("horizontal")
+      
+      Text("Badges", font: .boldSystemFont(ofSize: 20)).id("label3")
+      VStack(spacing: 10) {
+        Text("Badges custom offset")
+        Flow(spacing: 10) {
+          Box().badge(NumberBadge(1), offset: .zero)
+          Box().badge(NumberBadge("99+"), offset: CGVector(dx: 5, dy: -5))
+          Box().badge(NumberBadge.redPoint(), offset: CGVector(dx: -5, dy: 5))
+          Space(width: 50, height: 50).badge(BannerBadge("New"), horizontalAlignment: .stretch, offset: CGVector(dx: 0, dy: 2)).styleColor(.systemBlue).clipsToBounds(true)
+          Space(width: 50, height: 50).badge(BannerBadge("\nN\ne\nw\n", isHorizontal: false), verticalAlignment: .stretch).styleColor(.systemBlue).clipsToBounds(true)
+        }
+        Text("Badges position")
+        Flow(spacing: 10) {
+          for v in CrossAxisAlignment.allCases {
+            for h in CrossAxisAlignment.allCases {
+              Box().badge(NumberBadge.redPoint(), verticalAlignment: v, horizontalAlignment: h)
+            }
+          }
+        }
+      }.inset(10).styleColor(.systemGroupedBackground).id("badges")
+      
     }.inset(20)
+    
   }
   
   override func viewDidLoad() {
