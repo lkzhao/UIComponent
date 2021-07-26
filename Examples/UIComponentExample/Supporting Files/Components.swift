@@ -36,15 +36,18 @@ struct NumberBadge: ComponentBuilder {
   let isRoundStyle: Bool
   func build() -> Component {
     Text(text,
-         font: .systemFont(ofSize: 14))
-      .size(width: text.isEmpty ? 5 : 18, height: text.isEmpty ? 5 : 18)
+         font: .systemFont(ofSize: 12))
+      .size(width: text.isEmpty ? .absolute(8) : text.count <= 2 ? .absolute(16) : .fit,
+            height: text.isEmpty ? .absolute(8) : text.count <= 2 ? .absolute(16) : .fit)
       .adjustsFontSizeToFitWidth(true)
       .textColor(.white)
       .textAlignment(.center)
-      .inset(2)
+      .inset(h: text.isEmpty ? 0 : text.count <= 2 ? 2 : 5,
+             v: text.isEmpty ? 0 : 2)
       .view()
       .backgroundColor(.systemRed)
       .update {
+        $0.layer.cornerCurve = .continuous
         $0.layer.cornerRadius = isRoundStyle ? min($0.frame.width, $0.frame.height) / 2 : 0
       }.clipsToBounds(true)
   }

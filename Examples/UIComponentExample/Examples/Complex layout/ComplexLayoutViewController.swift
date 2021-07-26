@@ -156,8 +156,9 @@ class ComplexLayoutViewController: ComponentViewController {
       VStack(spacing: 10) {
         Text("Badges custom offset")
         Flow(spacing: 10) {
-          Box().badge(NumberBadge(1), offset: .zero)
-          Box().badge(NumberBadge("99+"), offset: CGVector(dx: 5, dy: -5))
+          Box().badge(NumberBadge(5), offset: CGVector(dx: 8, dy: -8))
+          Box().badge(NumberBadge(12), offset: CGVector(dx: 8, dy: -8))
+          Box().badge(NumberBadge("99+"), offset: CGVector(dx: 8, dy: -8))
           Box().badge(NumberBadge.redPoint(), offset: CGVector(dx: -5, dy: 5))
           Space(width: 50, height: 50).badge(BannerBadge("New"), horizontalAlignment: .stretch, offset: CGVector(dx: 0, dy: 2)).styleColor(.systemBlue).clipsToBounds(true)
           Space(width: 50, height: 50).badge(BannerBadge("New"), verticalAlignment: .end, horizontalAlignment: .stretch, offset: CGVector(dx: 0, dy: -2)).styleColor(.systemBlue).clipsToBounds(true)
