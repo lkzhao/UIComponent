@@ -160,7 +160,7 @@ class ComplexLayoutViewController: ComponentViewController {
           Box().badge(NumberBadge("99+"), offset: CGVector(dx: 5, dy: -5))
           Box().badge(NumberBadge.redPoint(), offset: CGVector(dx: -5, dy: 5))
           Space(width: 50, height: 50).badge(BannerBadge("New"), horizontalAlignment: .stretch, offset: CGVector(dx: 0, dy: 2)).styleColor(.systemBlue).clipsToBounds(true)
-          Space(width: 50, height: 50).badge(BannerBadge("\nN\ne\nw\n", isHorizontal: false), verticalAlignment: .stretch).styleColor(.systemBlue).clipsToBounds(true)
+          Space(width: 50, height: 50).badge(BannerBadge("New"), verticalAlignment: .end, horizontalAlignment: .stretch, offset: CGVector(dx: 0, dy: -2)).styleColor(.systemBlue).clipsToBounds(true)
         }
         Text("Badges position")
         Flow(spacing: 10) {
