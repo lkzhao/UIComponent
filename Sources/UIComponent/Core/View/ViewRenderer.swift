@@ -9,46 +9,46 @@ import UIKit
 
 @dynamicMemberLookup
 public protocol ViewRenderer: AnyViewRenderer {
-  associatedtype View: UIView
-  func makeView() -> View
-  func updateView(_ view: View)
+    associatedtype View: UIView
+    func makeView() -> View
+    func updateView(_ view: View)
 }
 
 public extension ViewRenderer {
-  // MARK: Default
-  func makeView() -> View {
-    View()
-  }
-  // MARK: AnyViewRenderer
-  func _makeView() -> UIView {
-    if let reuseKey = reuseKey {
-      return ReuseManager.shared.dequeue(identifier: reuseKey, makeView())
+    // MARK: Default
+    func makeView() -> View {
+        View()
     }
-    return makeView()
-  }
-  func _updateView(_ view: UIView) {
-    guard let view = view as? View else { return }
-    return updateView(view)
-  }
+    // MARK: AnyViewRenderer
+    func _makeView() -> UIView {
+        if let reuseKey = reuseKey {
+            return ReuseManager.shared.dequeue(identifier: reuseKey, makeView())
+        }
+        return makeView()
+    }
+    func _updateView(_ view: UIView) {
+        guard let view = view as? View else { return }
+        return updateView(view)
+    }
 }
 
 extension ViewRenderer {
-  subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<View, Value>) -> (Value) -> ViewKeyPathUpdateRenderer<View, Value, Self> {
-    { with(keyPath, $0) }
-  }
-  public func with<Value>(_ keyPath: ReferenceWritableKeyPath<View, Value>, _ value: Value) -> ViewKeyPathUpdateRenderer<View, Value, Self> {
-    ViewKeyPathUpdateRenderer(content: self, valueKeyPath: keyPath, value: value)
-  }
-  public func id(_ id: String) -> ViewIDRenderer<View, Self> {
-    ViewIDRenderer(content: self, id: id)
-  }
-  public func animator(_ animator: Animator?) -> ViewAnimatorRenderer<View, Self> {
-    ViewAnimatorRenderer(content: self, animator: animator)
-  }
-  public func reuseKey(_ reuseKey: String?) -> ViewReuseKeyRenderer<View, Self> {
-    ViewReuseKeyRenderer(content: self, reuseKey: reuseKey)
-  }
-  public func update(_ update: @escaping (View) -> Void) -> ViewUpdateRenderer<View, Self> {
-    ViewUpdateRenderer(content: self, update: update)
-  }
+    subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<View, Value>) -> (Value) -> ViewKeyPathUpdateRenderer<View, Value, Self> {
+        { with(keyPath, $0) }
+    }
+    public func with<Value>(_ keyPath: ReferenceWritableKeyPath<View, Value>, _ value: Value) -> ViewKeyPathUpdateRenderer<View, Value, Self> {
+        ViewKeyPathUpdateRenderer(content: self, valueKeyPath: keyPath, value: value)
+    }
+    public func id(_ id: String) -> ViewIDRenderer<View, Self> {
+        ViewIDRenderer(content: self, id: id)
+    }
+    public func animator(_ animator: Animator?) -> ViewAnimatorRenderer<View, Self> {
+        ViewAnimatorRenderer(content: self, animator: animator)
+    }
+    public func reuseKey(_ reuseKey: String?) -> ViewReuseKeyRenderer<View, Self> {
+        ViewReuseKeyRenderer(content: self, reuseKey: reuseKey)
+    }
+    public func update(_ update: @escaping (View) -> Void) -> ViewUpdateRenderer<View, Self> {
+        ViewUpdateRenderer(content: self, update: update)
+    }
 }

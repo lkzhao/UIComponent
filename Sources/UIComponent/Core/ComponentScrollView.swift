@@ -17,52 +17,52 @@ import UIKit
 ///
 /// See ``ComponentDisplayableView`` for usage details.
 open class ComponentScrollView: UIScrollView, ComponentDisplayableView {
-  lazy public var engine: ComponentEngine = ComponentEngine(view: self)
-  
-  public var onFirstReload: ((ComponentScrollView) -> Void)? {
-    didSet {
-      if let onFirstReload = onFirstReload {
-        engine.onFirstReload = { [weak self] in
-          guard let self = self else { return }
-          onFirstReload(self)
+    lazy public var engine: ComponentEngine = ComponentEngine(view: self)
+    
+    public var onFirstReload: ((ComponentScrollView) -> Void)? {
+        didSet {
+            if let onFirstReload = onFirstReload {
+                engine.onFirstReload = { [weak self] in
+                    guard let self = self else { return }
+                    onFirstReload(self)
+                }
+            } else {
+                engine.onFirstReload = nil
+            }
         }
-      } else {
-        engine.onFirstReload = nil
-      }
     }
-  }
-  
-  open override var contentOffset: CGPoint {
-    didSet {
-      setNeedsLayout()
+    
+    open override var contentOffset: CGPoint {
+        didSet {
+            setNeedsLayout()
+        }
     }
-  }
-
-  public var contentView: UIView? {
-    get { return engine.contentView }
-    set { engine.contentView = newValue }
-  }
-
-  open override func safeAreaInsetsDidChange() {
-    super.safeAreaInsetsDidChange()
-    setNeedsInvalidateLayout()
-  }
-
-  open override func layoutSubviews() {
-    super.layoutSubviews()
-    engine.layoutSubview()
-  }
-  
-  open override func sizeThatFits(_ size: CGSize) -> CGSize {
-    engine.sizeThatFits(size)
-  }
-  
-  @discardableResult open func scrollTo(id: String, animated: Bool) -> Bool {
-    if let frame = engine.renderer?.frame(id: id) {
-      scrollRectToVisible(frame, animated: animated)
-      return true
-    } else {
-      return false
+    
+    public var contentView: UIView? {
+        get { return engine.contentView }
+        set { engine.contentView = newValue }
     }
-  }
+    
+    open override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        setNeedsInvalidateLayout()
+    }
+    
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        engine.layoutSubview()
+    }
+    
+    open override func sizeThatFits(_ size: CGSize) -> CGSize {
+        engine.sizeThatFits(size)
+    }
+    
+    @discardableResult open func scrollTo(id: String, animated: Bool) -> Bool {
+        if let frame = engine.renderer?.frame(id: id) {
+            scrollRectToVisible(frame, animated: animated)
+            return true
+        } else {
+            return false
+        }
+    }
 }

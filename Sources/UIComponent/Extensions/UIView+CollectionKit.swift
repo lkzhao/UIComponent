@@ -9,39 +9,39 @@
 import UIKit
 
 protocol GenericValueHolder {
-  func write(to: AnyObject) -> GenericValueHolder
+    func write(to: AnyObject) -> GenericValueHolder
 }
 
 extension UIView {
-	private struct AssociatedKeys {
-		static var ckContext = "ckContext"
-	}
-
-  internal var _ckContext: CKContext? {
-    return objc_getAssociatedObject(self, &AssociatedKeys.ckContext) as? CKContext
-  }
-
-  internal var ckContext: CKContext {
-    if let context = _ckContext {
-      return context
+    private struct AssociatedKeys {
+        static var ckContext = "ckContext"
     }
-    let context = CKContext()
-    objc_setAssociatedObject(self, &AssociatedKeys.ckContext, context, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    return context
-  }
+    
+    internal var _ckContext: CKContext? {
+        return objc_getAssociatedObject(self, &AssociatedKeys.ckContext) as? CKContext
+    }
+    
+    internal var ckContext: CKContext {
+        if let context = _ckContext {
+            return context
+        }
+        let context = CKContext()
+        objc_setAssociatedObject(self, &AssociatedKeys.ckContext, context, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return context
+    }
 }
 
 @objc extension UIView {
-	open func recycleForUIComponentReuse() {
-    if let reuseIdentifier = _ckContext?.reuseIdentifier, let reuseManager = _ckContext?.reuseManager {
-      reuseManager.enqueue(identifier: reuseIdentifier, view: self)
-		} else {
-			removeFromSuperview()
-		}
-	}
+    open func recycleForUIComponentReuse() {
+        if let reuseIdentifier = _ckContext?.reuseIdentifier, let reuseManager = _ckContext?.reuseManager {
+            reuseManager.enqueue(identifier: reuseIdentifier, view: self)
+        } else {
+            removeFromSuperview()
+        }
+    }
 }
 
 class CKContext {
-  var reuseIdentifier: String?
-  var reuseManager: ReuseManager?
+    var reuseIdentifier: String?
+    var reuseManager: ReuseManager?
 }

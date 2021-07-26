@@ -8,11 +8,11 @@
 import Foundation
 
 public protocol ComponentBuilder: Component {
-  func build() -> Component
+    func build() -> Component
 }
 
 public extension ComponentBuilder {
-  func layout(_ constraint: Constraint) -> Renderer {
-    build().layout(constraint)
-  }
+    func layout(_ constraint: Constraint) -> Renderer {
+        build().layout(constraint)
+    }
 }

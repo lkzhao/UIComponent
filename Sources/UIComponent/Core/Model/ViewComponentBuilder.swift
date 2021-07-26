@@ -8,12 +8,12 @@
 import Foundation
 
 public protocol ViewComponentBuilder: ViewComponent {
-  associatedtype Content: ViewComponent
-  func build() -> Content
+    associatedtype Content: ViewComponent
+    func build() -> Content
 }
 
 public extension ViewComponentBuilder {
-  func layout(_ constraint: Constraint) -> Content.R {
-    build().layout(constraint)
-  }
+    func layout(_ constraint: Constraint) -> Content.R {
+        build().layout(constraint)
+    }
 }
