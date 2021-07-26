@@ -7,46 +7,56 @@
 
 import UIKit
 
-public enum BadgePosition {
-    case topLeft, topRight, bottomLeft, bottomRight
-}
-
 public struct Badge: Component {
+    
+    static let halfOffset = CGVector(dx: 0, dy: 0)
+    
     let child: Component
     let overlay: Component
-    let position: BadgePosition
-    let offset: CGPoint
+    let verticalAlignment: CrossAxisAlignment
+    let horizontalAlignment: CrossAxisAlignment
+    let offset: CGVector
     public func layout(_ constraint: Constraint) -> Renderer {
         let childRenderer = child.layout(constraint)
-        let badgeRenderer = overlay.layout(Constraint(minSize: .zero, maxSize: childRenderer.size))
-        let beagePosition: CGPoint
-        switch position {
-        case .topLeft:
-            let x = -(badgeRenderer.size.width / 2)
-            let y = -(badgeRenderer.size.height / 2)
-            beagePosition = CGPoint(x: x , y: y) + offset
-        case .topRight:
-            let x = childRenderer.size.width - (badgeRenderer.size.width / 2)
-            let y = -(badgeRenderer.size.height / 2)
-            beagePosition = CGPoint(x: x - offset.x, y: y + offset.y)
-        case .bottomLeft:
-            let x = -(badgeRenderer.size.width / 2)
-            let y = childRenderer.size.height - (badgeRenderer.size.height / 2)
-            beagePosition = CGPoint(x: x + offset.x, y: y - offset.y)
-        case .bottomRight:
-            let x = childRenderer.size.width - (badgeRenderer.size.width / 2)
-            let y = childRenderer.size.height - (badgeRenderer.size.height / 2)
-            beagePosition = CGPoint(x: x, y: y) - offset
+        let badgeRenderer = overlay.layout(Constraint(minSize: CGSize(width: horizontalAlignment == .stretch ? childRenderer.size.width : -.infinity ,
+                                                                      height: verticalAlignment == .stretch ? childRenderer.size.height : -.infinity) ,
+                                                      maxSize: childRenderer.size))
+        let beagePosition: (x: CGFloat, y: CGFloat)
+        switch horizontalAlignment {
+        case .start:
+            beagePosition.x = 0
+        case .end:
+            beagePosition.x = (childRenderer.size.width - badgeRenderer.size.width)
+        case .center:
+            beagePosition.x =  (childRenderer.size.width / 2 - badgeRenderer.size.width / 2)
+        case .stretch:
+            beagePosition.x = 0
         }
-        return SlowRenderer(size: childRenderer.size, children: [childRenderer, badgeRenderer], positions: [.zero, beagePosition])
+        switch verticalAlignment {
+        case .start:
+            beagePosition.y = 0
+        case .end:
+            beagePosition.y = (childRenderer.size.height - badgeRenderer.size.height)
+        case .center:
+            beagePosition.y = (childRenderer.size.height / 2 - badgeRenderer.size.height / 2)
+        case .stretch:
+            beagePosition.y = 0
+        }
+        let finallyBadgePosition = CGPoint(x: beagePosition.x, y: beagePosition.y) + offset
+        
+        return SlowRenderer(size: childRenderer.size, children: [childRenderer, badgeRenderer], positions: [.zero, finallyBadgePosition])
     }
 }
 
 public extension Component {
-    func badge(_ component: Component, position: BadgePosition = .topRight, offset: CGPoint = .zero) -> Badge {
+    func badge(_ component: Component,
+               verticalAlignment: CrossAxisAlignment = .start,
+               horizontalAlignment: CrossAxisAlignment = .end,
+               offset: CGVector = .zero) -> Badge {
         Badge(child: self,
               overlay: component,
-              position: position,
+              verticalAlignment: verticalAlignment,
+              horizontalAlignment: horizontalAlignment,
               offset: offset)
     }
 }

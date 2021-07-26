@@ -75,6 +75,10 @@ func + (left: CGPoint, right: CGPoint) -> CGPoint {
 	return CGPoint(x: left.x + right.x, y: left.y + right.y)
 }
 
+func + (left: CGPoint, right: CGVector) -> CGPoint {
+    return CGPoint(x: left.x + right.dx, y: left.y + right.dy)
+}
+
 func += (left: inout CGPoint, right: CGPoint) {
 	left.x += right.x
 	left.y += right.y
