@@ -8,9 +8,6 @@
 import UIKit
 
 public struct Badge: Component {
-    
-    static let halfOffset = CGVector(dx: 0, dy: 0)
-    
     let child: Component
     let overlay: Component
     let verticalAlignment: CrossAxisAlignment
