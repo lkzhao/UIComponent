@@ -67,14 +67,12 @@ struct NumberBadge: ComponentBuilder {
 
 struct BannerBadge: ComponentBuilder {
   let text: String
-  let isHorizontal: Bool
   func build() -> Component {
-    Text(text, font: .systemFont(ofSize: 11)).textAlignment(.center).textColor(.white).backgroundColor(.systemRed).adjustsFontSizeToFitWidth(true).size(width: isHorizontal ? .fit : .absolute(15), height: isHorizontal ? .absolute(15) : .fit).inset(h: 2)
+    Text(text, font: .systemFont(ofSize: 11)).textAlignment(.center).textColor(.white).backgroundColor(.systemRed).adjustsFontSizeToFitWidth(true).size(height: .absolute(15)).inset(h: 2)
   }
   
-  init(_ text: String, isHorizontal: Bool = true) {
+  init(_ text: String) {
     self.text = text
-    self.isHorizontal = isHorizontal
   }
   
 }
