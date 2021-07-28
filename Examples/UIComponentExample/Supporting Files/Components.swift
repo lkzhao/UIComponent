@@ -38,7 +38,7 @@ struct NumberBadge: ComponentBuilder {
     Text(text,
          font: .systemFont(ofSize: 12))
       .size(width: text.isEmpty ? .absolute(8) : text.count <= 2 ? .absolute(16) : .fit,
-            height: text.isEmpty ? .absolute(8) : text.count <= 2 ? .absolute(16) : .fit)
+            height: text.isEmpty ? .absolute(8) : .absolute(16))
       .adjustsFontSizeToFitWidth(true)
       .textColor(.white)
       .textAlignment(.center)
