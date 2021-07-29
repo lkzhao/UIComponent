@@ -63,6 +63,9 @@ func randomInt(minNum: UInt32, maxNum: UInt32) -> Int {
   Int(arc4random_uniform(maxNum - minNum) + minNum)
 }
 
-func randomWebImage(require size: CGSize = CGSize(width: 1000, height: 1000)) -> URL {
-  URL(string: "https://picsum.photos/id/\(randomInt(minNum: 1, maxNum: 1000))/\(size.width)/\(size.height)")!
+typealias WebImageSize = (width: Int, height: Int)
+
+func randomWebImage(require size: WebImageSize = (width: 1000, height: 1000)) -> URL {
+  let url = "https://picsum.photos/\(size.width)/\(size.height)?random=\(UUID().uuidString)"
+  return URL(string: url)!
 }
