@@ -31,8 +31,8 @@
 		F8E3DD1626A7BC5F0062E58F /* ComplexLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1326A7BC5F0062E58F /* ComplexLayoutViewController.swift */; };
 		F8E3DD1826A7BE300062E58F /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1726A7BE300062E58F /* Modifiers.swift */; };
 		F8E3DD1A26A7BEB60062E58F /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1926A7BEB60062E58F /* Components.swift */; };
-		F8FC37F226B28E9300C72DF5 /* IrregularLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC37F126B28E9200C72DF5 /* IrregularLayoutViewController.swift */; };
 		F8FC37F826B28F2400C72DF5 /* IrregularComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC37F726B28F2400C72DF5 /* IrregularComponents.swift */; };
+		F8FC37FA26B29D7C00C72DF5 /* IrregularLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC37F926B29D7C00C72DF5 /* IrregularLayoutViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -74,8 +74,8 @@
 		F8E3DD1326A7BC5F0062E58F /* ComplexLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplexLayoutViewController.swift; sourceTree = "<group>"; };
 		F8E3DD1726A7BE300062E58F /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		F8E3DD1926A7BEB60062E58F /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
-		F8FC37F126B28E9200C72DF5 /* IrregularLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrregularLayoutViewController.swift; sourceTree = "<group>"; };
 		F8FC37F726B28F2400C72DF5 /* IrregularComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrregularComponents.swift; sourceTree = "<group>"; };
+		F8FC37F926B29D7C00C72DF5 /* IrregularLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrregularLayoutViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,7 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				F8FC37F626B28F1300C72DF5 /* Components */,
-				F8FC37F126B28E9200C72DF5 /* IrregularLayoutViewController.swift */,
+				F8FC37F926B29D7C00C72DF5 /* IrregularLayoutViewController.swift */,
 			);
 			path = "Irregular Layout";
 			sourceTree = "<group>";
@@ -322,8 +322,8 @@
 				B10A123224F31EAA0076B038 /* Helpers.swift in Sources */,
 				F8FC37F826B28F2400C72DF5 /* IrregularComponents.swift in Sources */,
 				F8E3DD1A26A7BEB60062E58F /* Components.swift in Sources */,
+				F8FC37FA26B29D7C00C72DF5 /* IrregularLayoutViewController.swift in Sources */,
 				B16EA6A22677E26F005CFB18 /* AsyncImage.swift in Sources */,
-				F8FC37F226B28E9300C72DF5 /* IrregularLayoutViewController.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
 				F8E3DD1826A7BE300062E58F /* Modifiers.swift in Sources */,
 				F8E3DD1426A7BC5F0062E58F /* HorizontalCardItem.swift in Sources */,
