@@ -160,23 +160,24 @@
 			path = Card;
 			sourceTree = "<group>";
 		};
-		B1CC3F6A2678009C005BCE8C /* AsyncImage */ = {
+		B1CC3F6A2678009C005BCE8C /* Async Image */ = {
 			isa = PBXGroup;
 			children = (
 				B1CC3F662677FF79005BCE8C /* AsyncImageViewController.swift */,
 				B16EA6A12677E26F005CFB18 /* AsyncImage.swift */,
 			);
-			path = AsyncImage;
+			path = "Async Image";
 			sourceTree = "<group>";
 		};
 		B1CC3F6C267800B9005BCE8C /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				B1CC3F6A2678009C005BCE8C /* Async Image */,
 				B1CC3F692678008F005BCE8C /* Card */,
-				B1CC3F6A2678009C005BCE8C /* AsyncImage */,
-				F88E832326A3E70C009E7720 /* Flex Layout */,
-				B1B079EC26AB397A003BEAFB /* Waterfall Layout */,
 				F8E3DD0F26A7BC5F0062E58F /* Complex Layout */,
+				F88E832326A3E70C009E7720 /* Flex Layout */,
+				F8FC37F026B28A0500C72DF5 /* Irregular Layout */,
+				B1B079EC26AB397A003BEAFB /* Waterfall Layout */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -206,6 +207,13 @@
 				F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		F8FC37F026B28A0500C72DF5 /* Irregular Layout */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Irregular Layout";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
