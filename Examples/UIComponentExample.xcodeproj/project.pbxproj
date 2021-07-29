@@ -124,12 +124,12 @@
 			path = UIComponentExample;
 			sourceTree = "<group>";
 		};
-		B1B079EC26AB397A003BEAFB /* WaterfallLayout */ = {
+		B1B079EC26AB397A003BEAFB /* Waterfall Layout */ = {
 			isa = PBXGroup;
 			children = (
 				B1B079ED26AB398E003BEAFB /* WaterfallLayoutViewController.swift */,
 			);
-			path = WaterfallLayout;
+			path = "Waterfall Layout";
 			sourceTree = "<group>";
 		};
 		B1CC3F682677FFCC005BCE8C /* Supporting Files */ = {
@@ -175,8 +175,8 @@
 				B1CC3F692678008F005BCE8C /* Card */,
 				B1CC3F6A2678009C005BCE8C /* AsyncImage */,
 				F88E832326A3E70C009E7720 /* Flex Layout */,
-				B1B079EC26AB397A003BEAFB /* WaterfallLayout */,
-				F8E3DD0F26A7BC5F0062E58F /* Complex layout */,
+				B1B079EC26AB397A003BEAFB /* Waterfall Layout */,
+				F8E3DD0F26A7BC5F0062E58F /* Complex Layout */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -189,13 +189,13 @@
 			path = "Flex Layout";
 			sourceTree = "<group>";
 		};
-		F8E3DD0F26A7BC5F0062E58F /* Complex layout */ = {
+		F8E3DD0F26A7BC5F0062E58F /* Complex Layout */ = {
 			isa = PBXGroup;
 			children = (
 				F8E3DD1026A7BC5F0062E58F /* Components */,
 				F8E3DD1326A7BC5F0062E58F /* ComplexLayoutViewController.swift */,
 			);
-			path = "Complex layout";
+			path = "Complex Layout";
 			sourceTree = "<group>";
 		};
 		F8E3DD1026A7BC5F0062E58F /* Components */ = {
