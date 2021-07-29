@@ -34,8 +34,35 @@ extension CGRect {
   var center: CGPoint {
     return CGPoint(x: midX, y: midY)
   }
-
+  
   init(center: CGPoint, size: CGSize) {
     self.init(origin: CGPoint(x: center.x - size.width / 2, y: center.y - size.height / 2), size: size)
   }
+}
+
+extension Array {
+  /*
+   This method split array of elements into chunks of a size  specify
+   
+   Take a look at this example:
+   ```
+   let array = [1,2,3,4,5,6,7]
+   array.chuncked(by: 3) // [[1,2,3], [4,5,6], [7]]
+   ```
+   
+   - parameter chunkSize: Subarray size.
+   */
+  public func chunked(by chunkSize: Int) -> [[Element]] {
+    return stride(from: 0, to: self.count, by: chunkSize).map {
+      Array(self[$0..<Swift.min($0 + chunkSize, self.count)])
+    }
+  }
+}
+
+func randomInt(minNum: UInt32, maxNum: UInt32) -> Int {
+  Int(arc4random_uniform(maxNum - minNum) + minNum)
+}
+
+func randomWebImage() -> URL {
+  URL(string: "https://picsum.photos/id/\(randomInt(minNum: 1, maxNum: 1000))/1000")!
 }

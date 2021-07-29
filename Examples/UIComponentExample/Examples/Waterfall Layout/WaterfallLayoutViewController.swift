@@ -15,7 +15,7 @@ class WaterfallLayoutViewController: ComponentViewController {
   lazy var waterfallData: [WaterfallItem] = {
     var sizes = [(CGSize, UIColor)]()
     for _ in 1 ... 30 {
-      sizes.append((CGSize(width: Int(arc4random_uniform(300 - 100)) + 100, height: Int(arc4random_uniform(300 - 100)) + 100), .randomSystemColor()))
+      sizes.append((CGSize(width: randomInt(minNum: 100, maxNum: 300), height: randomInt(minNum: 100, maxNum: 300)), .randomSystemColor()))
     }
     return sizes
   }()
