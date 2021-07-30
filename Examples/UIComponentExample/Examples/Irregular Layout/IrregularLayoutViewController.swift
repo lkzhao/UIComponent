@@ -25,37 +25,54 @@ class IrregularLayoutViewController: ComponentViewController {
   override var component: Component {
     VStack(spacing: 20) {
       
-      Text("Irregular layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
-      for position in IrregularComponent.Position.allCases {
+      Text("Irregular simple layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
+      for position in LayoutType.allCases {
         VStack(spacing: 10) {
           Text("position: .\(position)")
-          IrregularComponent(coverModels: positionExampleData, position: position, spacing: 2, showOrder: true)
+          IrregularSimpleComponent(coverModels: positionExampleData, type: position, spacing: 2, showOrder: true)
         }.inset(10).styleColor(.systemGroupedBackground)
       }
       
-      Text("Irregular horizontal flow layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
+      Text("Irregular simple horizontal flow layouts").size(width: .fill)
       HStack(spacing: 2) {
         for (index, item) in horizontalData.chunked(by: 6).enumerated() {
-          IrregularComponent(coverModels: item, position: getPosition(index % 3), spacing: 2).view()
+          IrregularSimpleComponent(coverModels: item, type: getPosition(index % 3), spacing: 2).view()
         }
       }.size(height: UIScreen.main.bounds.width - 20).scrollView().backgroundColor(.systemGroupedBackground).update {
         $0.layer.cornerRadius = 8
       }
       
-      Text("Irregular vertical flow layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
+      Text("Irregular simple vertical flow layouts").size(width: .fill)
       Text("Shuffle").textColor(.systemBlue).tappableView {
         self.verticalData = self.verticalData.shuffled()
       }
       VStack(spacing: 2) {
         for (index, item) in verticalData.chunked(by: 6).enumerated() {
-          IrregularComponent(coverModels: item, position: getPosition(index % 3), spacing: 2)
+          IrregularSimpleComponent(coverModels: item, type: getPosition(index % 3), spacing: 2)
         }
       }
+      
+      Text("Irregular custom layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
+      VStack(spacing: 2) {
+        IrregularCustomComponent(coverModels: verticalData, configLayout: { index in
+          let newIndex = index % 4
+          if newIndex == 0 {
+            return .layout1
+          } else if newIndex == 1 {
+            return .layout2
+          } else if newIndex == 2 {
+            return .topLeft
+          } else {
+            return .topRight
+          }
+        }, spacing: 2, showOrder: false)
+      }
+      
     }.inset(h: 10, v: 20)
   }
   
-  private func getPosition(_ index: Int) -> IrregularComponent.Position {
-    let position: IrregularComponent.Position
+  private func getPosition(_ index: Int) -> LayoutType {
+    let position: LayoutType
     if index == 1 {
       position = .topRight
     } else if index == 2 {
