@@ -22,10 +22,19 @@ struct IrregularComponent: ComponentBuilder {
   let coverModels: [CoverModel]
   let position: Position
   let spacing: CGFloat
+  let showOrder: Bool
+  
+  init(coverModels: [CoverModel], position: Position, spacing: CGFloat, showOrder: Bool = false) {
+    self.coverModels = coverModels
+    self.position = position
+    self.spacing = spacing
+    self.showOrder = showOrder
+  }
+  
   func build() -> Component {
     CustomizeLayout {
-      for item in coverModels {
-        AsyncImage(item.cover).id(item.id)
+      for (index, item) in coverModels.enumerated() {
+        AsyncImage(item.cover).id(item.id).overlay(showOrder ? Text("\(index)").textColor(.white).textAlignment(.center).backgroundColor(UIColor.black.withAlphaComponent(0.5)) : Space())
       }
     } blockFrames: { constraint in
       return Array(genFrames(side: min(constraint.maxSize.width, constraint.maxSize.height), spacing: spacing, position: position).prefix(coverModels.count))
@@ -51,8 +60,8 @@ struct IrregularComponent: ComponentBuilder {
     case .topRight:
       return [
         CGRect(x: 0, y: 0, width: minWidth, height: minWidth),
-        CGRect(x: minWidth + spacing, y: 0, width: maxWidth, height: maxHeight),
         CGRect(x: 0, y: minWidth + spacing, width: minWidth, height: minHeight),
+        CGRect(x: minWidth + spacing, y: 0, width: maxWidth, height: maxHeight),
         CGRect(x: 0, y: maxHeight + spacing, width: minWidth, height: minHeight),
         CGRect(x: minWidth + spacing, y: maxHeight + spacing, width: minWidth, height: minHeight),
         CGRect(x: minWidth * 2 + spacing * 2, y: maxHeight + spacing, width: minWidth, height: minHeight)

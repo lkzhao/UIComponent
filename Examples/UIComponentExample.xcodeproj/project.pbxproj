@@ -145,7 +145,6 @@
 				A304892E21C347020026EDA7 /* Assets.xcassets */,
 				F8E3DD1926A7BEB60062E58F /* Components.swift */,
 				B1CC3F642677FD99005BCE8C /* ComponentViewController.swift */,
-				F81E6CDF26B3A37000BA4258 /* CustomizeLayout.swift */,
 				B10A123124F31EAA0076B038 /* Helpers.swift */,
 				A304893321C347020026EDA7 /* Info.plist */,
 				A304893021C347020026EDA7 /* LaunchScreen.storyboard */,
@@ -228,6 +227,7 @@
 		F8FC37F626B28F1300C72DF5 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				F81E6CDF26B3A37000BA4258 /* CustomizeLayout.swift */,
 				F8FC37F726B28F2400C72DF5 /* IrregularComponents.swift */,
 			);
 			path = Components;
