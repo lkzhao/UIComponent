@@ -30,19 +30,19 @@ class IrregularLayoutViewController: ComponentViewController {
       }
       
       Text("Irregular horizontal flow layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
-      HStack {
+      HStack(spacing: 2) {
         for (index, item) in horizontalData.chunked(by: 6).enumerated() {
           let position = IrregularComponent.Position.allCases[index % 4]
-          IrregularComponent(coverModels: item, position: position, spacing: 0).view()
+          IrregularComponent(coverModels: item, position: position, spacing: 2).view()
         }
       }.size(height: UIScreen.main.bounds.width - 20).scrollView().backgroundColor(.systemGroupedBackground).update {
         $0.layer.cornerRadius = 8
       }
       
       Text("Irregular vertical flow layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
-      VStack {
+      VStack(spacing: 2) {
         for (index, item) in verticalData.chunked(by: 6).enumerated() {
-          IrregularComponent(coverModels: item, position: index % 2 == 1 ? .topRight : .topLeft, spacing: 0)
+          IrregularComponent(coverModels: item, position: index % 2 == 1 ? .topRight : .topLeft, spacing: 2)
         }
       }
     }.inset(h: 10, v: 20)
