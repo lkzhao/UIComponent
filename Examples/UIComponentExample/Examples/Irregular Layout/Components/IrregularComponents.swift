@@ -17,7 +17,7 @@ struct CoverModel: Equatable {
 
 struct IrregularComponent: ComponentBuilder {
   enum Position: CaseIterable {
-    case topLeft, topRight, bottomLeft, bottomRight
+    case topLeft, topRight, bottomLeft, bottomRight, layout1
   }
   let coverModels: [CoverModel]
   let position: Position
@@ -34,7 +34,7 @@ struct IrregularComponent: ComponentBuilder {
   func build() -> Component {
     CustomizeLayout {
       for (index, item) in coverModels.enumerated() {
-        AsyncImage(item.cover).id(item.id).overlay(showOrder ? Text("\(index)").textColor(.white).textAlignment(.center).backgroundColor(UIColor.black.withAlphaComponent(0.5)) : Space())
+        AsyncImage(item.cover).contentMode(.scaleAspectFill).clipsToBounds(true).id(item.id).overlay(showOrder ? Text("\(index)").textColor(.white).textAlignment(.center).backgroundColor(UIColor.black.withAlphaComponent(0.5)) : Space())
       }
     } blockFrames: { constraint in
       return Array(genFrames(side: min(constraint.maxSize.width, constraint.maxSize.height), spacing: spacing, position: position).prefix(coverModels.count))
@@ -83,6 +83,15 @@ struct IrregularComponent: ComponentBuilder {
         CGRect(x: 0, y: minHeight + spacing, width: minWidth, height: minHeight),
         CGRect(x: 0, y: maxHeight + spacing, width: minWidth, height: minHeight),
         CGRect(x: minWidth + spacing, y: minHeight + spacing, width: maxWidth, height: maxHeight),
+      ]
+    case .layout1:
+      return [
+        CGRect(x: 0, y: 0, width: side, height: side),
+        CGRect(x: 0, y: side + spacing, width: minWidth, height: minHeight),
+        CGRect(x: minWidth + spacing, y: side + spacing, width: minWidth, height: minHeight),
+        CGRect(x: maxWidth + spacing, y: side + spacing, width: minWidth, height: minHeight),
+        CGRect(x: 0, y: side + spacing + minHeight + spacing, width: maxWidth, height: maxHeight),
+        CGRect(x: maxWidth + spacing, y: side + spacing + minHeight + spacing, width: minWidth, height: maxHeight)
       ]
     }
   }
