@@ -24,6 +24,7 @@
 		B1CC3F7026789E1F005BCE8C /* CardViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */; };
 		B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7126789F07005BCE8C /* AddCardButton.swift */; };
 		B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7326789F3D005BCE8C /* CardData.swift */; };
+		F81E6CE026B3A37000BA4258 /* CustomizeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81E6CDF26B3A37000BA4258 /* CustomizeLayout.swift */; };
 		F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */; };
 		F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */; };
 		F8E3DD1426A7BC5F0062E58F /* HorizontalCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1126A7BC5F0062E58F /* HorizontalCardItem.swift */; };
@@ -67,6 +68,7 @@
 		B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController3.swift; sourceTree = "<group>"; };
 		B1CC3F7126789F07005BCE8C /* AddCardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardButton.swift; sourceTree = "<group>"; };
 		B1CC3F7326789F3D005BCE8C /* CardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
+		F81E6CDF26B3A37000BA4258 /* CustomizeLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeLayout.swift; sourceTree = "<group>"; };
 		F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionCard.swift; sourceTree = "<group>"; };
 		F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexLayoutViewController.swift; sourceTree = "<group>"; };
 		F8E3DD1126A7BC5F0062E58F /* HorizontalCardItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HorizontalCardItem.swift; sourceTree = "<group>"; };
@@ -140,14 +142,15 @@
 			isa = PBXGroup;
 			children = (
 				A304892721C347010026EDA7 /* AppDelegate.swift */,
-				B1CC3F642677FD99005BCE8C /* ComponentViewController.swift */,
-				F8E3DD1726A7BE300062E58F /* Modifiers.swift */,
-				B10A123124F31EAA0076B038 /* Helpers.swift */,
-				A304892B21C347010026EDA7 /* Main.storyboard */,
 				A304892E21C347020026EDA7 /* Assets.xcassets */,
-				A304893021C347020026EDA7 /* LaunchScreen.storyboard */,
-				A304893321C347020026EDA7 /* Info.plist */,
 				F8E3DD1926A7BEB60062E58F /* Components.swift */,
+				B1CC3F642677FD99005BCE8C /* ComponentViewController.swift */,
+				F81E6CDF26B3A37000BA4258 /* CustomizeLayout.swift */,
+				B10A123124F31EAA0076B038 /* Helpers.swift */,
+				A304893321C347020026EDA7 /* Info.plist */,
+				A304893021C347020026EDA7 /* LaunchScreen.storyboard */,
+				A304892B21C347010026EDA7 /* Main.storyboard */,
+				F8E3DD1726A7BE300062E58F /* Modifiers.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */,
 				F8E3DD1626A7BC5F0062E58F /* ComplexLayoutViewController.swift in Sources */,
 				B1B079EE26AB398E003BEAFB /* WaterfallLayoutViewController.swift in Sources */,
+				F81E6CE026B3A37000BA4258 /* CustomizeLayout.swift in Sources */,
 				B1CC3F632677FCFD005BCE8C /* CardViewController.swift in Sources */,
 				F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */,
 				B1CC3F652677FD99005BCE8C /* ComponentViewController.swift in Sources */,

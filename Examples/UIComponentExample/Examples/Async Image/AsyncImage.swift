@@ -24,7 +24,8 @@ public struct AsyncImage: ViewComponentBuilder {
   
   public func build() -> ViewUpdateComponent<SimpleViewComponent<UIImageView>> {
     SimpleViewComponent<UIImageView>().update {
-      $0.kf.setImage(with: url)
+      $0.kf.indicatorType = .activity
+      $0.kf.setImage(with: url, options: [.transition(.flipFromBottom(0.35))])
     }
   }
 }
