@@ -11,7 +11,9 @@ import UIComponent
 
 class IrregularLayoutViewController: ComponentViewController {
   
-  let defaultData: [CoverModel] = (0...32).map { _ in CoverModel() }
+  let verticalData: [CoverModel] = (0...33).map { _ in CoverModel() }
+  
+  let horizontalData: [CoverModel] = (0...33).map { _ in CoverModel() }
   
   let positionExampleData = (1...6).map { _ in CoverModel() }
   
@@ -29,7 +31,7 @@ class IrregularLayoutViewController: ComponentViewController {
       
       Text("Irregular horizontal flow layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
       HStack {
-        for (index, item) in defaultData.chunked(by: 6).enumerated() {
+        for (index, item) in horizontalData.chunked(by: 6).enumerated() {
           let position = IrregularComponent.Position.allCases[index % 4]
           IrregularComponent(coverModels: item, position: position, spacing: 0).view()
         }
@@ -39,7 +41,7 @@ class IrregularLayoutViewController: ComponentViewController {
       
       Text("Irregular vertical flow layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
       VStack {
-        for (index, item) in defaultData.chunked(by: 6).enumerated() {
+        for (index, item) in verticalData.chunked(by: 6).enumerated() {
           IrregularComponent(coverModels: item, position: index % 2 == 1 ? .topRight : .topLeft, spacing: 0)
         }
       }
