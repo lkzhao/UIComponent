@@ -24,16 +24,12 @@ struct CustomizeLayout: Component {
     
     let frames = blockFrames(constraint)
     
-    let elements = zip(frames, children).map { frame, child in
-      return (frame.origin, child.layout(Constraint(minSize: frame.size, maxSize: frame.size)))
+    let frame = frames.reduce(frames.first ?? .zero) {
+      $0.union($1)
     }
-    let maxWidth = frames.reduce(CGFloat(0), {
-      max($0, $1.maxX)
-    })
-    let maxHeight = frames.reduce(CGFloat(0), {
-      max($0, $1.maxY)
-    })
-    return SlowRenderer(size: CGSize(width: maxWidth, height: maxHeight), children: elements.map { $0.1 }, positions: elements.map { $0.0 })
+    return SlowRenderer(size: CGSize(width: frame.maxX, height: frame.maxY),
+                        children: zip(children, frames).map({ $0.0.layout(.tight($0.1.size)) }),
+                        positions: frames.map({ $0.origin }))
   }
   
 }
