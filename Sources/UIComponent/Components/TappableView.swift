@@ -29,6 +29,7 @@ open class TappableView: ComponentView {
   lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
   lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
   
+  public var previewBackgroundColor: UIColor?
   public var onTap: ((TappableView) -> Void)? {
     didSet {
       if onTap != nil {
@@ -129,6 +130,15 @@ extension TappableView: UIContextMenuInteractionDelegate {
         return self?.contextMenuProvider?()
       }
     }
+  }
+  
+  public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+    if let previewBackgroundColor = previewBackgroundColor {
+      let param = UIPreviewParameters()
+      param.backgroundColor = previewBackgroundColor
+      return UITargetedPreview(view: self, parameters: param)
+    }
+    return nil
   }
   
   public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {

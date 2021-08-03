@@ -43,24 +43,30 @@ class AsyncImageViewController: ComponentViewController {
             let detailVC = AsyncImageDetailViewController()
             detailVC.image = image
             $0.parentViewController?.navigationController?.pushViewController(detailVC, animated: true)
-          }.previewProvider {
+          }
+          .previewBackgroundColor(.systemBackground.withAlphaComponent(0.7))
+          .previewProvider {
             let detailVC = AsyncImageDetailViewController()
-            detailVC.preferredContentSize = image.size
             detailVC.image = image
+            detailVC.preferredContentSize = image.size
+            detailVC.view.backgroundColor = .clear
             return detailVC
-          }.contextMenuProvider { [weak self] in
+          }
+          .contextMenuProvider { [weak self] in
             UIMenu(children: [
               UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: [.destructive], handler: { action in
                 self?.images.remove(at: index)
               })
             ])
           }
+          .id(image.url.absoluteString)
       }
     }
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    componentView.animator = AnimatedReloadAnimator()
     title = "Async Image"
   }
 }
