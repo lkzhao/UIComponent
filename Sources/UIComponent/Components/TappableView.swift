@@ -23,8 +23,30 @@ public struct TappableViewConfiguration {
 }
 
 open class TappableView: ComponentView {
-  public var onTap: ((TappableView) -> Void)?
   public var configuration: TappableViewConfiguration?
+  
+  lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
+  lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
+  
+  public var onTap: ((TappableView) -> Void)? {
+    didSet {
+      if onTap != nil {
+        addGestureRecognizer(tapGestureRecognizer)
+      } else {
+        removeGestureRecognizer(tapGestureRecognizer)
+      }
+    }
+  }
+  
+  public var onLongPress: ((TappableView) -> Void)? {
+    didSet {
+      if onLongPress != nil {
+        addGestureRecognizer(longPressGestureRecognizer)
+      } else {
+        removeGestureRecognizer(longPressGestureRecognizer)
+      }
+    }
+  }
 
   open var isHighlighted: Bool = false {
     didSet {
@@ -37,7 +59,6 @@ open class TappableView: ComponentView {
   public override init(frame: CGRect) {
     super.init(frame: frame)
     accessibilityTraits = .button
-    addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTap)))
   }
 
   required public init?(coder: NSCoder) {
@@ -63,6 +84,12 @@ open class TappableView: ComponentView {
     let config = configuration ?? TappableViewConfiguration.default
     config.didTap?(self)
     onTap?(self)
+  }
+  
+  @objc open func didLongPress() {
+    if longPressGestureRecognizer.state == .began {
+      onLongPress?(self)
+    }
   }
 }
 
