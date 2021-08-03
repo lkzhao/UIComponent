@@ -59,6 +59,8 @@ open class TappableView: ComponentView {
     }
   }
   
+  public var onCommitPreview: ((UIContextMenuInteractionCommitAnimating) -> Void)?
+  
   public var contextMenuProvider: (() -> UIMenu?)? {
     didSet {
       if previewProvider != nil || contextMenuProvider != nil {
@@ -116,10 +118,26 @@ open class TappableView: ComponentView {
 
 extension TappableView: UIContextMenuInteractionDelegate {
   public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-    return UIContextMenuConfiguration(identifier: nil) { [weak self] in
-      return self?.previewProvider?()
-    } actionProvider: { [weak self] _ in
-      return self?.contextMenuProvider?()
+    if let previewProvider = previewProvider {
+      return UIContextMenuConfiguration(identifier: nil) {
+        previewProvider()
+      } actionProvider: { [weak self] _ in
+        return self?.contextMenuProvider?()
+      }
+    } else {
+      return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+        return self?.contextMenuProvider?()
+      }
+    }
+  }
+  
+  public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+    if let onCommitPreview = onCommitPreview {
+      onCommitPreview(animator)
+    } else {
+      animator.addAnimations {
+        self.onTap?(self)
+      }
     }
   }
 }
