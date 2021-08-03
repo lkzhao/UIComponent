@@ -20,6 +20,7 @@ class ViewController: ComponentViewController {
         ExampleItem(name: "Flex Layout Example", viewController: FlexLayoutViewController())
         ExampleItem(name: "Waterfall Layout Example", viewController: WaterfallLayoutViewController())
         ExampleItem(name: "Complex Layout Example", viewController: ComplexLayoutViewController())
+        ExampleItem(name: "Irregular Layout Example", viewController: IrregularLayoutViewController())
       } separator: {
         Separator()
       }
