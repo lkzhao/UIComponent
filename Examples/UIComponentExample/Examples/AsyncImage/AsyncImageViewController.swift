@@ -15,7 +15,7 @@ struct ImageData {
 }
 
 class AsyncImageViewController: ComponentViewController {
-  let images = [
+  var images = [
     ImageData(url: URL(string: "https://unsplash.com/photos/Yn0l7uwBrpw/download?force=true&w=640")!,
           size: CGSize(width: 640, height: 360)),
     ImageData(url: URL(string: "https://unsplash.com/photos/J4-xolC4CCU/download?force=true&w=640")!,
@@ -28,29 +28,40 @@ class AsyncImageViewController: ComponentViewController {
           size: CGSize(width: 640, height: 426)),
     ImageData(url: URL(string: "https://unsplash.com/photos/MOfETox0bkE/download?force=true&w=640")!,
           size: CGSize(width: 640, height: 426)),
-  ]
+  ] {
+    didSet {
+      reloadComponent()
+    }
+  }
 
   override var component: Component {
     Waterfall(columns: 2, spacing: 1) {
-      for image in images {
+      for (index, image) in images.enumerated() {
         AsyncImage(image.url)
           .size(width: .fill, height: .aspectPercentage(image.size.height / image.size.width))
           .tappableView {
             let detailVC = AsyncImageDetailViewController()
             detailVC.image = image
             $0.parentViewController?.navigationController?.pushViewController(detailVC, animated: true)
+          }.previewProvider {
+            let detailVC = AsyncImageDetailViewController()
+            detailVC.preferredContentSize = image.size
+            detailVC.image = image
+            return detailVC
+          }.contextMenuProvider { [weak self] in
+            UIMenu(children: [
+              UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: [.destructive], handler: { action in
+                self?.images.remove(at: index)
+              })
+            ])
           }
       }
     }
   }
   
-  init() {
-    super.init(nibName: nil, bundle: nil)
+  override func viewDidLoad() {
+    super.viewDidLoad()
     title = "Async Image"
-  }
-  
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 }
 

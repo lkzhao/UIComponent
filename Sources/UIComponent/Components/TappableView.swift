@@ -49,9 +49,19 @@ open class TappableView: ComponentView {
     }
   }
   
-  public var contextMenuProvider: ((TappableView) -> UIMenu?)? {
+  public var previewProvider: (() -> UIViewController?)? {
     didSet {
-      if contextMenuProvider != nil {
+      if previewProvider != nil || contextMenuProvider != nil {
+        addInteraction(contextMenuInteraction)
+      } else {
+        removeInteraction(contextMenuInteraction)
+      }
+    }
+  }
+  
+  public var contextMenuProvider: (() -> UIMenu?)? {
+    didSet {
+      if previewProvider != nil || contextMenuProvider != nil {
         addInteraction(contextMenuInteraction)
       } else {
         removeInteraction(contextMenuInteraction)
@@ -106,9 +116,10 @@ open class TappableView: ComponentView {
 
 extension TappableView: UIContextMenuInteractionDelegate {
   public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
-      guard let self = self else { return nil }
-      return self.contextMenuProvider?(self)
+    return UIContextMenuConfiguration(identifier: nil) { [weak self] in
+      return self?.previewProvider?()
+    } actionProvider: { [weak self] _ in
+      return self?.contextMenuProvider?()
     }
   }
 }
