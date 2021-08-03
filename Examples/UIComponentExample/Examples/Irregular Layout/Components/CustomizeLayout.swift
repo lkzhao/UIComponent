@@ -9,7 +9,7 @@
 import UIKit
 import UIComponent
 
-struct CustomizeLayout: Component, HorizontalLayoutProtocol {
+struct CustomizeLayout: Component {
   
   let blockFrames: (_ constraint: Constraint) -> [CGRect]
   
@@ -33,7 +33,7 @@ struct CustomizeLayout: Component, HorizontalLayoutProtocol {
     let maxHeight = frames.reduce(CGFloat(0), {
       max($0, $1.maxY)
     })
-    return renderer(size: CGSize(width: maxWidth, height: maxHeight), children: elements.map { $0.1 }, positions: elements.map { $0.0 })
+    return SlowRenderer(size: CGSize(width: maxWidth, height: maxHeight), children: elements.map { $0.1 }, positions: elements.map { $0.0 })
   }
   
 }
