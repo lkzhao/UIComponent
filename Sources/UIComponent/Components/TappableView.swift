@@ -27,6 +27,7 @@ open class TappableView: ComponentView {
   
   lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
   lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
+  lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
   
   public var onTap: ((TappableView) -> Void)? {
     didSet {
@@ -44,6 +45,16 @@ open class TappableView: ComponentView {
         addGestureRecognizer(longPressGestureRecognizer)
       } else {
         removeGestureRecognizer(longPressGestureRecognizer)
+      }
+    }
+  }
+  
+  public var contextMenuProvider: UIContextMenuActionProvider? {
+    didSet {
+      if contextMenuProvider != nil {
+        addInteraction(contextMenuInteraction)
+      } else {
+        removeInteraction(contextMenuInteraction)
       }
     }
   }
@@ -90,6 +101,12 @@ open class TappableView: ComponentView {
     if longPressGestureRecognizer.state == .began {
       onLongPress?(self)
     }
+  }
+}
+
+extension TappableView: UIContextMenuInteractionDelegate {
+  public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: contextMenuProvider)
   }
 }
 
