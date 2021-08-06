@@ -25,9 +25,9 @@
 		B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7126789F07005BCE8C /* AddCardButton.swift */; };
 		B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7326789F3D005BCE8C /* CardData.swift */; };
 		F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */; };
-		F858D54026B9459E00410219 /* IrregularComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53D26B9459E00410219 /* IrregularComponents.swift */; };
-		F858D54126B9459E00410219 /* CustomizeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53E26B9459E00410219 /* CustomizeLayout.swift */; };
-		F858D54226B9459E00410219 /* IrregularLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53F26B9459E00410219 /* IrregularLayoutViewController.swift */; };
+		F858D54026B9459E00410219 /* GalleryComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53D26B9459E00410219 /* GalleryComponents.swift */; };
+		F858D54126B9459E00410219 /* GalleryLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53E26B9459E00410219 /* GalleryLayout.swift */; };
+		F858D54226B9459E00410219 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53F26B9459E00410219 /* GalleryViewController.swift */; };
 		F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */; };
 		F8E3DD1426A7BC5F0062E58F /* HorizontalCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1126A7BC5F0062E58F /* HorizontalCardItem.swift */; };
 		F8E3DD1526A7BC5F0062E58F /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */; };
@@ -69,9 +69,9 @@
 		B1CC3F7126789F07005BCE8C /* AddCardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardButton.swift; sourceTree = "<group>"; };
 		B1CC3F7326789F3D005BCE8C /* CardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
 		F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionCard.swift; sourceTree = "<group>"; };
-		F858D53D26B9459E00410219 /* IrregularComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IrregularComponents.swift; sourceTree = "<group>"; };
-		F858D53E26B9459E00410219 /* CustomizeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomizeLayout.swift; sourceTree = "<group>"; };
-		F858D53F26B9459E00410219 /* IrregularLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IrregularLayoutViewController.swift; sourceTree = "<group>"; };
+		F858D53D26B9459E00410219 /* GalleryComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryComponents.swift; sourceTree = "<group>"; };
+		F858D53E26B9459E00410219 /* GalleryLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryLayout.swift; sourceTree = "<group>"; };
+		F858D53F26B9459E00410219 /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexLayoutViewController.swift; sourceTree = "<group>"; };
 		F8E3DD1126A7BC5F0062E58F /* HorizontalCardItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HorizontalCardItem.swift; sourceTree = "<group>"; };
 		F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -182,26 +182,26 @@
 				B1CC3F692678008F005BCE8C /* Card */,
 				F8E3DD0F26A7BC5F0062E58F /* Complex layout */,
 				F88E832326A3E70C009E7720 /* Flex Layout */,
-				F858D53B26B9459E00410219 /* Irregular Layout */,
+				F858D53B26B9459E00410219 /* Gallery Example */,
 				B1B079EC26AB397A003BEAFB /* Waterfall Layout */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
 		};
-		F858D53B26B9459E00410219 /* Irregular Layout */ = {
+		F858D53B26B9459E00410219 /* Gallery Example */ = {
 			isa = PBXGroup;
 			children = (
 				F858D53C26B9459E00410219 /* Components */,
-				F858D53F26B9459E00410219 /* IrregularLayoutViewController.swift */,
+				F858D53F26B9459E00410219 /* GalleryViewController.swift */,
 			);
-			path = "Irregular Layout";
+			path = "Gallery Example";
 			sourceTree = "<group>";
 		};
 		F858D53C26B9459E00410219 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				F858D53D26B9459E00410219 /* IrregularComponents.swift */,
-				F858D53E26B9459E00410219 /* CustomizeLayout.swift */,
+				F858D53D26B9459E00410219 /* GalleryComponents.swift */,
+				F858D53E26B9459E00410219 /* GalleryLayout.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -313,7 +313,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F858D54126B9459E00410219 /* CustomizeLayout.swift in Sources */,
+				F858D54126B9459E00410219 /* GalleryLayout.swift in Sources */,
 				B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */,
 				F8E3DD1526A7BC5F0062E58F /* UserProfile.swift in Sources */,
 				F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */,
@@ -321,11 +321,11 @@
 				B1B079EE26AB398E003BEAFB /* WaterfallLayoutViewController.swift in Sources */,
 				B1CC3F632677FCFD005BCE8C /* CardViewController.swift in Sources */,
 				F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */,
-				F858D54026B9459E00410219 /* IrregularComponents.swift in Sources */,
+				F858D54026B9459E00410219 /* GalleryComponents.swift in Sources */,
 				B1CC3F652677FD99005BCE8C /* ComponentViewController.swift in Sources */,
 				B1CC3F672677FF79005BCE8C /* AsyncImageViewController.swift in Sources */,
 				B10A123224F31EAA0076B038 /* Helpers.swift in Sources */,
-				F858D54226B9459E00410219 /* IrregularLayoutViewController.swift in Sources */,
+				F858D54226B9459E00410219 /* GalleryViewController.swift in Sources */,
 				F8E3DD1A26A7BEB60062E58F /* Components.swift in Sources */,
 				B16EA6A22677E26F005CFB18 /* AsyncImage.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
