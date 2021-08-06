@@ -58,7 +58,7 @@ class GalleryViewController: ComponentViewController {
         }
       }.inset(h: 20).size(height: UIScreen.main.bounds.width - 40).scrollView().showsHorizontalScrollIndicator(false)
       
-      Text("Flow horizontal gallery").inset(h: 20)
+      Text("Flow vertical gallery").inset(h: 20)
       
       VerticalGallery(spacing: 2, template: temolates) {
         for data in verticalData {
