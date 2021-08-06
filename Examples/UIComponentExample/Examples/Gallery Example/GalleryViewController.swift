@@ -50,9 +50,9 @@ class GalleryViewController: ComponentViewController {
       
       Text("Flow horizontal gallery").inset(h: 20)
       
-      let temolates = GalleryFrames.LayoutType.allCases.map{ GalleryFrames(layout: $0) }
+      let templates = GalleryFrames.LayoutType.allCases.map{ GalleryFrames(layout: $0) }
       
-      HorizontalGallery(spacing: 2, template: temolates) {
+      HorizontalGallery(spacing: 2, template: templates) {
         for data in horizontalData {
           GalleryItem(data: data)
         }
@@ -60,7 +60,7 @@ class GalleryViewController: ComponentViewController {
       
       Text("Flow vertical gallery").inset(h: 20)
       
-      VerticalGallery(spacing: 2, template: temolates) {
+      VerticalGallery(spacing: 2, template: templates) {
         for data in verticalData {
           GalleryItem(data: data)
         }
