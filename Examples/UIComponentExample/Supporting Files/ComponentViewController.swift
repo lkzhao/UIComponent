@@ -1,10 +1,4 @@
-//
-//  ComponentViewController.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 6/14/21.
-//  Copyright © 2021 Luke Zhao. All rights reserved.
-//
 
 import UIComponent
 import UIKit

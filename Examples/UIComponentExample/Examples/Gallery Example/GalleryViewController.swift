@@ -1,10 +1,4 @@
-//
-//  GalleryViewController.swift
-//  UIComponentExample
-//
 //  Created by y H on 2021/7/29.
-//  Copyright © 2021 Luke Zhao. All rights reserved.
-//
 
 import UIKit
 import UIComponent

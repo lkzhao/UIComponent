@@ -1,10 +1,4 @@
-//
-//  UIView+UIComponent.swift
-//  UIComponent
-//
 //  Created by Luke Zhao on 2017-07-24.
-//  Copyright © 2017 lkzhao. All rights reserved.
-//
 
 import UIKit
 
@@ -33,7 +27,8 @@ extension UIView {
 
 @objc extension UIView {
 	open func recycleForUIComponentReuse() {
-    if let reuseIdentifier = _ckContext?.reuseIdentifier, let reuseManager = _ckContext?.reuseManager {
+    if let reuseIdentifier = _ckContext?.reuseIdentifier,
+       let reuseManager = _ckContext?.reuseManager {
       reuseManager.enqueue(identifier: reuseIdentifier, view: self)
 		} else {
 			removeFromSuperview()

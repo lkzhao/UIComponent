@@ -1,9 +1,4 @@
-//
-//  Renderer.swift
-//  
-//
 //  Created by Luke Zhao on 8/22/20.
-//
 
 import CoreGraphics
 

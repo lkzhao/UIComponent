@@ -1,10 +1,4 @@
-//
-//  HorizontalCardItem.swift
-//  UIComponentExample
-//
 //  Created by y H on 2021/7/21.
-//  Copyright © 2021 Luke Zhao. All rights reserved.
-//
 
 import UIComponent
 import UIKit.UIScreen

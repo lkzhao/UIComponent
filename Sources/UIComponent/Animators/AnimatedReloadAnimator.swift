@@ -1,10 +1,4 @@
-//
-//  AnimatedReloadAnimator.swift
-//  UIComponent
-//
 //  Created by Luke Zhao on 2018-12-27.
-//  Copyright © 2018 Luke Zhao. All rights reserved.
-//
 
 import UIKit
 

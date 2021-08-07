@@ -1,70 +1,15 @@
-//
-//  File.swift
-//
-//
 //  Created by Luke Zhao on 8/22/20.
-//
 
 import UIKit
 
-public struct HStack: StackComponent, HorizontalLayoutProtocol {
-  public let spacing: CGFloat
-  public let justifyContent: MainAxisAlignment
-  public let alignItems: CrossAxisAlignment
-  public let children: [Component]
-  public init(spacing: CGFloat = 0,
-              justifyContent: MainAxisAlignment = .start,
-              alignItems: CrossAxisAlignment = .start,
-              children: [Component] = []) {
-    self.spacing = spacing
-    self.justifyContent = justifyContent
-    self.alignItems = alignItems
-    self.children = children
-  }
-}
-
-public struct VStack: StackComponent, VerticalLayoutProtocol {
-  public let spacing: CGFloat
-  public let justifyContent: MainAxisAlignment
-  public let alignItems: CrossAxisAlignment
-  public let children: [Component]
-  public init(spacing: CGFloat = 0,
-              justifyContent: MainAxisAlignment = .start,
-              alignItems: CrossAxisAlignment = .start,
-              children: [Component] = []) {
-    self.spacing = spacing
-    self.justifyContent = justifyContent
-    self.alignItems = alignItems
-    self.children = children
-  }
-}
-
-public extension HStack {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
-    self.init(spacing: spacing,
-              justifyContent: justifyContent,
-              alignItems: alignItems,
-              children: content())
-  }
-}
-
-public extension VStack {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
-    self.init(spacing: spacing,
-              justifyContent: justifyContent,
-              alignItems: alignItems,
-              children: content())
-  }
-}
-
-public protocol StackComponent: Component, BaseLayoutProtocol {
+public protocol Stack: Component, BaseLayoutProtocol {
   var spacing: CGFloat { get }
   var justifyContent: MainAxisAlignment { get }
   var alignItems: CrossAxisAlignment { get }
   var children: [Component] { get }
 }
 
-extension StackComponent {
+extension Stack {
   public func layout(_ constraint: Constraint) -> Renderer {
     var renderers = getRenderers(constraint)
     let crossMax = renderers.reduce(CGFloat(0).clamp(cross(constraint.minSize), cross(constraint.maxSize))) {

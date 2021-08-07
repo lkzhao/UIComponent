@@ -1,10 +1,4 @@
-//
-//  ReuseManager.swift
-//  UIComponent
-//
 //  Created by Luke Zhao on 2017-07-21.
-//  Copyright © 2017 lkzhao. All rights reserved.
-//
 
 import UIKit
 

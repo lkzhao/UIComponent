@@ -1,12 +1,12 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 8/29/20.
-//
 
 import UIKit
 
+/**
+ # Absolute Component
+ 
+ Renders a list of child components base on the provided `children` and `frames` parameters.
+*/
 public struct Absolute: Component {
   public var children: [Component]
   public var frames: [CGRect]

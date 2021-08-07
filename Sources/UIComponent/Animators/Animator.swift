@@ -1,10 +1,4 @@
-//
-//  Animator.swift
-//  ComponentView
-//
 //  Created by Luke Zhao on 2017-07-19.
-//  Copyright © 2017 lkzhao. All rights reserved.
-//
 
 import UIKit
 

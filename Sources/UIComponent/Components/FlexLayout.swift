@@ -1,13 +1,9 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 8/24/20.
-//
 
 import UIKit
 
-public protocol FlexLayoutComponent: Component, BaseLayoutProtocol {
+/// Implementation for `FlexColumn` & `FlexRow`
+public protocol FlexLayout: Component, BaseLayoutProtocol {
   var lineSpacing: CGFloat { get }
   var interitemSpacing: CGFloat { get }
   var justifyContent: MainAxisAlignment { get }
@@ -23,7 +19,7 @@ public protocol FlexLayoutComponent: Component, BaseLayoutProtocol {
        children: [Component])
 }
 
-public extension FlexLayoutComponent {
+public extension FlexLayout {
   init(lineSpacing: CGFloat = 0,
        interitemSpacing: CGFloat = 0,
        justifyContent: MainAxisAlignment = .start,
@@ -41,7 +37,7 @@ public extension FlexLayoutComponent {
   }
 }
 
-extension FlexLayoutComponent {
+extension FlexLayout {
   public func layout(_ constraint: Constraint) -> Renderer {
     let mainMax = main(constraint.maxSize)
     let crossMax = cross(constraint.maxSize)

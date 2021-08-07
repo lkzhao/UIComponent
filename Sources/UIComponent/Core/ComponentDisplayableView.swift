@@ -1,10 +1,4 @@
-//
-//  ComponentDisplayable.swift
-//  UIComponent
-//
 //  Created by Luke Zhao on 2016-02-12.
-//  Copyright © 2016 lkzhao. All rights reserved.
-//
 
 import UIKit
 

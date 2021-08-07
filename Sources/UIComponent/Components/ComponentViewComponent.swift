@@ -1,24 +1,27 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 8/23/20.
-//
 
 import UIKit
 
-public struct ComponentDisplayableViewComponent<View: ComponentDisplayableView>: ViewComponent {
+/**
+ # ComponentViewComponent
+ 
+ Wraps a `component` inside a `ComponentDisplayableView`.
+ 
+ This is used to power the `.view()` and `.scrollView()` modifiers.
+*/
+public struct ComponentViewComponent<View: ComponentDisplayableView>: ViewComponent {
   let component: Component
   public init(component: Component) {
     self.component = component
   }
-  public func layout(_ constraint: Constraint) -> ComponentDisplayableViewRenderer<View> {
+  public func layout(_ constraint: Constraint) -> ComponentViewRenderer<View> {
     let renderer = component.layout(constraint)
-    return ComponentDisplayableViewRenderer(size: renderer.size.bound(to: constraint), component: component, renderer: renderer)
+    return ComponentViewRenderer(size: renderer.size.bound(to: constraint), component: component, renderer: renderer)
   }
 }
 
-public struct ComponentDisplayableViewRenderer<View: ComponentDisplayableView>: ViewRenderer {
+/// Renderer for the `ComponentViewComponent`
+public struct ComponentViewRenderer<View: ComponentDisplayableView>: ViewRenderer {
   public let size: CGSize
   public let component: Component
   public let renderer: Renderer
@@ -40,16 +43,6 @@ public struct ComponentDisplayableViewRenderer<View: ComponentDisplayableView>: 
   }
   public func updateView(_ view: View) {
     view.engine.reloadWithExisting(component: component, renderer: renderer)
-  }
-}
-
-public extension Component {
-  func view() -> ComponentDisplayableViewComponent<ComponentView> {
-    ComponentDisplayableViewComponent(component: self)
-  }
-
-  func scrollView() -> ComponentDisplayableViewComponent<ComponentScrollView> {
-    ComponentDisplayableViewComponent(component: self)
   }
 }
 

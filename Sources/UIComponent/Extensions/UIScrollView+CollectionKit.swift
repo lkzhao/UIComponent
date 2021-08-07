@@ -1,10 +1,4 @@
-//
-//  UIScrollView+Addtion.swift
-//  ComponentView
-//
-//  Created by Luke on 4/16/17.
 //  Copyright © 2017 lkzhao. All rights reserved.
-//
 
 import UIKit
 

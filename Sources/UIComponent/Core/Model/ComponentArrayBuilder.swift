@@ -1,9 +1,4 @@
-//
-//  ComponentArrayBuilder.swift
-//  
-//
 //  Created by Luke Zhao on 8/22/20.
-//
 
 import Foundation
 
@@ -36,4 +31,8 @@ public struct ComponentArrayBuilder {
   public static func buildLimitedAvailability(_ component: [Component]) -> [Component] {
     component
   }
+}
+
+public protocol ComponentArrayContainer {
+  var components: [Component] { get }
 }

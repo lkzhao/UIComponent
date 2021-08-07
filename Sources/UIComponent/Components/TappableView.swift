@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 6/8/21.
-//
 
 import UIKit
 
@@ -154,14 +149,14 @@ extension TappableView: UIContextMenuInteractionDelegate {
 
 extension Component {
   public func tappableView(configuration: TappableViewConfiguration? = nil,
-                           _ onTap: @escaping (TappableView) -> Void) -> ViewUpdateComponent<ComponentDisplayableViewComponent<TappableView>> {
-    ComponentDisplayableViewComponent<TappableView>(component: self).update {
+                           _ onTap: @escaping (TappableView) -> Void) -> ViewUpdateComponent<ComponentViewComponent<TappableView>> {
+    ComponentViewComponent<TappableView>(component: self).update {
       $0.onTap = onTap
       $0.configuration = configuration
     }
   }
   public func tappableView(configuration: TappableViewConfiguration? = nil,
-                           _ onTap: @escaping () -> Void) -> ViewUpdateComponent<ComponentDisplayableViewComponent<TappableView>> {
+                           _ onTap: @escaping () -> Void) -> ViewUpdateComponent<ComponentViewComponent<TappableView>> {
     tappableView(configuration: configuration) { _ in
       onTap()
     }

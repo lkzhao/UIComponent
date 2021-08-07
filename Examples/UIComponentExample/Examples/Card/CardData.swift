@@ -1,10 +1,4 @@
-//
-//  CardData.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 6/15/21.
-//  Copyright © 2021 Luke Zhao. All rights reserved.
-//
 
 import Foundation
 

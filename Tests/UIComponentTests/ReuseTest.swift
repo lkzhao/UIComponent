@@ -1,9 +1,5 @@
-//
-//  ReuseTest.swift
-//  
-//
 //  Created by Luke Zhao on 2/15/20.
-//
+
 import XCTest
 @testable import UIComponent
 

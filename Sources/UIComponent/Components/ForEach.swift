@@ -1,15 +1,6 @@
-//
-//  File.swift
-//
-//
 //  Created by Luke Zhao on 8/23/20.
-//
 
 import Foundation
-
-public protocol ComponentArrayContainer {
-  var components: [Component] { get }
-}
 
 public struct ForEach<S: Sequence, D>: ComponentArrayContainer where S.Element == D {
   public let components: [Component]

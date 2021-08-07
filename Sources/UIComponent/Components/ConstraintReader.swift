@@ -1,14 +1,9 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 8/25/20.
-//
 
 import UIKit
 
 /**
- Read incoming constraint and pass it to a Component builder block
+ Read incoming constraint and pass it to a Component `builder` block
  
  e.g Normally the following will fail because we are trying to fill an infinite x axis
 
@@ -16,7 +11,7 @@ import UIKit
        Space(height: 50).size(width: .fill)
      }
  
- We can read the top level constraint and pass it into the child so it doesn't get an infinite width
+ We can solve this issue by reading the top level constraint and pass it into the child so it doesn't get an infinite width
  
      ConstraintReader { constraint in
        HStack {

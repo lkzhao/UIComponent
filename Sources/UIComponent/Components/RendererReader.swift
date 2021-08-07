@@ -1,13 +1,8 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 8/26/20.
-//
 
 import Foundation
 
-public struct LayoutReader: Component {
+public struct RendererReader: Component {
   let child: Component
   let reader: (Renderer) -> Void
   
@@ -24,7 +19,7 @@ public struct LayoutReader: Component {
 }
 
 public extension Component {
-  func layoutReader(_ reader: @escaping (Renderer) -> Void) -> LayoutReader {
-    LayoutReader(child: self, reader)
+  func layoutReader(_ reader: @escaping (Renderer) -> Void) -> RendererReader {
+    RendererReader(child: self, reader)
   }
 }
