@@ -1,14 +1,14 @@
-//  Copyright © 2017 lkzhao. All rights reserved.
+//  Created by Luke on 4/16/17.
 
 import UIKit
 
 extension UIScrollView {
 	public var visibleFrame: CGRect {
-		return bounds
+		bounds
 	}
 
 	public var visibleFrameLessInset: CGRect {
-		return visibleFrame.inset(by: contentInset)
+		visibleFrame.inset(by: contentInset)
 	}
 
   public var adjustedSize: CGSize {
@@ -28,7 +28,7 @@ extension UIScrollView {
 	}
 
 	public func absoluteLocation(for point: CGPoint) -> CGPoint {
-		return point - contentOffset
+		point - contentOffset
 	}
 
 	public func scrollTo(edge: UIRectEdge, animated: Bool) {

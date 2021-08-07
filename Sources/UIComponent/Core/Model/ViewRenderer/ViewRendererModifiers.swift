@@ -11,13 +11,9 @@ extension ViewRendererWrapper {
   public var id: String? {
     content.id
   }
-  // We shouldn't implement reuseKey: String? and pass the content's reuseKey.
-  // because the types are different, we should generate a new reuseKey based
-  // on the current ViewRendererWrapper type
-  //
-  // public var reuseKey: String? { // DONT UNCOMMENT
-  //   content.reuseKey
-  // }
+  public var reuseKey: String? {
+    "\(type(of: self))"
+  }
   public var animator: Animator? {
     content.animator
   }
