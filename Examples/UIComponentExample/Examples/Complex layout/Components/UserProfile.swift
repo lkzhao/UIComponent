@@ -23,7 +23,7 @@ struct UserProfile: ComponentBuilder {
   
   func build() -> Component {
     HStack(spacing: 10, alignItems: .center) {
-      AsyncImage(avatar)!
+      AsyncImage(avatar)
         .contentMode(.scaleAspectFill)
         .clipsToBounds(true)
         .size(width: 64, height: 64)
