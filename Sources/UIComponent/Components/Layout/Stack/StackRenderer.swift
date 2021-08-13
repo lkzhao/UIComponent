@@ -2,14 +2,14 @@
 
 import UIKit
 
-public protocol StackRenderer: Renderer, BaseLayoutProtocol {
+public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
   var size: CGSize { get }
-  var children: [Renderer] { get }
+  var children: [RenderNode] { get }
   var positions: [CGPoint] { get }
   var mainAxisMaxValue: CGFloat { get }
 }
 
-public extension StackRenderer {
+public extension StackRenderNode {
   func views(in frame: CGRect) -> [Renderable] {
     guard var index = firstVisibleIndex(in: frame) else { return [] }
     var result: [Renderable] = []
@@ -19,7 +19,7 @@ public extension StackRenderer {
       let childResult = children[index].views(in: frame.intersection(childFrame) - childFrame.origin).map {
         Renderable(id: $0.id,
                    keyPath: "\(type(of: self))-\(index)." + $0.keyPath,
-                   animator: $0.animator, renderer: $0.renderer,
+                   animator: $0.animator, renderNode: $0.renderNode,
                    frame: CGRect(origin: $0.frame.origin + childFrame.origin, size: $0.frame.size))
       }
       result.append(contentsOf: childResult)
@@ -42,26 +42,26 @@ public extension StackRenderer {
   }
 }
 
-public struct HorizontalRenderer: StackRenderer, HorizontalLayoutProtocol {
+public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
   public let size: CGSize
-  public let children: [Renderer]
+  public let children: [RenderNode]
   public let positions: [CGPoint]
   public let mainAxisMaxValue: CGFloat
 }
 
-public struct VerticalRenderer: StackRenderer, VerticalLayoutProtocol {
+public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
   public let size: CGSize
-  public let children: [Renderer]
+  public let children: [RenderNode]
   public let positions: [CGPoint]
   public let mainAxisMaxValue: CGFloat
 }
 
-public struct SlowRenderer: Renderer {
+public struct SlowRenderNode: RenderNode {
   public let size: CGSize
-  public let children: [Renderer]
+  public let children: [RenderNode]
   public let positions: [CGPoint]
   
-  public init(size: CGSize, children: [Renderer], positions: [CGPoint]) {
+  public init(size: CGSize, children: [RenderNode], positions: [CGPoint]) {
     self.size = size
     self.children = children
     self.positions = positions
@@ -78,7 +78,7 @@ public struct SlowRenderer: Renderer {
           Renderable(id: $0.id,
                      keyPath: "slow-\(i)." + $0.keyPath,
                      animator: $0.animator,
-                     renderer: $0.renderer,
+                     renderNode: $0.renderNode,
                      frame: CGRect(origin: $0.frame.origin + childFrame.origin, size: $0.frame.size))
         }
         result.append(contentsOf: childResult)

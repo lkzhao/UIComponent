@@ -15,12 +15,12 @@ public struct SimpleViewComponent<View: UIView>: ViewComponent {
   public init(id: String? = nil, generator: @autoclosure @escaping () -> View) {
     self.init(view: nil, generator: generator)
   }
-  public func layout(_ constraint: Constraint) -> SimpleViewRenderer<View> {
-    SimpleViewRenderer(size: (view?.sizeThatFits(constraint.maxSize) ?? .zero).bound(to: constraint), view: view, generator: generator)
+  public func layout(_ constraint: Constraint) -> SimpleViewRenderNode<View> {
+    SimpleViewRenderNode(size: (view?.sizeThatFits(constraint.maxSize) ?? .zero).bound(to: constraint), view: view, generator: generator)
   }
 }
 
-public struct SimpleViewRenderer<View: UIView>: ViewRenderer {
+public struct SimpleViewRenderNode<View: UIView>: ViewRenderNode {
   public let size: CGSize
   public let view: View?
   public let generator: (() -> View)?
@@ -66,7 +66,7 @@ public struct SimpleViewRenderer<View: UIView>: ViewRenderer {
 }
 
 extension UIView: ViewComponent {
-  public func layout(_ constraint: Constraint) -> some ViewRenderer {
-    SimpleViewRenderer(size: sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
+  public func layout(_ constraint: Constraint) -> some ViewRenderNode {
+    SimpleViewRenderNode(size: sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
   }
 }

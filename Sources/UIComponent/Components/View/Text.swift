@@ -10,13 +10,13 @@ public struct Text: ViewComponent {
   public init(_ attributedText: NSAttributedString) {
     self.attributedText = attributedText
   }
-  public func layout(_ constraint: Constraint) -> TextRenderer {
+  public func layout(_ constraint: Constraint) -> TextRenderNode {
     let size = attributedText.boundingRect(with: constraint.maxSize, options: [.usesLineFragmentOrigin], context: nil).size
-    return TextRenderer(attributedText: attributedText, size: size.bound(to: constraint))
+    return TextRenderNode(attributedText: attributedText, size: size.bound(to: constraint))
   }
 }
 
-public struct TextRenderer: ViewRenderer {
+public struct TextRenderNode: ViewRenderNode {
   public let attributedText: NSAttributedString
   public let size: CGSize
   public func updateView(_ label: UILabel) {

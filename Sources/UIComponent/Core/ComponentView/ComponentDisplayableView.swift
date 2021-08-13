@@ -20,7 +20,7 @@ public extension ComponentDisplayableView {
     set { engine.animator = newValue }
   }
   
-  /// visible frame insets that is applied to the view port before fetching the views from the renderer
+  /// visible frame insets that is applied to the view port before fetching the views from the renderNode
   var visibleFrameInsets: UIEdgeInsets {
     get { engine.visibleFrameInsets }
     set { engine.visibleFrameInsets = newValue }
@@ -103,6 +103,6 @@ public extension ComponentDisplayableView {
     }
   }
   func frame(id: String) -> CGRect? {
-    engine.renderer?.frame(id: id)
+    engine.renderNode?.frame(id: id)
   }
 }

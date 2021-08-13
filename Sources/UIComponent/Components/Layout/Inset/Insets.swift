@@ -9,8 +9,8 @@ public struct Insets: Component {
     self.insets = insets
     self.child = child
   }
-  public func layout(_ constraint: Constraint) -> Renderer {
-    InsetsRenderer(child: child.layout(constraint.inset(by: insets)), insets: insets)
+  public func layout(_ constraint: Constraint) -> RenderNode {
+    InsetsRenderNode(child: child.layout(constraint.inset(by: insets)), insets: insets)
   }
 }
 
@@ -21,19 +21,19 @@ public struct DynamicInsets: Component {
     self.insetProvider = insetProvider
     self.child = child
   }
-  public func layout(_ constraint: Constraint) -> Renderer {
+  public func layout(_ constraint: Constraint) -> RenderNode {
     let insets = insetProvider(constraint)
-    return InsetsRenderer(child: child.layout(constraint.inset(by: insets)), insets: insets)
+    return InsetsRenderNode(child: child.layout(constraint.inset(by: insets)), insets: insets)
   }
 }
 
-struct InsetsRenderer: Renderer {
-  let child: Renderer
+struct InsetsRenderNode: RenderNode {
+  let child: RenderNode
   let insets: UIEdgeInsets
   var size: CGSize {
     return child.size.inset(by: -insets)
   }
-  var children: [Renderer] {
+  var children: [RenderNode] {
     [child]
   }
   var positions: [CGPoint] {
@@ -43,7 +43,7 @@ struct InsetsRenderer: Renderer {
     child.views(in: frame.inset(by: -insets)).map {
       Renderable(id: $0.id,
                  keyPath: "inset." + $0.keyPath,
-                 animator: $0.animator, renderer: $0.renderer, frame: $0.frame + CGPoint(x: insets.left, y: insets.top))
+                 animator: $0.animator, renderNode: $0.renderNode, frame: $0.frame + CGPoint(x: insets.left, y: insets.top))
     }
   }
 }

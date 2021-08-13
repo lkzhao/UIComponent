@@ -24,7 +24,7 @@ extension GalleryLayout {
 
 extension GalleryLayout {
   
-  func layout(_ constraint: Constraint) -> Renderer {
+  func layout(_ constraint: Constraint) -> RenderNode {
     
     var allFrames = [CGRect]()
     var index = 0
@@ -49,9 +49,9 @@ extension GalleryLayout {
     }
     appendFrames()
     let finalFrame = allFrames.reduce(allFrames.first ?? .zero, { $0.union($1) })
-    return renderer(size: size(main: main(finalFrame.size), cross: cross(finalFrame.size)),
-                    children: zip(children, allFrames).map({ $0.0.layout(.tight(size(main: main($0.1.size), cross: cross($0.1.size)))) }),
-                    positions: allFrames.map({ point(main: main($0.origin), cross: cross($0.origin)) }))
+    return renderNode(size: size(main: main(finalFrame.size), cross: cross(finalFrame.size)),
+                      children: zip(children, allFrames).map({ $0.0.layout(.tight(size(main: main($0.1.size), cross: cross($0.1.size)))) }),
+                      positions: allFrames.map({ point(main: main($0.origin), cross: cross($0.origin)) }))
   }
 }
 

@@ -16,12 +16,12 @@ public struct Image: ViewComponent {
     self.image = image
   }
 
-  public func layout(_ constraint: Constraint) -> ImageRenderer {
-    ImageRenderer(image: image, size: image.size.bound(to: constraint))
+  public func layout(_ constraint: Constraint) -> ImageRenderNode {
+    ImageRenderNode(image: image, size: image.size.bound(to: constraint))
   }
 }
 
-public struct ImageRenderer: ViewRenderer {
+public struct ImageRenderNode: ViewRenderNode {
   public let image: UIImage
   public let size: CGSize
   public func updateView(_ view: UIImageView) {

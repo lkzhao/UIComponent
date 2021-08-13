@@ -2,7 +2,7 @@
 
 import UIKit
 
-public protocol AnyViewRenderer: Renderer {
+public protocol AnyViewRenderNode: RenderNode {
   var id: String? { get }
   var keyPath: String { get }
   var animator: Animator? { get }
@@ -11,12 +11,12 @@ public protocol AnyViewRenderer: Renderer {
   func _updateView(_ view: UIView)
 }
 
-public extension AnyViewRenderer {
+public extension AnyViewRenderNode {
   var id: String? { nil }
   var animator: Animator? { nil }
   var keyPath: String { "\(type(of: self))" }
   var reuseKey: String? { "\(type(of: self))" }
-  var children: [Renderer] { [] }
+  var children: [RenderNode] { [] }
   var positions: [CGPoint] { [] }
 
   func views(in frame: CGRect) -> [Renderable] {
@@ -25,7 +25,7 @@ public extension AnyViewRenderer {
       return [Renderable(id: id,
                          keyPath: keyPath,
                          animator: animator,
-                         renderer: self,
+                         renderNode: self,
                          frame: childFrame)]
     }
     return []

@@ -16,11 +16,11 @@ public struct Absolute: Component {
     self.frames = frames
   }
   
-  public func layout(_ constraint: Constraint) -> Renderer {
+  public func layout(_ constraint: Constraint) -> RenderNode {
     let frame = frames.reduce(frames.first ?? .zero) {
       $0.union($1)
     }
-    return SlowRenderer(size: CGSize(width: frame.maxX, height: frame.maxY),
+    return SlowRenderNode(size: CGSize(width: frame.maxX, height: frame.maxY),
                         children: zip(children, frames).map({ $0.0.layout(.tight($0.1.size)) }),
                         positions: frames.map({ $0.origin }))
   }

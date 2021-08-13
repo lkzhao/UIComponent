@@ -20,8 +20,8 @@ public class ComponentEngine {
     didSet { setNeedsReload() }
   }
   
-  /// Current renderer. This is nil before the layout is done. And it will cache the current Renderer once the layout is done.
-  var renderer: Renderer?
+  /// Current renderNode. This is nil before the layout is done. And it will cache the current RenderNode once the layout is done.
+  var renderNode: RenderNode?
   
   /// internal states
   var needsReload = true
@@ -133,7 +133,7 @@ public class ComponentEngine {
   }
 
   func setNeedsInvalidateLayout() {
-    renderer = nil
+    renderNode = nil
     setNeedsRender()
   }
 
@@ -145,7 +145,7 @@ public class ComponentEngine {
   // re-layout, but not updating cells' contents
   func invalidateLayout() {
     guard !isRendering, !isReloading, hasReloaded else { return }
-    renderer = nil
+    renderNode = nil
     render()
   }
 
@@ -163,7 +163,7 @@ public class ComponentEngine {
     }
     
     if !shouldSkipNextLayout {
-      renderer = nil
+      renderNode = nil
     }
     shouldSkipNextLayout = false
     render(contentOffsetAdjustFn: contentOffsetAdjustFn, updateViews: true)
@@ -177,13 +177,13 @@ public class ComponentEngine {
       isRendering = false
     }
     
-    let renderer: Renderer
-    if let currentRenderer = self.renderer {
-      renderer = currentRenderer
+    let renderNode: RenderNode
+    if let currentRenderNode = self.renderNode {
+      renderNode = currentRenderNode
     } else {
-      renderer = component.layout(Constraint(maxSize: adjustedSize))
-      contentSize = renderer.size * zoomScale
-      self.renderer = renderer
+      renderNode = component.layout(Constraint(maxSize: adjustedSize))
+      contentSize = renderNode.size * zoomScale
+      self.renderNode = renderNode
     }
     
     let oldContentOffset = contentOffset
@@ -195,11 +195,11 @@ public class ComponentEngine {
     animator.willUpdate(componentView: componentView)
     let visibleFrame = (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
     
-    var newVisibleRenderable = renderer.views(in: visibleFrame)
-    if contentSize != renderer.size * zoomScale {
-      // update contentSize if it is changed. Some renderers update
+    var newVisibleRenderable = renderNode.views(in: visibleFrame)
+    if contentSize != renderNode.size * zoomScale {
+      // update contentSize if it is changed. Some renderNodes update
       // its size when views(in: visibleFrame) is called. e.g. InfiniteLayout
-      contentSize = renderer.size * zoomScale
+      contentSize = renderNode.size * zoomScale
     }
 
     // construct private identifiers
@@ -239,17 +239,17 @@ public class ComponentEngine {
         view = existingView
         if updateViews {
           // view was on screen before reload, need to update the view.
-          viewData.renderer._updateView(view)
+          viewData.renderNode._updateView(view)
           (viewData.animator ?? animator).shift(componentView: componentView, delta: contentOffsetDelta,
                                                 view: view, frame: frame)
         }
       } else {
-        view = viewData.renderer._makeView()
+        view = viewData.renderNode._makeView()
         UIView.performWithoutAnimation {
           view.bounds.size = frame.bounds.size
           view.center = frame.center
         }
-        viewData.renderer._updateView(view)
+        viewData.renderNode._updateView(view)
         (viewData.animator ?? animator).insert(componentView: componentView, view: view, frame: frame)
         newViews[index] = view
       }
@@ -272,12 +272,12 @@ public class ComponentEngine {
     }
   }
   
-  /// This function assigns component with an already calculated renderer
+  /// This function assigns component with an already calculated render node
   /// This is a performance hack that skips layout for the component if it has already
   /// been layed out.
-  public func reloadWithExisting(component: Component, renderer: Renderer) {
+  public func reloadWithExisting(component: Component, renderNode: RenderNode) {
     self.component = component
-    self.renderer = renderer
+    self.renderNode = renderNode
     self.shouldSkipNextLayout = true
   }
 

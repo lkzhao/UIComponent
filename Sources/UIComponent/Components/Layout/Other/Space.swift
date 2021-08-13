@@ -10,14 +10,14 @@ public struct Space: Component {
   public init(width: CGFloat = 0, height: CGFloat = 0) {
     size = CGSize(width: width, height: height)
   }
-  public func layout(_ constraint: Constraint) -> Renderer {
-    SpaceRenderer(size: size.bound(to: constraint))
+  public func layout(_ constraint: Constraint) -> RenderNode {
+    SpaceRenderNode(size: size.bound(to: constraint))
   }
 }
 
-struct SpaceRenderer: Renderer {
+struct SpaceRenderNode: RenderNode {
   let size: CGSize
-  var children: [Renderer] { [] }
+  var children: [RenderNode] { [] }
   var positions: [CGPoint] { [] }
   func views(in frame: CGRect) -> [Renderable] {
     []

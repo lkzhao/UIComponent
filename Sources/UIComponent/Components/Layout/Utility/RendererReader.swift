@@ -2,24 +2,24 @@
 
 import Foundation
 
-public struct RendererReader: Component {
+public struct RenderNodeReader: Component {
   let child: Component
-  let reader: (Renderer) -> Void
+  let reader: (RenderNode) -> Void
   
-  public init(child: Component, _ reader: @escaping (Renderer) -> Void) {
+  public init(child: Component, _ reader: @escaping (RenderNode) -> Void) {
     self.child = child
     self.reader = reader
   }
 
-  public func layout(_ constraint: Constraint) -> Renderer {
-    let renderer = child.layout(constraint)
-    reader(renderer)
-    return renderer
+  public func layout(_ constraint: Constraint) -> RenderNode {
+    let renderNode = child.layout(constraint)
+    reader(renderNode)
+    return renderNode
   }
 }
 
 public extension Component {
-  func layoutReader(_ reader: @escaping (Renderer) -> Void) -> RendererReader {
-    RendererReader(child: self, reader)
+  func layoutReader(_ reader: @escaping (RenderNode) -> Void) -> RenderNodeReader {
+    RenderNodeReader(child: self, reader)
   }
 }

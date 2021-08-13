@@ -9,8 +9,8 @@ public protocol WaterfallLayoutProtocol: Component, BaseLayoutProtocol {
 }
 
 public extension WaterfallLayoutProtocol {
-  func layout(_ constraint: Constraint) -> Renderer {
-    var renderers: [Renderer] = []
+  func layout(_ constraint: Constraint) -> RenderNode {
+    var renderNodes: [RenderNode] = []
     var positions: [CGPoint] = []
 
     let columnWidth = (cross(constraint.maxSize) - CGFloat(columns - 1) * spacing) / CGFloat(columns)
@@ -25,16 +25,16 @@ public extension WaterfallLayoutProtocol {
     }
 
     for child in children {
-      let renderer = child.layout(Constraint(minSize: size(main: 0, cross: columnWidth),
+      let renderNode = child.layout(Constraint(minSize: size(main: 0, cross: columnWidth),
                                              maxSize: size(main: .infinity, cross: columnWidth)))
       let (columnIndex, offsetY) = getMinColomn()
-      columnHeight[columnIndex] += main(renderer.size) + spacing
-      renderers.append(renderer)
+      columnHeight[columnIndex] += main(renderNode.size) + spacing
+      renderNodes.append(renderNode)
       positions.append(point(main: offsetY, cross: CGFloat(columnIndex) * (columnWidth + spacing)))
     }
 
-    return renderer(size: size(main: max(0, columnHeight.max()! - spacing), cross: cross(constraint.maxSize)),
-                    children: renderers,
+    return renderNode(size: size(main: max(0, columnHeight.max()! - spacing), cross: cross(constraint.maxSize)),
+                    children: renderNodes,
                     positions: positions)
   }
 }

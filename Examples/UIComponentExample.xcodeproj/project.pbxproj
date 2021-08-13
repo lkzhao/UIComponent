@@ -50,7 +50,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		024B130A23E7B312004F4D00 /* CollectionKit3 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CollectionKit3; path = ..; sourceTree = "<group>"; };
+		024B130A23E7B312004F4D00 /* UIComponent */ = {isa = PBXFileReference; lastKnownFileType = folder; name = UIComponent; path = ..; sourceTree = "<group>"; };
 		A304892421C347010026EDA7 /* UIComponentExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIComponentExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A304892721C347010026EDA7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A304892921C347010026EDA7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -96,7 +96,7 @@
 		024B130123E7AC3C004F4D00 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				024B130A23E7B312004F4D00 /* CollectionKit3 */,
+				024B130A23E7B312004F4D00 /* UIComponent */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -254,7 +254,7 @@
 				B121A09F24F8771E00E59F78 /* UIComponent */,
 				B16EA69F2677E262005CFB18 /* Kingfisher */,
 			);
-			productName = CollectionKit3;
+			productName = UIComponent;
 			productReference = A304892421C347010026EDA7 /* UIComponentExample.app */;
 			productType = "com.apple.product-type.application";
 		};

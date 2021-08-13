@@ -4,17 +4,17 @@ import Foundation
 
 @dynamicMemberLookup
 public protocol ViewComponent: Component {
-  associatedtype R: ViewRenderer
+  associatedtype R: ViewRenderNode
   func layout(_ constraint: Constraint) -> R
 }
 
 extension ViewComponent {
-  public func layout(_ constraint: Constraint) -> Renderer {
+  public func layout(_ constraint: Constraint) -> RenderNode {
     layout(constraint) as R
   }
 }
 
-public struct ViewModifierComponent<View, Content: ViewComponent, Result: ViewRenderer>: ViewComponent where Content.R.View == View, Result.View == View {
+public struct ViewModifierComponent<View, Content: ViewComponent, Result: ViewRenderNode>: ViewComponent where Content.R.View == View, Result.View == View {
   let content: Content
   let modifier: (Content.R) -> Result
 
@@ -23,15 +23,15 @@ public struct ViewModifierComponent<View, Content: ViewComponent, Result: ViewRe
   }
 }
 
-public typealias ViewUpdateComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewUpdateRenderer<Content.R.View, Content.R>>
+public typealias ViewUpdateComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewUpdateRenderNode<Content.R.View, Content.R>>
 
-public typealias ViewKeyPathUpdateComponent<Content: ViewComponent, Value> = ViewModifierComponent<Content.R.View, Content, ViewKeyPathUpdateRenderer<Content.R.View, Value, Content.R>>
+public typealias ViewKeyPathUpdateComponent<Content: ViewComponent, Value> = ViewModifierComponent<Content.R.View, Content, ViewKeyPathUpdateRenderNode<Content.R.View, Value, Content.R>>
 
-public typealias ViewIDComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewIDRenderer<Content.R.View, Content.R>>
+public typealias ViewIDComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewIDRenderNode<Content.R.View, Content.R>>
 
-public typealias ViewAnimatorComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewAnimatorRenderer<Content.R.View, Content.R>>
+public typealias ViewAnimatorComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewAnimatorRenderNode<Content.R.View, Content.R>>
 
-public typealias ViewReuseKeyComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewReuseKeyRenderer<Content.R.View, Content.R>>
+public typealias ViewReuseKeyComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewReuseKeyRenderNode<Content.R.View, Content.R>>
 
 public extension ViewComponent {
   subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<R.View, Value>) -> (Value) -> ViewKeyPathUpdateComponent<Self, Value> {

@@ -10,17 +10,17 @@ public protocol Stack: Component, BaseLayoutProtocol {
 }
 
 extension Stack {
-  public func layout(_ constraint: Constraint) -> Renderer {
-    var renderers = getRenderers(constraint)
-    let crossMax = renderers.reduce(CGFloat(0).clamp(cross(constraint.minSize), cross(constraint.maxSize))) {
+  public func layout(_ constraint: Constraint) -> RenderNode {
+    var renderNodes = getRenderNodes(constraint)
+    let crossMax = renderNodes.reduce(CGFloat(0).clamp(cross(constraint.minSize), cross(constraint.maxSize))) {
       max($0, cross($1.size))
     }
     if cross(constraint.maxSize) == .infinity, alignItems == .stretch {
       // when using alignItem = .stretch, we need to relayout child to stretch its cross axis
-      renderers = getRenderers(Constraint(minSize: constraint.minSize,
+      renderNodes = getRenderNodes(Constraint(minSize: constraint.minSize,
                                           maxSize: size(main: main(constraint.maxSize), cross: crossMax)))
     }
-    let mainTotal = renderers.reduce(0) {
+    let mainTotal = renderNodes.reduce(0) {
       $0 + main($1.size)
     }
     
@@ -28,11 +28,11 @@ extension Stack {
                                                                maxPrimary: main(constraint.maxSize),
                                                                totalPrimary: mainTotal,
                                                                minimunSpacing: spacing,
-                                                               numberOfItems: renderers.count)
+                                                               numberOfItems: renderNodes.count)
     
     var primaryOffset = offset
     var positions: [CGPoint] = []
-    for (index, child) in renderers.enumerated() {
+    for (index, child) in renderNodes.enumerated() {
       var crossValue: CGFloat = 0
       let alignChild = (children[index] as? Flexible)?.alignSelf ?? alignItems
       switch alignChild {
@@ -52,11 +52,11 @@ extension Stack {
     let finalMain = justifyContent != .start && main(constraint.maxSize) != .infinity ? max(main(constraint.maxSize), intrisicMain) : intrisicMain
     let finalSize = size(main: finalMain, cross: crossMax)
 
-    return renderer(size: finalSize, children: renderers, positions: positions)
+    return renderNode(size: finalSize, children: renderNodes, positions: positions)
   }
   
-  func getRenderers(_ constraint: Constraint) -> [Renderer] {
-    var renderers: [Renderer?] = []
+  func getRenderNodes(_ constraint: Constraint) -> [RenderNode] {
+    var renderNodes: [RenderNode?] = []
     
     let spacings = spacing * CGFloat(children.count - 1)
     var mainFreezed: CGFloat = spacings
@@ -68,11 +68,11 @@ extension Stack {
     for child in children {
       if let flexChild = child as? Flexible {
         flexCount += flexChild.flex
-        renderers.append(nil)
+        renderNodes.append(nil)
       } else {
-        let childRenderer = child.layout(childConstraint)
-        mainFreezed += main(childRenderer.size)
-        renderers.append(childRenderer)
+        let childRenderNode = child.layout(childConstraint)
+        mainFreezed += main(childRenderNode.size)
+        renderNodes.append(childRenderNode)
       }
     }
     
@@ -85,12 +85,12 @@ extension Stack {
           let mainReserved = mainPerFlex * child.flex
           let constraint = Constraint(minSize: size(main: mainReserved, cross: (alignChild == .stretch) ? cross(constraint.maxSize) : 0),
                                       maxSize: size(main: mainReserved, cross: cross(constraint.maxSize)))
-          renderers[index] = child.layout(constraint)
+          renderNodes[index] = child.layout(constraint)
           mainFreezed += mainReserved
         }
       }
     }
 
-    return renderers.map { $0! }
+    return renderNodes.map { $0! }
   }
 }

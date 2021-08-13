@@ -38,11 +38,11 @@ public extension FlexLayout {
 }
 
 extension FlexLayout {
-  public func layout(_ constraint: Constraint) -> Renderer {
+  public func layout(_ constraint: Constraint) -> RenderNode {
     let mainMax = main(constraint.maxSize)
     let crossMax = cross(constraint.maxSize)
     let childConstraint = Constraint(minSize: CGSize(width: -.infinity, height: -.infinity), maxSize: size(main: .infinity, cross: crossMax))
-    var renderers: [Renderer] = children.map {
+    var renderNodes: [RenderNode] = children.map {
       $0.layout(childConstraint)
     }
     var positions: [CGPoint] = []
@@ -53,8 +53,8 @@ extension FlexLayout {
     var currentLineWidth: CGFloat = 0
     var currentLineMaxHeight: CGFloat = 0
     var totalHeight: CGFloat = 0
-    for renderer in renderers {
-      if currentLineWidth + cross(renderer.size) > crossMax, currentLineItemCount != 0 {
+    for renderNode in renderNodes {
+      if currentLineWidth + cross(renderNode.size) > crossMax, currentLineItemCount != 0 {
         lineData.append((lineSize: size(main: currentLineMaxHeight,
                                         cross: currentLineWidth - CGFloat(currentLineItemCount) * interitemSpacing),
                          count: currentLineItemCount))
@@ -63,8 +63,8 @@ extension FlexLayout {
         currentLineWidth = 0
         currentLineItemCount = 0
       }
-      currentLineMaxHeight = max(currentLineMaxHeight, main(renderer.size))
-      currentLineWidth += cross(renderer.size) + interitemSpacing
+      currentLineMaxHeight = max(currentLineMaxHeight, main(renderNode.size))
+      currentLineWidth += cross(renderNode.size) + interitemSpacing
       currentLineItemCount += 1
     }
     if currentLineItemCount > 0 {
@@ -95,10 +95,10 @@ extension FlexLayout {
           let child = children[index]
           if let child = child as? Flexible {
             let alignChild = child.alignSelf ?? alignItems
-            let crossReserved = crossPerFlex * child.flex + cross(renderers[index].size)
+            let crossReserved = crossPerFlex * child.flex + cross(renderNodes[index].size)
             let constraint = Constraint(minSize: size(main: (alignChild == .stretch) ? main(lineSize) : 0, cross: crossReserved),
                                         maxSize: size(main: .infinity, cross: crossReserved))
-            renderers[index] = child.layout(constraint)
+            renderNodes[index] = child.layout(constraint)
           }
         }
         lineSize = size(main: main(lineSize), cross: crossMax)
@@ -112,13 +112,13 @@ extension FlexLayout {
                                                                 numberOfItems: count)
 
       // finally, layout all of the items on this line
-      for (itemIndex, var child) in renderers[lineStartIndex ..< (lineStartIndex + count)].enumerated() {
+      for (itemIndex, var child) in renderNodes[lineStartIndex ..< (lineStartIndex + count)].enumerated() {
         let childComponent = children[lineStartIndex + itemIndex]
         if alignItems == .stretch, main(child.size) != main(lineSize) {
           // relayout items with a fixed main size
           child = childComponent.layout(Constraint(minSize: size(main: main(lineSize), cross: -.infinity),
                                                    maxSize: size(main: main(lineSize), cross: crossMax)))
-          renderers[lineStartIndex + itemIndex] = child
+          renderNodes[lineStartIndex + itemIndex] = child
         }
         var alignValue: CGFloat = 0
         let alignChild = (childComponent as? Flexible)?.alignSelf ?? alignItems
@@ -141,6 +141,6 @@ extension FlexLayout {
     let intrisicMain = mainOffset - mainSpacing
     let finalMain = alignContent != .start && mainMax != .infinity ? max(mainMax, intrisicMain) : intrisicMain
     let finalSize = size(main: finalMain, cross: crossMax)
-    return renderer(size: finalSize, children: renderers, positions: positions)
+    return renderNode(size: finalSize, children: renderNodes, positions: positions)
   }
 }

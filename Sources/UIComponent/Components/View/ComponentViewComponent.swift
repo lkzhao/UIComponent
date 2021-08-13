@@ -14,35 +14,35 @@ public struct ComponentViewComponent<View: ComponentDisplayableView>: ViewCompon
   public init(component: Component) {
     self.component = component
   }
-  public func layout(_ constraint: Constraint) -> ComponentViewRenderer<View> {
-    let renderer = component.layout(constraint)
-    return ComponentViewRenderer(size: renderer.size.bound(to: constraint), component: component, renderer: renderer)
+  public func layout(_ constraint: Constraint) -> ComponentViewRenderNode<View> {
+    let renderNode = component.layout(constraint)
+    return ComponentViewRenderNode(size: renderNode.size.bound(to: constraint), component: component, renderNode: renderNode)
   }
 }
 
-/// Renderer for the `ComponentViewComponent`
-public struct ComponentViewRenderer<View: ComponentDisplayableView>: ViewRenderer {
+/// RenderNode for the `ComponentViewComponent`
+public struct ComponentViewRenderNode<View: ComponentDisplayableView>: ViewRenderNode {
   public let size: CGSize
   public let component: Component
-  public let renderer: Renderer
+  public let renderNode: RenderNode
   
-  private var viewRenderer: AnyViewRenderer? {
-    renderer as? AnyViewRenderer
+  private var viewRenderNode: AnyViewRenderNode? {
+    renderNode as? AnyViewRenderNode
   }
   public var id: String? {
-    viewRenderer?.id
+    viewRenderNode?.id
   }
   public var reuseKey: String? {
-    viewRenderer?.reuseKey
+    viewRenderNode?.reuseKey
   }
   public var animator: Animator? {
-    viewRenderer?.animator
+    viewRenderNode?.animator
   }
   public var keyPath: String {
-    "\(type(of: self))." + (viewRenderer?.keyPath ?? "\(type(of: renderer))")
+    "\(type(of: self))." + (viewRenderNode?.keyPath ?? "\(type(of: renderNode))")
   }
   public func updateView(_ view: View) {
-    view.engine.reloadWithExisting(component: component, renderer: renderer)
+    view.engine.reloadWithExisting(component: component, renderNode: renderNode)
   }
 }
 

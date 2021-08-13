@@ -2,12 +2,12 @@
 
 import UIKit
 
-public protocol ViewRendererWrapper: ViewRenderer {
-  associatedtype Content: ViewRenderer
+public protocol ViewRenderNodeWrapper: ViewRenderNode {
+  associatedtype Content: ViewRenderNode
   var content: Content { get }
 }
 
-extension ViewRendererWrapper {
+extension ViewRenderNodeWrapper {
   public var id: String? {
     content.id
   }
@@ -28,7 +28,7 @@ extension ViewRendererWrapper {
   }
 }
 
-public struct ViewUpdateRenderer<View, Content: ViewRenderer>: ViewRendererWrapper where Content.View == View {
+public struct ViewUpdateRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
   public let content: Content
   public let update: (View) -> Void
 
@@ -38,7 +38,7 @@ public struct ViewUpdateRenderer<View, Content: ViewRenderer>: ViewRendererWrapp
   }
 }
 
-public struct ViewKeyPathUpdateRenderer<View, Value, Content: ViewRenderer>: ViewRendererWrapper where Content.View == View {
+public struct ViewKeyPathUpdateRenderNode<View, Value, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
   public let content: Content
   public let valueKeyPath: ReferenceWritableKeyPath<View, Value>
   public let value: Value
@@ -49,17 +49,17 @@ public struct ViewKeyPathUpdateRenderer<View, Value, Content: ViewRenderer>: Vie
   }
 }
 
-public struct ViewIDRenderer<View, Content: ViewRenderer>: ViewRendererWrapper where Content.View == View {
+public struct ViewIDRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
   public let content: Content
   public let id: String?
 }
 
-public struct ViewAnimatorRenderer<View, Content: ViewRenderer>: ViewRendererWrapper where Content.View == View {
+public struct ViewAnimatorRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
   public let content: Content
   public let animator: Animator?
 }
 
-public struct ViewReuseKeyRenderer<View, Content: ViewRenderer>: ViewRendererWrapper where Content.View == View {
+public struct ViewReuseKeyRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
   public let content: Content
   public let reuseKey: String?
 }

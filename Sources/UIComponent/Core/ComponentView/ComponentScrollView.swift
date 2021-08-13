@@ -53,7 +53,7 @@ open class ComponentScrollView: UIScrollView, ComponentDisplayableView {
   }
   
   @discardableResult open func scrollTo(id: String, animated: Bool) -> Bool {
-    if let frame = engine.renderer?.frame(id: id) {
+    if let frame = engine.renderNode?.frame(id: id) {
       scrollRectToVisible(frame, animated: animated)
       return true
     } else {

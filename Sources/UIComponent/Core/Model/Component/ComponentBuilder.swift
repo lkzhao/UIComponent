@@ -7,7 +7,7 @@ public protocol ComponentBuilder: Component {
 }
 
 public extension ComponentBuilder {
-  func layout(_ constraint: Constraint) -> Renderer {
+  func layout(_ constraint: Constraint) -> RenderNode {
     build().layout(constraint)
   }
 }

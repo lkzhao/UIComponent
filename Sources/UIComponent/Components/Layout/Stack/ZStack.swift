@@ -7,13 +7,13 @@ public struct ZStack: Component {
   public var horizontalAlignment: CrossAxisAlignment = .center
   public var children: [Component]
 
-  public func layout(_ constraint: Constraint) -> Renderer {
-    var renderers: [Renderer] = children.map {
+  public func layout(_ constraint: Constraint) -> RenderNode {
+    var renderNodes: [RenderNode] = children.map {
       $0.layout(constraint)
     }
-    let size = CGSize(width: renderers.max { $0.size.width < $1.size.width }?.size.width ?? 0,
-                      height: renderers.max { $0.size.height < $1.size.height }?.size.height ?? 0).bound(to: constraint)
-    let positions: [CGPoint] = renderers.enumerated().map { (idx, node) in
+    let size = CGSize(width: renderNodes.max { $0.size.width < $1.size.width }?.size.width ?? 0,
+                      height: renderNodes.max { $0.size.height < $1.size.height }?.size.height ?? 0).bound(to: constraint)
+    let positions: [CGPoint] = renderNodes.enumerated().map { (idx, node) in
       var result = CGRect(origin: .zero, size: node.size)
       switch verticalAlignment {
       case .start:
@@ -36,11 +36,11 @@ public struct ZStack: Component {
         result.size.width = size.width
       }
       if node.size != result.size {
-        renderers[idx] = children[idx].layout(.tight(result.size))
+        renderNodes[idx] = children[idx].layout(.tight(result.size))
       }
       return result.origin
     }
-    return SlowRenderer(size: size, children: renderers, positions: positions)
+    return SlowRenderNode(size: size, children: renderNodes, positions: positions)
   }
 }
 
