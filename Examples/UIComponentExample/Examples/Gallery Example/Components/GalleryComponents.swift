@@ -11,7 +11,7 @@ struct GalleryItemData: Equatable {
 struct GalleryItem: ComponentBuilder {
   let data: GalleryItemData
   func build() -> Component {
-    AsyncImage(data.cover, indicatorType: .activity, options: [.transition(.flipFromBottom(0.35))])
+    AsyncImage(data.cover, indicatorType: .activity, configurationBuilder: { $0.transition(.flipFromBottom(0.35)) })
       .contentMode(.scaleAspectFill)
       .clipsToBounds(true)
       .id(data.id)
