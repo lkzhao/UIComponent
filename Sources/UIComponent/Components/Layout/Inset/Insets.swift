@@ -40,7 +40,7 @@ struct InsetsRenderNode: RenderNode {
     [CGPoint(x: insets.left, y: insets.top)]
   }
   func views(in frame: CGRect) -> [Renderable] {
-    child.views(in: frame.inset(by: -insets)).map {
+    child.views(in: frame.offsetBy(dx: -insets.left, dy: -insets.top)).map {
       Renderable(id: $0.id,
                  keyPath: "inset." + $0.keyPath,
                  animator: $0.animator, renderNode: $0.renderNode, frame: $0.frame + CGPoint(x: insets.left, y: insets.top))
