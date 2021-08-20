@@ -241,8 +241,6 @@ public class ComponentEngine {
         if updateViews {
           // view was on screen before reload, need to update the view.
           viewData.renderNode._updateView(view)
-          (viewData.animator ?? animator).shift(componentView: componentView, delta: contentOffsetDelta,
-                                                view: view, frame: frame)
         }
       } else {
         view = viewData.renderNode._makeView()

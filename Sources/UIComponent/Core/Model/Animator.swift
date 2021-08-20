@@ -3,12 +3,15 @@
 import UIKit
 
 open class Animator {
-	/// Called before ComponentView perform any update to the cells.
-	/// This method is only called when your animator is the componentView's root animator (i.e. componentView.animator)
-	///
-	/// - Parameters:
-	///   - componentView: the ComponentView performing the update
-	open func willUpdate(componentView: ComponentDisplayableView) {}
+
+  public init() {}
+
+  /// Called before ComponentView perform any update to the cells.
+  /// This method is only called when your animator is the componentView's root animator (i.e. componentView.animator)
+  ///
+  /// - Parameters:
+  ///   - componentView: the ComponentView performing the update
+  open func willUpdate(componentView: ComponentDisplayableView) {}
 
 	/// Called when ComponentView inserts a view into its subviews.
 	///
@@ -57,21 +60,4 @@ open class Animator {
 			view.center = frame.center
 		}
 	}
-
-	/// Called when contentOffset changes during reloadData
-	///
-	/// - Parameters:
-	///   - componentView: source ComponentView
-	///   - delta: changes in contentOffset
-	///   - view: the view being updated
-	///   - at: index of the view inside the ComponentView (after flattening step)
-	///   - frame: frame provided by the layout
-	open func shift(componentView: ComponentDisplayableView,
-									delta: CGPoint,
-									view: UIView,
-									frame: CGRect) {
-		view.center += delta
-	}
-
-	public init() {}
 }

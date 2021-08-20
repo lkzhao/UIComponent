@@ -2,10 +2,6 @@
 
 import UIKit
 
-protocol GenericValueHolder {
-  func write(to: AnyObject) -> GenericValueHolder
-}
-
 extension UIView {
 	private struct AssociatedKeys {
 		static var ckContext = "ckContext"
@@ -27,8 +23,9 @@ extension UIView {
 
 @objc extension UIView {
 	func recycleForUIComponentReuse() {
-    if let reuseIdentifier = _ckContext?.reuseIdentifier,
-       let reuseManager = _ckContext?.reuseManager {
+    if let _ckContext = _ckContext,
+       let reuseIdentifier = _ckContext.reuseIdentifier,
+       let reuseManager = _ckContext.reuseManager {
       reuseManager.enqueue(identifier: reuseIdentifier, view: self)
 		} else {
 			removeFromSuperview()
