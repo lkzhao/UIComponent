@@ -47,21 +47,3 @@ struct InsetsRenderNode: RenderNode {
     }
   }
 }
-
-public extension Component {
-  func inset(_ amount: CGFloat) -> Component {
-    Insets(insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount), child: self)
-  }
-  func inset(h: CGFloat = 0, v: CGFloat = 0) -> Component {
-    Insets(insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h), child: self)
-  }
-  func inset(top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0) -> Component {
-    Insets(insets: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right), child: self)
-  }
-  func inset(by insets: UIEdgeInsets) -> Component {
-    Insets(insets: insets, child: self)
-  }
-  func inset(_ insetProvider: @escaping (Constraint) -> UIEdgeInsets) -> Component {
-    DynamicInsets(insetProvider: insetProvider, child: self)
-  }
-}

@@ -63,18 +63,3 @@ struct DynamicVisibleFrameInsetRenderNode: RenderNode {
     child.views(in: frame.inset(by: insetProvider(frame)))
   }
 }
-
-public extension Component {
-  func visibleInset(_ amount: CGFloat) -> Component {
-    VisibleFrameInsets(insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount), child: self)
-  }
-  func visibleInset(h: CGFloat = 0, v: CGFloat = 0) -> Component {
-    VisibleFrameInsets(insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h), child: self)
-  }
-  func visibleInset(_ insets: UIEdgeInsets) -> Component {
-    VisibleFrameInsets(insets: insets, child: self)
-  }
-  func visibleInset(_ insetProvider: @escaping (CGRect) -> UIEdgeInsets) -> Component {
-    DynamicVisibleFrameInset(insetProvider: insetProvider, child: self)
-  }
-}

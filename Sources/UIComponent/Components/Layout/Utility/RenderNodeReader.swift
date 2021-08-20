@@ -17,9 +17,3 @@ public struct RenderNodeReader: Component {
     return renderNode
   }
 }
-
-public extension Component {
-  func layoutReader(_ reader: @escaping (RenderNode) -> Void) -> RenderNodeReader {
-    RenderNodeReader(child: self, reader)
-  }
-}

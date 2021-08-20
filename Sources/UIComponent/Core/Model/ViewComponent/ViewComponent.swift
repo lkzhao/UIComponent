@@ -32,39 +32,3 @@ public typealias ViewIDComponent<Content: ViewComponent> = ViewModifierComponent
 public typealias ViewAnimatorComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewAnimatorRenderNode<Content.R.View, Content.R>>
 
 public typealias ViewReuseKeyComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewReuseKeyRenderNode<Content.R.View, Content.R>>
-
-public extension ViewComponent {
-  subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<R.View, Value>) -> (Value) -> ViewKeyPathUpdateComponent<Self, Value> {
-    { with(keyPath, $0) }
-  }
-
-  func with<Value>(_ keyPath: ReferenceWritableKeyPath<R.View, Value>, _ value: Value) -> ViewKeyPathUpdateComponent<Self, Value> {
-    ViewModifierComponent(content: self) {
-      $0.with(keyPath, value)
-    }
-  }
-
-  func id(_ id: String) -> ViewIDComponent<Self> {
-    ViewModifierComponent(content: self) {
-      $0.id(id)
-    }
-  }
-
-  func animator(_ animator: Animator?) -> ViewAnimatorComponent<Self> {
-    ViewModifierComponent(content: self) {
-      $0.animator(animator)
-    }
-  }
-
-  func reuseKey(_ reuseKey: String?) -> ViewReuseKeyComponent<Self> {
-    ViewModifierComponent(content: self) {
-      $0.reuseKey(reuseKey)
-    }
-  }
-
-  func update(_ update: @escaping (R.View) -> Void) -> ViewUpdateComponent<Self> {
-    ViewModifierComponent(content: self) {
-      $0.update(update)
-    }
-  }
-}
