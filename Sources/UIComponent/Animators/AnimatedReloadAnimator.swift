@@ -14,7 +14,7 @@ public class AnimatedReloadAnimator: Animator {
     super.init()
   }
   
-  public override func delete(componentView: ComponentDisplayableView, view: UIView) {
+  public override func delete(componentView: ComponentDisplayableView, view: UIView, completion: @escaping () -> Void) {
     if componentView.isReloading, componentView.bounds.intersects(view.frame) {
       UIView.animate(withDuration: duration, animations: {
         view.layer.transform = self.transform
@@ -23,11 +23,11 @@ public class AnimatedReloadAnimator: Animator {
         if !componentView.visibleViews.contains(view) {
           view.transform = CGAffineTransform.identity
           view.alpha = 1
-          view.recycleForUIComponentReuse()
         }
+        completion()
       })
     } else {
-      view.recycleForUIComponentReuse()
+      completion()
     }
   }
   

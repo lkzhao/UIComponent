@@ -1,6 +1,27 @@
 //  Created by Luke Zhao on 8/19/21.
 
-import Foundation
+import UIKit
+
+public struct ViewModifierComponent<View, Content: ViewComponent, Result: ViewRenderNode>: ViewComponent where Content.R.View == View, Result.View == View {
+  let content: Content
+  let modifier: (Content.R) -> Result
+
+  public func layout(_ constraint: Constraint) -> Result {
+    modifier(content.layout(constraint))
+  }
+}
+
+public typealias ViewUpdateComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewUpdateRenderNode<Content.R.View, Content.R>>
+
+public typealias ViewKeyPathUpdateComponent<Content: ViewComponent, Value> = ViewModifierComponent<Content.R.View, Content, ViewKeyPathUpdateRenderNode<Content.R.View, Value, Content.R>>
+
+public typealias ViewIDComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewIDRenderNode<Content.R.View, Content.R>>
+
+public typealias ViewAnimatorComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewAnimatorRenderNode<Content.R.View, Content.R>>
+
+public typealias ViewAnimatorWrapperComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewAnimatorWrapperRenderNode<Content.R.View, Content.R>>
+
+public typealias ViewReuseKeyComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewReuseKeyRenderNode<Content.R.View, Content.R>>
 
 public extension ViewComponent {
   subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<R.View, Value>) -> (Value) -> ViewKeyPathUpdateComponent<Self, Value> {
@@ -34,6 +55,24 @@ public extension ViewComponent {
   func update(_ update: @escaping (R.View) -> Void) -> ViewUpdateComponent<Self> {
     ViewModifierComponent(content: self) {
       $0.update(update)
+    }
+  }
+}
+
+public extension ViewComponent {
+  func animateUpdate(_ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperComponent<Self> {
+    ViewModifierComponent(content: self) {
+      $0.animateUpdate(updateBlock)
+    }
+  }
+  func animateInsert(_ insertBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperComponent<Self> {
+    ViewModifierComponent(content: self) {
+      $0.animateInsert(insertBlock)
+    }
+  }
+  func animateDelete(_ deleteBlock: @escaping ((ComponentDisplayableView, UIView, () -> Void) -> Void)) -> ViewAnimatorWrapperComponent<Self> {
+    ViewModifierComponent(content: self) {
+      $0.animateDelete(deleteBlock)
     }
   }
 }

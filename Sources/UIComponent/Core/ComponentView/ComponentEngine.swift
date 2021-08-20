@@ -216,7 +216,6 @@ public class ComponentEngine {
       }
       newIdentifierSet[finalId] = index
     }
-//    print(newIdentifierSet)
 
     var newViews = [UIView?](repeating: nil, count: newVisibleRenderable.count)
 
@@ -227,7 +226,9 @@ public class ComponentEngine {
       if let index = newIdentifierSet[identifier] {
         newViews[index] = cell
       } else {
-        (visibleRenderable[index].animator ?? animator)?.delete(componentView: componentView, view: cell)
+        (visibleRenderable[index].animator ?? animator)?.delete(componentView: componentView, view: cell) {
+          cell.recycleForUIComponentReuse()
+        }
       }
     }
 

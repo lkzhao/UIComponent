@@ -8,7 +8,7 @@ open class Animator {
 	///
 	/// - Parameters:
 	///   - componentView: the ComponentView performing the update
-	open func willUpdate(componentView _: ComponentDisplayableView) {}
+	open func willUpdate(componentView: ComponentDisplayableView) {}
 
 	/// Called when ComponentView inserts a view into its subviews.
 	///
@@ -19,9 +19,9 @@ open class Animator {
 	///   - view: the view being inserted
 	///   - at: index of the view inside the ComponentView (after flattening step)
 	///   - frame: frame provided by the layout
-	open func insert(componentView _: ComponentDisplayableView,
-									 view _: UIView,
-									 frame _: CGRect) {}
+	open func insert(componentView: ComponentDisplayableView,
+									 view: UIView,
+									 frame: CGRect) {}
 
 	/// Called when ComponentView deletes a view from its subviews.
 	///
@@ -31,9 +31,10 @@ open class Animator {
 	/// - Parameters:
 	///   - componentView: source ComponentView
 	///   - view: the view being deleted
-	open func delete(componentView _: ComponentDisplayableView,
-									 view: UIView) {
-		view.recycleForUIComponentReuse()
+	open func delete(componentView: ComponentDisplayableView,
+									 view: UIView,
+                   completion: @escaping () -> Void) {
+    completion()
 	}
 
 	/// Called when:
@@ -46,7 +47,7 @@ open class Animator {
 	///   - view: the view being updated
 	///   - at: index of the view inside the ComponentView (after flattening step)
 	///   - frame: frame provided by the layout
-	open func update(componentView _: ComponentDisplayableView,
+	open func update(componentView: ComponentDisplayableView,
 									 view: UIView,
 									 frame: CGRect) {
 		if view.bounds.size != frame.bounds.size {
@@ -65,10 +66,10 @@ open class Animator {
 	///   - view: the view being updated
 	///   - at: index of the view inside the ComponentView (after flattening step)
 	///   - frame: frame provided by the layout
-	open func shift(componentView _: ComponentDisplayableView,
+	open func shift(componentView: ComponentDisplayableView,
 									delta: CGPoint,
 									view: UIView,
-									frame _: CGRect) {
+									frame: CGRect) {
 		view.center += delta
 	}
 

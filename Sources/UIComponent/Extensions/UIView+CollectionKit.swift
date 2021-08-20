@@ -26,7 +26,7 @@ extension UIView {
 }
 
 @objc extension UIView {
-	open func recycleForUIComponentReuse() {
+	func recycleForUIComponentReuse() {
     if let reuseIdentifier = _ckContext?.reuseIdentifier,
        let reuseManager = _ckContext?.reuseManager {
       reuseManager.enqueue(identifier: reuseIdentifier, view: self)
