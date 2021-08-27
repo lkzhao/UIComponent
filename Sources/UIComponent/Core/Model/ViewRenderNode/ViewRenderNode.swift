@@ -2,9 +2,14 @@
 
 import UIKit
 
+public protocol UIComponentRenderableView {
+  init()
+}
+extension UIView: UIComponentRenderableView {}
+
 @dynamicMemberLookup
 public protocol ViewRenderNode: AnyViewRenderNode {
-  associatedtype View: UIView
+  associatedtype View: UIComponentRenderableView
   func makeView() -> View
   func updateView(_ view: View)
 }
@@ -14,15 +19,21 @@ public extension ViewRenderNode {
   func makeView() -> View {
     View()
   }
+  func _makeView() -> Any {
+    return makeView()
+  }
   // MARK: AnyViewRenderNode
-  func _makeView() -> UIView {
+  func _updateView(_ view: Any) {
+    guard let view = view as? View else { return }
+    return updateView(view)
+  }
+}
+
+public extension ViewRenderNode where View: UIView {
+  func _makeView() -> Any {
     if let reuseKey = reuseKey {
       return ReuseManager.shared.dequeue(identifier: reuseKey, makeView())
     }
     return makeView()
-  }
-  func _updateView(_ view: UIView) {
-    guard let view = view as? View else { return }
-    return updateView(view)
   }
 }

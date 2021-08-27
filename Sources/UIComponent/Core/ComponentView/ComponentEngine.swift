@@ -243,7 +243,7 @@ public class ComponentEngine {
           viewData.renderNode._updateView(view)
         }
       } else {
-        view = viewData.renderNode._makeView()
+        view = viewData.renderNode._makeView() as! UIView
         UIView.performWithoutAnimation {
           view.bounds.size = frame.bounds.size
           view.center = frame.center

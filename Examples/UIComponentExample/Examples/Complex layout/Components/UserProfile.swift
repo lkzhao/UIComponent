@@ -4,7 +4,7 @@ import UIComponent
 import Kingfisher
 import UIKit.UIImageView
 
-extension ViewComponent {
+extension ViewComponent where R.View: UIView {
   fileprivate func shadowAvatar() -> ViewUpdateComponent<Self> {
     update {
       $0.layer.shadowColor = UIColor.black.withAlphaComponent(0.2).cgColor

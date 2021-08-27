@@ -7,8 +7,8 @@ public protocol AnyViewRenderNode: RenderNode {
   var keyPath: String { get }
   var animator: Animator? { get }
   var reuseKey: String? { get }
-  func _makeView() -> UIView
-  func _updateView(_ view: UIView)
+  func _makeView() -> Any
+  func _updateView(_ view: Any)
 }
 
 public extension AnyViewRenderNode {
