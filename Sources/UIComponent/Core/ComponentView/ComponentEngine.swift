@@ -209,7 +209,6 @@ public class ComponentEngine {
       let initialId = viewData.id ?? viewData.keyPath
       var finalId = initialId
       while newIdentifierSet[finalId] != nil {
-//        assertionFailure("There are two view with the same id/keyPath \"\(finalId)\". This could cause undefined behavior.")
         finalId = initialId + String(count)
         newVisibleRenderable[index].id = finalId
         count += 1
@@ -226,7 +225,8 @@ public class ComponentEngine {
       if let index = newIdentifierSet[identifier] {
         newViews[index] = cell
       } else {
-        (visibleRenderable[index].animator ?? animator)?.delete(componentView: componentView, view: cell) {
+        let animator = visibleRenderable[index].animator ?? animator
+        animator.delete(componentView: componentView, view: cell) {
           cell.recycleForUIComponentReuse()
         }
       }
@@ -236,6 +236,8 @@ public class ComponentEngine {
     for (index, viewData) in newVisibleRenderable.enumerated() {
       let view: UIView
       let frame = viewData.frame
+      let animator = viewData.animator ?? animator
+      let containerView = contentView ?? componentView
       if let existingView = newViews[index] {
         view = existingView
         if updateViews {
@@ -249,11 +251,11 @@ public class ComponentEngine {
           view.center = frame.center
         }
         viewData.renderNode._updateView(view)
-        (viewData.animator ?? animator).insert(componentView: componentView, view: view, frame: frame)
+        animator.insert(componentView: componentView, view: view, frame: frame)
         newViews[index] = view
       }
-      (viewData.animator ?? animator).update(componentView: componentView, view: view, frame: frame)
-      (contentView ?? componentView).insertSubview(view, at: index)
+      animator.update(componentView: componentView, view: view, frame: frame)
+      containerView.insertSubview(view, at: index)
     }
 
     visibleRenderable = newVisibleRenderable
