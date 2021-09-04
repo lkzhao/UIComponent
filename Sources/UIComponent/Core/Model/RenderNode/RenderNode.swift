@@ -1,6 +1,8 @@
 //  Created by Luke Zhao on 8/22/20.
 
 import CoreGraphics
+import Foundation
+import UIKit
 
 public protocol RenderNode {
   /// size of the render node
@@ -12,9 +14,49 @@ public protocol RenderNode {
   /// child render nodes
   var children: [RenderNode] { get }
   
-  /// Get items' view and its rect within the frame in current component's coordinates.
+  /// Get indexes of the children that are visible in the given frame
   /// - Parameter frame: Parent component's visible frame in current component's coordinates.
-  func views(in frame: CGRect) -> [Renderable]
+  ///
+  /// Discussion: This method is used in the default implementation of `visibleRenderables(in:)`
+  /// It won't be called if `visibleRenderables(in:)` is overwritten.
+  /// The default implementation for this methods is not optmized and will return all indexes regardless of the frame.
+  func visibleIndexes(in frame: CGRect) -> IndexSet
+  
+  /// Get renderables that are visible in the given frame
+  /// - Parameter frame: Parent component's visible frame in current component's coordinates.
+  ///
+  /// The default implementation recursively retrives all Renderable from visible children and combines them
+  func visibleRenderables(in frame: CGRect) -> [Renderable]
+}
+
+// MARK: - Default implementation
+
+public extension RenderNode {
+  var children: [RenderNode] { [] }
+  var positions: [CGPoint] { [] }
+  
+  func visibleIndexes(in frame: CGRect) -> IndexSet {
+    IndexSet(0..<children.count)
+  }
+  
+  func visibleRenderables(in frame: CGRect) -> [Renderable] {
+    var result = [Renderable]()
+    let indexes = visibleIndexes(in: frame)
+    for i in indexes {
+      let child = children[i]
+      let position = positions[i]
+      let childFrame = CGRect(origin: position, size: child.size)
+      let childVisibleFrame = frame.intersection(childFrame) - position
+      let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
+        Renderable(id: $0.id,
+                   keyPath: "\(type(of: self))-\(i)." + $0.keyPath,
+                   animator: $0.animator, renderNode: $0.renderNode,
+                   frame: CGRect(origin: $0.frame.origin + position, size: $0.frame.size))
+      }
+      result.append(contentsOf: childRenderables)
+    }
+    return result
+  }
 }
 
 public extension RenderNode {

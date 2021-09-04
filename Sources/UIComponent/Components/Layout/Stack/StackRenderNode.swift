@@ -10,22 +10,14 @@ public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
 }
 
 public extension StackRenderNode {
-  func views(in frame: CGRect) -> [Renderable] {
-    guard var index = firstVisibleIndex(in: frame) else { return [] }
-    var result: [Renderable] = []
+  func visibleIndexes(in frame: CGRect) -> IndexSet {
+    guard let start = firstVisibleIndex(in: frame) else { return [] }
+    var index = start
     let endPoint = main(frame.origin) + main(frame.size)
     while index < positions.count, main(positions[index]) < endPoint {
-      let childFrame = CGRect(origin: positions[index], size: children[index].size)
-      let childResult = children[index].views(in: frame.intersection(childFrame) - childFrame.origin).map {
-        Renderable(id: $0.id,
-                   keyPath: "\(type(of: self))-\(index)." + $0.keyPath,
-                   animator: $0.animator, renderNode: $0.renderNode,
-                   frame: CGRect(origin: $0.frame.origin + childFrame.origin, size: $0.frame.size))
-      }
-      result.append(contentsOf: childResult)
       index += 1
     }
-    return result
+    return IndexSet(start..<index)
   }
 
   func firstVisibleIndex(in frame: CGRect) -> Int? {
@@ -67,24 +59,17 @@ public struct SlowRenderNode: RenderNode {
     self.positions = positions
   }
   
-  public func views(in frame: CGRect) -> [Renderable] {
-    var result = [Renderable]()
+  public func visibleIndexes(in frame: CGRect) -> IndexSet {
+    var result = [Int]()
 
     for (i, origin) in positions.enumerated() {
       let child = children[i]
       let childFrame = CGRect(origin: origin, size: child.size)
       if frame.intersects(childFrame) {
-        let childResult = child.views(in: frame.intersection(childFrame) - childFrame.origin).map {
-          Renderable(id: $0.id,
-                     keyPath: "slow-\(i)." + $0.keyPath,
-                     animator: $0.animator,
-                     renderNode: $0.renderNode,
-                     frame: CGRect(origin: $0.frame.origin + childFrame.origin, size: $0.frame.size))
-        }
-        result.append(contentsOf: childResult)
+        result.append(i)
       }
     }
 
-    return result
+    return IndexSet(result)
   }
 }

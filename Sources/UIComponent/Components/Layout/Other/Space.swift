@@ -17,9 +17,4 @@ public struct Space: Component {
 
 struct SpaceRenderNode: RenderNode {
   let size: CGSize
-  var children: [RenderNode] { [] }
-  var positions: [CGPoint] { [] }
-  func views(in frame: CGRect) -> [Renderable] {
-    []
-  }
 }

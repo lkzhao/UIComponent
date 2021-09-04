@@ -132,9 +132,6 @@ struct SizeOverrideRenderNode: RenderNode {
   var positions: [CGPoint] {
     [.zero]
   }
-  func views(in frame: CGRect) -> [Renderable] {
-    child.views(in: frame)
-  }
 }
 
 struct ConstraintOverrideComponent: Component {

@@ -42,8 +42,8 @@ struct VisibleFrameInsetRenderNode: RenderNode {
   var positions: [CGPoint] {
     [.zero]
   }
-  func views(in frame: CGRect) -> [Renderable] {
-    child.views(in: frame.inset(by: insets))
+  func visibleRenderables(in frame: CGRect) -> [Renderable] {
+    child.visibleRenderables(in: frame.inset(by: insets))
   }
 }
 
@@ -59,7 +59,7 @@ struct DynamicVisibleFrameInsetRenderNode: RenderNode {
   var positions: [CGPoint] {
     [.zero]
   }
-  func views(in frame: CGRect) -> [Renderable] {
-    child.views(in: frame.inset(by: insetProvider(frame)))
+  func visibleRenderables(in frame: CGRect) -> [Renderable] {
+    child.visibleRenderables(in: frame.inset(by: insetProvider(frame)))
   }
 }
