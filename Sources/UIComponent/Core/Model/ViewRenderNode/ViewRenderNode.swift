@@ -20,20 +20,14 @@ public extension ViewRenderNode {
     View()
   }
   func _makeView() -> Any {
+    if View.self is UIView.Type, let reuseKey = reuseKey {
+      return ReuseManager.shared.dequeue(identifier: reuseKey, makeView() as! UIView)
+    }
     return makeView()
   }
   // MARK: AnyViewRenderNode
   func _updateView(_ view: Any) {
     guard let view = view as? View else { return }
     return updateView(view)
-  }
-}
-
-public extension ViewRenderNode where View: UIView {
-  func _makeView() -> Any {
-    if let reuseKey = reuseKey {
-      return ReuseManager.shared.dequeue(identifier: reuseKey, makeView())
-    }
-    return makeView()
   }
 }
