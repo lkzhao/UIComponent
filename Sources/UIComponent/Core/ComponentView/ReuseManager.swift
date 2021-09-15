@@ -3,26 +3,25 @@
 import UIKit
 
 open class ReuseManager: NSObject {
-  static let shared = ReuseManager()
+  public static let shared = ReuseManager()
 
 	/// Time it takes for ReuseManager to
 	/// dump all reusableViews to save memory
 	public var lifeSpan: TimeInterval = 5.0
 
-	/// When `removeFromComponentViewWhenReuse` is enabled,
+	/// When `removeFromSuperviewWhenReuse` is enabled,
 	/// cells will always be removed from ComponentView during reuse.
 	/// This is slower but it doesn't influence the `isHidden` property
 	/// of individual cells.
-	public var removeFromComponentViewWhenReuse = true
+	public var removeFromSuperviewWhenReuse = true
 
 	var reusableViews: [String: [UIView]] = [:]
 	var cleanupTimer: Timer?
-
-	public func enqueue(identifier: String,
-											view: UIView) {
+    
+    public func enqueue<T: UIView>(identifier: String = NSStringFromClass(T.self), view: T) {
     view.ckContext.reuseIdentifier = nil
     view.ckContext.reuseManager = nil
-		if removeFromComponentViewWhenReuse {
+		if removeFromSuperviewWhenReuse {
 			view.removeFromSuperview()
 		} else {
 			view.isHidden = true
@@ -44,7 +43,7 @@ open class ReuseManager: NSObject {
 																 _ defaultView: @autoclosure () -> T) -> T {
 		let queuedView = reusableViews[identifier]?.popLast() as? T
 		let view = queuedView ?? defaultView()
-		if !removeFromComponentViewWhenReuse {
+		if !removeFromSuperviewWhenReuse {
 			view.isHidden = false
 		}
 		view.ckContext.reuseManager = self
