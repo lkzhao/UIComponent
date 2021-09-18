@@ -7,10 +7,12 @@ public struct HStack: Stack, HorizontalLayoutProtocol {
   public let justifyContent: MainAxisAlignment
   public let alignItems: CrossAxisAlignment
   public let children: [Component]
-  public init(spacing: CGFloat = 0,
-              justifyContent: MainAxisAlignment = .start,
-              alignItems: CrossAxisAlignment = .start,
-              children: [Component] = []) {
+  public init(
+    spacing: CGFloat = 0,
+    justifyContent: MainAxisAlignment = .start,
+    alignItems: CrossAxisAlignment = .start,
+    children: [Component] = []
+  ) {
     self.spacing = spacing
     self.justifyContent = justifyContent
     self.alignItems = alignItems
@@ -18,11 +20,13 @@ public struct HStack: Stack, HorizontalLayoutProtocol {
   }
 }
 
-public extension HStack {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
-    self.init(spacing: spacing,
-              justifyContent: justifyContent,
-              alignItems: alignItems,
-              children: content())
+extension HStack {
+  public init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
+    self.init(
+      spacing: spacing,
+      justifyContent: justifyContent,
+      alignItems: alignItems,
+      children: content()
+    )
   }
 }

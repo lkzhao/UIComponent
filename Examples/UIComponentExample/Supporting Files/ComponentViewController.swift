@@ -18,16 +18,15 @@ class ComponentViewController: UIViewController {
     super.viewDidLayoutSubviews()
     componentView.frame = view.bounds
   }
-  
+
   func reloadComponent() {
     componentView.component = component
   }
-  
+
   var component: Component {
     VStack(justifyContent: .center, alignItems: .center) {
       Text("Empty")
-    }.size(width: .fill)
+    }
+    .size(width: .fill)
   }
 }
-
-

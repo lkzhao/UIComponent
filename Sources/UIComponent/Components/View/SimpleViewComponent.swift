@@ -33,13 +33,13 @@ public struct SimpleViewRenderNode<View: UIView>: ViewRenderNode {
   public var reuseKey: String? {
     return view == nil ? "\(type(of: self))" : nil
   }
-  
+
   fileprivate init(size: CGSize, view: View?, generator: (() -> View)?) {
     self.size = size
     self.view = view
     self.generator = generator
   }
-  
+
   public init(size: CGSize) {
     self.init(size: size, view: nil, generator: nil)
   }

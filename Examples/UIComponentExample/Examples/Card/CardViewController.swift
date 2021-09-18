@@ -79,7 +79,7 @@ class CardViewController: ComponentViewController {
     super.viewDidLoad()
     componentView.animator = AnimatedReloadAnimator()
   }
-  
+
   override var component: Component {
     VStack(spacing: 8) {
       for (index, card) in cards.enumerated() {
@@ -89,11 +89,15 @@ class CardViewController: ComponentViewController {
         }
       }
       AddCardButton { [unowned self] in
-        self.cards.append(CardData(title: "Item \(self.newCardIndex)",
-                                   subtitle: "Description \(self.newCardIndex)"))
+        self.cards.append(
+          CardData(
+            title: "Item \(self.newCardIndex)",
+            subtitle: "Description \(self.newCardIndex)"
+          )
+        )
         self.newCardIndex += 1
       }
-    }.inset(20)
+    }
+    .inset(20)
   }
 }
-

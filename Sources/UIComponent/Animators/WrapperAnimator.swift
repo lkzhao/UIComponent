@@ -7,7 +7,7 @@ public class WrapperAnimator: Animator {
   public var insertBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
   public var updateBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
   public var deleteBlock: ((ComponentDisplayableView, UIView, () -> Void) -> Void)?
-  
+
   public override func update(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
     if let updateBlock = updateBlock {
       updateBlock(componentView, view, frame)
@@ -17,7 +17,7 @@ public class WrapperAnimator: Animator {
       componentView.animator.update(componentView: componentView, view: view, frame: frame)
     }
   }
-  
+
   public override func insert(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
     if let insertBlock = insertBlock {
       insertBlock(componentView, view, frame)
@@ -27,7 +27,7 @@ public class WrapperAnimator: Animator {
       componentView.animator.insert(componentView: componentView, view: view, frame: frame)
     }
   }
-  
+
   public override func delete(componentView: ComponentDisplayableView, view: UIView, completion: @escaping () -> Void) {
     if let deleteBlock = deleteBlock {
       deleteBlock(componentView, view, completion)
@@ -38,4 +38,3 @@ public class WrapperAnimator: Animator {
     }
   }
 }
-

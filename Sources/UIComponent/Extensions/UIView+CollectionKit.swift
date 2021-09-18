@@ -3,9 +3,9 @@
 import UIKit
 
 extension UIView {
-	private struct AssociatedKeys {
-		static var ckContext = "ckContext"
-	}
+  private struct AssociatedKeys {
+    static var ckContext = "ckContext"
+  }
 
   internal var _ckContext: CKContext? {
     return objc_getAssociatedObject(self, &AssociatedKeys.ckContext) as? CKContext
@@ -22,15 +22,16 @@ extension UIView {
 }
 
 @objc extension UIView {
-	func recycleForUIComponentReuse() {
+  func recycleForUIComponentReuse() {
     if let _ckContext = _ckContext,
-       let reuseIdentifier = _ckContext.reuseIdentifier,
-       let reuseManager = _ckContext.reuseManager {
+      let reuseIdentifier = _ckContext.reuseIdentifier,
+      let reuseManager = _ckContext.reuseManager
+    {
       reuseManager.enqueue(identifier: reuseIdentifier, view: self)
-		} else {
-			removeFromSuperview()
-		}
-	}
+    } else {
+      removeFromSuperview()
+    }
+  }
 }
 
 class CKContext {

@@ -11,20 +11,24 @@ public protocol AnyViewRenderNode: RenderNode {
   func _updateView(_ view: Any)
 }
 
-public extension AnyViewRenderNode {
-  var id: String? { nil }
-  var animator: Animator? { nil }
-  var keyPath: String { "\(type(of: self))" }
-  var reuseKey: String? { "\(type(of: self))" }
+extension AnyViewRenderNode {
+  public var id: String? { nil }
+  public var animator: Animator? { nil }
+  public var keyPath: String { "\(type(of: self))" }
+  public var reuseKey: String? { "\(type(of: self))" }
 
-  func visibleRenderables(in frame: CGRect) -> [Renderable] {
+  public func visibleRenderables(in frame: CGRect) -> [Renderable] {
     let childFrame = CGRect(origin: .zero, size: size)
     if frame.intersects(childFrame) {
-      return [Renderable(id: id,
-                         keyPath: keyPath,
-                         animator: animator,
-                         renderNode: self,
-                         frame: childFrame)]
+      return [
+        Renderable(
+          id: id,
+          keyPath: keyPath,
+          animator: animator,
+          renderNode: self,
+          frame: childFrame
+        )
+      ]
     }
     return []
   }

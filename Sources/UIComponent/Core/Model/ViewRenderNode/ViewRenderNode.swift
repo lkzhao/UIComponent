@@ -14,19 +14,19 @@ public protocol ViewRenderNode: AnyViewRenderNode {
   func updateView(_ view: View)
 }
 
-public extension ViewRenderNode {
+extension ViewRenderNode {
   // MARK: Default
-  func makeView() -> View {
+  public func makeView() -> View {
     View()
   }
-  func _makeView() -> Any {
+  public func _makeView() -> Any {
     if View.self is UIView.Type, let reuseKey = reuseKey {
       return ReuseManager.shared.dequeue(identifier: reuseKey, makeView() as! UIView)
     }
     return makeView()
   }
   // MARK: AnyViewRenderNode
-  func _updateView(_ view: Any) {
+  public func _updateView(_ view: Any) {
     guard let view = view as? View else { return }
     return updateView(view)
   }

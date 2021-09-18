@@ -3,7 +3,10 @@
 import UIKit
 
 public enum SizeStrategy {
-  case fill, fit, absolute(CGFloat), percentage(CGFloat), aspectPercentage(CGFloat)
+  case fill, fit
+  case absolute(CGFloat)
+  case percentage(CGFloat)
+  case aspectPercentage(CGFloat)
 }
 
 public protocol ConstraintTransformer {
@@ -11,8 +14,8 @@ public protocol ConstraintTransformer {
   func bound(size: CGSize, to constraint: Constraint) -> CGSize
 }
 
-public extension ConstraintTransformer {
-  func bound(size: CGSize, to constraint: Constraint) -> CGSize {
+extension ConstraintTransformer {
+  public func bound(size: CGSize, to constraint: Constraint) -> CGSize {
     size.bound(to: constraint)
   }
 }
@@ -102,7 +105,7 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
     }
     return Constraint(minSize: minSize, maxSize: maxSize)
   }
-  
+
   func bound(size: CGSize, to constraint: Constraint) -> CGSize {
     var boundSize = size.bound(to: constraint)
     // if size strategy is fit, we don't force the size component to be bound to the constraint
@@ -140,7 +143,7 @@ struct ConstraintOverrideComponent: Component {
   func layout(_ constraint: Constraint) -> RenderNode {
     let finalConstraint = transformer.calculate(constraint)
     let renderNode = child.layout(finalConstraint)
-    return SizeOverrideRenderNode(child: renderNode, size: transformer.bound(size: renderNode.size, to:finalConstraint))
+    return SizeOverrideRenderNode(child: renderNode, size: transformer.bound(size: renderNode.size, to: finalConstraint))
   }
 }
 

@@ -1,6 +1,7 @@
 //  Created by Luke Zhao on 2/15/20.
 
 import XCTest
+
 @testable import UIComponent
 
 final class ReuseTests: XCTestCase {
@@ -30,7 +31,7 @@ final class ReuseTests: XCTestCase {
     let newLabel = componentView.subviews.first as? UILabel
     XCTAssertNotNil(newLabel)
     XCTAssertEqual(newLabel?.text, "2")
-    
+
     // the UILabel should be reused
     XCTAssertEqual(existingLabel, newLabel)
   }
@@ -110,4 +111,3 @@ final class ReuseTests: XCTestCase {
     XCTAssertNotEqual(existingLabel, newLabel)
   }
 }
-

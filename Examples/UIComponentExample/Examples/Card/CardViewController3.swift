@@ -10,7 +10,8 @@ private struct Card: ComponentBuilder {
     VStack(spacing: 8) {
       Text(card.title, font: UIFont.boldSystemFont(ofSize: 22))
       Text(card.subtitle)
-    }.inset(h: 20, v: 16).size(width: .fill).tappableView(onTap).id(card.id)
+    }
+    .inset(h: 20, v: 16).size(width: .fill).tappableView(onTap).id(card.id)
     .backgroundColor(.systemBackground)
     .with(\.layer.shadowColor, UIColor.black.cgColor)
     .with(\.layer.shadowRadius, 4)
@@ -32,7 +33,7 @@ class CardViewController3: ComponentViewController {
     super.viewDidLoad()
     componentView.animator = AnimatedReloadAnimator()
   }
-  
+
   override var component: Component {
     VStack(spacing: 8) {
       for (index, card) in cards.enumerated() {
@@ -42,11 +43,15 @@ class CardViewController3: ComponentViewController {
         }
       }
       AddCardButton { [unowned self] in
-        self.cards.append(CardData(title: "Item \(self.newCardIndex)",
-                                   subtitle: "Description \(self.newCardIndex)"))
+        self.cards.append(
+          CardData(
+            title: "Item \(self.newCardIndex)",
+            subtitle: "Description \(self.newCardIndex)"
+          )
+        )
         self.newCardIndex += 1
       }
-    }.inset(20)
+    }
+    .inset(20)
   }
 }
-

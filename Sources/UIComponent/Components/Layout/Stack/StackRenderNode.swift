@@ -9,8 +9,8 @@ public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
   var mainAxisMaxValue: CGFloat { get }
 }
 
-public extension StackRenderNode {
-  func visibleIndexes(in frame: CGRect) -> IndexSet {
+extension StackRenderNode {
+  public func visibleIndexes(in frame: CGRect) -> IndexSet {
     guard let start = firstVisibleIndex(in: frame) else { return [] }
     var index = start
     let endPoint = main(frame.origin) + main(frame.size)
@@ -20,7 +20,7 @@ public extension StackRenderNode {
     return IndexSet(start..<index)
   }
 
-  func firstVisibleIndex(in frame: CGRect) -> Int? {
+  public func firstVisibleIndex(in frame: CGRect) -> Int? {
     let beginPoint = main(frame.origin) - mainAxisMaxValue
     let endPoint = main(frame.origin) + main(frame.size)
     var index = positions.binarySearch { main($0) < beginPoint }
@@ -52,13 +52,13 @@ public struct SlowRenderNode: RenderNode {
   public let size: CGSize
   public let children: [RenderNode]
   public let positions: [CGPoint]
-  
+
   public init(size: CGSize, children: [RenderNode], positions: [CGPoint]) {
     self.size = size
     self.children = children
     self.positions = positions
   }
-  
+
   public func visibleIndexes(in frame: CGRect) -> IndexSet {
     var result = [Int]()
 

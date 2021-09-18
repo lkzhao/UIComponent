@@ -5,12 +5,12 @@ import UIKit
 public struct VisibleFrameInsets: Component {
   let insets: UIEdgeInsets
   let child: Component
-  
+
   public init(insets: UIEdgeInsets, child: Component) {
     self.insets = insets
     self.child = child
   }
-  
+
   public func layout(_ constraint: Constraint) -> RenderNode {
     VisibleFrameInsetRenderNode(insets: insets, child: child.layout(constraint))
   }
@@ -19,7 +19,7 @@ public struct VisibleFrameInsets: Component {
 public struct DynamicVisibleFrameInset: Component {
   let insetProvider: (CGRect) -> UIEdgeInsets
   let child: Component
-  
+
   public init(insetProvider: @escaping (CGRect) -> UIEdgeInsets, child: Component) {
     self.insetProvider = insetProvider
     self.child = child

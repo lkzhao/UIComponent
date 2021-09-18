@@ -42,7 +42,7 @@ public struct ViewKeyPathUpdateRenderNode<View, Value, Content: ViewRenderNode>:
   public let content: Content
   public let valueKeyPath: ReferenceWritableKeyPath<View, Value>
   public let value: Value
-  
+
   public func updateView(_ view: View) {
     content.updateView(view)
     view[keyPath: valueKeyPath] = value

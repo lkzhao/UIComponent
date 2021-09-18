@@ -4,13 +4,13 @@ import UIKit
 
 public struct TappableViewConfiguration {
   public static var `default` = TappableViewConfiguration(onHighlightChanged: nil, didTap: nil)
-  
+
   // place to apply highlight state or animation to the TappableView
   public var onHighlightChanged: ((TappableView, Bool) -> Void)?
-  
+
   // hook before the actual onTap is called
   public var didTap: ((TappableView) -> Void)?
-  
+
   public init(onHighlightChanged: ((TappableView, Bool) -> Void)? = nil, didTap: ((TappableView) -> Void)? = nil) {
     self.onHighlightChanged = onHighlightChanged
     self.didTap = didTap
@@ -19,11 +19,11 @@ public struct TappableViewConfiguration {
 
 open class TappableView: ComponentView {
   public var configuration: TappableViewConfiguration?
-  
+
   lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
   lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
   lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
-  
+
   public var previewBackgroundColor: UIColor?
   public var onTap: ((TappableView) -> Void)? {
     didSet {
@@ -34,7 +34,7 @@ open class TappableView: ComponentView {
       }
     }
   }
-  
+
   public var onLongPress: ((TappableView) -> Void)? {
     didSet {
       if onLongPress != nil {
@@ -44,7 +44,7 @@ open class TappableView: ComponentView {
       }
     }
   }
-  
+
   public var previewProvider: (() -> UIViewController?)? {
     didSet {
       if previewProvider != nil || contextMenuProvider != nil {
@@ -54,9 +54,9 @@ open class TappableView: ComponentView {
       }
     }
   }
-  
+
   public var onCommitPreview: ((UIContextMenuInteractionCommitAnimating) -> Void)?
-  
+
   public var contextMenuProvider: (() -> UIMenu?)? {
     didSet {
       if previewProvider != nil || contextMenuProvider != nil {
@@ -104,7 +104,7 @@ open class TappableView: ComponentView {
     config.didTap?(self)
     onTap?(self)
   }
-  
+
   @objc open func didLongPress() {
     if longPressGestureRecognizer.state == .began {
       onLongPress?(self)
@@ -126,8 +126,10 @@ extension TappableView: UIContextMenuInteractionDelegate {
       }
     }
   }
-  
-  public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+
+  public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration)
+    -> UITargetedPreview?
+  {
     if let previewBackgroundColor = previewBackgroundColor {
       let param = UIPreviewParameters()
       param.backgroundColor = previewBackgroundColor
@@ -135,8 +137,12 @@ extension TappableView: UIContextMenuInteractionDelegate {
     }
     return nil
   }
-  
-  public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+
+  public func contextMenuInteraction(
+    _ interaction: UIContextMenuInteraction,
+    willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration,
+    animator: UIContextMenuInteractionCommitAnimating
+  ) {
     if let onCommitPreview = onCommitPreview {
       onCommitPreview(animator)
     } else {
@@ -148,15 +154,20 @@ extension TappableView: UIContextMenuInteractionDelegate {
 }
 
 extension Component {
-  public func tappableView(configuration: TappableViewConfiguration? = nil,
-                           _ onTap: @escaping (TappableView) -> Void) -> ViewUpdateComponent<ComponentViewComponent<TappableView>> {
-    ComponentViewComponent<TappableView>(component: self).update {
-      $0.onTap = onTap
-      $0.configuration = configuration
-    }
+  public func tappableView(
+    configuration: TappableViewConfiguration? = nil,
+    _ onTap: @escaping (TappableView) -> Void
+  ) -> ViewUpdateComponent<ComponentViewComponent<TappableView>> {
+    ComponentViewComponent<TappableView>(component: self)
+      .update {
+        $0.onTap = onTap
+        $0.configuration = configuration
+      }
   }
-  public func tappableView(configuration: TappableViewConfiguration? = nil,
-                           _ onTap: @escaping () -> Void) -> ViewUpdateComponent<ComponentViewComponent<TappableView>> {
+  public func tappableView(
+    configuration: TappableViewConfiguration? = nil,
+    _ onTap: @escaping () -> Void
+  ) -> ViewUpdateComponent<ComponentViewComponent<TappableView>> {
     tappableView(configuration: configuration) { _ in
       onTap()
     }

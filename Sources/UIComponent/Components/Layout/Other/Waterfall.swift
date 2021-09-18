@@ -8,8 +8,8 @@ public protocol WaterfallLayoutProtocol: Component, BaseLayoutProtocol {
   var children: [Component] { get }
 }
 
-public extension WaterfallLayoutProtocol {
-  func layout(_ constraint: Constraint) -> RenderNode {
+extension WaterfallLayoutProtocol {
+  public func layout(_ constraint: Constraint) -> RenderNode {
     var renderNodes: [RenderNode] = []
     var positions: [CGPoint] = []
 
@@ -25,17 +25,23 @@ public extension WaterfallLayoutProtocol {
     }
 
     for child in children {
-      let renderNode = child.layout(Constraint(minSize: size(main: 0, cross: columnWidth),
-                                             maxSize: size(main: .infinity, cross: columnWidth)))
+      let renderNode = child.layout(
+        Constraint(
+          minSize: size(main: 0, cross: columnWidth),
+          maxSize: size(main: .infinity, cross: columnWidth)
+        )
+      )
       let (columnIndex, offsetY) = getMinColomn()
       columnHeight[columnIndex] += main(renderNode.size) + spacing
       renderNodes.append(renderNode)
       positions.append(point(main: offsetY, cross: CGFloat(columnIndex) * (columnWidth + spacing)))
     }
 
-    return renderNode(size: size(main: max(0, columnHeight.max()! - spacing), cross: cross(constraint.maxSize)),
-                    children: renderNodes,
-                    positions: positions)
+    return renderNode(
+      size: size(main: max(0, columnHeight.max()! - spacing), cross: cross(constraint.maxSize)),
+      children: renderNodes,
+      positions: positions
+    )
   }
 }
 
@@ -61,14 +67,14 @@ public struct HorizontalWaterfall: WaterfallLayoutProtocol, HorizontalLayoutProt
   }
 }
 
-public extension Waterfall {
-  init(columns: Int = 2, spacing: CGFloat = 0, @ComponentArrayBuilder _ content: () -> [Component]) {
+extension Waterfall {
+  public init(columns: Int = 2, spacing: CGFloat = 0, @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(columns: columns, spacing: spacing, children: content())
   }
 }
 
-public extension HorizontalWaterfall {
-  init(columns: Int = 2, spacing: CGFloat = 0, @ComponentArrayBuilder _ content: () -> [Component]) {
+extension HorizontalWaterfall {
+  public init(columns: Int = 2, spacing: CGFloat = 0, @ComponentArrayBuilder _ content: () -> [Component]) {
     self.init(columns: columns, spacing: spacing, children: content())
   }
 }

@@ -2,13 +2,11 @@
 
 import UIKit
 
-/**
- # ComponentViewComponent
- 
- Wraps a `component` inside a `ComponentDisplayableView`.
- 
- This is used to power the `.view()` and `.scrollView()` modifiers.
-*/
+/// # ComponentViewComponent
+///
+/// Wraps a `component` inside a `ComponentDisplayableView`.
+///
+/// This is used to power the `.view()` and `.scrollView()` modifiers.
 public struct ComponentViewComponent<View: ComponentDisplayableView>: ViewComponent {
   let component: Component
   public init(component: Component) {
@@ -25,7 +23,7 @@ public struct ComponentViewRenderNode<View: ComponentDisplayableView>: ViewRende
   public let size: CGSize
   public let component: Component
   public let renderNode: RenderNode
-  
+
   private var viewRenderNode: AnyViewRenderNode? {
     renderNode as? AnyViewRenderNode
   }
@@ -45,4 +43,3 @@ public struct ComponentViewRenderNode<View: ComponentDisplayableView>: ViewRende
     view.engine.reloadWithExisting(component: component, renderNode: renderNode)
   }
 }
-

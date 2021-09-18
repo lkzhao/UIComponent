@@ -32,7 +32,9 @@ struct ExampleItem: ComponentBuilder {
   func build() -> Component {
     VStack {
       Text(name)
-    }.inset(20).tappableView {
+    }
+    .inset(20)
+    .tappableView {
       $0.present(viewController())
     }
   }

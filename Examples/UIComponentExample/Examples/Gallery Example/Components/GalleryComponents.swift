@@ -1,7 +1,7 @@
 //  Created by y H on 2021/7/29.
 
-import UIKit
 import UIComponent
+import UIKit
 
 struct GalleryItemData: Equatable {
   let id = UUID().uuidString
@@ -26,18 +26,18 @@ struct GalleryIndexOverlay: ComponentBuilder {
 }
 
 struct GalleryFrames: GalleryTemplate {
-  
+
   enum LayoutType: CaseIterable {
     case layout1, layout2, layout3
   }
-  
+
   let layout: LayoutType
-  
+
   func calculateFrames(spacing: CGFloat, side: CGFloat, makeFrame: (Point, Size) -> CGRect) -> [CGRect] {
     let mini = (side - (spacing * 2)) / 3.0
     let medium = mini * 2 + spacing
     let large = side
-    
+
     switch layout {
     case .layout1:
       return [
@@ -45,7 +45,7 @@ struct GalleryFrames: GalleryTemplate {
         makeFrame((main: large + spacing, cross: 0), (main: mini, cross: large)),
         makeFrame((main: large + mini + spacing * 2, cross: 0), (main: medium, medium)),
         makeFrame((main: large + mini + spacing * 2, cross: medium + spacing), (main: mini, cross: mini)),
-        makeFrame((main: large + mini + mini + spacing * 3, cross: medium + spacing), (main: mini, cross: mini))
+        makeFrame((main: large + mini + mini + spacing * 3, cross: medium + spacing), (main: mini, cross: mini)),
       ]
     case .layout2:
       return [
@@ -58,7 +58,7 @@ struct GalleryFrames: GalleryTemplate {
         makeFrame((main: large + medium + spacing * 2, cross: medium + spacing), (main: mini, cross: mini)),
         makeFrame((main: large + medium + mini + spacing * 3, cross: 0), (main: mini, cross: mini)),
         makeFrame((main: large + medium + mini + spacing * 3, cross: mini + spacing), (main: mini, cross: mini)),
-        makeFrame((main: large + medium + mini + spacing * 3, cross: medium + spacing), (main: mini, cross: mini))
+        makeFrame((main: large + medium + mini + spacing * 3, cross: medium + spacing), (main: mini, cross: mini)),
       ]
     case .layout3:
       return [
@@ -71,9 +71,8 @@ struct GalleryFrames: GalleryTemplate {
         makeFrame((main: large + medium + spacing * 2, cross: 0), (main: mini, cross: mini)),
         makeFrame((main: large + medium + mini + spacing * 3, cross: 0), (main: mini, cross: mini)),
         makeFrame((main: large + medium + mini + spacing * 3, cross: mini + spacing), (main: mini, cross: mini)),
-        makeFrame((main: large + medium + mini + spacing * 3, cross: medium + spacing), (main: mini, cross: mini))
+        makeFrame((main: large + medium + mini + spacing * 3, cross: medium + spacing), (main: mini, cross: mini)),
       ]
     }
   }
 }
-

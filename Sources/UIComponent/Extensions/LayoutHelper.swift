@@ -75,16 +75,19 @@ extension HorizontalLayoutProtocol {
 }
 
 struct LayoutHelper {
-  static func distribute(justifyContent: MainAxisAlignment,
-                         maxPrimary: CGFloat,
-                         totalPrimary: CGFloat,
-                         minimunSpacing: CGFloat,
-                         numberOfItems: Int) -> (offset: CGFloat, spacing: CGFloat) {
+  static func distribute(
+    justifyContent: MainAxisAlignment,
+    maxPrimary: CGFloat,
+    totalPrimary: CGFloat,
+    minimunSpacing: CGFloat,
+    numberOfItems: Int
+  ) -> (offset: CGFloat, spacing: CGFloat) {
     var offset: CGFloat = 0
     var spacing = minimunSpacing
     guard numberOfItems > 0 else { return (offset, spacing) }
     if maxPrimary != .infinity,
-      totalPrimary + CGFloat(numberOfItems - 1) * minimunSpacing < maxPrimary {
+      totalPrimary + CGFloat(numberOfItems - 1) * minimunSpacing < maxPrimary
+    {
       let leftOverPrimary = maxPrimary - totalPrimary
       switch justifyContent {
       case .start:

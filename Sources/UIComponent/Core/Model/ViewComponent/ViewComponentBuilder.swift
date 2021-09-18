@@ -7,8 +7,8 @@ public protocol ViewComponentBuilder: ViewComponent {
   func build() -> Content
 }
 
-public extension ViewComponentBuilder {
-  func layout(_ constraint: Constraint) -> Content.R {
+extension ViewComponentBuilder {
+  public func layout(_ constraint: Constraint) -> Content.R {
     build().layout(constraint)
   }
 }

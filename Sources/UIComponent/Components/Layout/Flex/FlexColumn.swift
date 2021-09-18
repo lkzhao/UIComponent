@@ -2,28 +2,26 @@
 
 import UIKit
 
-/**
- # FlexColumn Component
- 
- Renders a list of child components using `flex-column` layout.
- 
- ```
- [1] [4]
- [2] [5]
- [3]
- ```
- 
- Example:
- ```swift
- FlexColumn(spacing: 10, justifyContent: .start, alignItems: .center) {
-   for cellData in cells {
-      Cell(data: cellData)
-   }
- }
- ```
- 
- Checkout the `FlexLayoutViewController.swift` for other examples.
-*/
+/// # FlexColumn Component
+///
+/// Renders a list of child components using `flex-column` layout.
+///
+/// ```
+/// [1] [4]
+/// [2] [5]
+/// [3]
+/// ```
+///
+/// Example:
+/// ```swift
+/// FlexColumn(spacing: 10, justifyContent: .start, alignItems: .center) {
+///   for cellData in cells {
+///      Cell(data: cellData)
+///   }
+/// }
+/// ```
+///
+/// Checkout the `FlexLayoutViewController.swift` for other examples.
 public struct FlexColumn: FlexLayout, HorizontalLayoutProtocol {
   public var lineSpacing: CGFloat
   public var interitemSpacing: CGFloat
@@ -34,12 +32,14 @@ public struct FlexColumn: FlexLayout, HorizontalLayoutProtocol {
   public var tailJustifyContent: MainAxisAlignment?
   public var children: [Component]
 
-  public init(lineSpacing: CGFloat = 0,
-              interitemSpacing: CGFloat = 0,
-              justifyContent: MainAxisAlignment = .start,
-              alignItems: CrossAxisAlignment = .start,
-              alignContent: MainAxisAlignment = .start,
-              children: [Component]) {
+  public init(
+    lineSpacing: CGFloat = 0,
+    interitemSpacing: CGFloat = 0,
+    justifyContent: MainAxisAlignment = .start,
+    alignItems: CrossAxisAlignment = .start,
+    alignContent: MainAxisAlignment = .start,
+    children: [Component]
+  ) {
     self.lineSpacing = lineSpacing
     self.interitemSpacing = interitemSpacing
     self.justifyContent = justifyContent
@@ -48,4 +48,3 @@ public struct FlexColumn: FlexLayout, HorizontalLayoutProtocol {
     self.children = children
   }
 }
-

@@ -1,7 +1,7 @@
 //  Created by Luke Zhao on 2018-12-13.
 
-import UIKit
 import UIComponent
+import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -40,4 +40,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
   }
 }
-

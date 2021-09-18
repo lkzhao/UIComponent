@@ -9,20 +9,20 @@ import UIKit
 public class ComponentEngine {
   /// view that is managed by this engine.
   weak var view: ComponentDisplayableView?
-  
+
   /// component for rendering
   var component: Component? {
     didSet { setNeedsReload() }
   }
-  
+
   /// default animator for the components rendered by this engine
   var animator: Animator = Animator() {
     didSet { setNeedsReload() }
   }
-  
+
   /// Current renderNode. This is nil before the layout is done. And it will cache the current RenderNode once the layout is done.
   var renderNode: RenderNode?
-  
+
   /// internal states
   var needsReload = true
   var needsRender = false
@@ -30,10 +30,10 @@ public class ComponentEngine {
   var reloadCount = 0
   var isRendering = false
   var isReloading = false
-  
+
   /// visible frame insets. this will be applied to the visibleFrame that is used to retrieve views for the view port.
   var visibleFrameInsets: UIEdgeInsets = .zero
-  
+
   /// simple flag indicating whether or not this engine has rendered
   var hasReloaded: Bool { reloadCount > 0 }
 
@@ -43,12 +43,12 @@ public class ComponentEngine {
 
   /// last reload bounds
   var lastRenderBounds: CGRect = .zero
-  
+
   /// contentOffset changes since the last reload
   var contentOffsetDelta: CGPoint = .zero
-  
+
   var onFirstReload: (() -> Void)?
-  
+
   /// Used to support zooming. setting a ``contentView`` will make the render
   /// all views inside the content view.
   var contentView: UIView? {
@@ -59,11 +59,11 @@ public class ComponentEngine {
       }
     }
   }
-  
+
   /// contentView layout configurations
   var centerContentViewVertically = false
   var centerContentViewHorizontally = true
-  
+
   /// internal helpers for updating the component view
   var contentSize: CGSize = .zero {
     didSet {
@@ -89,11 +89,11 @@ public class ComponentEngine {
     guard let view = view as? UIScrollView else { return 1 }
     return view.zoomScale
   }
-  
+
   init(view: ComponentDisplayableView) {
     self.view = view
   }
-  
+
   func layoutSubview() {
     if needsReload {
       reloadData()
@@ -161,7 +161,7 @@ public class ComponentEngine {
         onFirstReload()
       }
     }
-    
+
     if !shouldSkipNextLayout {
       renderNode = nil
     }
@@ -176,7 +176,7 @@ public class ComponentEngine {
       needsRender = false
       isRendering = false
     }
-    
+
     let renderNode: RenderNode
     if let currentRenderNode = self.renderNode {
       renderNode = currentRenderNode
@@ -185,7 +185,7 @@ public class ComponentEngine {
       contentSize = renderNode.size * zoomScale
       self.renderNode = renderNode
     }
-    
+
     let oldContentOffset = contentOffset
     if let offset = contentOffsetAdjustFn?() {
       contentOffset = offset
@@ -194,7 +194,7 @@ public class ComponentEngine {
 
     animator.willUpdate(componentView: componentView)
     let visibleFrame = (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
-    
+
     var newVisibleRenderable = renderNode.visibleRenderables(in: visibleFrame)
     if contentSize != renderNode.size * zoomScale {
       // update contentSize if it is changed. Some renderNodes update
@@ -219,7 +219,7 @@ public class ComponentEngine {
     var newViews = [UIView?](repeating: nil, count: newVisibleRenderable.count)
 
     // 1st pass, delete all removed cells and move existing cells
-    for index in 0 ..< visibleViews.count {
+    for index in 0..<visibleViews.count {
       let identifier = visibleRenderable[index].id ?? visibleRenderable[index].keyPath
       let cell = visibleViews[index]
       if let index = newIdentifierSet[identifier] {
@@ -272,7 +272,7 @@ public class ComponentEngine {
       break
     }
   }
-  
+
   /// This function assigns component with an already calculated render node
   /// This is a performance hack that skips layout for the component if it has already
   /// been layed out.

@@ -4,7 +4,7 @@ import UIKit
 
 public struct Image: ViewComponent {
   public let image: UIImage
-  
+
   public init(_ imageName: String) {
     self.init(UIImage(named: imageName)!)
   }

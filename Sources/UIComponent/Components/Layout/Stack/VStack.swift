@@ -7,10 +7,12 @@ public struct VStack: Stack, VerticalLayoutProtocol {
   public let justifyContent: MainAxisAlignment
   public let alignItems: CrossAxisAlignment
   public let children: [Component]
-  public init(spacing: CGFloat = 0,
-              justifyContent: MainAxisAlignment = .start,
-              alignItems: CrossAxisAlignment = .start,
-              children: [Component] = []) {
+  public init(
+    spacing: CGFloat = 0,
+    justifyContent: MainAxisAlignment = .start,
+    alignItems: CrossAxisAlignment = .start,
+    children: [Component] = []
+  ) {
     self.spacing = spacing
     self.justifyContent = justifyContent
     self.alignItems = alignItems
@@ -18,11 +20,13 @@ public struct VStack: Stack, VerticalLayoutProtocol {
   }
 }
 
-public extension VStack {
-  init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
-    self.init(spacing: spacing,
-              justifyContent: justifyContent,
-              alignItems: alignItems,
-              children: content())
+extension VStack {
+  public init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
+    self.init(
+      spacing: spacing,
+      justifyContent: justifyContent,
+      alignItems: alignItems,
+      children: content()
+    )
   }
 }

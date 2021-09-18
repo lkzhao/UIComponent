@@ -23,7 +23,7 @@ open class ComponentView: UIView, ComponentDisplayableView {
     super.layoutSubviews()
     engine.layoutSubview()
   }
-  
+
   open override func sizeThatFits(_ size: CGSize) -> CGSize {
     engine.sizeThatFits(size)
   }

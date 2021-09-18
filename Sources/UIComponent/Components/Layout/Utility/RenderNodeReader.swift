@@ -5,7 +5,7 @@ import Foundation
 public struct RenderNodeReader: Component {
   let child: Component
   let reader: (RenderNode) -> Void
-  
+
   public init(child: Component, _ reader: @escaping (RenderNode) -> Void) {
     self.child = child
     self.reader = reader

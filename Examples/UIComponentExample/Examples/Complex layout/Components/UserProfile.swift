@@ -1,7 +1,7 @@
 //  Created by y H on 2021/7/21.
 
-import UIComponent
 import Kingfisher
+import UIComponent
 import UIKit.UIImageView
 
 extension ViewComponent where R.View: UIView {
@@ -16,11 +16,11 @@ extension ViewComponent where R.View: UIView {
 }
 
 struct UserProfile: ComponentBuilder {
-  
+
   let avatar: String
   let userName: String
   let introduce: String
-  
+
   func build() -> Component {
     HStack(spacing: 10, alignItems: .center) {
       AsyncImage(avatar)
@@ -28,21 +28,23 @@ struct UserProfile: ComponentBuilder {
         .clipsToBounds(true)
         .size(width: 64, height: 64)
         .update {
-          $0.layer.cornerRadius = $0.frame.height/2
+          $0.layer.cornerRadius = $0.frame.height / 2
         }
         .with(\.layer.borderWidth, 2)
         .with(\.layer.borderColor, UIColor.white.cgColor)
         .view()
         .id("avatar")
         .shadowAvatar()
-      
+
       VStack(spacing: 4) {
         Text(userName)
         Text(introduce, font: .systemFont(ofSize: 13, weight: .light)).textColor(.secondaryLabel)
         Text("🤔🤔🤔", font: .systemFont(ofSize: 12, weight: .light)).textColor(.secondaryLabel)
-      }.flex()
-      
+      }
+      .flex()
+
       Image(systemName: "chevron.right").tintColor(.systemGray)
-    }.inset(15).defaultShadow().id("user-info")
+    }
+    .inset(15).defaultShadow().id("user-info")
   }
 }
