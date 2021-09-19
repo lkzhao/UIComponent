@@ -8,7 +8,7 @@ public class AnimatedReloadAnimator: Animator {
   let cascade: Bool
 
   public init(
-    transform: CATransform3D = CATransform3DTranslate(CATransform3DIdentity, 0, 0, -10),
+    transform: CATransform3D = CATransform3DIdentity,
     duration: TimeInterval = 0.5,
     cascade: Bool = false
   ) {
