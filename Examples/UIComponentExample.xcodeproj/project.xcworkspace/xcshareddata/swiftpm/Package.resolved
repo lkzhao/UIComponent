@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "BaseToolbox",
+        "repositoryURL": "https://github.com/lkzhao/BaseToolbox",
+        "state": {
+          "branch": null,
+          "revision": "5d1b48334b30745715bc9f235f2899e162dcdd77",
+          "version": "0.0.1"
+        }
+      },
+      {
         "package": "Kingfisher",
         "repositoryURL": "https://github.com/onevcat/Kingfisher",
         "state": {

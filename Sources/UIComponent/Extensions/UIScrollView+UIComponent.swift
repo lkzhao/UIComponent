@@ -1,6 +1,7 @@
 //  Created by Luke on 4/16/17.
 
 import UIKit
+import BaseToolbox
 
 extension UIScrollView {
   public var visibleFrame: CGRect {

@@ -1,6 +1,7 @@
 //  Created by y H on 2021/7/25.
 
 import UIKit
+import BaseToolbox
 
 /// # Badge Component
 ///
@@ -61,7 +62,7 @@ public struct Badge: Component {
     case .stretch:
       beagePosition.y = 0
     }
-    let finallyBadgePosition = CGPoint(x: beagePosition.x, y: beagePosition.y) + offset
+    let finallyBadgePosition = CGPoint(x: beagePosition.x + offset.dx, y: beagePosition.y + offset.dy)
 
     return SlowRenderNode(size: childRenderNode.size, children: [childRenderNode, badgeRenderNode], positions: [.zero, finallyBadgePosition])
   }

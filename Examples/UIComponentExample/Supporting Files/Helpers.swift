@@ -3,20 +3,6 @@
 import UIComponent
 import UIKit
 
-extension UIView {
-  public var parentViewController: UIViewController? {
-    var responder: UIResponder? = self
-    while responder is UIView {
-      responder = responder!.next
-    }
-    return responder as? UIViewController
-  }
-
-  public func present(_ viewController: UIViewController, completion: (() -> Void)? = nil) {
-    parentViewController?.present(viewController, animated: true, completion: completion)
-  }
-}
-
 extension UIColor {
   static let systemColors: [UIColor] = [
     .systemRed, .systemBlue, .systemPink, .systemTeal, .systemGray, .systemFill, .systemGreen, .systemGreen, .systemYellow, .systemPurple, .systemOrange,
