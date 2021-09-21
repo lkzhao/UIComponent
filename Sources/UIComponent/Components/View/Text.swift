@@ -2,23 +2,16 @@
 
 import UIKit
 
-private let sizingLabel = UILabel()
-
 public struct Text: ViewComponent {
   public let attributedText: NSAttributedString
-  public let numberOfLines: Int
-  public init(_ text: String, font: UIFont = UIFont.systemFont(ofSize: 16), numberOfLines: Int = 0) {
+  public init(_ text: String, font: UIFont = UIFont.systemFont(ofSize: 16)) {
     self.attributedText = NSAttributedString(string: text, attributes: [.font: font])
-    self.numberOfLines = numberOfLines
   }
-  public init(_ attributedText: NSAttributedString, numberOfLines: Int = 0) {
+  public init(_ attributedText: NSAttributedString) {
     self.attributedText = attributedText
-    self.numberOfLines = numberOfLines
   }
   public func layout(_ constraint: Constraint) -> TextRenderNode {
-    sizingLabel.attributedText = attributedText
-    sizingLabel.numberOfLines = numberOfLines
-    let size = sizingLabel.sizeThatFits(constraint.maxSize)
+    let size = attributedText.boundingRect(with: constraint.maxSize, options: [.usesLineFragmentOrigin], context: nil).size
     return TextRenderNode(attributedText: attributedText, size: size.bound(to: constraint))
   }
 }
