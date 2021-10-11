@@ -40,7 +40,7 @@ struct IntroductionCard: ComponentBuilder {
       VStack(spacing: 5) {
         Text("UIComponent", font: .boldSystemFont(ofSize: 17))
         Text("Powerful layout", font: .systemFont(ofSize: 14)).textColor(.link)
-        Text(longText, font: .systemFont(ofSize: 13)).textColor(.secondaryLabel).numberOfLines(isExpanded ? 0 : 3).size(height: isExpanded ? .fit : .absolute(50))
+        Text(longText, font: .systemFont(ofSize: 13), numberOfLines: isExpanded ? 0 : 3).textColor(.secondaryLabel)
       }
       .flex()
     }
