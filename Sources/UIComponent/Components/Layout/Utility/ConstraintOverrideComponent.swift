@@ -45,7 +45,7 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
       if maxSize.width != .infinity {
         minSize.width = maxSize.width
       } else {
-        assertionFailure("Can't fill an infinite x axis")
+        assertionFailure("Can't fill infinite width. Check for `size(width: .fill)` inside a `HStack` or `FlexColumn`.")
       }
     case .fit:
       break
@@ -58,7 +58,7 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
         maxSize.width = value * maxWidth
         minSize.width = value * maxWidth
       } else {
-        assertionFailure("Can't use percentage width an infinite x axis")
+        assertionFailure("Can't use percentage width with an infinite width. Check for `size(width: .percentage(x))` inside a `HStack` or `FlexColumn`.")
       }
     case .aspectPercentage(let value):
       if case .absolute(let height) = height {
@@ -68,7 +68,7 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
         maxSize.width = value * maxSize.height
         minSize.width = value * maxSize.height
       } else {
-        assertionFailure("Can't use aspectPercentage width an infinite y axis")
+        assertionFailure("Can't use aspectPercentage width with an infinite height. Check for `size(width: .aspectPercentage(x))` inside a `VStack`, `Flow`, or `FlexRow`.")
       }
     }
     switch height {
@@ -76,7 +76,7 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
       if maxSize.height != .infinity {
         minSize.height = maxSize.height
       } else {
-        assertionFailure("Can't fill an infinite y axis")
+        assertionFailure("Can't fill infinite height. Check for `size(height: .fill)` inside a `VStack`, `Flow`, or `FlexRow`.")
       }
     case .fit:
       break
@@ -90,7 +90,7 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
         maxSize.height = value * maxHeight
         minSize.height = value * maxHeight
       } else {
-        assertionFailure("Can't use percentage height an infinite y axis")
+        assertionFailure("Can't use percentage height with an infinite height. Check for `size(height: .fill)` inside a `VStack`, `Flow`, or `FlexRow`.")
       }
     case .aspectPercentage(let value):
       if case .absolute(let width) = width {
@@ -100,7 +100,7 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
         maxSize.height = value * maxSize.width
         minSize.height = value * maxSize.width
       } else {
-        assertionFailure("Can't use aspectPercentage height an infinite x axis")
+        assertionFailure("Can't use aspectPercentage height with an infinite width. Check for `size(height: .aspectPercentage(x))` inside a `HStack` or `FlexColumn`.")
       }
     }
     return Constraint(minSize: minSize, maxSize: maxSize)

@@ -122,6 +122,17 @@ extension Component {
   public func size(width: SizeStrategy = .fit, height: CGFloat) -> Component {
     ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: width, height: .absolute(height)))
   }
+  public func fit() -> Component {
+    size(width: .fit, height: .fit)
+  }
+  public func fill() -> Component {
+    size(width: .fill, height: .fill)
+  }
+  public func centered() -> Component {
+    ZStack {
+      self
+    }
+  }
   public func constraint(_ constraintComponent: @escaping (Constraint) -> Constraint) -> Component {
     ConstraintOverrideComponent(child: self, transformer: BlockConstraintTransformer(block: constraintComponent))
   }

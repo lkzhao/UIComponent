@@ -15,6 +15,7 @@ class ViewController: ComponentViewController {
         ExampleItem(name: "Waterfall Layout Example", viewController: WaterfallLayoutViewController())
         ExampleItem(name: "Complex Layout Example", viewController: ComplexLayoutViewController())
         ExampleItem(name: "Gallery Example", viewController: GalleryViewController())
+        ExampleItem(name: "Size Example", viewController: SizeExampleViewController())
       } separator: {
         Separator()
       }

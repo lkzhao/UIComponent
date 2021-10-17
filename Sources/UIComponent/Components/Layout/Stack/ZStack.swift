@@ -1,6 +1,7 @@
 //  Created by Luke Zhao on 8/26/20.
 
 import UIKit
+import BaseToolbox
 
 public struct ZStack: Component {
   public var verticalAlignment: CrossAxisAlignment = .center
@@ -9,7 +10,7 @@ public struct ZStack: Component {
 
   public func layout(_ constraint: Constraint) -> RenderNode {
     var renderNodes: [RenderNode] = children.map {
-      $0.layout(constraint)
+      $0.layout(Constraint(minSize: -.infinity, maxSize: constraint.maxSize))
     }
     let size = CGSize(
       width: renderNodes.max { $0.size.width < $1.size.width }?.size.width ?? 0,

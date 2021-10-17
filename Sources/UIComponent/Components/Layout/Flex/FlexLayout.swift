@@ -1,6 +1,7 @@
 //  Created by Luke Zhao on 8/24/20.
 
 import UIKit
+import BaseToolbox
 
 /// Implementation for `FlexColumn` & `FlexRow`
 public protocol FlexLayout: Component, BaseLayoutProtocol {
@@ -47,7 +48,7 @@ extension FlexLayout {
   public func layout(_ constraint: Constraint) -> RenderNode {
     let mainMax = main(constraint.maxSize)
     let crossMax = cross(constraint.maxSize)
-    let childConstraint = Constraint(minSize: CGSize(width: -.infinity, height: -.infinity), maxSize: size(main: .infinity, cross: crossMax))
+    let childConstraint = Constraint(minSize: -.infinity, maxSize: size(main: .infinity, cross: crossMax))
     var renderNodes: [RenderNode] = children.map {
       $0.layout(childConstraint)
     }

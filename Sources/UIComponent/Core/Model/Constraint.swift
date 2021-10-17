@@ -1,14 +1,15 @@
 //  Created by Luke Zhao on 8/22/20.
 
 import UIKit
+import BaseToolbox
 
 public struct Constraint {
   public var minSize: CGSize
   public var maxSize: CGSize
 
   public init(
-    minSize: CGSize = CGSize(width: -CGFloat.infinity, height: -CGFloat.infinity),
-    maxSize: CGSize = CGSize(width: CGFloat.infinity, height: .infinity)
+    minSize: CGSize = -.infinity,
+    maxSize: CGSize = .infinity
   ) {
     self.minSize = minSize
     self.maxSize = maxSize
