@@ -12,7 +12,7 @@ public struct SimpleViewComponent<View: UIView>: ViewComponent {
   public init(view: View? = nil) {
     self.init(view: view, generator: nil)
   }
-  public init(id: String? = nil, generator: @autoclosure @escaping () -> View) {
+  public init(generator: @autoclosure @escaping () -> View) {
     self.init(view: nil, generator: generator)
   }
   public func layout(_ constraint: Constraint) -> SimpleViewRenderNode<View> {
