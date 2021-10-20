@@ -30,8 +30,8 @@ public struct SimpleViewRenderNode<View: UIView>: ViewRenderNode {
     }
     return nil
   }
-  public var reuseKey: String? {
-    return view == nil ? "\(type(of: self))" : nil
+  public var reuseStrategy: ReuseStrategy {
+    view == nil ? .automatic : .noReuse
   }
 
   fileprivate init(size: CGSize, view: View?, generator: (() -> View)?) {

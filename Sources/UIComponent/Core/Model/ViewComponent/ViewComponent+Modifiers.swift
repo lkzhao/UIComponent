@@ -23,7 +23,7 @@ public typealias ViewAnimatorComponent<Content: ViewComponent> = ViewModifierCom
 
 public typealias ViewAnimatorWrapperComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewAnimatorWrapperRenderNode<Content.R.View, Content.R>>
 
-public typealias ViewReuseKeyComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewReuseKeyRenderNode<Content.R.View, Content.R>>
+public typealias ViewReuseStrategyComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewReuseStrategyRenderNode<Content.R.View, Content.R>>
 
 extension ViewComponent {
   public subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<R.View, Value>) -> (Value) -> ViewKeyPathUpdateComponent<Self, Value> {
@@ -48,9 +48,9 @@ extension ViewComponent {
     }
   }
 
-  public func reuseKey(_ reuseKey: String?) -> ViewReuseKeyComponent<Self> {
+  public func reuseStrategy(_ reuseStrategy: ReuseStrategy) -> ViewReuseStrategyComponent<Self> {
     ViewModifierComponent(content: self) {
-      $0.reuseKey(reuseKey)
+      $0.reuseStrategy(reuseStrategy)
     }
   }
 

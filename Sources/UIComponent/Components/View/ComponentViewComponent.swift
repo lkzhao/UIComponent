@@ -30,9 +30,6 @@ public struct ComponentViewRenderNode<View: ComponentDisplayableView>: ViewRende
   public var id: String? {
     viewRenderNode?.id
   }
-  public var reuseKey: String? {
-    viewRenderNode?.reuseKey
-  }
   public var animator: Animator? {
     viewRenderNode?.animator
   }

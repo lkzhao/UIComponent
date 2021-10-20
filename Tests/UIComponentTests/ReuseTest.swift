@@ -36,8 +36,8 @@ final class ReuseTests: XCTestCase {
     XCTAssertEqual(existingLabel, newLabel)
   }
 
-  func testNoReuseWhenReuseKeyDiffers() {
-    componentView.component = Text("1").reuseKey("myLabel")
+  func testNoReuseWhenReuseStrategyDiffers() {
+    componentView.component = Text("1").reuseStrategy(.key("myLabel"))
     componentView.reloadData()
     XCTAssertEqual(componentView.subviews.count, 1)
     let existingLabel = componentView.subviews.first as? UILabel
@@ -54,15 +54,15 @@ final class ReuseTests: XCTestCase {
     XCTAssertNotEqual(existingLabel, newLabel)
   }
 
-  func testNoReuseWhenNoReuseKey() {
-    componentView.component = Text("1").reuseKey(nil)
+  func testNoReuseWhenNoReuseStrategy() {
+    componentView.component = Text("1").reuseStrategy(.noReuse)
     componentView.reloadData()
     XCTAssertEqual(componentView.subviews.count, 1)
     let existingLabel = componentView.subviews.first as? UILabel
     XCTAssertNotNil(existingLabel)
     XCTAssertEqual(existingLabel?.text, "1")
     componentView.component = VStack {
-      Text("2").reuseKey(nil)
+      Text("2").reuseStrategy(.noReuse)
     }
     componentView.reloadData()
     XCTAssertEqual(componentView.subviews.count, 1)

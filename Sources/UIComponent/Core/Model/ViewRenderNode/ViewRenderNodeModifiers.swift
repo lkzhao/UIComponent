@@ -11,8 +11,8 @@ extension ViewRenderNodeWrapper {
   public var id: String? {
     content.id
   }
-  public var reuseKey: String? {
-    "\(type(of: self))"
+  public var reuseStrategy: ReuseStrategy {
+    content.reuseStrategy
   }
   public var animator: Animator? {
     content.animator
@@ -59,9 +59,9 @@ public struct ViewAnimatorRenderNode<View, Content: ViewRenderNode>: ViewRenderN
   public let animator: Animator?
 }
 
-public struct ViewReuseKeyRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
+public struct ViewReuseStrategyRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
   public let content: Content
-  public let reuseKey: String?
+  public let reuseStrategy: ReuseStrategy
 }
 
 extension ViewRenderNode {
@@ -77,8 +77,8 @@ extension ViewRenderNode {
   public func animator(_ animator: Animator?) -> ViewAnimatorRenderNode<View, Self> {
     ViewAnimatorRenderNode(content: self, animator: animator)
   }
-  public func reuseKey(_ reuseKey: String?) -> ViewReuseKeyRenderNode<View, Self> {
-    ViewReuseKeyRenderNode(content: self, reuseKey: reuseKey)
+  public func reuseStrategy(_ reuseStrategy: ReuseStrategy) -> ViewReuseStrategyRenderNode<View, Self> {
+    ViewReuseStrategyRenderNode(content: self, reuseStrategy: reuseStrategy)
   }
   public func update(_ update: @escaping (View) -> Void) -> ViewUpdateRenderNode<View, Self> {
     ViewUpdateRenderNode(content: self, update: update)

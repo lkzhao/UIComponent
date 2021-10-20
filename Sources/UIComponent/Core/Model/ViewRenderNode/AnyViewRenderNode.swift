@@ -6,7 +6,6 @@ public protocol AnyViewRenderNode: RenderNode {
   var id: String? { get }
   var keyPath: String { get }
   var animator: Animator? { get }
-  var reuseKey: String? { get }
   func _makeView() -> Any
   func _updateView(_ view: Any)
 }
@@ -15,7 +14,6 @@ extension AnyViewRenderNode {
   public var id: String? { nil }
   public var animator: Animator? { nil }
   public var keyPath: String { "\(type(of: self))" }
-  public var reuseKey: String? { "\(type(of: self))" }
 
   public func visibleRenderables(in frame: CGRect) -> [Renderable] {
     let childFrame = CGRect(origin: .zero, size: size)
