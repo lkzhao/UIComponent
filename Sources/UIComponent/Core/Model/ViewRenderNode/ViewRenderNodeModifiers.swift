@@ -87,12 +87,14 @@ extension ViewRenderNode {
 
 public struct ViewAnimatorWrapperRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
   public let content: Content
+  var passthrough: Bool
   var insertBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
   var updateBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
   var deleteBlock: ((ComponentDisplayableView, UIView, () -> Void) -> Void)?
-  public var animator: Animator {
+  public var animator: Animator? {
     let wrapper = WrapperAnimator()
     wrapper.content = content.animator
+    wrapper.passthrough = passthrough
     wrapper.insertBlock = insertBlock
     wrapper.deleteBlock = deleteBlock
     wrapper.updateBlock = updateBlock
@@ -101,13 +103,13 @@ public struct ViewAnimatorWrapperRenderNode<View, Content: ViewRenderNode>: View
 }
 
 extension ViewRenderNode {
-  func animateUpdate(_ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperRenderNode<View, Self> {
-    ViewAnimatorWrapperRenderNode(content: self, updateBlock: updateBlock)
+  func animateUpdate(passthrough: Bool = false, _ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperRenderNode<View, Self> {
+    ViewAnimatorWrapperRenderNode(content: self, passthrough: passthrough, updateBlock: updateBlock)
   }
-  func animateInsert(_ insertBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperRenderNode<View, Self> {
-    ViewAnimatorWrapperRenderNode(content: self, insertBlock: insertBlock)
+  func animateInsert(passthrough: Bool = false, _ insertBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperRenderNode<View, Self> {
+    ViewAnimatorWrapperRenderNode(content: self, passthrough: passthrough, insertBlock: insertBlock)
   }
-  func animateDelete(_ deleteBlock: @escaping ((ComponentDisplayableView, UIView, () -> Void) -> Void)) -> ViewAnimatorWrapperRenderNode<View, Self> {
-    ViewAnimatorWrapperRenderNode(content: self, deleteBlock: deleteBlock)
+  func animateDelete(passthrough: Bool = false, _ deleteBlock: @escaping ((ComponentDisplayableView, UIView, () -> Void) -> Void)) -> ViewAnimatorWrapperRenderNode<View, Self> {
+    ViewAnimatorWrapperRenderNode(content: self, passthrough: passthrough, deleteBlock: deleteBlock)
   }
 }

@@ -62,19 +62,19 @@ extension ViewComponent {
 }
 
 extension ViewComponent {
-  public func animateUpdate(_ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperComponent<Self> {
+  public func animateUpdate(passthrough: Bool = false, _ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperComponent<Self> {
     ViewModifierComponent(content: self) {
-      $0.animateUpdate(updateBlock)
+      $0.animateUpdate(passthrough: passthrough, updateBlock)
     }
   }
-  public func animateInsert(_ insertBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperComponent<Self> {
+  public func animateInsert(passthrough: Bool = false, _ insertBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperComponent<Self> {
     ViewModifierComponent(content: self) {
-      $0.animateInsert(insertBlock)
+      $0.animateInsert(passthrough: passthrough, insertBlock)
     }
   }
-  public func animateDelete(_ deleteBlock: @escaping ((ComponentDisplayableView, UIView, () -> Void) -> Void)) -> ViewAnimatorWrapperComponent<Self> {
+  public func animateDelete(passthrough: Bool = false, _ deleteBlock: @escaping ((ComponentDisplayableView, UIView, () -> Void) -> Void)) -> ViewAnimatorWrapperComponent<Self> {
     ViewModifierComponent(content: self) {
-      $0.animateDelete(deleteBlock)
+      $0.animateDelete(passthrough: passthrough, deleteBlock)
     }
   }
 }

@@ -4,6 +4,7 @@ import UIKit
 
 public class WrapperAnimator: Animator {
   public var content: Animator?
+  public var passthrough: Bool = false
   public var insertBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
   public var updateBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
   public var deleteBlock: ((ComponentDisplayableView, UIView, () -> Void) -> Void)?
@@ -11,6 +12,9 @@ public class WrapperAnimator: Animator {
   public override func update(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
     if let updateBlock = updateBlock {
       updateBlock(componentView, view, frame)
+      if passthrough, let content = content {
+        content.update(componentView: componentView, view: view, frame: frame)
+      }
     } else if let content = content {
       content.update(componentView: componentView, view: view, frame: frame)
     } else {
