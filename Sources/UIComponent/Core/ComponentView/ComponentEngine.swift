@@ -27,10 +27,10 @@ public class ComponentEngine {
   /// internal states
   var needsReload = true
   var needsRender = false
+  var shouldSkipNextLayout = false
   var reloadCount = 0
   var isRendering = false
   var isReloading = false
-  var allowLayout = true
 
   /// visible frame insets. this will be applied to the visibleFrame that is used to retrieve views for the view port.
   var visibleFrameInsets: UIEdgeInsets = .zero
@@ -134,9 +134,7 @@ public class ComponentEngine {
   }
 
   func setNeedsInvalidateLayout() {
-    if allowLayout {
-      renderNode = nil
-    }
+    renderNode = nil
     setNeedsRender()
   }
 
@@ -147,7 +145,7 @@ public class ComponentEngine {
 
   // re-layout, but not updating cells' contents
   func invalidateLayout() {
-    guard !isRendering, !isReloading, hasReloaded, allowLayout else { return }
+    guard !isRendering, !isReloading, hasReloaded else { return }
     renderNode = nil
     render()
   }
@@ -165,9 +163,10 @@ public class ComponentEngine {
       }
     }
 
-    if allowLayout {
+    if !shouldSkipNextLayout {
       renderNode = nil
     }
+    shouldSkipNextLayout = false
     render(contentOffsetAdjustFn: contentOffsetAdjustFn, updateViews: true)
   }
 
@@ -281,7 +280,7 @@ public class ComponentEngine {
   public func reloadWithExisting(component: Component, renderNode: RenderNode) {
     self.component = component
     self.renderNode = renderNode
-    self.allowLayout = false
+    self.shouldSkipNextLayout = true
   }
 
   /// calculate the size for the current component
