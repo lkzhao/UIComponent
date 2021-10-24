@@ -10,7 +10,7 @@ public struct ZStack: Component {
 
   public func layout(_ constraint: Constraint) -> RenderNode {
     var renderNodes: [RenderNode] = children.map {
-      $0.layout(Constraint(minSize: -.infinity, maxSize: constraint.maxSize))
+      $0.layout(Constraint(maxSize: constraint.maxSize))
     }
     let size = CGSize(
       width: renderNodes.max { $0.size.width < $1.size.width }?.size.width ?? 0,

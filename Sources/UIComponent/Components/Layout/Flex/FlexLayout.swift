@@ -48,7 +48,7 @@ extension FlexLayout {
   public func layout(_ constraint: Constraint) -> RenderNode {
     let mainMax = main(constraint.maxSize)
     let crossMax = cross(constraint.maxSize)
-    let childConstraint = Constraint(minSize: -.infinity, maxSize: size(main: .infinity, cross: crossMax))
+    let childConstraint = Constraint(maxSize: size(main: .infinity, cross: crossMax))
     var renderNodes: [RenderNode] = children.map {
       $0.layout(childConstraint)
     }

@@ -131,7 +131,7 @@ extension Component {
   public func centered() -> Component {
     ZStack {
       self
-    }
+    }.fill()
   }
   public func constraint(_ constraintComponent: @escaping (Constraint) -> Constraint) -> Component {
     ConstraintOverrideComponent(child: self, transformer: BlockConstraintTransformer(block: constraintComponent))
