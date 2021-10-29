@@ -80,7 +80,7 @@ public class AnimatedReloadAnimator: Animator {
         delay: 0,
         usingSpringWithDamping: 0.9,
         initialSpringVelocity: 0,
-        options: [.allowUserInteraction],
+        options: [.allowUserInteraction, .layoutSubviews],
         animations: {
           view.bounds.size = frame.bounds.size
         },
