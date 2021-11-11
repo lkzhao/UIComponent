@@ -1,6 +1,7 @@
 //  Created by Luke Zhao on 8/22/20.
 
 import UIKit
+import BaseToolbox
 
 public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
   var size: CGSize { get }
@@ -73,3 +74,37 @@ public struct SlowRenderNode: RenderNode {
     return IndexSet(result)
   }
 }
+
+public struct AlwaysRenderNode: RenderNode {
+  public let size: CGSize
+  public let children: [RenderNode]
+  public let positions: [CGPoint]
+
+  public init(size: CGSize, children: [RenderNode], positions: [CGPoint]) {
+    self.size = size
+    self.children = children
+    self.positions = positions
+  }
+
+  public func visibleRenderables(in frame: CGRect) -> [Renderable] {
+    var result = [Renderable]()
+    for i in 0..<children.count {
+      let child = children[i]
+      let position = positions[i]
+      let childFrame = CGRect(origin: .zero, size: child.size)
+      let childRenderables = child.visibleRenderables(in: childFrame)
+        .map {
+          Renderable(
+            id: $0.id,
+            keyPath: "\(type(of: self))-\(i)." + $0.keyPath,
+            animator: $0.animator,
+            renderNode: $0.renderNode,
+            frame: CGRect(origin: $0.frame.origin + position, size: $0.frame.size)
+          )
+        }
+      result.append(contentsOf: childRenderables)
+    }
+    return result
+  }
+}
+

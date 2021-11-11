@@ -39,9 +39,9 @@ extension Component {
 extension Component {
   public func badge(
     _ component: Component,
-    verticalAlignment: CrossAxisAlignment = .start,
-    horizontalAlignment: CrossAxisAlignment = .end,
-    offset: CGVector = .zero
+    verticalAlignment: Badge.Alignment = .start,
+    horizontalAlignment: Badge.Alignment = .end,
+    offset: CGPoint = .zero
   ) -> Badge {
     Badge(
       child: self,
@@ -52,9 +52,9 @@ extension Component {
     )
   }
   public func badge(
-    verticalAlignment: CrossAxisAlignment = .start,
-    horizontalAlignment: CrossAxisAlignment = .end,
-    offset: CGVector = .zero,
+    verticalAlignment: Badge.Alignment = .start,
+    horizontalAlignment: Badge.Alignment = .end,
+    offset: CGPoint = .zero,
     _ component: () -> Component
   ) -> Badge {
     Badge(

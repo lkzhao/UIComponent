@@ -13,22 +13,25 @@ import BaseToolbox
 ///
 /// Instead of using it directly, you can easily create a` Badge` component by using the `.badge` modifier.
 /// ```swift
-/// someComponent.badge(someOtherComponent, offset: CGVector(dx: 8, dy: -8))
+/// someComponent.badge(someOtherComponent, offset: CGPoint(x: 8, y: -8))
 /// ```
 /// or
 /// ```swift
-/// someComponent.badge(offset: CGVector(dx: 8, dy: -8)) {
+/// someComponent.badge(offset: CGPoint(x: 8, y: -8)) {
 ///   someOtherComponent
 /// }
 /// ```
 ///
 /// Checkout the `ComplexLayoutViewController.swift` for other examples.
 public struct Badge: Component {
+  public enum Alignment: CaseIterable {
+    case start, end, center, stretch, before, after
+  }
   let child: Component
   let overlay: Component
-  let verticalAlignment: CrossAxisAlignment
-  let horizontalAlignment: CrossAxisAlignment
-  let offset: CGVector
+  let verticalAlignment: Alignment
+  let horizontalAlignment: Alignment
+  let offset: CGPoint
 
   public func layout(_ constraint: Constraint) -> RenderNode {
     let childRenderNode = child.layout(constraint)
@@ -38,32 +41,43 @@ public struct Badge: Component {
           width: horizontalAlignment == .stretch ? childRenderNode.size.width : -.infinity,
           height: verticalAlignment == .stretch ? childRenderNode.size.height : -.infinity
         ),
-        maxSize: childRenderNode.size
+        maxSize: CGSize(
+            width: horizontalAlignment == .stretch ? childRenderNode.size.width : .infinity,
+            height: verticalAlignment == .stretch ? childRenderNode.size.height : .infinity
+        )
       )
     )
-    let beagePosition: (x: CGFloat, y: CGFloat)
+    let badgePosition: (x: CGFloat, y: CGFloat)
     switch horizontalAlignment {
     case .start:
-      beagePosition.x = 0
+      badgePosition.x = 0
     case .end:
-      beagePosition.x = (childRenderNode.size.width - badgeRenderNode.size.width)
+      badgePosition.x = (childRenderNode.size.width - badgeRenderNode.size.width)
     case .center:
-      beagePosition.x = (childRenderNode.size.width / 2 - badgeRenderNode.size.width / 2)
+      badgePosition.x = (childRenderNode.size.width / 2 - badgeRenderNode.size.width / 2)
     case .stretch:
-      beagePosition.x = 0
+      badgePosition.x = 0
+    case .before:
+      badgePosition.x = -badgeRenderNode.size.width
+    case .after:
+      badgePosition.x = childRenderNode.size.width
     }
     switch verticalAlignment {
     case .start:
-      beagePosition.y = 0
+      badgePosition.y = 0
     case .end:
-      beagePosition.y = (childRenderNode.size.height - badgeRenderNode.size.height)
+      badgePosition.y = (childRenderNode.size.height - badgeRenderNode.size.height)
     case .center:
-      beagePosition.y = (childRenderNode.size.height / 2 - badgeRenderNode.size.height / 2)
+      badgePosition.y = (childRenderNode.size.height / 2 - badgeRenderNode.size.height / 2)
     case .stretch:
-      beagePosition.y = 0
+      badgePosition.y = 0
+    case .before:
+      badgePosition.y = -badgeRenderNode.size.height
+    case .after:
+      badgePosition.y = childRenderNode.size.height
     }
-    let finallyBadgePosition = CGPoint(x: beagePosition.x + offset.dx, y: beagePosition.y + offset.dy)
+    let finallyBadgePosition = CGPoint(x: badgePosition.x + offset.x, y: badgePosition.y + offset.y)
 
-    return SlowRenderNode(size: childRenderNode.size, children: [childRenderNode, badgeRenderNode], positions: [.zero, finallyBadgePosition])
+    return AlwaysRenderNode(size: childRenderNode.size, children: [childRenderNode, badgeRenderNode], positions: [.zero, finallyBadgePosition])
   }
 }
