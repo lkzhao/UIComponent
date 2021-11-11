@@ -5,38 +5,61 @@ import UIKit
 public struct Text: ViewComponent {
   public let attributedText: NSAttributedString
   public let numberOfLines: Int
-  public init(_ text: String, font: UIFont = UIFont.systemFont(ofSize: 16), numberOfLines: Int = 0) {
+  public let lineBreakMode: NSLineBreakMode
+  public init(_ text: String,
+              font: UIFont = UIFont.systemFont(ofSize: 16),
+              numberOfLines: Int = 0,
+              lineBreakMode: NSLineBreakMode = .byWordWrapping)
+  {
     self.attributedText = NSAttributedString(string: text, attributes: [.font: font])
     self.numberOfLines = numberOfLines
+    self.lineBreakMode = lineBreakMode
   }
-  public init(_ attributedText: NSAttributedString, numberOfLines: Int = 0) {
+
+  public init(_ attributedText: NSAttributedString,
+              numberOfLines: Int = 0,
+              lineBreakMode: NSLineBreakMode = .byWordWrapping)
+  {
     self.attributedText = attributedText
     self.numberOfLines = numberOfLines
+    self.lineBreakMode = lineBreakMode
   }
+
   public func layout(_ constraint: Constraint) -> TextRenderNode {
-    let textContainer = NSTextContainer(size: constraint.maxSize)
-    textContainer.maximumNumberOfLines = numberOfLines
-    textContainer.lineFragmentPadding = 0
-    
+    guard numberOfLines != 0 else {
+      return TextRenderNode(attributedText: attributedText,
+                            numberOfLines: numberOfLines,
+                            lineBreakMode: lineBreakMode,
+                            size: attributedText.boundingRect(with: constraint.maxSize, options: [.usesLineFragmentOrigin], context: nil).size.bound(to: constraint))
+    }
+    let textStorage = NSTextStorage()
     let layoutManager = NSLayoutManager()
-    layoutManager.addTextContainer(textContainer)
-    
-    let textStorage = NSTextStorage(attributedString: attributedText)
+    layoutManager.usesFontLeading = false
     textStorage.addLayoutManager(layoutManager)
-    
+
+    textStorage.setAttributedString(attributedText)
+    let textContainer = NSTextContainer(size: constraint.maxSize)
+    textContainer.lineFragmentPadding = 0
+    textContainer.lineBreakMode = lineBreakMode
+    textContainer.maximumNumberOfLines = numberOfLines
+    layoutManager.addTextContainer(textContainer)
     layoutManager.ensureLayout(for: textContainer)
-    
     let rect = layoutManager.usedRect(for: textContainer)
-    return TextRenderNode(attributedText: attributedText, numberOfLines: numberOfLines, size: rect.size.bound(to: constraint))
+    return TextRenderNode(attributedText: attributedText,
+                          numberOfLines: numberOfLines,
+                          lineBreakMode: lineBreakMode,
+                          size: rect.size.bound(to: constraint))
   }
 }
 
 public struct TextRenderNode: ViewRenderNode {
   public let attributedText: NSAttributedString
   public let numberOfLines: Int
+  public let lineBreakMode: NSLineBreakMode
   public let size: CGSize
   public func updateView(_ label: UILabel) {
     label.attributedText = attributedText
     label.numberOfLines = numberOfLines
+    label.lineBreakMode = lineBreakMode
   }
 }
