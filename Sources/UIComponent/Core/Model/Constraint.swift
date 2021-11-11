@@ -6,6 +6,7 @@ import BaseToolbox
 public struct Constraint {
   public var minSize: CGSize
   public var maxSize: CGSize
+  public var isTight: Bool { minSize == maxSize }
 
   public init(
     minSize: CGSize = -.infinity,

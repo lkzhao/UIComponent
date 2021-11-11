@@ -40,7 +40,9 @@ open class ComponentScrollView: UIScrollView, ComponentDisplayableView {
 
   open override func safeAreaInsetsDidChange() {
     super.safeAreaInsetsDidChange()
-    setNeedsInvalidateLayout()
+    if contentInsetAdjustmentBehavior != .never {
+      setNeedsInvalidateLayout()
+    }
   }
 
   open override func layoutSubviews() {

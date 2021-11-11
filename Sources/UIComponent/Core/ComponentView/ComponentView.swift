@@ -14,11 +14,6 @@ import UIKit
 open class ComponentView: UIView, ComponentDisplayableView {
   lazy public var engine: ComponentEngine = ComponentEngine(view: self)
 
-  open override func safeAreaInsetsDidChange() {
-    super.safeAreaInsetsDidChange()
-    setNeedsInvalidateLayout()
-  }
-
   open override func layoutSubviews() {
     super.layoutSubviews()
     engine.layoutSubview()
