@@ -172,33 +172,7 @@ class ComplexLayoutViewController: ComponentViewController {
         .inset(left: 10)
       }
       .inset(v: 10).styleColor(.systemGroupedBackground).id("horizontal")
-
-      Text("Badges", font: .boldSystemFont(ofSize: 20)).id("label3")
-      VStack(spacing: 10) {
-        Text("Badges custom offset")
-        Flow(spacing: 10) {
-          Box().badge(NumberBadge(5), offset: CGPoint(x: 8, y: -8))
-          Box().badge(NumberBadge(12), offset: CGPoint(x: 8, y: -8))
-          Box().badge(NumberBadge("99+"), offset: CGPoint(x: 8, y: -8))
-          Box().badge(NumberBadge.redPoint(), offset: CGPoint(x: -5, y: 5))
-          Space(width: 50, height: 50).badge(BannerBadge("New"), horizontalAlignment: .stretch, offset: CGPoint(x: 0, y: 2)).styleColor(.systemBlue).clipsToBounds(true)
-          Space(width: 50, height: 50).badge(BannerBadge("New"), verticalAlignment: .end, horizontalAlignment: .stretch, offset: CGPoint(x: 0, y: -2)).styleColor(.systemBlue)
-            .clipsToBounds(true)
-        }
-        Text("Badges position")
-        Flow(spacing: 10) {
-          for v in Badge.Alignment.allCases {
-            for h in Badge.Alignment.allCases {
-              Box().badge(NumberBadge.redPoint(), verticalAlignment: v, horizontalAlignment: h)
-            }
-          }
-        }
-      }
-      .inset(10).styleColor(.systemGroupedBackground).id("badges")
-
-    }
-    .inset(20)
-
+    }.inset(20)
   }
 
   override func viewDidLoad() {

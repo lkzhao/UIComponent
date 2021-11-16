@@ -13,8 +13,9 @@ class ViewController: ComponentViewController {
         ExampleItem(name: "AsyncImage Example", viewController: UINavigationController(rootViewController: AsyncImageViewController()))
         ExampleItem(name: "Flex Layout Example", viewController: FlexLayoutViewController())
         ExampleItem(name: "Waterfall Layout Example", viewController: WaterfallLayoutViewController())
-        ExampleItem(name: "Complex Layout Example", viewController: ComplexLayoutViewController())
-        ExampleItem(name: "Gallery Example", viewController: GalleryViewController())
+        ExampleItem(name: "Badge Example", viewController: BadgeViewController())
+        ExampleItem(name: "Complex Example", viewController: ComplexLayoutViewController())
+        ExampleItem(name: "Custom Layout Example", viewController: GalleryViewController())
         ExampleItem(name: "Size Example", viewController: SizeExampleViewController())
       } separator: {
         Separator()
