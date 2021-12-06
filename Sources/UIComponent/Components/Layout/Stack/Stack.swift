@@ -28,9 +28,11 @@ extension Stack {
       $0 + main($1.size)
     }
 
+    let maxPrimary = main(constraint.maxSize)
+    let minPrimary = main(constraint.minSize)
     let (offset, distributedSpacing) = LayoutHelper.distribute(
       justifyContent: justifyContent,
-      maxPrimary: main(constraint.maxSize),
+      maxPrimary: maxPrimary == .infinity && minPrimary > 0 ? minPrimary : maxPrimary,
       totalPrimary: mainTotal,
       minimunSpacing: spacing,
       numberOfItems: renderNodes.count
