@@ -67,6 +67,8 @@ open class TappableView: ComponentView {
     }
   }
 
+  public var pointerStyleProvider: (() -> UIPointerStyle?)?
+
   open var isHighlighted: Bool = false {
     didSet {
       guard isHighlighted != oldValue else { return }
@@ -78,6 +80,7 @@ open class TappableView: ComponentView {
   public override init(frame: CGRect) {
     super.init(frame: frame)
     accessibilityTraits = .button
+    addInteraction(UIPointerInteraction(delegate: self))
   }
 
   required public init?(coder: NSCoder) {
@@ -110,6 +113,16 @@ open class TappableView: ComponentView {
       onLongPress?(self)
     }
   }
+}
+
+extension TappableView: UIPointerInteractionDelegate {
+    public func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
+        if let pointerStyleProvider = pointerStyleProvider {
+            return pointerStyleProvider()
+        } else {
+            return UIPointerStyle(effect: .automatic(UITargetedPreview(view: self)), shape: nil)
+        }
+    }
 }
 
 extension TappableView: UIContextMenuInteractionDelegate {
