@@ -7,7 +7,7 @@ public struct Text: ViewComponent {
   public let numberOfLines: Int
   public let lineBreakMode: NSLineBreakMode
   public init(_ text: String,
-              font: UIFont = UIFont.systemFont(ofSize: 16),
+              font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
               numberOfLines: Int = 0,
               lineBreakMode: NSLineBreakMode = .byWordWrapping)
   {

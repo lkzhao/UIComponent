@@ -80,33 +80,33 @@ extension ViewComponent {
 }
 
 extension ViewComponent {
-  public func size(width: SizeStrategy = .fit, height: SizeStrategy = .fit) -> ConstraintOverrideViewComponent<R, Self> {
+  public func size(width: SizeStrategy = .fit, height: SizeStrategy = .fit) -> ConstraintOverrideViewComponent<Self> {
     ConstraintOverrideViewComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: width, height: height))
   }
-  public func size(width: CGFloat, height: SizeStrategy = .fit) -> ConstraintOverrideViewComponent<R, Self> {
+  public func size(width: CGFloat, height: SizeStrategy = .fit) -> ConstraintOverrideViewComponent<Self> {
     ConstraintOverrideViewComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(width), height: height))
   }
-  public func size(width: CGFloat, height: CGFloat) -> ConstraintOverrideViewComponent<R, Self> {
+  public func size(width: CGFloat, height: CGFloat) -> ConstraintOverrideViewComponent<Self> {
     ConstraintOverrideViewComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(width), height: .absolute(height)))
   }
-  public func size(_ size: CGSize) -> ConstraintOverrideViewComponent<R, Self> {
+  public func size(_ size: CGSize) -> ConstraintOverrideViewComponent<Self> {
     ConstraintOverrideViewComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(size.width), height: .absolute(size.height)))
   }
-  public func size(width: SizeStrategy = .fit, height: CGFloat) -> ConstraintOverrideViewComponent<R, Self> {
+  public func size(width: SizeStrategy = .fit, height: CGFloat) -> ConstraintOverrideViewComponent<Self> {
     ConstraintOverrideViewComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: width, height: .absolute(height)))
   }
-  public func constraint(_ constraintComponent: @escaping (Constraint) -> Constraint) -> ConstraintOverrideViewComponent<R, Self> {
+  public func constraint(_ constraintComponent: @escaping (Constraint) -> Constraint) -> ConstraintOverrideViewComponent<Self> {
     ConstraintOverrideViewComponent(child: self, transformer: BlockConstraintTransformer(block: constraintComponent))
   }
-  public func constraint(_ constraint: Constraint) -> ConstraintOverrideViewComponent<R, Self> {
+  public func constraint(_ constraint: Constraint) -> ConstraintOverrideViewComponent<Self> {
     ConstraintOverrideViewComponent(child: self, transformer: PassThroughConstraintTransformer(constraint: constraint))
   }
-  public func unboundedWidth() -> ConstraintOverrideViewComponent<R, Self> {
+  public func unboundedWidth() -> ConstraintOverrideViewComponent<Self> {
     constraint { c in
       Constraint(minSize: c.minSize, maxSize: CGSize(width: .infinity, height: c.maxSize.height))
     }
   }
-  public func unboundedHeight() -> ConstraintOverrideViewComponent<R, Self> {
+  public func unboundedHeight() -> ConstraintOverrideViewComponent<Self> {
     constraint { c in
       Constraint(minSize: c.minSize, maxSize: CGSize(width: c.maxSize.width, height: .infinity))
     }

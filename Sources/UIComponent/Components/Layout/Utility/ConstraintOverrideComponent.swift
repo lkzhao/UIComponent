@@ -136,10 +136,10 @@ struct ConstraintOverrideComponent: Component {
   }
 }
 
-public struct ConstraintOverrideViewComponent<R, Content: ViewComponent>: ViewComponent where R == Content.R {
+public struct ConstraintOverrideViewComponent<Content: ViewComponent>: ViewComponent {
   let child: Content
   let transformer: ConstraintTransformer
-  public func layout(_ constraint: Constraint) -> R {
+  public func layout(_ constraint: Constraint) -> Content.R {
     child.layout(transformer.calculate(constraint))
   }
 }

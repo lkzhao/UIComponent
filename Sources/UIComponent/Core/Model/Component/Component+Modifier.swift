@@ -107,6 +107,11 @@ extension Component {
 }
 
 extension Component {
+    public func maxSize(width: CGFloat = .infinity, height: CGFloat = .infinity) -> Component {
+        constraint { c in
+            Constraint(minSize: c.minSize, maxSize: CGSize(width: min(width, c.maxSize.width), height: min(height, c.maxSize.height)))
+        }
+    }
   public func size(width: SizeStrategy = .fit, height: SizeStrategy = .fit) -> Component {
     ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: width, height: height))
   }

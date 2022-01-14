@@ -44,6 +44,21 @@ open class TappableView: ComponentView {
       }
     }
   }
+    
+    private var dropInteraction: UIDropInteraction?
+    public weak var dropDelegate: UIDropInteractionDelegate? {
+        didSet {
+            guard dropDelegate !== oldValue else { return }
+            if let dropDelegate = dropDelegate {
+                dropInteraction = UIDropInteraction(delegate: dropDelegate)
+                addInteraction(dropInteraction!)
+            } else {
+                if let dropInteraction = dropInteraction {
+                    removeInteraction(dropInteraction)
+                }
+            }
+        }
+    }
 
   public var previewProvider: (() -> UIViewController?)? {
     didSet {
