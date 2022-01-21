@@ -2,6 +2,7 @@
 
 import UIKit
 
+@available(iOS 13.0, *)
 public struct Separator: ViewComponentBuilder {
   public static var defaultSeparatorColor: UIColor = {
     if #available(iOS 13, *) {
@@ -16,7 +17,8 @@ public struct Separator: ViewComponentBuilder {
   public init(color: UIColor = Separator.defaultSeparatorColor) {
     self.color = color
   }
-
+    
+ /// The keyword some is only supported by iOS13. Is there any other solution?
   public func build() -> some ViewComponent {
     SimpleViewComponent<UIView>().backgroundColor(color)
       .constraint { constraint in

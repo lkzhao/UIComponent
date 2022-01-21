@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "BaseToolbox",
+        "repositoryURL": "https://github.com/fanglinwei/BaseToolbox",
+        "state": {
+          "branch": null,
+          "revision": "3eca382926ee42a0d9156cbc20925c8561fded1e",
+          "version": "0.1.7"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
