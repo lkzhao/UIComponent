@@ -2,7 +2,7 @@
 
 import UIKit
 
-public struct ViewModifierComponent<View, Content: ViewComponent, Result: ViewRenderNode>: ViewComponent where Content.R.View == View, Result.View == View {
+public struct ViewModifierComponent<Content: ViewComponent, Result: ViewRenderNode>: ViewComponent where Content.R.View == Result.View {
   let content: Content
   let modifier: (Content.R) -> Result
 
@@ -11,19 +11,19 @@ public struct ViewModifierComponent<View, Content: ViewComponent, Result: ViewRe
   }
 }
 
-public typealias ViewUpdateComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewUpdateRenderNode<Content.R.View, Content.R>>
+public typealias ViewUpdateComponent<Content: ViewComponent> = ViewModifierComponent<Content, ViewUpdateRenderNode<Content.R>>
 
 public typealias ViewKeyPathUpdateComponent<Content: ViewComponent, Value> = ViewModifierComponent<
-  Content.R.View, Content, ViewKeyPathUpdateRenderNode<Content.R.View, Value, Content.R>
+  Content, ViewKeyPathUpdateRenderNode<Value, Content.R>
 >
 
-public typealias ViewIDComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewIDRenderNode<Content.R.View, Content.R>>
+public typealias ViewIDComponent<Content: ViewComponent> = ViewModifierComponent<Content, ViewIDRenderNode<Content.R>>
 
-public typealias ViewAnimatorComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewAnimatorRenderNode<Content.R.View, Content.R>>
+public typealias ViewAnimatorComponent<Content: ViewComponent> = ViewModifierComponent<Content, ViewAnimatorRenderNode<Content.R>>
 
-public typealias ViewAnimatorWrapperComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewAnimatorWrapperRenderNode<Content.R.View, Content.R>>
+public typealias ViewAnimatorWrapperComponent<Content: ViewComponent> = ViewModifierComponent<Content, ViewAnimatorWrapperRenderNode<Content.R>>
 
-public typealias ViewReuseStrategyComponent<Content: ViewComponent> = ViewModifierComponent<Content.R.View, Content, ViewReuseStrategyRenderNode<Content.R.View, Content.R>>
+public typealias ViewReuseStrategyComponent<Content: ViewComponent> = ViewModifierComponent<Content, ViewReuseStrategyRenderNode<Content.R>>
 
 extension ViewComponent {
   public subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<R.View, Value>) -> (Value) -> ViewKeyPathUpdateComponent<Self, Value> {

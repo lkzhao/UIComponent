@@ -28,64 +28,64 @@ extension ViewRenderNodeWrapper {
   }
 }
 
-public struct ViewUpdateRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
+public struct ViewUpdateRenderNode<Content: ViewRenderNode>: ViewRenderNodeWrapper {
   public let content: Content
-  public let update: (View) -> Void
+  public let update: (Content.View) -> Void
 
-  public func updateView(_ view: View) {
+  public func updateView(_ view: Content.View) {
     content.updateView(view)
     update(view)
   }
 }
 
-public struct ViewKeyPathUpdateRenderNode<View, Value, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
+public struct ViewKeyPathUpdateRenderNode<Value, Content: ViewRenderNode>: ViewRenderNodeWrapper {
   public let content: Content
-  public let valueKeyPath: ReferenceWritableKeyPath<View, Value>
+  public let valueKeyPath: ReferenceWritableKeyPath<Content.View, Value>
   public let value: Value
 
-  public func updateView(_ view: View) {
+  public func updateView(_ view: Content.View) {
     content.updateView(view)
     view[keyPath: valueKeyPath] = value
   }
 }
 
-public struct ViewIDRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
+public struct ViewIDRenderNode<Content: ViewRenderNode>: ViewRenderNodeWrapper {
   public let content: Content
   public let id: String?
 }
 
-public struct ViewAnimatorRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
+public struct ViewAnimatorRenderNode<Content: ViewRenderNode>: ViewRenderNodeWrapper {
   public let content: Content
   public let animator: Animator?
 }
 
-public struct ViewReuseStrategyRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
+public struct ViewReuseStrategyRenderNode<Content: ViewRenderNode>: ViewRenderNodeWrapper {
   public let content: Content
   public let reuseStrategy: ReuseStrategy
 }
 
 extension ViewRenderNode {
-  subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<View, Value>) -> (Value) -> ViewKeyPathUpdateRenderNode<View, Value, Self> {
+  subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<View, Value>) -> (Value) -> ViewKeyPathUpdateRenderNode<Value, Self> {
     { with(keyPath, $0) }
   }
-  public func with<Value>(_ keyPath: ReferenceWritableKeyPath<View, Value>, _ value: Value) -> ViewKeyPathUpdateRenderNode<View, Value, Self> {
+  public func with<Value>(_ keyPath: ReferenceWritableKeyPath<View, Value>, _ value: Value) -> ViewKeyPathUpdateRenderNode<Value, Self> {
     ViewKeyPathUpdateRenderNode(content: self, valueKeyPath: keyPath, value: value)
   }
-  public func id(_ id: String) -> ViewIDRenderNode<View, Self> {
+  public func id(_ id: String) -> ViewIDRenderNode<Self> {
     ViewIDRenderNode(content: self, id: id)
   }
-  public func animator(_ animator: Animator?) -> ViewAnimatorRenderNode<View, Self> {
+  public func animator(_ animator: Animator?) -> ViewAnimatorRenderNode<Self> {
     ViewAnimatorRenderNode(content: self, animator: animator)
   }
-  public func reuseStrategy(_ reuseStrategy: ReuseStrategy) -> ViewReuseStrategyRenderNode<View, Self> {
+  public func reuseStrategy(_ reuseStrategy: ReuseStrategy) -> ViewReuseStrategyRenderNode<Self> {
     ViewReuseStrategyRenderNode(content: self, reuseStrategy: reuseStrategy)
   }
-  public func update(_ update: @escaping (View) -> Void) -> ViewUpdateRenderNode<View, Self> {
+  public func update(_ update: @escaping (View) -> Void) -> ViewUpdateRenderNode<Self> {
     ViewUpdateRenderNode(content: self, update: update)
   }
 }
 
-public struct ViewAnimatorWrapperRenderNode<View, Content: ViewRenderNode>: ViewRenderNodeWrapper where Content.View == View {
+public struct ViewAnimatorWrapperRenderNode<Content: ViewRenderNode>: ViewRenderNodeWrapper {
   public let content: Content
   var passthrough: Bool
   var insertBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
@@ -103,13 +103,13 @@ public struct ViewAnimatorWrapperRenderNode<View, Content: ViewRenderNode>: View
 }
 
 extension ViewRenderNode {
-  func animateUpdate(passthrough: Bool = false, _ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperRenderNode<View, Self> {
+  func animateUpdate(passthrough: Bool = false, _ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperRenderNode<Self> {
     ViewAnimatorWrapperRenderNode(content: self, passthrough: passthrough, updateBlock: updateBlock)
   }
-  func animateInsert(passthrough: Bool = false, _ insertBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperRenderNode<View, Self> {
+  func animateInsert(passthrough: Bool = false, _ insertBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperRenderNode<Self> {
     ViewAnimatorWrapperRenderNode(content: self, passthrough: passthrough, insertBlock: insertBlock)
   }
-  func animateDelete(passthrough: Bool = false, _ deleteBlock: @escaping ((ComponentDisplayableView, UIView, () -> Void) -> Void)) -> ViewAnimatorWrapperRenderNode<View, Self> {
+  func animateDelete(passthrough: Bool = false, _ deleteBlock: @escaping ((ComponentDisplayableView, UIView, () -> Void) -> Void)) -> ViewAnimatorWrapperRenderNode<Self> {
     ViewAnimatorWrapperRenderNode(content: self, passthrough: passthrough, deleteBlock: deleteBlock)
   }
 }
