@@ -19,7 +19,7 @@ public struct Separator: ViewComponentBuilder {
   }
     
  /// The keyword some is only supported by iOS13. Is there any other solution?
-  public func build() -> some ViewComponent {
+  public func build() -> ConstraintOverrideViewComponent<ViewKeyPathUpdateComponent<SimpleViewComponent<UIView>, UIColor?>> {
     SimpleViewComponent<UIView>().backgroundColor(color)
       .constraint { constraint in
         if constraint.minSize.height <= 0, constraint.maxSize.width != .infinity {
