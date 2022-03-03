@@ -36,7 +36,7 @@ extension ViewComponent {
     }
   }
 
-  public func id(_ id: String) -> ViewIDComponent<Self> {
+  public func id(_ id: String?) -> ViewIDComponent<Self> {
     ViewModifierComponent(content: self) {
       $0.id(id)
     }

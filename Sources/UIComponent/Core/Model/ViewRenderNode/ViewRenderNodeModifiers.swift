@@ -71,7 +71,7 @@ extension ViewRenderNode {
   public func with<Value>(_ keyPath: ReferenceWritableKeyPath<View, Value>, _ value: Value) -> ViewKeyPathUpdateRenderNode<Value, Self> {
     ViewKeyPathUpdateRenderNode(content: self, valueKeyPath: keyPath, value: value)
   }
-  public func id(_ id: String) -> ViewIDRenderNode<Self> {
+  public func id(_ id: String?) -> ViewIDRenderNode<Self> {
     ViewIDRenderNode(content: self, id: id)
   }
   public func animator(_ animator: Animator?) -> ViewAnimatorRenderNode<Self> {
