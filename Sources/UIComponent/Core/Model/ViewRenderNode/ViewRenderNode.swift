@@ -8,7 +8,7 @@ public protocol UIComponentRenderableView {
 extension UIView: UIComponentRenderableView {}
 
 public enum ReuseStrategy {
-    case automatic, noReuse, key(String)
+  case automatic, noReuse, key(String)
 }
 
 @dynamicMemberLookup

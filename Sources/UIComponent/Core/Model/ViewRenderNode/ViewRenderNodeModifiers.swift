@@ -31,7 +31,7 @@ extension ViewRenderNodeWrapper {
 public struct ViewUpdateRenderNode<Content: ViewRenderNode>: ViewRenderNodeWrapper {
   public let content: Content
   public let update: (Content.View) -> Void
-
+  
   public func updateView(_ view: Content.View) {
     content.updateView(view)
     update(view)
@@ -42,7 +42,7 @@ public struct ViewKeyPathUpdateRenderNode<Value, Content: ViewRenderNode>: ViewR
   public let content: Content
   public let valueKeyPath: ReferenceWritableKeyPath<Content.View, Value>
   public let value: Value
-
+  
   public func updateView(_ view: Content.View) {
     content.updateView(view)
     view[keyPath: valueKeyPath] = value
