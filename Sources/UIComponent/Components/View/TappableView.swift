@@ -82,7 +82,12 @@ open class TappableView: ComponentView {
     }
   }
 
-  public var pointerStyleProvider: (() -> UIPointerStyle?)?
+  private var _pointerStyleProvider: Any?
+  @available(iOS 13.4, *)
+  public var pointerStyleProvider: (() -> UIPointerStyle?)? {
+    get { _pointerStyleProvider as? () -> UIPointerStyle? }
+    set { _pointerStyleProvider = newValue }
+  }
 
   open var isHighlighted: Bool = false {
     didSet {
@@ -95,7 +100,9 @@ open class TappableView: ComponentView {
   public override init(frame: CGRect) {
     super.init(frame: frame)
     accessibilityTraits = .button
-    addInteraction(UIPointerInteraction(delegate: self))
+    if #available(iOS 13.4, *) {
+      addInteraction(UIPointerInteraction(delegate: self))
+    }
   }
 
   required public init?(coder: NSCoder) {
@@ -130,14 +137,15 @@ open class TappableView: ComponentView {
   }
 }
 
+@available(iOS 13.4, *)
 extension TappableView: UIPointerInteractionDelegate {
-    public func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
-        if let pointerStyleProvider = pointerStyleProvider {
-            return pointerStyleProvider()
-        } else {
-            return UIPointerStyle(effect: .automatic(UITargetedPreview(view: self)), shape: nil)
-        }
+  public func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
+    if let pointerStyleProvider = pointerStyleProvider {
+      return pointerStyleProvider()
+    } else {
+      return UIPointerStyle(effect: .automatic(UITargetedPreview(view: self)), shape: nil)
     }
+  }
 }
 
 extension TappableView: UIContextMenuInteractionDelegate {
