@@ -57,6 +57,14 @@ public struct TextRenderNode: ViewRenderNode {
   public let numberOfLines: Int
   public let lineBreakMode: NSLineBreakMode
   public let size: CGSize
+
+  public init(attributedText: NSAttributedString, numberOfLines: Int, lineBreakMode: NSLineBreakMode, size: CGSize) {
+    self.attributedText = attributedText
+    self.numberOfLines = numberOfLines
+    self.lineBreakMode = lineBreakMode
+    self.size = size
+  }
+
   public func updateView(_ label: UILabel) {
     label.attributedText = attributedText
     label.numberOfLines = numberOfLines
