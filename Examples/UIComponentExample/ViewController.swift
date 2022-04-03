@@ -17,6 +17,7 @@ class ViewController: ComponentViewController {
         ExampleItem(name: "Complex Example", viewController: ComplexLayoutViewController())
         ExampleItem(name: "Custom Layout Example", viewController: GalleryViewController())
         ExampleItem(name: "Size Example", viewController: SizeExampleViewController())
+        ExampleItem(name: "Grid Layout", viewController: GridLayoutViewController())
       } separator: {
         Separator()
       }

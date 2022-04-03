@@ -2,8 +2,8 @@
 
 import UIComponent
 
-public struct GridSpan: Component {
-  public static let `default` = GridSpan(child: Space())
+public struct GridSpanComponent: Component {
+  public static let `default` = GridSpanComponent(child: Space())
 
   public let column: Int
   public let row: Int
@@ -24,7 +24,7 @@ public struct GridSpan: Component {
 }
 
 public extension Component {
-  func gridSpan(_ column: Int = 1, row: Int) -> GridSpan {
-    GridSpan(column: column, row: row, child: self)
+  func gridSpan(_ column: Int = 1, row: Int) -> GridSpanComponent {
+    GridSpanComponent(column: column, row: row, child: self)
   }
 }
