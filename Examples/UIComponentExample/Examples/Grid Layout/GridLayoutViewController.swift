@@ -28,7 +28,7 @@ class GridLayoutViewController: ComponentViewController {
   }
   
   override var component: Component {
-    Grid(tracks: [.fr(1), .fr(1), .fr(1)], spacing: 0) {
+    Grid(tracks: [.fr(1), .fr(1), .fr(1)], spacing: 10) {
       data.enumerated().map { model in
         SimpleViewComponent().styleColor(model.element.color)
           .if(model.element.height != nil) {

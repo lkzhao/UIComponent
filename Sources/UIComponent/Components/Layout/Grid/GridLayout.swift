@@ -203,8 +203,7 @@ extension GridLayout {
     
     // 必要数据
     var totalMainSize: CGFloat = 0
-    var renderNodes: [RenderNode] = []
-    var positions: [CGPoint] = []
+    var itemInfos: [GridItemInfo] = []
     var pointCross: CGFloat = 0
     
     // 上下文信息
@@ -232,8 +231,6 @@ extension GridLayout {
         trackCrossSize = calculateTrackCrossSize(offset: 0, column: data.element.column, constraint: constraint)
       }
       let renderNode = data.element.layout(Constraint(minSize: size(main: 0, cross: trackCrossSize), maxSize: size(main: .infinity, cross: trackCrossSize)))
-      // 这里总是需要添加到renderNodes，保障后续对renderNode的mainSize更新
-      renderNodes.append(renderNode)
       // 计算cross值, 这里需要说明的是offset: 0，是因为column值是对的就行，该方法会自动计算crossSize并加上crossSpacing
 //      var pointCross = calculateTrackCrossSize(offset: 0, column: trackOffset + 1, constraint: constraint)
       
@@ -247,8 +244,10 @@ extension GridLayout {
         // 判断是否放得下
         if isPutdown {
           columnItems.append(gridItem)
-          positions.append(gridItem.bounds.origin)
           pointCross = cross(gridItem.bounds.origin) + cross(gridItem.bounds.size) + crossSpacing
+          if !itemInfos.contains(where: { $0.offset == gridItem.offset }) {
+            itemInfos.append(gridItem)
+          }
         } else {
           // 放不下强制换新行，并标记跳过此行
           isForceNewline = true
@@ -280,12 +279,13 @@ extension GridLayout {
         // 检查是否有上一次循环跳过的item
         if var skipItem = skipColumnItem {
           // 有跳过的话就增加到当前行
+          let newTrackCrossSize = calculateTrackCrossSize(offset: trackOffset, column: skipItem.child.column, constraint: constraint)
           skipItem.trackOffset = trackOffset
-          skipItem.renderNode = skipItem.child.layout(Constraint(minSize: size(main: 0, cross: trackCrossSize), maxSize: size(main: .infinity, cross: trackCrossSize)))
-          skipItem.bounds = CGRect(origin: point(main: freezeMainSize, cross: pointCross), size: size(main: main(skipItem.renderNode.size), cross: trackCrossSize))
+          let render = skipItem.child.layout(Constraint(minSize: size(main: 0, cross: newTrackCrossSize), maxSize: size(main: .infinity, cross: newTrackCrossSize)))
+          skipItem.renderNode = render
+          skipItem.bounds = CGRect(origin: point(main: freezeMainSize, cross: pointCross), size: size(main: main(skipItem.renderNode.size), cross: newTrackCrossSize))
           // 跳过的项目在新的一行中添加完毕，清空skipColumnItem
           skipColumnItem = nil
-          renderNodes[skipItem.offset] = skipItem.renderNode
           columnItemsAppend(gridItem: skipItem)
           trackOffset += skipItem.child.column
           // 更新pointCross
@@ -296,19 +296,23 @@ extension GridLayout {
           }
         }
         // 获取没有被占用的track
-        var _tmp = 0
-        var currentLineOccupiedTrackOffset: [Int] = []
-        for offset in 0 ..< tracks.count {
-          if currentLineOccupiedTrackOffset.contains(offset) {
-            currentLineOccupiedTrackOffset.append(_tmp)
-            _tmp = 0
-          } else {
-            _tmp += 1
-          }
-        }
-        // 需要找到没有被占用的track
+//        var _tmp = 0
+//        var currentLineOccupiedTrackOffset: [Int] = []
+//        let occupiedTrackOffsets = currentLineOccupiedItems.map(\.trackOffset)
+//        if !occupiedTrackOffsets.isEmpty {
+//          for offset in 0 ..< tracks.count {
+//            if occupiedTrackOffsets.contains(offset) {
+//              currentLineOccupiedTrackOffset.append(_tmp)
+//              _tmp = 0
+//            } else {
+//              _tmp += 1
+//              if _tmp >= data.element.column {
+//                trackOffset = offset
+//              }
+//            }
+//          }
+//        }
         
-        currentLineOccupiedItems.map(\.trackOffset).contains(trackOffset)
         let gridItemInfo = GridItemInfo(bounds: CGRect(origin: point(main: freezeMainSize + mainSpacing, cross: pointCross),
                                                        size: size(main: main(renderNode.size), cross: trackCrossSize)),
                                         occupiedRowOfNumberLeast: occupiedRowOfNumberLeast,
@@ -327,7 +331,7 @@ extension GridLayout {
             }
             let bounds = occupiedItem.bounds
             occupiedItem.bounds = CGRect(origin: bounds.origin, size: size(main: maxMainSize + mainSpacing, cross: cross(bounds.size)))
-            renderNodes[occupiedItem.offset] = occupiedItem.child.layout(.tight(occupiedItem.bounds.size))
+            itemInfos[occupiedItem.offset] = occupiedItem
           }
         }
         
@@ -358,7 +362,7 @@ extension GridLayout {
           var bounds = item.bounds
           bounds.size = size(main: maxMainSize, cross: cross(bounds.size))
           item.bounds = bounds
-          renderNodes[item.offset] = item.child.layout(.tight(bounds.size))
+          itemInfos[item.offset] = item
           if let index = columnItems.firstIndex(where: { $0.offset == item.offset }) {
             columnItems[index] = item
           }
@@ -381,7 +385,17 @@ extension GridLayout {
     
     let totalSize = size(main: totalMainSize, cross: crossMax)
     
+    let renderNodes = itemInfos.map {
+      $0.child.layout(.tight($0.bounds.size))
+    }
+    
+    let positions = itemInfos.map(\.bounds.origin)
+    
     return renderNode(size: totalSize, children: renderNodes, positions: positions)
+  }
+  
+  private func overrideSize(gridSpan: GridSpan, size: CGSize) -> Component {
+    return gridSpan
   }
   
   /*

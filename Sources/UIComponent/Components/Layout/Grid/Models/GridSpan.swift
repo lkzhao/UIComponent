@@ -1,7 +1,5 @@
 //  Created by y H on 2022/4/2.
 
-import UIComponent
-
 public struct GridSpan: Component {
   public static let `default` = GridSpan(child: Space())
 
