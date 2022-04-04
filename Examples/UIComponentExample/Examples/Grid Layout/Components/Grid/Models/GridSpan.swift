@@ -1,23 +1,30 @@
-//
-//  GridSpan.swift
-//  ExyteGrid
-//
-//  Created by Denis Obukhov on 19.04.2020.
-//  Copyright © 2020 Exyte. All rights reserved.
-//
+//  Created by y H on 2022/4/2.
 
-import Foundation
+import UIComponent
 
-public struct GridSpan: Equatable, Hashable {
-  var column: Int = 1
-  var row: Int = 1
-  
-  static let `default` = GridSpan()
+public struct GridSpan: Component {
+  public static let `default` = GridSpan(child: Space())
+
+  public let column: Int
+  public let row: Int
+  public let child: Component
+
+  public init(column: Int = 1,
+              row: Int = 1,
+              child: Component)
+  {
+    self.column = column
+    self.row = row
+    self.child = child
+  }
+
+  public func layout(_ constraint: Constraint) -> RenderNode {
+    child.layout(constraint)
+  }
 }
 
-extension GridSpan: ExpressibleByArrayLiteral {
-  public init(arrayLiteral elements: Int...) {
-    assert(elements.count == 2)
-    self = GridSpan(column: elements[0], row: elements[1])
+public extension Component {
+  func gridSpan(_ column: Int = 1, row: Int) -> GridSpan {
+    GridSpan(column: column, row: row, child: self)
   }
 }

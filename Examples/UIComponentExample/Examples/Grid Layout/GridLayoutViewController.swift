@@ -13,14 +13,14 @@ class GridLayoutViewController: ComponentViewController {
   }
   
   var data: [Model] = [
-    .init(column: 2, row: 1, height: 300),
-    .init(column: 2, row: 1, height: nil),
-    .init(column: 1, row: 1, height: 200),
-    .init(column: 2, row: 1, height: nil),
-    .init(column: 3, row: 1, height: 100),
+    .init(column: 2, row: 1, height: 300), // 第一行
+    .init(column: 2, row: 1, height: 30),
+    .init(column: 1, row: 2, height: nil), // 第二行
+    .init(column: 2, row: 1, height: 50), // 第三行
+    .init(column: 3, row: 1, height: 100), // 第四行
     .init(column: 2, row: 2, height: 250),
-    .init(column: 1, row: 1, height: nil),
-    .init(column: 1, row: 1, height: 20)
+    .init(column: 1, row: 1, height: nil), // 第五行
+    .init(column: 1, row: 1, height: 20) // 第六行
   ] {
     didSet {
       reloadComponent()
@@ -29,11 +29,13 @@ class GridLayoutViewController: ComponentViewController {
   
   override var component: Component {
     Grid(tracks: [.fr(1), .fr(1), .fr(1)], spacing: 0) {
-      data.map { model in
-        SimpleViewComponent().styleColor(model.color)
-          .if(model.height != nil) {
-          $0.size(height: model.height!)
-        }.gridSpan(model.column, row: model.row)
+      data.enumerated().map { model in
+        SimpleViewComponent().styleColor(model.element.color)
+          .if(model.element.height != nil) {
+            $0.size(height: model.element.height!)
+          }.overlay {
+            Text("index: \(model.offset)").centered()
+          }.gridSpan(model.element.column, row: model.element.row)
       }
     }.inset(10)
   }
