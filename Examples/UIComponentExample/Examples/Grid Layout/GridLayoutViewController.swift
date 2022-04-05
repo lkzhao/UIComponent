@@ -4,7 +4,6 @@ import UIComponent
 import UIKit
 
 class GridLayoutViewController: ComponentViewController {
-  
   struct Model {
     let column: Int
     let row: Int
@@ -13,14 +12,16 @@ class GridLayoutViewController: ComponentViewController {
   }
   
   var data: [Model] = [
-    .init(column: 2, row: 1, height: 300), // 第一行
-    .init(column: 2, row: 1, height: 30),
-    .init(column: 1, row: 2, height: nil), // 第二行
-    .init(column: 2, row: 1, height: 50), // 第三行
-    .init(column: 3, row: 1, height: 100), // 第四行
-    .init(column: 2, row: 2, height: 250),
-    .init(column: 1, row: 1, height: nil), // 第五行
-    .init(column: 1, row: 1, height: 20) // 第六行
+    .init(column: 1, row: 2, height: nil),
+    .init(column: 1, row: 2, height: nil),
+    .init(column: 1, row: 4, height: nil),
+    .init(column: 2, row: 2, height: nil),
+    .init(column: 1, row: 1, height: nil),
+    .init(column: 1, row: 1, height: nil),
+    .init(column: 1, row: 2, height: nil),
+    .init(column: 1, row: 1, height: nil),
+    .init(column: 1, row: 1, height: nil),
+    .init(column: 1, row: 1, height: nil),
   ] {
     didSet {
       reloadComponent()
@@ -28,25 +29,44 @@ class GridLayoutViewController: ComponentViewController {
   }
   
   override var component: Component {
-    Grid(tracks: [.fr(1), .fr(1), .fr(1)], spacing: 10) {
+    
+    Grid(tracks: 3, spacing: 10) {
+      
+      Grid(tracks: [.fr(1), .fr(1)], flow: .columns, spacing: 5) {
+        SimpleViewComponent().styleColor(.green)
+        SimpleViewComponent().styleColor(.red).gridSpan(column: 2, row: 1)
+        SimpleViewComponent().styleColor(.blue)
+        SimpleViewComponent().styleColor(.systemPink).gridSpan(column: 2, row: 1)
+      }.inset(5)
+        .scrollView()
+        .view()
+        .cornerRadius(5)
+        .shadowColor(.label)
+        .shadowOffset(CGSize(width: 0, height: 3))
+        .shadowOpacity(0.1)
+        .shadowRadius(8)
+        .backgroundColor(.secondarySystemGroupedBackground)
+        .inset(bottom: 10)
+        .gridSpan(column: 3, row: 1)
+      
+      Text("test").tappableView { [unowned self] in
+        data = data.shuffled()
+      }.gridSpan(column: 1, row: 1)
+      
       data.enumerated().map { model in
         SimpleViewComponent().styleColor(model.element.color)
           .if(model.element.height != nil) {
             $0.size(height: model.element.height!)
           }.overlay {
             Text("index: \(model.offset)").centered()
-          }.gridSpan(model.element.column, row: model.element.row)
+          }.gridSpan(column: model.element.column, row: model.element.row)
       }
     }.inset(10)
   }
   
-  func placeholderText(length: Int? = nil) -> String {
-    let placeholderText =
-      """
-  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna
-  """
-    
-    return placeholderText.prefix(length ?? placeholderText.count) + "!"
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    view.backgroundColor = .systemGroupedBackground
+    componentView.animator = AnimatedReloadAnimator()
   }
-  
 }

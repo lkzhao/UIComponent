@@ -3,8 +3,8 @@
 public struct GridSpan: Component {
   public static let `default` = GridSpan(child: Space())
 
-  public let column: Int
-  public let row: Int
+  public var column: Int
+  public var row: Int
   public let child: Component
 
   public init(column: Int = 1,
@@ -22,7 +22,7 @@ public struct GridSpan: Component {
 }
 
 public extension Component {
-  func gridSpan(_ column: Int = 1, row: Int) -> GridSpan {
+  func gridSpan(column: Int = 1, row: Int) -> GridSpan {
     GridSpan(column: column, row: row, child: self)
   }
 }
