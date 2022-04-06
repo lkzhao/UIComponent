@@ -22,7 +22,7 @@ public struct GridSpan: Component {
 }
 
 public extension Component {
-  func gridSpan(column: Int = 1, row: Int) -> GridSpan {
+  func gridSpan(column: Int = 1, row: Int = 1) -> GridSpan {
     GridSpan(column: column, row: row, child: self)
   }
 }

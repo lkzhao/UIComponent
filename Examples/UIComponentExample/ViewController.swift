@@ -39,6 +39,6 @@ struct ExampleItem: ComponentBuilder {
     .inset(20)
     .tappableView {
       $0.present(viewController())
-    }
+    }.size(width: .fill)
   }
 }

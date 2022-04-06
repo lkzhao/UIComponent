@@ -1,19 +1,8 @@
-//
-//  GridTrack.swift
-//  ExyteGrid
-//
-//  Created by Denis Obukhov on 22.04.2020.
-//  Copyright © 2020 Exyte. All rights reserved.
-//
+//  Created by y H on 2022/4/6.
 
 import CoreGraphics
 
-// swiftlint:disable identifier_name
-
-/// Size of the each track.
-/// fr(N) sizes a track proportionally to the bounding rect with the respect of specified fraction N as a part of total fractions count.
-/// const(N) sizes a track to be equal to the specified size N.
-public enum GridTrack {
+public enum GridTrack: Equatable, Hashable {
   case fr(CGFloat)
   case pt(CGFloat)
   
@@ -26,12 +15,3 @@ public enum GridTrack {
     }
   }
 }
-
-extension Array: ExpressibleByIntegerLiteral where Element == GridTrack {
-  public typealias IntegerLiteralType = Int
-  public init(integerLiteral value: Self.IntegerLiteralType) {
-    self = .init(repeating: .fr(1), count: value)
-  }
-}
-
-extension GridTrack: Equatable, Hashable { }
