@@ -93,7 +93,7 @@ class GridLayoutViewController: ComponentViewController {
             .tappableView { [unowned self] in
               horizontalGridPreferencesModel.models.remove(at: data.offset)
             }
-            .cornerRadius(20)
+            .cornerRadius(10)
             .cornerCurve(.continuous)
             .backgroundColor(data.element.color.withAlphaComponent(0.5))
             .borderWidth(2)
