@@ -26,11 +26,16 @@
 		B1CC3F7026789E1F005BCE8C /* CardViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */; };
 		B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7126789F07005BCE8C /* AddCardButton.swift */; };
 		B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7326789F3D005BCE8C /* CardData.swift */; };
+		F8307E3427F812D000C70E53 /* GridLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8307E3327F812D000C70E53 /* GridLayoutViewController.swift */; };
 		F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */; };
 		F858D54026B9459E00410219 /* GalleryComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53D26B9459E00410219 /* GalleryComponents.swift */; };
 		F858D54126B9459E00410219 /* GalleryLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53E26B9459E00410219 /* GalleryLayout.swift */; };
 		F858D54226B9459E00410219 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53F26B9459E00410219 /* GalleryViewController.swift */; };
 		F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */; };
+		F8E238A027FD547400B92DDF /* GridItemConfigureComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E2389F27FD547400B92DDF /* GridItemConfigureComponent.swift */; };
+		F8E238A327FD572D00B92DDF /* Popover in Frameworks */ = {isa = PBXBuildFile; productRef = F8E238A227FD572D00B92DDF /* Popover */; };
+		F8E238A627FD5BFB00B92DDF /* PopoverExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E238A527FD5BFB00B92DDF /* PopoverExtensions.swift */; };
+		F8E238A827FD5DE700B92DDF /* GridLayoutViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E238A727FD5DE700B92DDF /* GridLayoutViewControllerExtensions.swift */; };
 		F8E3DD1426A7BC5F0062E58F /* HorizontalCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1126A7BC5F0062E58F /* HorizontalCardItem.swift */; };
 		F8E3DD1526A7BC5F0062E58F /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */; };
 		F8E3DD1626A7BC5F0062E58F /* ComplexLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1326A7BC5F0062E58F /* ComplexLayoutViewController.swift */; };
@@ -72,11 +77,44 @@
 		B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController3.swift; sourceTree = "<group>"; };
 		B1CC3F7126789F07005BCE8C /* AddCardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardButton.swift; sourceTree = "<group>"; };
 		B1CC3F7326789F3D005BCE8C /* CardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
+		F8307E3327F812D000C70E53 /* GridLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridLayoutViewController.swift; sourceTree = "<group>"; };
+		F8307E3E27F8372100C70E53 /* Join.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Join.swift; sourceTree = "<group>"; };
+		F8307E4127F8372100C70E53 /* Space.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space.swift; sourceTree = "<group>"; };
+		F8307E4227F8372100C70E53 /* Spacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacer.swift; sourceTree = "<group>"; };
+		F8307E4327F8372100C70E53 /* Background.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
+		F8307E4427F8372100C70E53 /* Waterfall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Waterfall.swift; sourceTree = "<group>"; };
+		F8307E4527F8372100C70E53 /* Absolute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Absolute.swift; sourceTree = "<group>"; };
+		F8307E4627F8372100C70E53 /* Overlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Overlay.swift; sourceTree = "<group>"; };
+		F8307E4727F8372100C70E53 /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
+		F8307E4927F8372100C70E53 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
+		F8307E4A27F8372100C70E53 /* StackRenderNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackRenderNode.swift; sourceTree = "<group>"; };
+		F8307E4B27F8372100C70E53 /* ZStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZStack.swift; sourceTree = "<group>"; };
+		F8307E4C27F8372100C70E53 /* HStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HStack.swift; sourceTree = "<group>"; };
+		F8307E4D27F8372100C70E53 /* VStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VStack.swift; sourceTree = "<group>"; };
+		F8307E4F27F8372100C70E53 /* VisibleFrameInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibleFrameInsets.swift; sourceTree = "<group>"; };
+		F8307E5027F8372100C70E53 /* Insets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Insets.swift; sourceTree = "<group>"; };
+		F8307E5227F8372100C70E53 /* Flexible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flexible.swift; sourceTree = "<group>"; };
+		F8307E5327F8372100C70E53 /* FlexRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexRow.swift; sourceTree = "<group>"; };
+		F8307E5427F8372100C70E53 /* FlexLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexLayout.swift; sourceTree = "<group>"; };
+		F8307E5527F8372100C70E53 /* FlexColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexColumn.swift; sourceTree = "<group>"; };
+		F8307E5727F8372100C70E53 /* ConstraintOverrideComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintOverrideComponent.swift; sourceTree = "<group>"; };
+		F8307E5827F8372100C70E53 /* RenderNodeReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderNodeReader.swift; sourceTree = "<group>"; };
+		F8307E5927F8372100C70E53 /* ConstraintReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintReader.swift; sourceTree = "<group>"; };
+		F8307E5B27F8372100C70E53 /* ComponentViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentViewComponent.swift; sourceTree = "<group>"; };
+		F8307E5C27F8372100C70E53 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		F8307E5D27F8372100C70E53 /* TappableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappableView.swift; sourceTree = "<group>"; };
+		F8307E5E27F8372100C70E53 /* SimpleViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleViewComponent.swift; sourceTree = "<group>"; };
+		F8307E5F27F8372100C70E53 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
+		F8307E6027F8372100C70E53 /* Separator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Separator.swift; sourceTree = "<group>"; };
+		F8307E6127F8372100C70E53 /* ForEach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForEach.swift; sourceTree = "<group>"; };
 		F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionCard.swift; sourceTree = "<group>"; };
 		F858D53D26B9459E00410219 /* GalleryComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryComponents.swift; sourceTree = "<group>"; };
 		F858D53E26B9459E00410219 /* GalleryLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryLayout.swift; sourceTree = "<group>"; };
 		F858D53F26B9459E00410219 /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexLayoutViewController.swift; sourceTree = "<group>"; };
+		F8E2389F27FD547400B92DDF /* GridItemConfigureComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridItemConfigureComponent.swift; sourceTree = "<group>"; };
+		F8E238A527FD5BFB00B92DDF /* PopoverExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverExtensions.swift; sourceTree = "<group>"; };
+		F8E238A727FD5DE700B92DDF /* GridLayoutViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridLayoutViewControllerExtensions.swift; sourceTree = "<group>"; };
 		F8E3DD1126A7BC5F0062E58F /* HorizontalCardItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HorizontalCardItem.swift; sourceTree = "<group>"; };
 		F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		F8E3DD1326A7BC5F0062E58F /* ComplexLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplexLayoutViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8E238A327FD572D00B92DDF /* Popover in Frameworks */,
 				B16EA6A02677E262005CFB18 /* Kingfisher in Frameworks */,
 				B121A0A024F8771E00E59F78 /* UIComponent in Frameworks */,
 			);
@@ -182,6 +221,7 @@
 		B1CC3F6C267800B9005BCE8C /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				F8307E3227F8127A00C70E53 /* Grid Layout */,
 				B1CC3F6A2678009C005BCE8C /* AsyncImage */,
 				B1CC3F692678008F005BCE8C /* Card */,
 				F8E3DD0F26A7BC5F0062E58F /* Complex layout */,
@@ -192,6 +232,117 @@
 				B1953D682743703C009804F6 /* BadgeExample.swift */,
 			);
 			path = Examples;
+			sourceTree = "<group>";
+		};
+		F8307E3227F8127A00C70E53 /* Grid Layout */ = {
+			isa = PBXGroup;
+			children = (
+				F8E238A427FD5BC900B92DDF /* Helps */,
+				F8307E3527F812F900C70E53 /* Components */,
+				F8307E3327F812D000C70E53 /* GridLayoutViewController.swift */,
+			);
+			path = "Grid Layout";
+			sourceTree = "<group>";
+		};
+		F8307E3527F812F900C70E53 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F8E2389F27FD547400B92DDF /* GridItemConfigureComponent.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F8307E3D27F8372100C70E53 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F8307E3E27F8372100C70E53 /* Join.swift */,
+				F8307E3F27F8372100C70E53 /* Layout */,
+				F8307E5A27F8372100C70E53 /* View */,
+				F8307E6127F8372100C70E53 /* ForEach.swift */,
+			);
+			name = Components;
+			path = ../../../../Sources/UIComponent/Components;
+			sourceTree = "<group>";
+		};
+		F8307E3F27F8372100C70E53 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				F8307E4027F8372100C70E53 /* Other */,
+				F8307E4827F8372100C70E53 /* Stack */,
+				F8307E4E27F8372100C70E53 /* Inset */,
+				F8307E5127F8372100C70E53 /* Flex */,
+				F8307E5627F8372100C70E53 /* Utility */,
+			);
+			path = Layout;
+			sourceTree = "<group>";
+		};
+		F8307E4027F8372100C70E53 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				F8307E4127F8372100C70E53 /* Space.swift */,
+				F8307E4227F8372100C70E53 /* Spacer.swift */,
+				F8307E4327F8372100C70E53 /* Background.swift */,
+				F8307E4427F8372100C70E53 /* Waterfall.swift */,
+				F8307E4527F8372100C70E53 /* Absolute.swift */,
+				F8307E4627F8372100C70E53 /* Overlay.swift */,
+				F8307E4727F8372100C70E53 /* Badge.swift */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		F8307E4827F8372100C70E53 /* Stack */ = {
+			isa = PBXGroup;
+			children = (
+				F8307E4927F8372100C70E53 /* Stack.swift */,
+				F8307E4A27F8372100C70E53 /* StackRenderNode.swift */,
+				F8307E4B27F8372100C70E53 /* ZStack.swift */,
+				F8307E4C27F8372100C70E53 /* HStack.swift */,
+				F8307E4D27F8372100C70E53 /* VStack.swift */,
+			);
+			path = Stack;
+			sourceTree = "<group>";
+		};
+		F8307E4E27F8372100C70E53 /* Inset */ = {
+			isa = PBXGroup;
+			children = (
+				F8307E4F27F8372100C70E53 /* VisibleFrameInsets.swift */,
+				F8307E5027F8372100C70E53 /* Insets.swift */,
+			);
+			path = Inset;
+			sourceTree = "<group>";
+		};
+		F8307E5127F8372100C70E53 /* Flex */ = {
+			isa = PBXGroup;
+			children = (
+				F8307E5227F8372100C70E53 /* Flexible.swift */,
+				F8307E5327F8372100C70E53 /* FlexRow.swift */,
+				F8307E5427F8372100C70E53 /* FlexLayout.swift */,
+				F8307E5527F8372100C70E53 /* FlexColumn.swift */,
+			);
+			path = Flex;
+			sourceTree = "<group>";
+		};
+		F8307E5627F8372100C70E53 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				F8307E5727F8372100C70E53 /* ConstraintOverrideComponent.swift */,
+				F8307E5827F8372100C70E53 /* RenderNodeReader.swift */,
+				F8307E5927F8372100C70E53 /* ConstraintReader.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		F8307E5A27F8372100C70E53 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8307E5B27F8372100C70E53 /* ComponentViewComponent.swift */,
+				F8307E5C27F8372100C70E53 /* Image.swift */,
+				F8307E5D27F8372100C70E53 /* TappableView.swift */,
+				F8307E5E27F8372100C70E53 /* SimpleViewComponent.swift */,
+				F8307E5F27F8372100C70E53 /* Text.swift */,
+				F8307E6027F8372100C70E53 /* Separator.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		F858D53B26B9459E00410219 /* Gallery Example */ = {
@@ -220,11 +371,21 @@
 			path = "Flex Layout";
 			sourceTree = "<group>";
 		};
+		F8E238A427FD5BC900B92DDF /* Helps */ = {
+			isa = PBXGroup;
+			children = (
+				F8E238A527FD5BFB00B92DDF /* PopoverExtensions.swift */,
+				F8E238A727FD5DE700B92DDF /* GridLayoutViewControllerExtensions.swift */,
+			);
+			path = Helps;
+			sourceTree = "<group>";
+		};
 		F8E3DD0F26A7BC5F0062E58F /* Complex layout */ = {
 			isa = PBXGroup;
 			children = (
 				F8E3DD1026A7BC5F0062E58F /* Components */,
 				F8E3DD1326A7BC5F0062E58F /* ComplexLayoutViewController.swift */,
+				F8307E3D27F8372100C70E53 /* Components */,
 			);
 			path = "Complex layout";
 			sourceTree = "<group>";
@@ -259,6 +420,7 @@
 			packageProductDependencies = (
 				B121A09F24F8771E00E59F78 /* UIComponent */,
 				B16EA69F2677E262005CFB18 /* Kingfisher */,
+				F8E238A227FD572D00B92DDF /* Popover */,
 			);
 			productName = UIComponent;
 			productReference = A304892421C347010026EDA7 /* UIComponentExample.app */;
@@ -291,6 +453,7 @@
 			mainGroup = A304891B21C347010026EDA7;
 			packageReferences = (
 				B16EA69E2677E262005CFB18 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				F8E238A127FD572D00B92DDF /* XCRemoteSwiftPackageReference "Popover" */,
 			);
 			productRefGroup = A304892521C347010026EDA7 /* Products */;
 			projectDirPath = "";
@@ -323,6 +486,7 @@
 				B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */,
 				F8E3DD1526A7BC5F0062E58F /* UserProfile.swift in Sources */,
 				F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */,
+				F8E238A827FD5DE700B92DDF /* GridLayoutViewControllerExtensions.swift in Sources */,
 				F8E3DD1626A7BC5F0062E58F /* ComplexLayoutViewController.swift in Sources */,
 				B1B079EE26AB398E003BEAFB /* WaterfallLayoutViewController.swift in Sources */,
 				B1CC3F632677FCFD005BCE8C /* CardViewController.swift in Sources */,
@@ -331,15 +495,18 @@
 				B1CC3F652677FD99005BCE8C /* ComponentViewController.swift in Sources */,
 				B1CC3F672677FF79005BCE8C /* AsyncImageViewController.swift in Sources */,
 				B10A123224F31EAA0076B038 /* Helpers.swift in Sources */,
+				F8E238A027FD547400B92DDF /* GridItemConfigureComponent.swift in Sources */,
 				B1953D692743703C009804F6 /* BadgeExample.swift in Sources */,
 				F858D54226B9459E00410219 /* GalleryViewController.swift in Sources */,
 				F8E3DD1A26A7BEB60062E58F /* Components.swift in Sources */,
+				F8E238A627FD5BFB00B92DDF /* PopoverExtensions.swift in Sources */,
 				B16EA6A22677E26F005CFB18 /* AsyncImage.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
 				B1A24DE9271CD9F80020B728 /* SizeExample.swift in Sources */,
 				F8E3DD1826A7BE300062E58F /* Modifiers.swift in Sources */,
 				F8E3DD1426A7BC5F0062E58F /* HorizontalCardItem.swift in Sources */,
 				A304892821C347010026EDA7 /* AppDelegate.swift in Sources */,
+				F8307E3427F812D000C70E53 /* GridLayoutViewController.swift in Sources */,
 				B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */,
 				B1CC3F7026789E1F005BCE8C /* CardViewController3.swift in Sources */,
 				B1CC3F6E26789C55005BCE8C /* CardViewController2.swift in Sources */,
@@ -491,6 +658,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/UIComponentExample/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -510,6 +678,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/UIComponentExample/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -556,6 +725,14 @@
 				minimumVersion = 6.3.0;
 			};
 		};
+		F8E238A127FD572D00B92DDF /* XCRemoteSwiftPackageReference "Popover" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lkzhao/Popover.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -567,6 +744,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B16EA69E2677E262005CFB18 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		F8E238A227FD572D00B92DDF /* Popover */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8E238A127FD572D00B92DDF /* XCRemoteSwiftPackageReference "Popover" */;
+			productName = Popover;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

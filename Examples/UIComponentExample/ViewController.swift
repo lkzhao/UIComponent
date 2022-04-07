@@ -17,6 +17,7 @@ class ViewController: ComponentViewController {
         ExampleItem(name: "Complex Example", viewController: ComplexLayoutViewController())
         ExampleItem(name: "Custom Layout Example", viewController: GalleryViewController())
         ExampleItem(name: "Size Example", viewController: SizeExampleViewController())
+        ExampleItem(name: "Grid Layout", viewController: GridLayoutViewController())
       } separator: {
         Separator()
       }
@@ -38,6 +39,6 @@ struct ExampleItem: ComponentBuilder {
     .inset(20)
     .tappableView {
       $0.present(viewController())
-    }
+    }.size(width: .fill)
   }
 }

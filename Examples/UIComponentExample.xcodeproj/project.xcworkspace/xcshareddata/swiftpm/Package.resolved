@@ -6,8 +6,17 @@
         "repositoryURL": "https://github.com/lkzhao/BaseToolbox",
         "state": {
           "branch": null,
-          "revision": "ee54181488ee3dc04035082e786011e74ab59123",
-          "version": "0.1.0"
+          "revision": "508c3365f566139554b4142bb34ef87b535fdf54",
+          "version": "0.1.6"
+        }
+      },
+      {
+        "package": "KeyboardManager",
+        "repositoryURL": "https://github.com/lkzhao/KeyboardManager",
+        "state": {
+          "branch": null,
+          "revision": "0e2c224c775ffcd42fcf9e1d386edb22043d4264",
+          "version": "0.0.1"
         }
       },
       {
@@ -17,6 +26,15 @@
           "branch": null,
           "revision": "44450a8f564d7c0165f736ba2250649ff8d3e556",
           "version": "6.3.0"
+        }
+      },
+      {
+        "package": "Popover",
+        "repositoryURL": "https://github.com/lkzhao/Popover.git",
+        "state": {
+          "branch": null,
+          "revision": "2bde9550856ade52b5e937b5fb09d34c771e1063",
+          "version": "0.0.4"
         }
       }
     ]
