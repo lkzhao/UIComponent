@@ -89,11 +89,13 @@ public extension GridLayout {
   }
 
   private func syncMainAxisSize(_ growingIndex: Int, coordinates: inout [GridItemInfo]) {
+    let lastGroingIndex = coordinates.reduce(0) { max($0, $1.startIndex[keyPath: flow.index(.main)]) }
+    
     let mainItems = coordinates.enumerated()
       .filter { $0.element.startIndex[keyPath: flow.index(.main)] == growingIndex }
-    
+
     var growingMainAxisMaxSize = mainItems
-      .filter { $0.element.child[keyPath: flow.spanIndex(.main)] <= 1 }
+      .filter { $0.element.child[keyPath: flow.spanIndex(.main)] <= 1 || lastGroingIndex == growingIndex }
       .map(\.element).reduce(0) { max($0, main($1.bounds.size)) }
     if growingMainAxisMaxSize == 0 {
       growingMainAxisMaxSize = mainItems
@@ -105,15 +107,15 @@ public extension GridLayout {
       coordinates[data.offset] = _item
     }
   }
-  
+
   private func updateOccupyMainAxis(coordinates: inout [GridItemInfo]) {
     let occupyItems = coordinates.enumerated().filter { $0.element.isOccupy(flow: flow) }.filter { data in
       let growingIndex = data.element.startIndex[keyPath: flow.index(.main)]
-      let otherItems = coordinates.filter{ growingIndex == $0.startIndex[keyPath: flow.index(.main)] }
+      let otherItems = coordinates.filter { growingIndex == $0.startIndex[keyPath: flow.index(.main)] }
         .filter { $0.child[keyPath: flow.spanIndex(.main)] == 1 }
       return !otherItems.isEmpty
     }
-    
+
     for data in occupyItems {
       let findOccpyEndTargets = coordinates.filter { $0.startIndex[keyPath: flow.index(.main)] == data.element.endIndex[keyPath: flow.index(.main)] }
       guard !findOccpyEndTargets.isEmpty else { continue }
@@ -203,11 +205,11 @@ public extension GridLayout {
                            size: size(main: mainSize, cross: crossSize))
       coordinates[data.offset] = item
     }
-    
+
     // 同步主轴大小
     let lastGroingIndex = coordinates.reduce(0) { max($0, $1.startIndex[keyPath: flow.index(.main)]) }
     syncMainAxisSize(lastGroingIndex, coordinates: &coordinates)
-    
+
     // 更新占用
     updateOccupyMainAxis(coordinates: &coordinates)
 
