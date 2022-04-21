@@ -1,6 +1,6 @@
 //  Created by Luke Zhao on 8/6/21.
 
-import Foundation
+import CoreGraphics
 
 /// # Spacer Component
 ///
@@ -8,6 +8,6 @@ import Foundation
 public typealias Spacer = Flexible
 extension Spacer {
   public init() {
-    self.init(flex: 1, alignSelf: nil, child: Space())
+    self.init(flexGrow: 1, flexShrink: 0, alignSelf: nil, child: Space())
   }
 }

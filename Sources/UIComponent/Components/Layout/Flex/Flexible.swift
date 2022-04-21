@@ -10,10 +10,11 @@ import UIKit
 ///
 /// Checkout the `FlexLayoutViewController.swift` for more examples.
 public struct Flexible: Component {
-  public let flex: CGFloat
-  public let alignSelf: CrossAxisAlignment?
-  public let child: Component
-  public func layout(_ constraint: Constraint) -> RenderNode {
-    child.layout(constraint)
-  }
+    public let flexGrow: CGFloat
+    public let flexShrink: CGFloat
+    public let alignSelf: CrossAxisAlignment?
+    public let child: Component
+    public func layout(_ constraint: Constraint) -> RenderNode {
+        child.layout(constraint)
+    }
 }

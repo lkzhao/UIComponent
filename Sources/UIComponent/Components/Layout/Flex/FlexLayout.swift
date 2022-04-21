@@ -109,7 +109,7 @@ extension FlexLayout {
       // resize flex items
       let flexCount = children[range]
         .reduce(0) { result, next in
-          result + ((next as? Flexible)?.flex ?? 0)
+          result + ((next as? Flexible)?.flexGrow ?? 0)
         }
       if flexCount > 0, crossMax != .infinity {
         let crossPerFlex = max(0, crossMax - cross(lineSize)) / flexCount
@@ -117,7 +117,7 @@ extension FlexLayout {
           let child = children[index]
           if let child = child as? Flexible {
             let alignChild = child.alignSelf ?? alignItems
-            let crossReserved = crossPerFlex * child.flex + cross(renderNodes[index].size)
+            let crossReserved = crossPerFlex * child.flexGrow + cross(renderNodes[index].size)
             let constraint = Constraint(
               minSize: size(main: (alignChild == .stretch) ? main(lineSize) : 0, cross: crossReserved),
               maxSize: size(main: .infinity, cross: crossReserved)

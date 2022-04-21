@@ -69,8 +69,11 @@ extension Component {
 
 extension Component {
   public func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> Flexible {
-    Flexible(flex: flex, alignSelf: alignSelf, child: self)
+    Flexible(flexGrow: flex, flexShrink: flex, alignSelf: alignSelf, child: self)
   }
+    public func flex(flexGrow: CGFloat, flexShrink: CGFloat, alignSelf: CrossAxisAlignment? = nil) -> Flexible {
+      Flexible(flexGrow: flexGrow, flexShrink: flexShrink, alignSelf: alignSelf, child: self)
+    }
 }
 
 extension Component {
