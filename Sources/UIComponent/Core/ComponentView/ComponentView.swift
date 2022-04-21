@@ -12,14 +12,14 @@ import UIKit
 ///
 /// See ``ComponentDisplayableView`` for usage details.
 open class ComponentView: UIView, ComponentDisplayableView {
-  lazy public var engine: ComponentEngine = ComponentEngine(view: self)
+    lazy public var engine: ComponentEngine = ComponentEngine(view: self)
 
-  open override func layoutSubviews() {
-    super.layoutSubviews()
-    engine.layoutSubview()
-  }
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        engine.layoutSubview()
+    }
 
-  open override func sizeThatFits(_ size: CGSize) -> CGSize {
-    engine.sizeThatFits(size)
-  }
+    open override func sizeThatFits(_ size: CGSize) -> CGSize {
+        engine.sizeThatFits(size)
+    }
 }

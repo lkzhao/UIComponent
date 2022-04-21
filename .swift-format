@@ -3,7 +3,7 @@
     "accessLevel" : "private"
   },
   "indentation" : {
-    "spaces" : 2
+    "spaces" : 4
   },
   "indentConditionalCompilationBlocks" : true,
   "indentSwitchCaseLabels" : false,
@@ -49,6 +49,6 @@
     "UseTripleSlashForDocumentationComments" : true,
     "ValidateDocumentationComments" : false
   },
-  "tabWidth" : 8,
+  "tabWidth" : 4,
   "version" : 1
 }

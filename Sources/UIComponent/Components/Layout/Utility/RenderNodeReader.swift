@@ -3,17 +3,17 @@
 import Foundation
 
 public struct RenderNodeReader: Component {
-  let child: Component
-  let reader: (RenderNode) -> Void
+    let child: Component
+    let reader: (RenderNode) -> Void
 
-  public init(child: Component, _ reader: @escaping (RenderNode) -> Void) {
-    self.child = child
-    self.reader = reader
-  }
+    public init(child: Component, _ reader: @escaping (RenderNode) -> Void) {
+        self.child = child
+        self.reader = reader
+    }
 
-  public func layout(_ constraint: Constraint) -> RenderNode {
-    let renderNode = child.layout(constraint)
-    reader(renderNode)
-    return renderNode
-  }
+    public func layout(_ constraint: Constraint) -> RenderNode {
+        let renderNode = child.layout(constraint)
+        reader(renderNode)
+        return renderNode
+    }
 }

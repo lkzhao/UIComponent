@@ -18,13 +18,13 @@ import UIKit
 ///       }
 ///     }
 public struct ConstraintReader: Component {
-  let builder: (Constraint) -> Component
+    let builder: (Constraint) -> Component
 
-  public init(_ builder: @escaping (Constraint) -> Component) {
-    self.builder = builder
-  }
+    public init(_ builder: @escaping (Constraint) -> Component) {
+        self.builder = builder
+    }
 
-  public func layout(_ constraint: Constraint) -> RenderNode {
-    builder(constraint).layout(constraint)
-  }
+    public func layout(_ constraint: Constraint) -> RenderNode {
+        builder(constraint).layout(constraint)
+    }
 }
