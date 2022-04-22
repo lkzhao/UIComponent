@@ -93,7 +93,7 @@ extension Stack {
                 if let child = child as? Flexible, child.flexGrow > 0 {
                     let alignChild = child.alignSelf ?? alignItems
                     let addition = mainPerFlex * child.flexGrow
-                    let mainReserved = addition + renderNodes[index].size.width
+                    let mainReserved = addition + main(renderNodes[index].size)
                     let constraint = Constraint(
                         minSize: size(main: mainReserved, cross: (alignChild == .stretch) ? cross(constraint.maxSize) : 0),
                         maxSize: size(main: mainReserved, cross: cross(constraint.maxSize))
@@ -107,7 +107,7 @@ extension Stack {
             for (index, child) in children.enumerated() {
                 if let child = child as? Flexible, child.flexShrink > 0 {
                     let alignChild = child.alignSelf ?? alignItems
-                    let mainReserved = mainPerFlex * child.flexShrink + renderNodes[index].size.width
+                    let mainReserved = mainPerFlex * child.flexShrink + main(renderNodes[index].size)
                     let constraint = Constraint(
                         minSize: size(main: mainReserved, cross: (alignChild == .stretch) ? cross(constraint.maxSize) : 0),
                         maxSize: size(main: mainReserved, cross: cross(constraint.maxSize))
