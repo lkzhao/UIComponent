@@ -112,7 +112,12 @@ extension Component {
 extension Component {
     public func maxSize(width: CGFloat = .infinity, height: CGFloat = .infinity) -> Component {
         constraint { c in
-            Constraint(minSize: c.minSize, maxSize: CGSize(width: min(width, c.maxSize.width), height: min(height, c.maxSize.height)))
+            c.with(maxSize: CGSize(width: min(width, c.maxSize.width), height: min(height, c.maxSize.height)))
+        }
+    }
+    public func minSize(width: CGFloat = -.infinity, height: CGFloat = -.infinity) -> Component {
+        constraint { c in
+            c.with(minSize: CGSize(width: max(width, c.minSize.width), height: max(height, c.minSize.height)))
         }
     }
     public func size(width: SizeStrategy = .fit, height: SizeStrategy = .fit) -> Component {
@@ -150,12 +155,12 @@ extension Component {
     }
     public func unboundedWidth() -> Component {
         constraint { c in
-            Constraint(minSize: c.minSize, maxSize: CGSize(width: .infinity, height: c.maxSize.height))
+            c.with(maxSize: CGSize(width: .infinity, height: c.maxSize.height))
         }
     }
     public func unboundedHeight() -> Component {
         constraint { c in
-            Constraint(minSize: c.minSize, maxSize: CGSize(width: c.maxSize.width, height: .infinity))
+            c.with(maxSize: CGSize(width: c.maxSize.width, height: .infinity))
         }
     }
 }

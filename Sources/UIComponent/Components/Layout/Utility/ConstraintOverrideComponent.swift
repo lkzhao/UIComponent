@@ -92,7 +92,7 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
                 minSize.height = value * maxSize.width
             }
         }
-        return Constraint(minSize: minSize, maxSize: maxSize)
+        return constraint.with(minSize: minSize, maxSize: maxSize)
     }
 
     func bound(size: CGSize, to constraint: Constraint) -> CGSize {

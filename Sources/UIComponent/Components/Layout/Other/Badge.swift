@@ -36,7 +36,7 @@ public struct Badge: Component {
     public func layout(_ constraint: Constraint) -> RenderNode {
         let childRenderNode = child.layout(constraint)
         let badgeRenderNode = overlay.layout(
-            Constraint(
+            constraint.with(
                 minSize: CGSize(
                     width: horizontalAlignment == .stretch ? childRenderNode.size.width : -.infinity,
                     height: verticalAlignment == .stretch ? childRenderNode.size.height : -.infinity

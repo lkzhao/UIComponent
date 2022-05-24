@@ -9,8 +9,9 @@ public struct ZStack: Component {
     public var children: [Component]
 
     public func layout(_ constraint: Constraint) -> RenderNode {
+        let childConstraint = constraint.withNoMinSize()
         var renderNodes: [RenderNode] = children.map {
-            $0.layout(Constraint(maxSize: constraint.maxSize))
+            $0.layout(childConstraint)
         }
         let size = CGSize(
             width: renderNodes.max { $0.size.width < $1.size.width }?.size.width ?? 0,
@@ -41,7 +42,7 @@ public struct ZStack: Component {
                     result.size.width = size.width
                 }
                 if node.size != result.size {
-                    renderNodes[idx] = children[idx].layout(.tight(result.size))
+                    renderNodes[idx] = children[idx].layout(constraint.with(tightSize: result.size))
                 }
                 return result.origin
             }

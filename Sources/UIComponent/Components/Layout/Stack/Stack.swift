@@ -18,7 +18,7 @@ extension Stack {
         if cross(constraint.maxSize) == .infinity, alignItems == .stretch {
             // when using alignItem = .stretch, we need to relayout child to stretch its cross axis
             renderNodes = getRenderNodes(
-                Constraint(
+                constraint.with(
                     minSize: constraint.minSize,
                     maxSize: size(main: main(constraint.maxSize), cross: crossMax)
                 )
@@ -72,7 +72,7 @@ extension Stack {
         var flexShrink: CGFloat = 0
         let crossMaxConstraint = cross(constraint.maxSize)
 
-        let childConstraint = Constraint(
+        let childConstraint = constraint.with(
             minSize: size(main: -.infinity, cross: alignItems == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0),
             maxSize: size(main: .infinity, cross: cross(constraint.maxSize))
         )
@@ -94,7 +94,7 @@ extension Stack {
                     let alignChild = child.alignSelf ?? alignItems
                     let addition = mainPerFlex * child.flexGrow
                     let mainReserved = addition + main(renderNodes[index].size)
-                    let constraint = Constraint(
+                    let constraint = constraint.with(
                         minSize: size(main: mainReserved, cross: (alignChild == .stretch) ? cross(constraint.maxSize) : 0),
                         maxSize: size(main: mainReserved, cross: cross(constraint.maxSize))
                     )
@@ -108,7 +108,7 @@ extension Stack {
                 if let child = child as? Flexible, child.flexShrink > 0 {
                     let alignChild = child.alignSelf ?? alignItems
                     let mainReserved = mainPerFlex * child.flexShrink + main(renderNodes[index].size)
-                    let constraint = Constraint(
+                    let constraint = constraint.with(
                         minSize: size(main: mainReserved, cross: (alignChild == .stretch) ? cross(constraint.maxSize) : 0),
                         maxSize: size(main: mainReserved, cross: cross(constraint.maxSize))
                     )

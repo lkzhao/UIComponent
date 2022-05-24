@@ -26,7 +26,7 @@ extension WaterfallLayoutProtocol {
 
         for child in children {
             let renderNode = child.layout(
-                Constraint(
+                constraint.with(
                     minSize: size(main: 0, cross: columnWidth),
                     maxSize: size(main: .infinity, cross: columnWidth)
                 )

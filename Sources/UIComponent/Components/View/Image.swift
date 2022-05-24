@@ -18,14 +18,18 @@ public struct Image: ViewComponent {
     }
 
     public func layout(_ constraint: Constraint) -> ImageRenderNode {
-        ImageRenderNode(image: image, size: image.size.bound(to: constraint))
+        ImageRenderNode(image: image, tintColor: constraint[\.tintColor] ?? constraint[\.foregroundColor], size: image.size.bound(to: constraint))
     }
 }
 
 public struct ImageRenderNode: ViewRenderNode {
     public let image: UIImage
+    public let tintColor: UIColor?
     public let size: CGSize
     public func updateView(_ view: UIImageView) {
+        if let tintColor = tintColor {
+            view.tintColor = tintColor
+        }
         view.image = image
     }
 }

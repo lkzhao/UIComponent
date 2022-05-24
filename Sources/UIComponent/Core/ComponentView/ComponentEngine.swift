@@ -182,7 +182,7 @@ public class ComponentEngine {
         if let currentRenderNode = self.renderNode {
             renderNode = currentRenderNode
         } else {
-            renderNode = component.layout(Constraint(maxSize: adjustedSize))
+            renderNode = component.layout(BaseConstraint(viewBoundingSize: adjustedSize))
             contentSize = renderNode.size * zoomScale
             self.renderNode = renderNode
         }
@@ -285,6 +285,6 @@ public class ComponentEngine {
 
     /// calculate the size for the current component
     func sizeThatFits(_ size: CGSize) -> CGSize {
-        return component?.layout(Constraint(maxSize: size)).size ?? .zero
+        return component?.layout(BaseConstraint(viewBoundingSize: size)).size ?? .zero
     }
 }

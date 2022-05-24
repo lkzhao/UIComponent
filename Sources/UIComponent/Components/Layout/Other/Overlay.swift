@@ -27,7 +27,7 @@ public struct Overlay: Component {
 
     public func layout(_ constraint: Constraint) -> RenderNode {
         let childRenderNode = child.layout(constraint)
-        let overlayRenderNode = overlay.layout(Constraint(minSize: childRenderNode.size, maxSize: childRenderNode.size))
+        let overlayRenderNode = overlay.layout(constraint.with(tightSize: childRenderNode.size))
         return SlowRenderNode(size: childRenderNode.size, children: [childRenderNode, overlayRenderNode], positions: [.zero, .zero])
     }
 }

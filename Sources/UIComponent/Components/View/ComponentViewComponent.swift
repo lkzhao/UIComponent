@@ -1,6 +1,7 @@
 //  Created by Luke Zhao on 8/23/20.
 
 import UIKit
+import BaseToolbox
 
 /// # ComponentViewComponent
 ///
@@ -13,7 +14,7 @@ public struct ComponentViewComponent<View: ComponentDisplayableView>: ViewCompon
         self.component = component
     }
     public func layout(_ constraint: Constraint) -> ComponentViewRenderNode<View> {
-        let renderNode = component.layout(Constraint(maxSize: constraint.maxSize))
+        let renderNode = component.layout(constraint.with(minSize: -.infinity, maxSize: constraint.maxSize))
         return ComponentViewRenderNode(size: renderNode.size.bound(to: constraint), component: component, renderNode: renderNode)
     }
 }

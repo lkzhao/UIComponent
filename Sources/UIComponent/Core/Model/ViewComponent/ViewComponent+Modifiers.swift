@@ -103,13 +103,27 @@ extension ViewComponent {
     }
     public func unboundedWidth() -> ConstraintOverrideViewComponent<Self> {
         constraint { c in
-            Constraint(minSize: c.minSize, maxSize: CGSize(width: .infinity, height: c.maxSize.height))
+            c.with(maxSize: CGSize(width: .infinity, height: c.maxSize.height))
         }
     }
     public func unboundedHeight() -> ConstraintOverrideViewComponent<Self> {
         constraint { c in
-            Constraint(minSize: c.minSize, maxSize: CGSize(width: c.maxSize.width, height: .infinity))
+            c.with(maxSize: CGSize(width: c.maxSize.width, height: .infinity))
         }
+    }
+    public func environment<T>(key: KeyPath<EnvironmentKeys, EnvironmentKey<T>>, value: T) -> ConstraintOverrideViewComponent<Self> {
+        constraint {
+            $0.with(key, value)
+        }
+    }
+    public func environmentTextColor(_ color: UIColor) -> ConstraintOverrideViewComponent<Self> {
+        environment(key: \.textColor, value: color)
+    }
+    public func environmentTintColor(_ color: UIColor) -> ConstraintOverrideViewComponent<Self> {
+        environment(key: \.tintColor, value: color)
+    }
+    public func environmentForegroundColor(_ color: UIColor) -> ConstraintOverrideViewComponent<Self> {
+        environment(key: \.foregroundColor, value: color)
     }
 }
 
