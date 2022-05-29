@@ -78,34 +78,67 @@ extension Component {
 
 extension Component {
     public func inset(_ amount: CGFloat) -> Component {
-        Insets(insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount), child: self)
+        Insets(child: self, insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount))
     }
-    public func inset(h: CGFloat = 0, v: CGFloat = 0) -> Component {
-        Insets(insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h), child: self)
+    public func inset(h: CGFloat, v: CGFloat) -> Component {
+        Insets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
+    }
+    public func inset(v: CGFloat, h: CGFloat) -> Component {
+        Insets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
+    }
+    public func inset(h: CGFloat) -> Component {
+        Insets(child: self, insets: UIEdgeInsets(top: 0, left: h, bottom: 0, right: h))
+    }
+    public func inset(v: CGFloat) -> Component {
+        Insets(child: self, insets: UIEdgeInsets(top: v, left: 0, bottom: v, right: 0))
     }
     public func inset(top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0) -> Component {
-        Insets(insets: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right), child: self)
+        Insets(child: self, insets: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right))
     }
-    public func inset(by insets: UIEdgeInsets) -> Component {
-        Insets(insets: insets, child: self)
+    public func inset(_ insets: UIEdgeInsets) -> Component {
+        Insets(child: self, insets: insets)
     }
     public func inset(_ insetProvider: @escaping (Constraint) -> UIEdgeInsets) -> Component {
-        DynamicInsets(insetProvider: insetProvider, child: self)
+        DynamicInsets(child: self, insetProvider: insetProvider)
+    }
+}
+
+extension Component {
+    public func offset(_ offset: CGPoint) -> Component {
+        Insets(child: self, insets: UIEdgeInsets(top: offset.y, left: offset.x, bottom: -offset.y, right: -offset.x))
+    }
+    public func offset(x: CGFloat = 0, y: CGFloat = 0) -> Component {
+        Insets(child: self, insets: UIEdgeInsets(top: y, left: x, bottom: -y, right: -x))
+    }
+    public func offset(_ offsetProvider: @escaping (Constraint) -> CGPoint) -> Component {
+        DynamicInsets(child: self) {
+            let offset = offsetProvider($0)
+            return UIEdgeInsets(top: offset.y, left: offset.x, bottom: -offset.y, right: -offset.x)
+        }
     }
 }
 
 extension Component {
     public func visibleInset(_ amount: CGFloat) -> Component {
-        VisibleFrameInsets(insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount), child: self)
+        VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount))
     }
-    public func visibleInset(h: CGFloat = 0, v: CGFloat = 0) -> Component {
-        VisibleFrameInsets(insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h), child: self)
+    public func visibleInset(h: CGFloat, v: CGFloat) -> Component {
+        VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
+    }
+    public func visibleInset(v: CGFloat, h: CGFloat) -> Component {
+        VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
+    }
+    public func visibleInset(h: CGFloat) -> Component {
+        VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: 0, left: h, bottom: 0, right: h))
+    }
+    public func visibleInset(v: CGFloat) -> Component {
+        VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: 0, bottom: v, right: 0))
     }
     public func visibleInset(_ insets: UIEdgeInsets) -> Component {
-        VisibleFrameInsets(insets: insets, child: self)
+        VisibleFrameInsets(child: self, insets: insets)
     }
     public func visibleInset(_ insetProvider: @escaping (CGRect) -> UIEdgeInsets) -> Component {
-        DynamicVisibleFrameInset(insetProvider: insetProvider, child: self)
+        DynamicVisibleFrameInset(child: self, insetProvider: insetProvider)
     }
 }
 

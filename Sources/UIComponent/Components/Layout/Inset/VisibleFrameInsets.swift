@@ -3,36 +3,36 @@
 import UIKit
 
 public struct VisibleFrameInsets: Component {
-    let insets: UIEdgeInsets
     let child: Component
+    let insets: UIEdgeInsets
 
-    public init(insets: UIEdgeInsets, child: Component) {
-        self.insets = insets
+    public init(child: Component, insets: UIEdgeInsets) {
         self.child = child
+        self.insets = insets
     }
 
     public func layout(_ constraint: Constraint) -> RenderNode {
-        VisibleFrameInsetRenderNode(insets: insets, child: child.layout(constraint))
+        VisibleFrameInsetRenderNode(child: child.layout(constraint), insets: insets)
     }
 }
 
 public struct DynamicVisibleFrameInset: Component {
-    let insetProvider: (CGRect) -> UIEdgeInsets
     let child: Component
+    let insetProvider: (CGRect) -> UIEdgeInsets
 
-    public init(insetProvider: @escaping (CGRect) -> UIEdgeInsets, child: Component) {
-        self.insetProvider = insetProvider
+    public init(child: Component, insetProvider: @escaping (CGRect) -> UIEdgeInsets) {
         self.child = child
+        self.insetProvider = insetProvider
     }
 
     public func layout(_ constraint: Constraint) -> RenderNode {
-        DynamicVisibleFrameInsetRenderNode(insetProvider: insetProvider, child: child.layout(constraint))
+        DynamicVisibleFrameInsetRenderNode(child: child.layout(constraint), insetProvider: insetProvider)
     }
 }
 
 struct VisibleFrameInsetRenderNode: RenderNode {
-    let insets: UIEdgeInsets
     let child: RenderNode
+    let insets: UIEdgeInsets
     var size: CGSize {
         child.size
     }
@@ -48,8 +48,8 @@ struct VisibleFrameInsetRenderNode: RenderNode {
 }
 
 struct DynamicVisibleFrameInsetRenderNode: RenderNode {
-    let insetProvider: (CGRect) -> UIEdgeInsets
     let child: RenderNode
+    let insetProvider: (CGRect) -> UIEdgeInsets
     var size: CGSize {
         child.size
     }
