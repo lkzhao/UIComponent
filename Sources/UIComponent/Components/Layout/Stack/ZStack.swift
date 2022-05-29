@@ -41,7 +41,7 @@ public struct ZStack: Component {
                     result.size.width = size.width
                 }
                 if node.size != result.size {
-                    renderNodes[idx] = children[idx].layout(.tight(result.size))
+                    renderNodes[idx] = children[idx].layout(Constraint(tightSize: result.size))
                 }
                 return result.origin
             }

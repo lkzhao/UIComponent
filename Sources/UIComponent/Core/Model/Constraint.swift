@@ -8,16 +8,14 @@ public struct Constraint {
     public var maxSize: CGSize
     public var isTight: Bool { minSize == maxSize }
 
-    public init(
-        minSize: CGSize = -.infinity,
-        maxSize: CGSize = .infinity
-    ) {
+    public init(minSize: CGSize = -.infinity, maxSize: CGSize = .infinity) {
         self.minSize = minSize
         self.maxSize = maxSize
     }
-
-    public static func tight(_ size: CGSize) -> Constraint {
-        Constraint(minSize: size, maxSize: size)
+    
+    public init(tightSize: CGSize) {
+        self.minSize = tightSize
+        self.maxSize = tightSize
     }
 
     public func inset(by insets: UIEdgeInsets) -> Constraint {

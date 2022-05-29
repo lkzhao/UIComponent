@@ -20,7 +20,7 @@ public struct Absolute: Component {
         }
         return SlowRenderNode(
             size: CGSize(width: frame.maxX, height: frame.maxY),
-            children: zip(children, frames).map({ $0.0.layout(.tight($0.1.size)) }),
+            children: zip(children, frames).map({ $0.0.layout(Constraint(tightSize: $0.1.size)) }),
             positions: frames.map({ $0.origin })
         )
     }
