@@ -72,11 +72,7 @@ open class Animator {
     ///   - componentView: source ComponentView
     ///   - delta: changes in contentOffset
     ///   - view: the view being updated
-    ///   - frame: frame provided by the layout
-    open func shift(componentView: ComponentDisplayableView,
-                                    delta: CGPoint,
-                                    view: UIView,
-                                    frame: CGRect) {
+    open func shift(componentView: ComponentDisplayableView, delta: CGPoint, view: UIView) {
         view.center += delta
     }
 }

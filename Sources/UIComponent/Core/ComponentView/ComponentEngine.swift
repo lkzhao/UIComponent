@@ -227,6 +227,7 @@ public class ComponentEngine {
                 newViews[index] = cell
             } else {
                 let animator = visibleRenderable[index].animator ?? animator
+                animator.shift(componentView: componentView, delta: contentOffsetDelta, view: cell)
                 animator.delete(componentView: componentView, view: cell) {
                     cell.recycleForUIComponentReuse()
                 }
@@ -244,8 +245,7 @@ public class ComponentEngine {
                 if updateViews {
                     // view was on screen before reload, need to update the view.
                     viewData.renderNode._updateView(view)
-                    (viewData.animator ?? animator).shift(componentView: componentView, delta: contentOffsetDelta,
-                                                          view: view, frame: frame)
+                    (viewData.animator ?? animator).shift(componentView: componentView, delta: contentOffsetDelta, view: view)
                 }
             } else {
                 view = viewData.renderNode._makeView() as! UIView

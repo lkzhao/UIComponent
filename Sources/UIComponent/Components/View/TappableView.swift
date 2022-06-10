@@ -21,6 +21,9 @@ open class TappableView: ComponentView {
     public var configuration: TappableViewConfiguration?
 
     lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
+    lazy var doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap)).then {
+        $0.numberOfTapsRequired = 2
+    }
     lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
     lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
 
@@ -41,6 +44,17 @@ open class TappableView: ComponentView {
                 addGestureRecognizer(longPressGestureRecognizer)
             } else {
                 removeGestureRecognizer(longPressGestureRecognizer)
+            }
+        }
+    }
+
+    public var onDoubleTap: ((TappableView) -> Void)? {
+        didSet {
+            if onDoubleTap != nil {
+                tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
+                addGestureRecognizer(doubleTapGestureRecognizer)
+            } else {
+                removeGestureRecognizer(doubleTapGestureRecognizer)
             }
         }
     }
@@ -128,6 +142,10 @@ open class TappableView: ComponentView {
         let config = configuration ?? TappableViewConfiguration.default
         config.didTap?(self)
         onTap?(self)
+    }
+
+    @objc open func didDoubleTap() {
+        onDoubleTap?(self)
     }
 
     @objc open func didLongPress() {
