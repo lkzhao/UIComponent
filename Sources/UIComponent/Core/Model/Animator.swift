@@ -21,7 +21,6 @@ open class Animator {
     /// - Parameters:
     ///   - componentView: source ComponentView
     ///   - view: the view being inserted
-    ///   - at: index of the view inside the ComponentView (after flattening step)
     ///   - frame: frame provided by the layout
     open func insert(
         componentView: ComponentDisplayableView,
@@ -53,7 +52,6 @@ open class Animator {
     /// - Parameters:
     ///   - componentView: source ComponentView
     ///   - view: the view being updated
-    ///   - at: index of the view inside the ComponentView (after flattening step)
     ///   - frame: frame provided by the layout
     open func update(
         componentView: ComponentDisplayableView,
@@ -66,5 +64,19 @@ open class Animator {
         if view.center != frame.center {
             view.center = frame.center
         }
+    }
+
+    /// Called when contentOffset changes during reloadData
+    ///
+    /// - Parameters:
+    ///   - componentView: source ComponentView
+    ///   - delta: changes in contentOffset
+    ///   - view: the view being updated
+    ///   - frame: frame provided by the layout
+    open func shift(componentView: ComponentDisplayableView,
+                                    delta: CGPoint,
+                                    view: UIView,
+                                    frame: CGRect) {
+        view.center += delta
     }
 }

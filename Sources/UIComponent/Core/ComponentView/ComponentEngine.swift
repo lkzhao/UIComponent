@@ -244,6 +244,8 @@ public class ComponentEngine {
                 if updateViews {
                     // view was on screen before reload, need to update the view.
                     viewData.renderNode._updateView(view)
+                    (viewData.animator ?? animator).shift(componentView: componentView, delta: contentOffsetDelta,
+                                                          view: view, frame: frame)
                 }
             } else {
                 view = viewData.renderNode._makeView() as! UIView
@@ -267,7 +269,7 @@ public class ComponentEngine {
     /// This is used to replace a cell's identifier with a new identifer
     /// Useful when a cell's identifier is going to change with the next
     /// reloadData, but you want to keep the same cell view.
-    func replace(identifier: String, with newIdentifier: String) {
+    public func replace(identifier: String, with newIdentifier: String) {
         for (i, viewData) in visibleRenderable.enumerated() where viewData.id == identifier {
             visibleRenderable[i].id = newIdentifier
             break
