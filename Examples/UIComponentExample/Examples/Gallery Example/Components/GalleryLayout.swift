@@ -61,7 +61,7 @@ extension GalleryLayout {
         let finalFrame = allFrames.reduce(allFrames.first ?? .zero, { $0.union($1) })
         return renderNode(
             size: size(main: main(finalFrame.size), cross: cross(finalFrame.size)),
-            children: zip(children, allFrames).map({ $0.0.layout(.tight(size(main: main($0.1.size), cross: cross($0.1.size)))) }),
+            children: zip(children, allFrames).map({ $0.0.layout(Constraint(tightSize: size(main: main($0.1.size), cross: cross($0.1.size)))) }),
             positions: allFrames.map({ point(main: main($0.origin), cross: cross($0.origin)) })
         )
     }
