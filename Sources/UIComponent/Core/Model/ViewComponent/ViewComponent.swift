@@ -3,7 +3,7 @@
 import Foundation
 
 @dynamicMemberLookup
-public protocol ViewComponent: Component {
+public protocol ViewComponent<R>: Component {
     associatedtype R: ViewRenderNode
     func layout(_ constraint: Constraint) -> R
 }

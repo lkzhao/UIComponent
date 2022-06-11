@@ -71,7 +71,7 @@ extension RenderNode {
     }
 
     public func frame(id: String) -> CGRect? {
-        if let viewRenderNode = self as? AnyViewRenderNode, viewRenderNode.id == id {
+        if let viewRenderNode = self as? (any ViewRenderNode), viewRenderNode.id == id {
             return CGRect(origin: .zero, size: size)
         }
         for (index, child) in children.enumerated() {

@@ -24,8 +24,8 @@ public struct ComponentViewRenderNode<View: ComponentDisplayableView>: ViewRende
     public let component: Component
     public let renderNode: RenderNode
 
-    private var viewRenderNode: AnyViewRenderNode? {
-        renderNode as? AnyViewRenderNode
+    private var viewRenderNode: (any ViewRenderNode)? {
+        renderNode as? (any ViewRenderNode)
     }
     public var id: String? {
         viewRenderNode?.id
