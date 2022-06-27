@@ -62,6 +62,13 @@ extension RenderNode {
         }
         return result
     }
+    
+    public func currentComponentView() -> ComponentViewProxy {
+        guard let current = ComponentViewMananger.shared.last else {
+            fatalError("currentComponentView must be accessed within visibleRenderables. Otherwise it is undefined")
+        }
+        return current
+    }
 }
 
 extension RenderNode {
