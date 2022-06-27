@@ -203,3 +203,9 @@ extension Component {
         RenderNodeReader(child: self, reader)
     }
 }
+
+extension Component {
+    public func onDisplay(_ callback: @escaping (CGSize, CGRect) -> Void) -> OnDisplayComponent {
+        OnDisplayComponent(child: self, onDisplay: callback)
+    }
+}

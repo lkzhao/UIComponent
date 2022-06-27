@@ -28,3 +28,29 @@ public struct ConstraintReader: Component {
         builder(constraint).layout(constraint)
     }
 }
+
+public struct OnDisplayComponent: Component {
+    let child: Component
+    let onDisplay: (CGSize, CGRect) -> ()
+    public func layout(_ constraint: Constraint) -> RenderNode {
+        OnDisplayRenderNode(child: child.layout(constraint), onDisplay: onDisplay)
+    }
+}
+
+struct OnDisplayRenderNode: RenderNode {
+    let child: RenderNode
+    let onDisplay: (CGSize, CGRect) -> ()
+    var size: CGSize {
+        child.size
+    }
+    var children: [RenderNode] {
+        [child]
+    }
+    var positions: [CGPoint] {
+        [.zero]
+    }
+    func visibleIndexes(in frame: CGRect) -> IndexSet {
+        onDisplay(size, frame)
+        return [0]
+    }
+}
