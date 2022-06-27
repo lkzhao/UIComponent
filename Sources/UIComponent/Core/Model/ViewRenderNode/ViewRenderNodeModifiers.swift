@@ -32,6 +32,12 @@ public struct ViewUpdateRenderNode<Content: ViewRenderNode>: ViewRenderNodeWrapp
     public let content: Content
     public let update: (Content.View) -> Void
 
+    public var reuseStrategy: ReuseStrategy {
+        // we don't know what the update block did, so we disable
+        // reuse so that we don't get inconsistent state
+        .noReuse
+    }
+
     public func updateView(_ view: Content.View) {
         content.updateView(view)
         update(view)
