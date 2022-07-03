@@ -8,6 +8,9 @@ import UIKit
 /// This object manages a ``ComponentDisplayableView`` and handles rendering the component
 /// to the view. See ``ComponentView`` for a sample implementation
 public class ComponentEngine {
+    // force view update to be performed within a UIView.performWithoutAnimation block
+    public static var disableUpdateAnimation: Bool = false
+    
     /// view that is managed by this engine.
     weak var view: ComponentDisplayableView?
 
@@ -254,8 +257,13 @@ public class ComponentEngine {
                 UIView.performWithoutAnimation {
                     view.bounds.size = frame.bounds.size
                     view.center = frame.center
+                    if ComponentEngine.disableUpdateAnimation {
+                        viewData.renderNode._updateView(view)
+                    }
                 }
-                viewData.renderNode._updateView(view)
+                if !ComponentEngine.disableUpdateAnimation {
+                    viewData.renderNode._updateView(view)
+                }
                 animator.insert(componentView: componentView, view: view, frame: frame)
                 newViews[index] = view
             }
