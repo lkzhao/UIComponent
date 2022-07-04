@@ -44,8 +44,10 @@ public class AnimatedReloadAnimator: Animator {
         view.center = frame.center
         if componentView.isReloading, componentView.hasReloaded, componentView.bounds.intersects(frame) {
             let offsetTime: TimeInterval = cascade ? TimeInterval(frame.origin.distance(componentView.bounds.origin) / 3000) : 0
-            view.layer.transform = transform
-            view.alpha = 0
+            UIView.performWithoutAnimation {
+                view.layer.transform = transform
+                view.alpha = 0
+            }
             UIView.animate(
                 withDuration: duration,
                 delay: offsetTime,
