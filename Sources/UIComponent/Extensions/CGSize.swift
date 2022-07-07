@@ -3,5 +3,5 @@
 import CoreGraphics
 
 extension CGSize {
-  public static let infinity: CGSize = CGSize(width: CGFloat.infinity, height: CGFloat.infinity)
+    public static let infinity: CGSize = CGSize(width: CGFloat.infinity, height: CGFloat.infinity)
 }

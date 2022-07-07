@@ -1,7 +1,7 @@
 //  Created by y H on 2021/7/25.
 
-import UIKit
 import BaseToolbox
+import UIKit
 
 /// # Badge Component
 ///
@@ -24,60 +24,60 @@ import BaseToolbox
 ///
 /// Checkout the `ComplexLayoutViewController.swift` for other examples.
 public struct Badge: Component {
-  public enum Alignment: CaseIterable {
-    case start, end, center, stretch, before, after
-  }
-  let child: Component
-  let overlay: Component
-  let verticalAlignment: Alignment
-  let horizontalAlignment: Alignment
-  let offset: CGPoint
+    public enum Alignment: CaseIterable {
+        case start, end, center, stretch, before, after
+    }
+    let child: Component
+    let overlay: Component
+    let verticalAlignment: Alignment
+    let horizontalAlignment: Alignment
+    let offset: CGPoint
 
-  public func layout(_ constraint: Constraint) -> RenderNode {
-    let childRenderNode = child.layout(constraint)
-    let badgeRenderNode = overlay.layout(
-      Constraint(
-        minSize: CGSize(
-          width: horizontalAlignment == .stretch ? childRenderNode.size.width : -.infinity,
-          height: verticalAlignment == .stretch ? childRenderNode.size.height : -.infinity
-        ),
-        maxSize: CGSize(
-            width: horizontalAlignment == .stretch ? childRenderNode.size.width : .infinity,
-            height: verticalAlignment == .stretch ? childRenderNode.size.height : .infinity
+    public func layout(_ constraint: Constraint) -> RenderNode {
+        let childRenderNode = child.layout(constraint)
+        let badgeRenderNode = overlay.layout(
+            Constraint(
+                minSize: CGSize(
+                    width: horizontalAlignment == .stretch ? childRenderNode.size.width : -.infinity,
+                    height: verticalAlignment == .stretch ? childRenderNode.size.height : -.infinity
+                ),
+                maxSize: CGSize(
+                    width: horizontalAlignment == .stretch ? childRenderNode.size.width : .infinity,
+                    height: verticalAlignment == .stretch ? childRenderNode.size.height : .infinity
+                )
+            )
         )
-      )
-    )
-    let badgePosition: (x: CGFloat, y: CGFloat)
-    switch horizontalAlignment {
-    case .start:
-      badgePosition.x = 0
-    case .end:
-      badgePosition.x = (childRenderNode.size.width - badgeRenderNode.size.width)
-    case .center:
-      badgePosition.x = (childRenderNode.size.width / 2 - badgeRenderNode.size.width / 2)
-    case .stretch:
-      badgePosition.x = 0
-    case .before:
-      badgePosition.x = -badgeRenderNode.size.width
-    case .after:
-      badgePosition.x = childRenderNode.size.width
-    }
-    switch verticalAlignment {
-    case .start:
-      badgePosition.y = 0
-    case .end:
-      badgePosition.y = (childRenderNode.size.height - badgeRenderNode.size.height)
-    case .center:
-      badgePosition.y = (childRenderNode.size.height / 2 - badgeRenderNode.size.height / 2)
-    case .stretch:
-      badgePosition.y = 0
-    case .before:
-      badgePosition.y = -badgeRenderNode.size.height
-    case .after:
-      badgePosition.y = childRenderNode.size.height
-    }
-    let finallyBadgePosition = CGPoint(x: badgePosition.x + offset.x, y: badgePosition.y + offset.y)
+        let badgePosition: (x: CGFloat, y: CGFloat)
+        switch horizontalAlignment {
+        case .start:
+            badgePosition.x = 0
+        case .end:
+            badgePosition.x = (childRenderNode.size.width - badgeRenderNode.size.width)
+        case .center:
+            badgePosition.x = (childRenderNode.size.width / 2 - badgeRenderNode.size.width / 2)
+        case .stretch:
+            badgePosition.x = 0
+        case .before:
+            badgePosition.x = -badgeRenderNode.size.width
+        case .after:
+            badgePosition.x = childRenderNode.size.width
+        }
+        switch verticalAlignment {
+        case .start:
+            badgePosition.y = 0
+        case .end:
+            badgePosition.y = (childRenderNode.size.height - badgeRenderNode.size.height)
+        case .center:
+            badgePosition.y = (childRenderNode.size.height / 2 - badgeRenderNode.size.height / 2)
+        case .stretch:
+            badgePosition.y = 0
+        case .before:
+            badgePosition.y = -badgeRenderNode.size.height
+        case .after:
+            badgePosition.y = childRenderNode.size.height
+        }
+        let finallyBadgePosition = CGPoint(x: badgePosition.x + offset.x, y: badgePosition.y + offset.y)
 
-    return AlwaysRenderNode(size: childRenderNode.size, children: [childRenderNode, badgeRenderNode], positions: [.zero, finallyBadgePosition])
-  }
+        return AlwaysRenderNode(size: childRenderNode.size, children: [childRenderNode, badgeRenderNode], positions: [.zero, finallyBadgePosition])
+    }
 }

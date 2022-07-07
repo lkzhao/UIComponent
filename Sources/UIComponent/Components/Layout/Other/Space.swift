@@ -3,18 +3,18 @@
 import UIKit
 
 public struct Space: Component {
-  let size: CGSize
-  public init(size: CGSize) {
-    self.size = size
-  }
-  public init(width: CGFloat = 0, height: CGFloat = 0) {
-    size = CGSize(width: width, height: height)
-  }
-  public func layout(_ constraint: Constraint) -> RenderNode {
-    SpaceRenderNode(size: size.bound(to: constraint))
-  }
+    let size: CGSize
+    public init(size: CGSize) {
+        self.size = size
+    }
+    public init(width: CGFloat = 0, height: CGFloat = 0) {
+        size = CGSize(width: width, height: height)
+    }
+    public func layout(_ constraint: Constraint) -> RenderNode {
+        SpaceRenderNode(size: size.bound(to: constraint))
+    }
 }
 
 struct SpaceRenderNode: RenderNode {
-  let size: CGSize
+    let size: CGSize
 }

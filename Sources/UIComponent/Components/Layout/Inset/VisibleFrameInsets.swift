@@ -3,63 +3,63 @@
 import UIKit
 
 public struct VisibleFrameInsets: Component {
-  let insets: UIEdgeInsets
-  let child: Component
+    let child: Component
+    let insets: UIEdgeInsets
 
-  public init(insets: UIEdgeInsets, child: Component) {
-    self.insets = insets
-    self.child = child
-  }
+    public init(child: Component, insets: UIEdgeInsets) {
+        self.child = child
+        self.insets = insets
+    }
 
-  public func layout(_ constraint: Constraint) -> RenderNode {
-    VisibleFrameInsetRenderNode(insets: insets, child: child.layout(constraint))
-  }
+    public func layout(_ constraint: Constraint) -> RenderNode {
+        VisibleFrameInsetRenderNode(child: child.layout(constraint), insets: insets)
+    }
 }
 
 public struct DynamicVisibleFrameInset: Component {
-  let insetProvider: (CGRect) -> UIEdgeInsets
-  let child: Component
+    let child: Component
+    let insetProvider: (CGRect) -> UIEdgeInsets
 
-  public init(insetProvider: @escaping (CGRect) -> UIEdgeInsets, child: Component) {
-    self.insetProvider = insetProvider
-    self.child = child
-  }
+    public init(child: Component, insetProvider: @escaping (CGRect) -> UIEdgeInsets) {
+        self.child = child
+        self.insetProvider = insetProvider
+    }
 
-  public func layout(_ constraint: Constraint) -> RenderNode {
-    DynamicVisibleFrameInsetRenderNode(insetProvider: insetProvider, child: child.layout(constraint))
-  }
+    public func layout(_ constraint: Constraint) -> RenderNode {
+        DynamicVisibleFrameInsetRenderNode(child: child.layout(constraint), insetProvider: insetProvider)
+    }
 }
 
 struct VisibleFrameInsetRenderNode: RenderNode {
-  let insets: UIEdgeInsets
-  let child: RenderNode
-  var size: CGSize {
-    child.size
-  }
-  var children: [RenderNode] {
-    [child]
-  }
-  var positions: [CGPoint] {
-    [.zero]
-  }
-  func visibleRenderables(in frame: CGRect) -> [Renderable] {
-    child.visibleRenderables(in: frame.inset(by: insets))
-  }
+    let child: RenderNode
+    let insets: UIEdgeInsets
+    var size: CGSize {
+        child.size
+    }
+    var children: [RenderNode] {
+        [child]
+    }
+    var positions: [CGPoint] {
+        [.zero]
+    }
+    func visibleRenderables(in frame: CGRect) -> [Renderable] {
+        child.visibleRenderables(in: frame.inset(by: insets))
+    }
 }
 
 struct DynamicVisibleFrameInsetRenderNode: RenderNode {
-  let insetProvider: (CGRect) -> UIEdgeInsets
-  let child: RenderNode
-  var size: CGSize {
-    child.size
-  }
-  var children: [RenderNode] {
-    [child]
-  }
-  var positions: [CGPoint] {
-    [.zero]
-  }
-  func visibleRenderables(in frame: CGRect) -> [Renderable] {
-    child.visibleRenderables(in: frame.inset(by: insetProvider(frame)))
-  }
+    let child: RenderNode
+    let insetProvider: (CGRect) -> UIEdgeInsets
+    var size: CGSize {
+        child.size
+    }
+    var children: [RenderNode] {
+        [child]
+    }
+    var positions: [CGPoint] {
+        [.zero]
+    }
+    func visibleRenderables(in frame: CGRect) -> [Renderable] {
+        child.visibleRenderables(in: frame.inset(by: insetProvider(frame)))
+    }
 }
