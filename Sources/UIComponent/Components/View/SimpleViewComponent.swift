@@ -65,6 +65,7 @@ public struct SimpleViewRenderNode<View: UIView>: ViewRenderNode {
     public func updateView(_ view: View) {}
 }
 
+@available(iOS 13.0, *)
 extension UIView: ViewComponent {
     public func layout(_ constraint: Constraint) -> some ViewRenderNode {
         SimpleViewRenderNode(size: constraint.isTight ? constraint.maxSize : sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)

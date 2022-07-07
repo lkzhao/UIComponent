@@ -3,6 +3,7 @@
 import UIKit
 import BaseToolbox
 
+@available(iOS 13.4, *)
 public struct TappableViewConfiguration {
     public static var `default` = TappableViewConfiguration(onHighlightChanged: nil, didTap: nil)
 
@@ -18,6 +19,7 @@ public struct TappableViewConfiguration {
     }
 }
 
+@available(iOS 13.4, *)
 open class TappableView: ComponentView {
     public var configuration: TappableViewConfiguration?
 
@@ -167,6 +169,7 @@ extension TappableView: UIPointerInteractionDelegate {
     }
 }
 
+@available(iOS 13.4, *)
 extension TappableView: UIContextMenuInteractionDelegate {
     public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         if let previewProvider = previewProvider {
@@ -208,6 +211,7 @@ extension TappableView: UIContextMenuInteractionDelegate {
     }
 }
 
+@available(iOS 13.4, *)
 extension Component {
     public func tappableView(
         configuration: TappableViewConfiguration? = nil,

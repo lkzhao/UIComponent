@@ -3,11 +3,11 @@
     "pins": [
       {
         "package": "BaseToolbox",
-        "repositoryURL": "https://github.com/lkzhao/BaseToolbox",
+        "repositoryURL": "https://github.com/fanglinwei/BaseToolbox",
         "state": {
           "branch": null,
-          "revision": "0ce57936b566abb743c6a253aa267a36662cde97",
-          "version": "0.1.10"
+          "revision": "d3737f81a8571596a6c9a758f69d22aad76eeb24",
+          "version": "0.1.8"
         }
       }
     ]
