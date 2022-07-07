@@ -5,9 +5,9 @@
         "package": "BaseToolbox",
         "repositoryURL": "https://github.com/fanglinwei/BaseToolbox",
         "state": {
-          "branch": "main",
-          "revision": "2c7b9d886eb278c4b83366d56b3bac4daebf7603",
-          "version": null
+          "branch": null,
+          "revision": "d3737f81a8571596a6c9a758f69d22aad76eeb24",
+          "version": "0.1.8"
         }
       }
     ]

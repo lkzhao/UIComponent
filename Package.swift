@@ -14,7 +14,7 @@ let package = Package(
     )
   ],
   dependencies: [
-    .package(url: "https://github.com/fanglinwei/BaseToolbox", .branchItem("main")),
+    .package(url: "https://github.com/fanglinwei/BaseToolbox", from: "0.1.8"),
   ],
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
