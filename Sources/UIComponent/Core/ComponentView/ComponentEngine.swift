@@ -146,11 +146,11 @@ public class ComponentEngine {
         view?.setNeedsLayout()
     }
 
-    // re-layout, but not updating cells' contents
+    // re-layout, but not reloads
     func invalidateLayout() {
         guard !isRendering, !isReloading, hasReloaded else { return }
         renderNode = nil
-        render()
+        render(updateViews: true)
     }
 
     // reload all frames. will automatically diff insertion & deletion
