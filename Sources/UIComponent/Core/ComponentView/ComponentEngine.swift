@@ -34,6 +34,14 @@ public class ComponentEngine {
     var reloadCount = 0
     var isRendering = false
     var isReloading = false
+    var allowReload = true {
+        didSet {
+            guard allowReload != oldValue else { return }
+            if allowReload, needsReload {
+                view?.setNeedsLayout()
+            }
+        }
+    }
 
     /// visible frame insets. this will be applied to the visibleFrame that is used to retrieve views for the view port.
     var visibleFrameInsets: UIEdgeInsets = .zero
@@ -155,7 +163,7 @@ public class ComponentEngine {
 
     // reload all frames. will automatically diff insertion & deletion
     func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
-        guard !isReloading else { return }
+        guard !isReloading, allowReload else { return }
         isReloading = true
         defer {
             reloadCount += 1
