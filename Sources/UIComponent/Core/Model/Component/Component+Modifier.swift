@@ -95,6 +95,18 @@ extension Component {
     public func inset(top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0) -> Component {
         Insets(child: self, insets: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right))
     }
+    public func inset(top: CGFloat, rest: CGFloat) -> Component {
+        Insets(child: self, insets: UIEdgeInsets(top: top, rest: rest))
+    }
+    public func inset(left: CGFloat, rest: CGFloat) -> Component {
+        Insets(child: self, insets: UIEdgeInsets(left: left, rest: rest))
+    }
+    public func inset(bottom: CGFloat, rest: CGFloat) -> Component {
+        Insets(child: self, insets: UIEdgeInsets(bottom: bottom, rest: rest))
+    }
+    public func inset(right: CGFloat, rest: CGFloat) -> Component {
+        Insets(child: self, insets: UIEdgeInsets(right: right, rest: rest))
+    }
     public func inset(_ insets: UIEdgeInsets) -> Component {
         Insets(child: self, insets: insets)
     }
