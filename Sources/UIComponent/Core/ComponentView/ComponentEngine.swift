@@ -66,7 +66,7 @@ public class ComponentEngine {
     var contentView: UIView? {
         didSet {
             oldValue?.removeFromSuperview()
-            if let contentView = contentView {
+            if let contentView {
                 view?.addSubview(contentView)
             }
         }
@@ -169,7 +169,7 @@ public class ComponentEngine {
             reloadCount += 1
             needsReload = false
             isReloading = false
-            if let onFirstReload = onFirstReload, reloadCount == 1 {
+            if let onFirstReload, reloadCount == 1 {
                 onFirstReload()
             }
         }

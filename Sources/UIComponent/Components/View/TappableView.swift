@@ -63,11 +63,11 @@ open class TappableView: ComponentView {
     public weak var dropDelegate: UIDropInteractionDelegate? {
         didSet {
             guard dropDelegate !== oldValue else { return }
-            if let dropDelegate = dropDelegate {
+            if let dropDelegate {
                 dropInteraction = UIDropInteraction(delegate: dropDelegate)
                 addInteraction(dropInteraction!)
             } else {
-                if let dropInteraction = dropInteraction {
+                if let dropInteraction {
                     removeInteraction(dropInteraction)
                 }
             }
@@ -156,7 +156,7 @@ open class TappableView: ComponentView {
 @available(iOS 13.4, *)
 extension TappableView: UIPointerInteractionDelegate {
     public func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
-        if let pointerStyleProvider = pointerStyleProvider {
+        if let pointerStyleProvider {
             return pointerStyleProvider()
         } else {
             return UIPointerStyle(effect: .automatic(UITargetedPreview(view: self)), shape: nil)
@@ -166,7 +166,7 @@ extension TappableView: UIPointerInteractionDelegate {
 
 extension TappableView: UIContextMenuInteractionDelegate {
     public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        if let previewProvider = previewProvider {
+        if let previewProvider {
             return UIContextMenuConfiguration(identifier: nil) {
                 previewProvider()
             } actionProvider: { [weak self] _ in
@@ -182,7 +182,7 @@ extension TappableView: UIContextMenuInteractionDelegate {
     public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration)
         -> UITargetedPreview?
     {
-        if let previewBackgroundColor = previewBackgroundColor {
+        if let previewBackgroundColor {
             let param = UIPreviewParameters()
             param.backgroundColor = previewBackgroundColor
             return UITargetedPreview(view: self, parameters: param)
@@ -195,7 +195,7 @@ extension TappableView: UIContextMenuInteractionDelegate {
         willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration,
         animator: UIContextMenuInteractionCommitAnimating
     ) {
-        if let onCommitPreview = onCommitPreview {
+        if let onCommitPreview {
             onCommitPreview(animator)
         } else {
             animator.addAnimations {

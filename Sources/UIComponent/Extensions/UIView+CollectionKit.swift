@@ -23,7 +23,7 @@ extension UIView {
 
 @objc extension UIView {
     func recycleForUIComponentReuse() {
-        if let _ckContext = _ckContext,
+        if let _ckContext,
             let reuseIdentifier = _ckContext.reuseIdentifier,
             let reuseManager = _ckContext.reuseManager
         {

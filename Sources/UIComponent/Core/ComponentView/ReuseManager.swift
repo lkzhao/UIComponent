@@ -31,7 +31,7 @@ open class ReuseManager: NSObject {
         } else {
             reusableViews[identifier] = [view]
         }
-        if let cleanupTimer = cleanupTimer {
+        if let cleanupTimer {
             cleanupTimer.fireDate = Date().addingTimeInterval(lifeSpan)
         } else {
             cleanupTimer = Timer.scheduledTimer(

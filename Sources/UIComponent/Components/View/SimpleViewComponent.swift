@@ -25,7 +25,7 @@ public struct SimpleViewRenderNode<View: UIView>: ViewRenderNode {
     public let view: View?
     public let generator: (() -> View)?
     public var id: String? {
-        if let view = view {
+        if let view {
             return "view-at-\(Unmanaged.passUnretained(view).toOpaque())"
         }
         return nil
@@ -53,9 +53,9 @@ public struct SimpleViewRenderNode<View: UIView>: ViewRenderNode {
     }
 
     public func makeView() -> View {
-        if let view = view {
+        if let view {
             return view
-        } else if let generator = generator {
+        } else if let generator {
             return generator()
         } else {
             return View()

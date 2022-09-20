@@ -16,7 +16,7 @@ open class ComponentScrollView: UIScrollView, ComponentDisplayableView {
 
     public var onFirstReload: ((ComponentScrollView) -> Void)? {
         didSet {
-            if let onFirstReload = onFirstReload {
+            if let onFirstReload {
                 engine.onFirstReload = { [weak self] in
                     guard let self = self else { return }
                     onFirstReload(self)
