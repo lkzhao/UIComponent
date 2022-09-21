@@ -58,7 +58,7 @@ class AsyncImageViewController: ComponentViewController {
                         detailVC.view.backgroundColor = .clear
                         return detailVC
                     }
-                    .contextMenuProvider { [weak self] in
+                    .contextMenuProvider { [weak self] _ in
                         UIMenu(children: [
                             UIAction(
                                 title: "Delete",

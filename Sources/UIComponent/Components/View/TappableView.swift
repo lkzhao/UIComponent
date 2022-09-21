@@ -86,7 +86,7 @@ open class TappableView: ComponentView {
 
     public var onCommitPreview: ((UIContextMenuInteractionCommitAnimating) -> Void)?
 
-    public var contextMenuProvider: (() -> UIMenu?)? {
+    public var contextMenuProvider: ((TappableView) -> UIMenu?)? {
         didSet {
             if previewProvider != nil || contextMenuProvider != nil {
                 addInteraction(contextMenuInteraction)
@@ -170,11 +170,13 @@ extension TappableView: UIContextMenuInteractionDelegate {
             return UIContextMenuConfiguration(identifier: nil) {
                 previewProvider()
             } actionProvider: { [weak self] _ in
-                return self?.contextMenuProvider?()
+                guard let self else { return nil }
+                return self.contextMenuProvider?(self)
             }
         } else {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
-                return self?.contextMenuProvider?()
+                guard let self else { return nil }
+                return self.contextMenuProvider?(self)
             }
         }
     }
