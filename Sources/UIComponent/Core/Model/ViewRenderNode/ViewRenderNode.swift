@@ -51,7 +51,7 @@ extension ViewRenderNode {
 }
 
 extension ViewRenderNode {
-    internal func _makeView() -> Any {
+    public func _makeView() -> Any {
         if View.self is UIView.Type {
             switch reuseStrategy {
             case .automatic:
@@ -64,7 +64,7 @@ extension ViewRenderNode {
         }
         return makeView()
     }
-    internal func _updateView(_ view: Any) {
+    public func _updateView(_ view: Any) {
         guard let view = view as? View else { return }
         return updateView(view)
     }
