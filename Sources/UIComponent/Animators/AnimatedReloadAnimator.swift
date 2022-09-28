@@ -3,9 +3,9 @@
 import UIKit
 
 public class AnimatedReloadAnimator: Animator {
-    let transform: CATransform3D
-    let duration: TimeInterval
-    let cascade: Bool
+    public var transform: CATransform3D
+    public var duration: TimeInterval
+    public var cascade: Bool
 
     public init(
         transform: CATransform3D = CATransform3DIdentity,
