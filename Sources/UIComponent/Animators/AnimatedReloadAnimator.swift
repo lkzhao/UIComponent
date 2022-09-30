@@ -40,7 +40,7 @@ public class AnimatedReloadAnimator: Animator {
     }
 
     public override func insert(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
-        view.bounds = frame.bounds
+        view.bounds.size = frame.size
         view.center = frame.center
         if componentView.isReloading, componentView.hasReloaded, componentView.bounds.intersects(frame) {
             let offsetTime: TimeInterval = cascade ? TimeInterval(frame.origin.distance(componentView.bounds.origin) / 3000) : 0
