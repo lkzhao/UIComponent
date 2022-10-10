@@ -211,13 +211,19 @@ extension Component {
 }
 
 extension Component {
-    public func renderNodeReader(_ reader: @escaping (RenderNode) -> Void) -> RenderNodeReader {
-        RenderNodeReader(child: self, reader)
+    /// Read the RenderNode
+    /// - Parameter reader: the RenderNode that gets generated on component layout
+    /// - Returns: RenderNodeReaderComponent
+    public func renderNodeReader(_ reader: @escaping (RenderNode) -> Void) -> RenderNodeReaderComponent {
+        RenderNodeReaderComponent(child: self, reader)
     }
 }
 
 extension Component {
-    public func onDisplay(_ callback: @escaping (CGSize, CGRect) -> Void) -> OnDisplayComponent {
-        OnDisplayComponent(child: self, onDisplay: callback)
+    /// Observe the visible bounds change of the current component
+    /// - Parameter callback: Called when the visible bounds changed with the current component's size and its visible bounds.
+    /// - Returns: Component
+    public func onVisibleBoundsChanged(_ callback: @escaping (CGSize, CGRect) -> Void) -> VisibleBoundsObserverComponent {
+        VisibleBoundsObserverComponent(child: self, onVisibleBoundsChanged: callback)
     }
 }
