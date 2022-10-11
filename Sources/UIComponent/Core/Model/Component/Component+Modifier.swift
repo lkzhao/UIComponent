@@ -213,9 +213,9 @@ extension Component {
 extension Component {
     /// Read the RenderNode
     /// - Parameter reader: the RenderNode that gets generated on component layout
-    /// - Returns: RenderNodeReaderComponent
-    public func renderNodeReader(_ reader: @escaping (RenderNode) -> Void) -> RenderNodeReaderComponent {
-        RenderNodeReaderComponent(child: self, reader)
+    /// - Returns: RenderNodeReader
+    public func renderNodeReader(_ reader: @escaping (RenderNode) -> Void) -> RenderNodeReader {
+        RenderNodeReader(child: self, reader)
     }
 }
 

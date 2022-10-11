@@ -26,12 +26,6 @@ extension ComponentDisplayableView {
         set { engine.visibleFrameInsets = newValue }
     }
 
-    /// whether or not the view is allowed to reload its content after setNeedsReload is called
-    public var allowReload: Bool {
-        get { engine.allowReload }
-        set { engine.allowReload = newValue }
-    }
-
     /// how many times this view has reloaded
     public var reloadCount: Int {
         engine.reloadCount

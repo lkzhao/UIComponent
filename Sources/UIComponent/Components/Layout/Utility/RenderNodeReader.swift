@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct RenderNodeReaderComponent: Component {
+public struct RenderNodeReader: Component {
     let child: Component
     let reader: (RenderNode) -> Void
 

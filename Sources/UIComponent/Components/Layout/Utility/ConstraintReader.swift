@@ -17,7 +17,7 @@ import UIKit
 ///         Space(width: 50, height: 50).size(width: .fill).constraint(constraint)
 ///       }
 ///     }
-public struct ConstraintReaderComponent: Component {
+public struct ConstraintReader: Component {
     let builder: (Constraint) -> Component
 
     public init(_ builder: @escaping (Constraint) -> Component) {
