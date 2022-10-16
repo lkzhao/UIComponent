@@ -1,7 +1,7 @@
 //  Created by Luke Zhao on 6/8/21.
 
 import UIKit
-import BaseToolbox
+@_implementationOnly import BaseToolbox
 
 public struct TappableViewConfiguration {
     public static var `default` = TappableViewConfiguration(onHighlightChanged: nil, didTap: nil)
