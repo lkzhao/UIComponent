@@ -1,6 +1,6 @@
 //  Created by Luke Zhao on 8/27/20.
 
-import BaseToolbox
+@_implementationOnly import BaseToolbox
 import UIKit
 
 public protocol ComponentReloadDelegate: AnyObject {

@@ -1,6 +1,6 @@
 //  Created by Luke Zhao on 2017-07-19.
 
-import BaseToolbox
+@_implementationOnly import BaseToolbox
 import UIKit
 
 open class Animator {

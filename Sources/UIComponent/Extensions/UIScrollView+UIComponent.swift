@@ -1,6 +1,6 @@
 //  Created by Luke on 4/16/17.
 
-import BaseToolbox
+@_implementationOnly import BaseToolbox
 import UIKit
 
 extension UIScrollView {

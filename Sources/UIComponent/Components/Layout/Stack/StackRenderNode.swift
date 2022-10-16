@@ -1,6 +1,6 @@
 //  Created by Luke Zhao on 8/22/20.
 
-import BaseToolbox
+@_implementationOnly import BaseToolbox
 import UIKit
 
 public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
