@@ -105,4 +105,12 @@ extension ComponentDisplayableView {
     public func frame(id: String) -> CGRect? {
         engine.renderNode?.frame(id: id)
     }
+    public func visibleView(id: String) -> UIView? {
+        for (view, renderNode) in zip(visibleViews, visibleRenderable) {
+            if renderNode.id == id {
+                return view
+            }
+        }
+        return nil
+    }
 }
