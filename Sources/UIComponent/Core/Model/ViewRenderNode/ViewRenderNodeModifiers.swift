@@ -93,14 +93,14 @@ extension ViewRenderNode {
 
 public struct ViewAnimatorWrapperRenderNode<Content: ViewRenderNode>: ViewRenderNodeWrapper {
     public let content: Content
-    var passthrough: Bool
+    var passthroughUpdate: Bool
     var insertBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
     var updateBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
     var deleteBlock: ((ComponentDisplayableView, UIView, () -> Void) -> Void)?
     public var animator: Animator? {
         let wrapper = WrapperAnimator()
         wrapper.content = content.animator
-        wrapper.passthrough = passthrough
+        wrapper.passthroughUpdate = passthroughUpdate
         wrapper.insertBlock = insertBlock
         wrapper.deleteBlock = deleteBlock
         wrapper.updateBlock = updateBlock
@@ -110,12 +110,6 @@ public struct ViewAnimatorWrapperRenderNode<Content: ViewRenderNode>: ViewRender
 
 extension ViewRenderNode {
     func animateUpdate(passthrough: Bool = false, _ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperRenderNode<Self> {
-        ViewAnimatorWrapperRenderNode(content: self, passthrough: passthrough, updateBlock: updateBlock)
-    }
-    func animateInsert(passthrough: Bool = false, _ insertBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperRenderNode<Self> {
-        ViewAnimatorWrapperRenderNode(content: self, passthrough: passthrough, insertBlock: insertBlock)
-    }
-    func animateDelete(passthrough: Bool = false, _ deleteBlock: @escaping ((ComponentDisplayableView, UIView, () -> Void) -> Void)) -> ViewAnimatorWrapperRenderNode<Self> {
-        ViewAnimatorWrapperRenderNode(content: self, passthrough: passthrough, deleteBlock: deleteBlock)
+        ViewAnimatorWrapperRenderNode(content: self, passthroughUpdate: passthrough, updateBlock: updateBlock)
     }
 }
