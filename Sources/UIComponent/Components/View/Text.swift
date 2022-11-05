@@ -6,6 +6,30 @@ public struct Text: ViewComponent {
     public let attributedText: NSAttributedString
     public let numberOfLines: Int
     public let lineBreakMode: NSLineBreakMode
+
+    @available(iOS 16, *)
+    public init(
+        localized: String.LocalizationValue,
+        font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
+        numberOfLines: Int = 0,
+        lineBreakMode: NSLineBreakMode = .byWordWrapping
+    ) {
+        self.attributedText = NSAttributedString(string: String(localized: localized), attributes: [.font: font])
+        self.numberOfLines = numberOfLines
+        self.lineBreakMode = lineBreakMode
+    }
+
+    @available(iOS 15, *)
+    public init(
+        _ attributedText: AttributedString,
+        numberOfLines: Int = 0,
+        lineBreakMode: NSLineBreakMode = .byWordWrapping
+    ) {
+        self.attributedText = NSAttributedString(attributedText)
+        self.numberOfLines = numberOfLines
+        self.lineBreakMode = lineBreakMode
+    }
+
     public init(
         _ text: String,
         font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
