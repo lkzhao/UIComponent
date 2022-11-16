@@ -9,7 +9,7 @@ public struct Text: ViewComponent {
 
     @available(iOS 15, *)
     public init(
-        localized: String.LocalizationValue,
+        _ localized: String.LocalizationValue,
         font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
         numberOfLines: Int = 0,
         lineBreakMode: NSLineBreakMode = .byWordWrapping
@@ -31,7 +31,7 @@ public struct Text: ViewComponent {
     }
 
     public init(
-        _ text: String,
+        verbatim text: String,
         font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
         numberOfLines: Int = 0,
         lineBreakMode: NSLineBreakMode = .byWordWrapping
