@@ -37,8 +37,8 @@ struct UserProfile: ComponentBuilder {
                 .shadowAvatar()
 
             VStack(spacing: 4) {
-                Text(userName)
-                Text(introduce, font: .systemFont(ofSize: 13, weight: .light)).textColor(.secondaryLabel)
+                Text(verbatim: userName)
+                Text(verbatim: introduce, font: .systemFont(ofSize: 13, weight: .light)).textColor(.secondaryLabel)
                 Text("🤔🤔🤔", font: .systemFont(ofSize: 12, weight: .light)).textColor(.secondaryLabel)
             }
             .flex()

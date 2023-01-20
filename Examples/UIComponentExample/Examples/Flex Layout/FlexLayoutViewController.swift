@@ -68,7 +68,7 @@ class FlexLayoutViewController: ComponentViewController {
             VStack(spacing: 10) {
                 Text("Justify Content", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
                 for justifyContent in MainAxisAlignment.allCases {
-                    Text("\(justifyContent)").size(width: .fill)
+                    Text(verbatim: "\(justifyContent)").size(width: .fill)
                     Flow(justifyContent: justifyContent) {
                         for index in 0..<10 {
                             Box(index)
@@ -81,7 +81,7 @@ class FlexLayoutViewController: ComponentViewController {
             VStack(spacing: 10) {
                 Text("Align Items", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
                 for alignItems in CrossAxisAlignment.allCases {
-                    Text("\(alignItems)").size(width: .fill)
+                    Text(verbatim: "\(alignItems)").size(width: .fill)
                     Flow(alignItems: alignItems) {
                         for index in 0..<10 {
                             Box(index, height: 50 + CGFloat(index % 4) * 10)
@@ -94,7 +94,7 @@ class FlexLayoutViewController: ComponentViewController {
             VStack(spacing: 10) {
                 Text("Align Content", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
                 for alignContent in MainAxisAlignment.allCases {
-                    Text("\(alignContent)").size(width: .fill)
+                    Text(verbatim: "\(alignContent)").size(width: .fill)
                     Flow(alignContent: alignContent) {
                         for index in 0..<10 {
                             Box(index, height: 50)
@@ -144,7 +144,7 @@ class FlexLayoutViewController: ComponentViewController {
                 Text("Flex align-self", font: .boldSystemFont(ofSize: 20))
 
                 for align in CrossAxisAlignment.allCases {
-                    Text("number 1 align-self \(align)").size(width: .fill)
+                    Text(verbatim: "number 1 align-self \(align)").size(width: .fill)
                     Flow {
                         Box(1).flex(alignSelf: align)
                         Box(2, height: 60)

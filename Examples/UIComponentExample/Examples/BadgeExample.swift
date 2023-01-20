@@ -41,7 +41,7 @@ struct NumberBadge: ComponentBuilder {
     let isRoundStyle: Bool
     func build() -> Component {
         Text(
-            text,
+            verbatim: text,
             font: .systemFont(ofSize: 12)
         )
         .size(
@@ -83,7 +83,7 @@ struct NumberBadge: ComponentBuilder {
 struct BannerBadge: ComponentBuilder {
     let text: String
     func build() -> Component {
-        Text(text, font: .systemFont(ofSize: 11)).textAlignment(.center).textColor(.white).backgroundColor(.systemRed).adjustsFontSizeToFitWidth(true).size(height: .absolute(15))
+        Text(verbatim: text, font: .systemFont(ofSize: 11)).textAlignment(.center).textColor(.white).backgroundColor(.systemRed).adjustsFontSizeToFitWidth(true).size(height: .absolute(15))
             .inset(h: 2)
     }
 

@@ -2,6 +2,7 @@
 
 import UIComponent
 import UIKit
+import BaseToolbox
 
 struct ImageData {
     let url: URL

@@ -30,7 +30,7 @@ class GalleryViewController: ComponentViewController {
 
             for layout in GalleryFrames.LayoutType.allCases {
                 VStack(spacing: 10) {
-                    Text(".\(layout)")
+                    Text(verbatim: "\(layout)")
                     let template = GalleryFrames(layout: layout)
                     VerticalGallery(spacing: 5, template: [template]) {
                         for index in 0..<template.calculateFrames(spacing: 0, side: 0, makeFrame: { _, _ in .zero }).count {

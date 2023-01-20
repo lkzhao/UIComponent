@@ -19,6 +19,6 @@ class Box: ComponentBuilder {
         self.init("", width: width, height: height)
     }
     func build() -> Component {
-        Space(width: width, height: height).styleColor(.systemBlue).overlay(Text(text).textColor(.white).textAlignment(.center).size(width: .fill, height: .fill))
+        Space(width: width, height: height).styleColor(.systemBlue).overlay(Text(verbatim: text).textColor(.white).textAlignment(.center).size(width: .fill, height: .fill))
     }
 }
