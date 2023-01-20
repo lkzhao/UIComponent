@@ -6,6 +6,7 @@ public struct Text: ViewComponent {
     public let attributedString: NSAttributedString
     public let numberOfLines: Int
     public let lineBreakMode: NSLineBreakMode
+    public let isSwiftAttributedString: Bool
 
     @available(iOS 15, *)
     public init(
@@ -17,6 +18,7 @@ public struct Text: ViewComponent {
         self.attributedString = NSAttributedString(string: String(localized: localized), attributes: [.font: font])
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
+        self.isSwiftAttributedString = false
     }
 
     @available(iOS 15, *)
@@ -28,6 +30,7 @@ public struct Text: ViewComponent {
         self.attributedString = NSAttributedString(attributedString)
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
+        self.isSwiftAttributedString = true
     }
 
     public init(
@@ -39,6 +42,7 @@ public struct Text: ViewComponent {
         self.attributedString = NSAttributedString(string: text, attributes: [.font: font])
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
+        self.isSwiftAttributedString = false
     }
 
     public init(
@@ -49,36 +53,46 @@ public struct Text: ViewComponent {
         self.attributedString = attributedString
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
+        self.isSwiftAttributedString = false
     }
 
     public func layout(_ constraint: Constraint) -> TextRenderNode {
-        guard numberOfLines != 0 else {
+        if numberOfLines != 0 || isSwiftAttributedString {
+            // Slower route
+            //
+            // Swift's AttributedString contains some attributes like NSInlinePresentationIntent
+            // that are not processed by foundation's `boundingRect(size:...)` method or
+            // CTFramesetter. Which will return incorrect sizing. So we fallback to TextKit.
+            let textStorage = NSTextStorage()
+            let layoutManager = NSLayoutManager()
+            layoutManager.usesFontLeading = false
+            textStorage.addLayoutManager(layoutManager)
+            textStorage.setAttributedString(attributedString)
+            let textContainer = NSTextContainer(size: constraint.maxSize)
+            textContainer.lineFragmentPadding = 0
+            textContainer.lineBreakMode = lineBreakMode
+            textContainer.maximumNumberOfLines = numberOfLines
+            layoutManager.addTextContainer(textContainer)
+            layoutManager.ensureLayout(for: textContainer)
+            let rect = layoutManager.usedRect(for: textContainer)
             return TextRenderNode(
                 attributedString: attributedString,
                 numberOfLines: numberOfLines,
                 lineBreakMode: lineBreakMode,
-                size: attributedString.boundingRect(with: constraint.maxSize, options: [.usesLineFragmentOrigin], context: nil).size.bound(to: constraint)
+                size: rect.size.bound(to: constraint)
+            )
+        } else {
+            // Faster route
+            let size = attributedString.boundingRect(with: constraint.maxSize,
+                                                     options: [.usesLineFragmentOrigin],
+                                                     context: nil).size
+            return TextRenderNode(
+                attributedString: attributedString,
+                numberOfLines: numberOfLines,
+                lineBreakMode: lineBreakMode,
+                size: size.bound(to: constraint)
             )
         }
-        let textStorage = NSTextStorage()
-        let layoutManager = NSLayoutManager()
-        layoutManager.usesFontLeading = false
-        textStorage.addLayoutManager(layoutManager)
-
-        textStorage.setAttributedString(attributedString)
-        let textContainer = NSTextContainer(size: constraint.maxSize)
-        textContainer.lineFragmentPadding = 0
-        textContainer.lineBreakMode = lineBreakMode
-        textContainer.maximumNumberOfLines = numberOfLines
-        layoutManager.addTextContainer(textContainer)
-        layoutManager.ensureLayout(for: textContainer)
-        let rect = layoutManager.usedRect(for: textContainer)
-        return TextRenderNode(
-            attributedString: attributedString,
-            numberOfLines: numberOfLines,
-            lineBreakMode: lineBreakMode,
-            size: rect.size.bound(to: constraint)
-        )
     }
 }
 
