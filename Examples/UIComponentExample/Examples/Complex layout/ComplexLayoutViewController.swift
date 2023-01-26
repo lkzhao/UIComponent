@@ -96,7 +96,7 @@ class ComplexLayoutViewController: ComponentViewController {
                         Text("Empty Tag")
                     } else {
                         for (index, tag) in tags.enumerated() {
-                            Text(verbatim: tag.name, font: .systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.color)
+                            Text(tag.name, font: .systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.color)
                                 .tappableView { [unowned self] in
                                     self.tags.remove(at: index)
                                 }
@@ -120,7 +120,7 @@ class ComplexLayoutViewController: ComponentViewController {
                         Text("Empty Tag")
                     } else {
                         for (index, tag) in tags.enumerated() {
-                            Text(verbatim: tag.name, font: .systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.color)
+                            Text(tag.name, font: .systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.color)
                                 .tappableView { [unowned self] in
                                     self.tags.remove(at: index)
                                 }

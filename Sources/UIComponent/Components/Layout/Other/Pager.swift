@@ -12,7 +12,7 @@ extension Pager {
         guard !isUnbounded else {
             let error = "Pager cannot be wrapped under an unlimited constraint component on its main axis. e.g. under a HStack or VStack"
             assertionFailure(error)
-            return Text(verbatim: error).textColor(.red).layout(constraint)
+            return Text(error).textColor(.red).layout(constraint)
         }
         let pageMain = main(constraint.maxSize)
         let childConstraint = Constraint(minSize: size(main: pageMain, cross: cross(constraint.minSize)),

@@ -25,7 +25,7 @@ class ComponentViewController: UIViewController {
 
     var component: Component {
         VStack(justifyContent: .center, alignItems: .center) {
-            Text(verbatim: "Empty")
+            Text("Empty")
         }
         .size(width: .fill)
     }

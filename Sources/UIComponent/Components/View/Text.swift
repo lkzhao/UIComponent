@@ -8,14 +8,13 @@ public struct Text: ViewComponent {
     public let lineBreakMode: NSLineBreakMode
     public let isSwiftAttributedString: Bool
 
-    @available(iOS 15, *)
     public init(
-        _ localized: String.LocalizationValue,
+        _ text: String,
         font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
         numberOfLines: Int = 0,
         lineBreakMode: NSLineBreakMode = .byWordWrapping
     ) {
-        self.attributedString = NSAttributedString(string: String(localized: localized), attributes: [.font: font])
+        self.attributedString = NSAttributedString(string: text, attributes: [.font: font])
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
         self.isSwiftAttributedString = false
@@ -31,18 +30,6 @@ public struct Text: ViewComponent {
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
         self.isSwiftAttributedString = true
-    }
-
-    public init(
-        verbatim text: String,
-        font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
-        numberOfLines: Int = 0,
-        lineBreakMode: NSLineBreakMode = .byWordWrapping
-    ) {
-        self.attributedString = NSAttributedString(string: text, attributes: [.font: font])
-        self.numberOfLines = numberOfLines
-        self.lineBreakMode = lineBreakMode
-        self.isSwiftAttributedString = false
     }
 
     public init(

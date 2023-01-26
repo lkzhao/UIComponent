@@ -33,7 +33,7 @@ struct ExampleItem: ComponentBuilder {
     }
     func build() -> Component {
         VStack {
-            Text(verbatim: name)
+            Text(name)
         }
         .inset(20)
         .tappableView {
