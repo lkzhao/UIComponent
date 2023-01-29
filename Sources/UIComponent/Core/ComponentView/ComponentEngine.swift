@@ -74,8 +74,8 @@ public class ComponentEngine {
     }
 
     /// contentView layout configurations
-    var centerContentViewVertically = false
-    var centerContentViewHorizontally = true
+    public var centerContentViewVertically = false
+    public var centerContentViewHorizontally = true
 
     /// internal helpers for updating the component view
     var contentSize: CGSize = .zero {

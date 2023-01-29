@@ -40,6 +40,17 @@ extension FlexLayout {
             children: content()
         )
     }
+    
+    public init(
+        spacing: CGFloat = 0,
+        justifyContent: MainAxisAlignment = .start,
+        alignItems: CrossAxisAlignment = .start,
+        alignContent: MainAxisAlignment = .start,
+        children: [Component]
+    ) {
+        self.init(lineSpacing: spacing, interitemSpacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: children)
+    }
+
     public init(
         spacing: CGFloat = 0,
         justifyContent: MainAxisAlignment = .start,
@@ -47,7 +58,7 @@ extension FlexLayout {
         alignContent: MainAxisAlignment = .start,
         @ComponentArrayBuilder _ content: () -> [Component]
     ) {
-        self.init(lineSpacing: spacing, interitemSpacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: content())
+        self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: content())
     }
 }
 
