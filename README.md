@@ -2,7 +2,7 @@
 
 ### Write UI in crazy speed, with great perf & no limitations.
 
-**SwiftUI** still haven't satisfied my requirements. So I build this.
+**SwiftUI** still hasn't satisfied my requirements. So I built this.
 
 This framework allows you to build UI using UIKit with syntax similar to SwiftUI. You can think about this as an improved `UICollectionView`.
 
@@ -27,7 +27,7 @@ This framework allows you to build UI using UIKit with syntax similar to SwiftUI
 
 ## How to use
 
-At its core, it provides two `UIView` subclass: `ComponentView` and `ComponentScrollView`.
+At its core, it provides two `UIView` subclasses: `ComponentView` and `ComponentScrollView`.
 
 These two classes takes in a `component` parameter where you use to construct your UI using declarative syntax. You can also apply modifiers to these components to treak them further.
 
