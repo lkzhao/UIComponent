@@ -72,10 +72,11 @@ extension Stack {
         var flexGrow: CGFloat = 0
         var flexShrink: CGFloat = 0
         let crossMaxConstraint = cross(constraint.maxSize)
+        let crossMinConstraint = alignItems == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0
 
         let childConstraint = Constraint(
-            minSize: size(main: -.infinity, cross: alignItems == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0),
-            maxSize: size(main: .infinity, cross: cross(constraint.maxSize))
+            minSize: size(main: -.infinity, cross: crossMinConstraint),
+            maxSize: size(main: .infinity, cross: crossMaxConstraint)
         )
         for child in children {
             if let flexChild = child as? Flexible {
@@ -83,7 +84,8 @@ extension Stack {
                 flexShrink += flexChild.flexShrink
             }
             let childRenderNode = child.layout(childConstraint)
-            mainFreezed += main(childRenderNode.size)
+            let mainIntrinsic = main(childRenderNode.size)
+            mainFreezed += mainIntrinsic.isFinite ? mainIntrinsic : 0
             renderNodes.append(childRenderNode)
         }
 
@@ -93,11 +95,13 @@ extension Stack {
             for (index, child) in children.enumerated() {
                 if let child = child as? Flexible, child.flexGrow > 0 {
                     let alignChild = child.alignSelf ?? alignItems
+                    let childCrossMinConstraint = alignChild == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0
                     let addition = mainPerFlex * child.flexGrow
-                    let mainReserved = addition + main(renderNodes[index].size)
+                    let mainIntrinsic = main(renderNodes[index].size)
+                    let mainReserved = addition + (mainIntrinsic.isFinite ? mainIntrinsic : 0)
                     let constraint = Constraint(
-                        minSize: size(main: mainReserved, cross: (alignChild == .stretch) ? cross(constraint.maxSize) : 0),
-                        maxSize: size(main: mainReserved, cross: cross(constraint.maxSize))
+                        minSize: size(main: mainReserved, cross: childCrossMinConstraint),
+                        maxSize: size(main: mainReserved, cross: crossMaxConstraint)
                     )
                     renderNodes[index] = child.layout(constraint)
                     mainFreezed += addition
@@ -108,10 +112,11 @@ extension Stack {
             for (index, child) in children.enumerated() {
                 if let child = child as? Flexible, child.flexShrink > 0 {
                     let alignChild = child.alignSelf ?? alignItems
+                    let childCrossMinConstraint = alignChild == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0
                     let mainReserved = mainPerFlex * child.flexShrink + main(renderNodes[index].size)
                     let constraint = Constraint(
-                        minSize: size(main: mainReserved, cross: (alignChild == .stretch) ? cross(constraint.maxSize) : 0),
-                        maxSize: size(main: mainReserved, cross: cross(constraint.maxSize))
+                        minSize: size(main: mainReserved, cross: childCrossMinConstraint),
+                        maxSize: size(main: mainReserved, cross: crossMaxConstraint)
                     )
                     renderNodes[index] = child.layout(constraint)
                     mainFreezed += mainReserved
