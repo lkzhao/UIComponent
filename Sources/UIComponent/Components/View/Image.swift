@@ -6,7 +6,7 @@ public struct Image: ViewComponent {
     public let image: UIImage
 
     public init(_ imageName: String) {
-        self.init(UIImage(named: imageName)!)
+        self.init(UIImage(named: imageName) ?? UIImage())
     }
 
     public init(systemName: String, withConfiguration configuration: UIImage.Configuration? = nil) {
