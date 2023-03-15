@@ -227,3 +227,24 @@ extension Component {
         VisibleBoundsObserverComponent(child: self, onVisibleBoundsChanged: callback)
     }
 }
+
+extension Component {
+    /// A block that can be captured inside `layout` or `build` method to trigger a reload on the linked componentView
+    public var reload: () -> Void {
+        guard let componentView = currentComponentView() else {
+            assertionFailure("reloadComponent should only be captured within `layout` or `build` method")
+            return {}
+        }
+        return { [weak componentView] in
+            componentView?.reloadData()
+        }
+    }
+}
+
+extension Component {
+    /// Hold any value while the Component is displayed
+    /// - Parameter value: value to be holding
+    public func hold(value: Any) -> Component {
+        HoldValueComponent(child: self, value: value)
+    }
+}
