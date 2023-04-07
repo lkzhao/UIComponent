@@ -7,6 +7,7 @@
 
 import UIKit
 
+#if !os(tvOS)
 @available(iOS 14.0, *)
 public struct PrimaryMenuComponent: ViewComponent {
     let component: Component
@@ -163,3 +164,4 @@ extension PrimaryMenu: UIPointerInteractionDelegate {
         return UIPointerStyle(effect: .automatic(UITargetedPreview(view: contentView)), shape: nil)
     }
 }
+#endif

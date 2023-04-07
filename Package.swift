@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
     name: "UIComponent",
     platforms: [
-        .iOS("13.0")
+        .iOS("13.0"),
+        .tvOS("15.0")
     ],
     products: [
         .library(

@@ -2,6 +2,12 @@
 
 import UIKit
 
+#if os(tvOS)
+extension UIFont {
+    public static let systemFontSize: Double = 16.0
+}
+#endif
+
 public struct Text: ViewComponent {
     public let attributedString: NSAttributedString
     public let numberOfLines: Int

@@ -26,7 +26,9 @@ open class TappableView: ComponentView {
         $0.numberOfTapsRequired = 2
     }
     public private(set) lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
+    #if !os(tvOS)
     public private(set) lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
+    #endif
 
     public var previewBackgroundColor: UIColor?
     public var onTap: ((TappableView) -> Void)? {
@@ -59,6 +61,7 @@ open class TappableView: ComponentView {
         }
     }
 
+#if !os(tvOS)
     private var dropInteraction: UIDropInteraction?
     public weak var dropDelegate: UIDropInteractionDelegate? {
         didSet {
@@ -102,6 +105,7 @@ open class TappableView: ComponentView {
         get { _pointerStyleProvider as? () -> UIPointerStyle? }
         set { _pointerStyleProvider = newValue }
     }
+#endif
 
     open var isHighlighted: Bool = false {
         didSet {
@@ -114,9 +118,11 @@ open class TappableView: ComponentView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         accessibilityTraits = .button
+#if !os(tvOS)
         if #available(iOS 13.4, *) {
             addInteraction(UIPointerInteraction(delegate: self))
         }
+#endif
     }
 
     required public init?(coder: NSCoder) {
@@ -153,6 +159,7 @@ open class TappableView: ComponentView {
     }
 }
 
+#if !os(tvOS)
 @available(iOS 13.4, *)
 extension TappableView: UIPointerInteractionDelegate {
     public func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
@@ -206,6 +213,7 @@ extension TappableView: UIContextMenuInteractionDelegate {
         }
     }
 }
+#endif
 
 extension Component {
     public func tappableView(
