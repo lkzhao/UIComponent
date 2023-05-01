@@ -105,8 +105,10 @@ extension ViewComponent {
 
 extension ViewComponent where R.View: UIView {
     public func roundedCorner() -> ViewUpdateComponent<Self> {
-        update { view in
-            view.cornerRadius = min(view.bounds.width, view.bounds.height) / 2
+        ViewModifierComponent(content: self) { node in
+            node.update { view in
+                view.cornerRadius = min(node.size.width, node.size.height) / 2
+            }
         }
     }
 }
