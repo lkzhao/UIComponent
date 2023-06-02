@@ -77,7 +77,7 @@ public struct Text: ViewComponent {
         } else {
             // Faster route
             let size = attributedString.boundingRect(with: constraint.maxSize,
-                                                     options: [.usesLineFragmentOrigin],
+                                                     options: [.usesLineFragmentOrigin, .usesFontLeading],
                                                      context: nil).size
             return TextRenderNode(
                 attributedString: attributedString,
