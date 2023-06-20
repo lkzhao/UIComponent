@@ -33,33 +33,23 @@ public struct DynamicVisibleFrameInset: Component {
 struct VisibleFrameInsetRenderNode: RenderNode {
     let child: RenderNode
     let insets: UIEdgeInsets
-    var size: CGSize {
-        child.size
-    }
-    var children: [RenderNode] {
-        [child]
-    }
-    var positions: [CGPoint] {
-        [.zero]
-    }
-    func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        child.visibleRenderables(in: frame.inset(by: insets))
+
+    var size: CGSize { child.size }
+    var children: [RenderNode] { child.children }
+    var positions: [CGPoint] { child.positions }
+    func visibleIndexes(in frame: CGRect) -> IndexSet {
+        child.visibleIndexes(in: frame.inset(by: insets))
     }
 }
 
 struct DynamicVisibleFrameInsetRenderNode: RenderNode {
     let child: RenderNode
     let insetProvider: (CGRect) -> UIEdgeInsets
-    var size: CGSize {
-        child.size
-    }
-    var children: [RenderNode] {
-        [child]
-    }
-    var positions: [CGPoint] {
-        [.zero]
-    }
-    func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        child.visibleRenderables(in: frame.inset(by: insetProvider(frame)))
+
+    var size: CGSize { child.size }
+    var children: [RenderNode] { child.children }
+    var positions: [CGPoint] { child.positions }
+    func visibleIndexes(in frame: CGRect) -> IndexSet {
+        child.visibleIndexes(in: frame.inset(by: insetProvider(frame)))
     }
 }

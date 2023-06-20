@@ -240,11 +240,3 @@ extension Component {
         }
     }
 }
-
-extension Component {
-    /// Hold any value while the Component is displayed
-    /// - Parameter value: value to be holding
-    public func hold(value: Any) -> Component {
-        HoldValueComponent(child: self, value: value)
-    }
-}

@@ -2,11 +2,6 @@
 
 import UIKit
 
-public protocol UIComponentRenderableView {
-    init()
-}
-extension UIView: UIComponentRenderableView {}
-
 public enum ReuseStrategy {
     case automatic, noReuse
     case key(String)
@@ -14,8 +9,8 @@ public enum ReuseStrategy {
 
 @dynamicMemberLookup
 public protocol ViewRenderNode<View>: RenderNode {
-    associatedtype View: UIComponentRenderableView
-    
+    associatedtype View: UIView
+
     var id: String? { get }
     var keyPath: String { get }
     var animator: Animator? { get }
@@ -44,17 +39,14 @@ extension ViewRenderNode {
 
 extension ViewRenderNode {
     public func _makeView() -> Any {
-        if View.self is UIView.Type {
-            switch reuseStrategy {
-            case .automatic:
-                return ReuseManager.shared.dequeue(identifier: "\(type(of: self))", makeView() as! UIView)
-            case .noReuse:
-                return makeView()
-            case .key(let key):
-                return ReuseManager.shared.dequeue(identifier: key, makeView() as! UIView)
-            }
+        switch reuseStrategy {
+        case .automatic:
+            return ReuseManager.shared.dequeue(identifier: "\(type(of: self))", makeView())
+        case .noReuse:
+            return makeView()
+        case .key(let key):
+            return ReuseManager.shared.dequeue(identifier: key, makeView())
         }
-        return makeView()
     }
     public func _updateView(_ view: Any) {
         guard let view = view as? View else { return }
