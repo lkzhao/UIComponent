@@ -36,15 +36,7 @@ extension ViewRenderNode {
     public func visibleRenderables(in frame: CGRect) -> [Renderable] {
         let childFrame = CGRect(origin: .zero, size: size)
         if frame.intersects(childFrame) {
-            return [
-                Renderable(
-                    id: id,
-                    keyPath: keyPath,
-                    animator: animator,
-                    renderNode: self,
-                    frame: childFrame
-                )
-            ]
+            return [ViewRenderable(renderNode: self)]
         }
         return []
     }
