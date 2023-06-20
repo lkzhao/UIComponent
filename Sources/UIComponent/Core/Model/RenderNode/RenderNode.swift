@@ -17,10 +17,6 @@ public protocol RenderNode {
 
     /// Get indexes of the children that are visible in the given frame
     /// - Parameter frame: Parent component's visible frame in current component's coordinates.
-    ///
-    /// Discussion: This method is used in the default implementation of `visibleRenderables(in:)`
-    /// It won't be called if `visibleRenderables(in:)` is overwritten.
-    /// The default implementation for this methods is not optmized and will return all indexes regardless of the frame.
     func visibleIndexes(in frame: CGRect) -> IndexSet
 
     /// Get renderables that are visible in the given frame
@@ -48,16 +44,9 @@ extension RenderNode {
             let position = positions[i]
             let childFrame = CGRect(origin: position, size: child.size)
             let childVisibleFrame = frame.intersection(childFrame) - position
-            let childRenderables = child.visibleRenderables(in: childVisibleFrame)
-                .map {
-                    Renderable(
-                        id: $0.id,
-                        keyPath: "\(type(of: self))-\(i)." + $0.keyPath,
-                        animator: $0.animator,
-                        renderNode: $0.renderNode,
-                        frame: CGRect(origin: $0.frame.origin + position, size: $0.frame.size)
-                    )
-                }
+            let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
+                OffsetRenderable(renderable: $0, offset: position, index: i)
+            }
             result.append(contentsOf: childRenderables)
         }
         return result
