@@ -10,12 +10,12 @@ public struct Space: Component {
     public init(width: CGFloat = 0, height: CGFloat = 0) {
         size = CGSize(width: width, height: height)
     }
-    public func layout(_ constraint: Constraint) -> AnyRenderNode {
+    public func layout(_ constraint: Constraint) -> any RenderNode {
         SpaceRenderNode(size: size.bound(to: constraint))
     }
 }
 
-struct SpaceRenderNode: ViewRenderNode {
+struct SpaceRenderNode: RenderNode {
     typealias View = NeverView
     let size: CGSize
 }

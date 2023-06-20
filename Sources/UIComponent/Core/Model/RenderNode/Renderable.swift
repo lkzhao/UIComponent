@@ -7,13 +7,13 @@ public protocol Renderable {
     var id: String { get }
     var userDefinedId: String? { get }
     var animator: Animator? { get }
-    var renderNode: any ViewRenderNode { get }
+    var renderNode: any RenderNode { get }
     var frame: CGRect { get }
 }
 
 public struct ViewRenderable: Renderable {
-    public let renderNode: any ViewRenderNode
-    public init(renderNode: any ViewRenderNode) {
+    public let renderNode: any RenderNode
+    public init(renderNode: any RenderNode) {
         self.renderNode = renderNode
     }
     public var userDefinedId: String? {
@@ -48,7 +48,7 @@ public struct OffsetRenderable: Renderable {
     public var animator: Animator? {
         renderable.animator
     }
-    public var renderNode: any ViewRenderNode {
+    public var renderNode: any RenderNode {
         renderable.renderNode
     }
     public var frame: CGRect {
@@ -69,7 +69,7 @@ public struct IdOverrideRenderable: Renderable {
     public var animator: Animator? {
         renderable.animator
     }
-    public var renderNode: any ViewRenderNode {
+    public var renderNode: any RenderNode {
         renderable.renderNode
     }
     public var frame: CGRect {

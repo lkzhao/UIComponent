@@ -30,7 +30,7 @@ public class ComponentEngine {
     }
 
     /// Current renderNode. This is nil before the layout is done. And it will cache the current RenderNode once the layout is done.
-    var renderNode: AnyRenderNode?
+    var renderNode: (any RenderNode)?
 
     /// internal states
     var needsReload = true
@@ -191,7 +191,7 @@ public class ComponentEngine {
         }
 
         ComponentViewMananger.shared.push(view: componentView)
-        let renderNode: AnyRenderNode
+        let renderNode: any RenderNode
         if let currentRenderNode = self.renderNode {
             renderNode = currentRenderNode
         } else {
@@ -299,7 +299,7 @@ public class ComponentEngine {
     /// This function assigns component with an already calculated render node
     /// This is a performance hack that skips layout for the component if it has already
     /// been layed out.
-    public func reloadWithExisting(component: Component, renderNode: AnyRenderNode) {
+    public func reloadWithExisting(component: Component, renderNode: any RenderNode) {
         self.component = component
         self.renderNode = renderNode
         self.shouldSkipNextLayout = true

@@ -12,20 +12,20 @@ public struct ComponentViewComponent<View: ComponentDisplayableView>: ViewCompon
     public init(component: Component) {
         self.component = component
     }
-    public func layout(_ constraint: Constraint) -> ComponentViewRenderNode<View> {
+    public func layout(_ constraint: Constraint) -> ComponentRenderNode<View> {
         let renderNode = component.layout(constraint)
-        return ComponentViewRenderNode(size: renderNode.size.bound(to: constraint), component: component, renderNode: renderNode)
+        return ComponentRenderNode(size: renderNode.size.bound(to: constraint), component: component, renderNode: renderNode)
     }
 }
 
 /// RenderNode for the `ComponentViewComponent`
-public struct ComponentViewRenderNode<View: ComponentDisplayableView>: ViewRenderNode {
+public struct ComponentRenderNode<View: ComponentDisplayableView>: RenderNode {
     public let size: CGSize
     public let component: Component
-    public let renderNode: AnyRenderNode
+    public let renderNode: any RenderNode
 
-    private var viewRenderNode: (any ViewRenderNode)? {
-        renderNode as? (any ViewRenderNode)
+    private var viewRenderNode: (any RenderNode)? {
+        renderNode as? (any RenderNode)
     }
     public var id: String? {
         viewRenderNode?.id

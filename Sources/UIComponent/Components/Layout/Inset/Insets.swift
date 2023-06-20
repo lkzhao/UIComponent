@@ -10,7 +10,7 @@ public struct Insets: Component {
         self.child = child
         self.insets = insets
     }
-    public func layout(_ constraint: Constraint) -> AnyRenderNode {
+    public func layout(_ constraint: Constraint) -> any RenderNode {
         InsetsRenderNode(child: child.layout(constraint.inset(by: insets)), insets: insets)
     }
 }
@@ -22,21 +22,21 @@ public struct DynamicInsets: Component {
         self.child = child
         self.insetProvider = insetProvider
     }
-    public func layout(_ constraint: Constraint) -> AnyRenderNode {
+    public func layout(_ constraint: Constraint) -> any RenderNode {
         let insets = insetProvider(constraint)
         return InsetsRenderNode(child: child.layout(constraint.inset(by: insets)), insets: insets)
     }
 }
 
-struct InsetsRenderNode: ViewRenderNode {
+struct InsetsRenderNode: RenderNode {
     typealias View = NeverView
 
-    let child: AnyRenderNode
+    let child: any RenderNode
     let insets: UIEdgeInsets
     var size: CGSize {
         child.size.inset(by: -insets)
     }
-    var children: [AnyRenderNode] {
+    var children: [any RenderNode] {
         [child]
     }
     var positions: [CGPoint] {

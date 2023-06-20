@@ -10,7 +10,7 @@ public protocol Stack: Component, BaseLayoutProtocol {
 }
 
 extension Stack {
-    public func layout(_ constraint: Constraint) -> AnyRenderNode {
+    public func layout(_ constraint: Constraint) -> any RenderNode {
         var renderNodes = getRenderNodes(constraint)
         let crossMax = renderNodes.reduce(CGFloat(0).clamp(cross(constraint.minSize), cross(constraint.maxSize))) {
             max($0, cross($1.size))
@@ -64,8 +64,8 @@ extension Stack {
         return renderNode(size: finalSize, children: renderNodes, positions: positions)
     }
 
-    func getRenderNodes(_ constraint: Constraint) -> [AnyRenderNode] {
-        var renderNodes: [AnyRenderNode] = []
+    func getRenderNodes(_ constraint: Constraint) -> [any RenderNode] {
+        var renderNodes: [any RenderNode] = []
 
         let spacings = spacing * CGFloat(children.count - 1)
         var mainFreezed: CGFloat = spacings

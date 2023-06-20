@@ -9,8 +9,8 @@ public protocol WaterfallLayoutProtocol: Component, BaseLayoutProtocol {
 }
 
 extension WaterfallLayoutProtocol {
-    public func layout(_ constraint: Constraint) -> AnyRenderNode {
-        var renderNodes: [AnyRenderNode] = []
+    public func layout(_ constraint: Constraint) -> any RenderNode {
+        var renderNodes: [any RenderNode] = []
         var positions: [CGPoint] = []
 
         let columnWidth = (cross(constraint.maxSize) - CGFloat(columns - 1) * spacing) / CGFloat(columns)

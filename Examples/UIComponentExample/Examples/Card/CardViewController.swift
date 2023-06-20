@@ -49,12 +49,12 @@ private class CardView: UIView {
 private struct CardViewComponent: ViewComponent {
     let data: CardData
     let onTap: () -> Void
-    func layout(_ constraint: Constraint) -> CardViewRenderNode {
-        CardViewRenderNode(data: data, onTap: onTap, size: CGSize(width: constraint.maxSize.width, height: 80))
+    func layout(_ constraint: Constraint) -> CardRenderNode {
+        CardRenderNode(data: data, onTap: onTap, size: CGSize(width: constraint.maxSize.width, height: 80))
     }
 }
 
-private struct CardViewRenderNode: ViewRenderNode {
+private struct CardRenderNode: RenderNode {
     let data: CardData
     let onTap: () -> Void
     var id: String? {

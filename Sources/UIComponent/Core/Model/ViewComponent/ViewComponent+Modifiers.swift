@@ -2,7 +2,7 @@
 
 import UIKit
 
-public struct ViewModifierComponent<Content: ViewComponent, Result: ViewRenderNode>: ViewComponent where Content.R.View == Result.View {
+public struct ViewModifierComponent<Content: ViewComponent, Result: RenderNode>: ViewComponent where Content.R.View == Result.View {
     let content: Content
     let modifier: (Content.R) -> Result
 
@@ -11,19 +11,19 @@ public struct ViewModifierComponent<Content: ViewComponent, Result: ViewRenderNo
     }
 }
 
-public typealias ViewUpdateComponent<Content: ViewComponent> = ViewModifierComponent<Content, ViewUpdateRenderNode<Content.R>>
+public typealias ViewUpdateComponent<Content: ViewComponent> = ViewModifierComponent<Content, UpdateRenderNode<Content.R>>
 
 public typealias ViewKeyPathUpdateComponent<Content: ViewComponent, Value> = ViewModifierComponent<
-    Content, ViewKeyPathUpdateRenderNode<Value, Content.R>
+    Content, KeyPathUpdateRenderNode<Value, Content.R>
 >
 
-public typealias ViewIDComponent<Content: ViewComponent> = ViewModifierComponent<Content, ViewIDRenderNode<Content.R>>
+public typealias ViewIDComponent<Content: ViewComponent> = ViewModifierComponent<Content, IDRenderNode<Content.R>>
 
-public typealias ViewAnimatorComponent<Content: ViewComponent> = ViewModifierComponent<Content, ViewAnimatorRenderNode<Content.R>>
+public typealias ViewAnimatorComponent<Content: ViewComponent> = ViewModifierComponent<Content, AnimatorRenderNode<Content.R>>
 
-public typealias ViewAnimatorWrapperComponent<Content: ViewComponent> = ViewModifierComponent<Content, ViewAnimatorWrapperRenderNode<Content.R>>
+public typealias ViewAnimatorWrapperComponent<Content: ViewComponent> = ViewModifierComponent<Content, AnimatorWrapperRenderNode<Content.R>>
 
-public typealias ViewReuseStrategyComponent<Content: ViewComponent> = ViewModifierComponent<Content, ViewReuseStrategyRenderNode<Content.R>>
+public typealias ViewReuseStrategyComponent<Content: ViewComponent> = ViewModifierComponent<Content, ReuseStrategyRenderNode<Content.R>>
 
 extension ViewComponent {
     public subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<R.View, Value>) -> (Value) -> ViewKeyPathUpdateComponent<Self, Value> {

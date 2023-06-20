@@ -18,7 +18,7 @@ public struct PrimaryMenuComponent: ViewComponent {
         self.menu = menu
     }
 
-    public func layout(_ constraint: Constraint) -> ViewUpdateRenderNode<SimpleViewRenderNode<PrimaryMenu>> {
+    public func layout(_ constraint: Constraint) -> UpdateRenderNode<SimpleRenderNode<PrimaryMenu>> {
         let renderNode = component.layout(Constraint(maxSize: constraint.maxSize))
         return SimpleViewComponent<PrimaryMenu>().size(renderNode.size).update {
             $0.menu = menu

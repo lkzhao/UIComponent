@@ -5,20 +5,20 @@ import Foundation
 public struct VisibleBoundsObserverComponent: Component {
     let child: Component
     let onVisibleBoundsChanged: (CGSize, CGRect) -> ()
-    public func layout(_ constraint: Constraint) -> AnyRenderNode {
+    public func layout(_ constraint: Constraint) -> any RenderNode {
         VisibleBoundsObserverRenderNode(child: child.layout(constraint), onVisibleBoundsChanged: onVisibleBoundsChanged)
     }
 }
 
-struct VisibleBoundsObserverRenderNode: ViewRenderNode {
+struct VisibleBoundsObserverRenderNode: RenderNode {
     typealias View = NeverView
 
-    let child: AnyRenderNode
+    let child: any RenderNode
     let onVisibleBoundsChanged: (CGSize, CGRect) -> ()
     var size: CGSize {
         child.size
     }
-    var children: [AnyRenderNode] {
+    var children: [any RenderNode] {
         [child]
     }
     var positions: [CGPoint] {

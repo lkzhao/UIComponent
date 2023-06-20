@@ -89,7 +89,7 @@ public struct Text: ViewComponent {
     }
 }
 
-public struct TextRenderNode: ViewRenderNode {
+public struct TextRenderNode: RenderNode {
     public let attributedString: NSAttributedString
     public let numberOfLines: Int
     public let lineBreakMode: NSLineBreakMode

@@ -3,9 +3,9 @@
 @_implementationOnly import BaseToolbox
 import UIKit
 
-public protocol StackRenderNode: ViewRenderNode, BaseLayoutProtocol {
+public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
     var size: CGSize { get }
-    var children: [AnyRenderNode] { get }
+    var children: [any RenderNode] { get }
     var positions: [CGPoint] { get }
     var mainAxisMaxValue: CGFloat { get }
 }
@@ -38,7 +38,7 @@ extension StackRenderNode {
 public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
     public typealias View = NeverView
     public let size: CGSize
-    public let children: [AnyRenderNode]
+    public let children: [any RenderNode]
     public let positions: [CGPoint]
     public let mainAxisMaxValue: CGFloat
 }
@@ -46,18 +46,18 @@ public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
 public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
     public typealias View = NeverView
     public let size: CGSize
-    public let children: [AnyRenderNode]
+    public let children: [any RenderNode]
     public let positions: [CGPoint]
     public let mainAxisMaxValue: CGFloat
 }
 
-public struct SlowRenderNode: ViewRenderNode {
+public struct SlowRenderNode: RenderNode {
     public typealias View = NeverView
     public let size: CGSize
-    public let children: [AnyRenderNode]
+    public let children: [any RenderNode]
     public let positions: [CGPoint]
 
-    public init(size: CGSize, children: [AnyRenderNode], positions: [CGPoint]) {
+    public init(size: CGSize, children: [any RenderNode], positions: [CGPoint]) {
         self.size = size
         self.children = children
         self.positions = positions
@@ -78,13 +78,13 @@ public struct SlowRenderNode: ViewRenderNode {
     }
 }
 
-public struct AlwaysRenderNode: ViewRenderNode {
+public struct AlwaysRenderNode: RenderNode {
     public typealias View = NeverView
     public let size: CGSize
-    public let children: [AnyRenderNode]
+    public let children: [any RenderNode]
     public let positions: [CGPoint]
 
-    public init(size: CGSize, children: [AnyRenderNode], positions: [CGPoint]) {
+    public init(size: CGSize, children: [any RenderNode], positions: [CGPoint]) {
         self.size = size
         self.children = children
         self.positions = positions

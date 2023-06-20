@@ -24,7 +24,7 @@ extension GalleryLayout {
 
 extension GalleryLayout {
 
-    func layout(_ constraint: Constraint) -> AnyRenderNode {
+    func layout(_ constraint: Constraint) -> any RenderNode {
 
         var allFrames = [CGRect]()
         var index = 0

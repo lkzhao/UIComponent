@@ -45,7 +45,7 @@ public struct Image: ViewComponent {
     }
 }
 
-public struct ImageRenderNode: ViewRenderNode {
+public struct ImageRenderNode: RenderNode {
     public let image: UIImage
     public let size: CGSize
     public func updateView(_ view: UIImageView) {

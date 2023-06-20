@@ -63,11 +63,11 @@ extension FlexLayout {
 }
 
 extension FlexLayout {
-    public func layout(_ constraint: Constraint) -> AnyRenderNode {
+    public func layout(_ constraint: Constraint) -> any RenderNode {
         let mainMax = main(constraint.maxSize)
         let crossMax = cross(constraint.maxSize)
         let childConstraint = Constraint(maxSize: size(main: .infinity, cross: crossMax))
-        var renderNodes: [AnyRenderNode] = children.map {
+        var renderNodes: [any RenderNode] = children.map {
             $0.layout(childConstraint)
         }
         var positions: [CGPoint] = []

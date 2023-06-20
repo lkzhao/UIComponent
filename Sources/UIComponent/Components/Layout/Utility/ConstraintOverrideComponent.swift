@@ -115,12 +115,12 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
     }
 }
 
-struct SizeOverrideRenderNode: ViewRenderNode {
+struct SizeOverrideRenderNode: RenderNode {
     typealias View = NeverView
 
-    let child: AnyRenderNode
+    let child: any RenderNode
     let size: CGSize
-    var children: [AnyRenderNode] {
+    var children: [any RenderNode] {
         [child]
     }
     var positions: [CGPoint] {
@@ -131,7 +131,7 @@ struct SizeOverrideRenderNode: ViewRenderNode {
 struct ConstraintOverrideComponent: Component {
     let child: Component
     let transformer: ConstraintTransformer
-    func layout(_ constraint: Constraint) -> AnyRenderNode {
+    func layout(_ constraint: Constraint) -> any RenderNode {
         let finalConstraint = transformer.calculate(constraint)
         let renderNode = child.layout(finalConstraint)
         return SizeOverrideRenderNode(child: renderNode, size: transformer.bound(size: renderNode.size, to: finalConstraint))

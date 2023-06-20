@@ -9,13 +9,32 @@ public enum ReuseStrategy {
 }
 
 @dynamicMemberLookup
-public protocol ViewRenderNode<View>: AnyRenderNode {
+public protocol RenderNode<View> {
     associatedtype View: UIView
 
     var id: String? { get }
     var keyPath: String { get }
     var animator: Animator? { get }
     var reuseStrategy: ReuseStrategy { get }
+
+    /// size of the render node
+    var size: CGSize { get }
+
+    /// positions of child render nodes
+    var positions: [CGPoint] { get }
+
+    /// child render nodes
+    var children: [any RenderNode] { get }
+
+    /// Get indexes of the children that are visible in the given frame
+    /// - Parameter frame: Parent component's visible frame in current component's coordinates.
+    func visibleIndexes(in frame: CGRect) -> IndexSet
+
+    /// Get renderables that are visible in the given frame
+    /// - Parameter frame: Parent component's visible frame in current component's coordinates.
+    ///
+    /// The default implementation recursively retrives all Renderable from visible children and combines them
+    func visibleRenderables(in frame: CGRect) -> [Renderable]
 
     func makeView() -> View
     func updateView(_ view: View)
@@ -25,17 +44,26 @@ public class NeverView: UIView {
 
 }
 
-extension ViewRenderNode {
+extension RenderNode {
     public var id: String? { nil }
     public var animator: Animator? { nil }
     public var keyPath: String { "\(type(of: self))" }
     public var reuseStrategy: ReuseStrategy { .automatic }
+
     public func makeView() -> View {
         View()
     }
     public func updateView(_ view: View) {
 
     }
+
+    public var children: [any RenderNode] { [] }
+    public var positions: [CGPoint] { [] }
+
+    public func visibleIndexes(in frame: CGRect) -> IndexSet {
+        IndexSet(0..<children.count)
+    }
+
     public func visibleRenderables(in frame: CGRect) -> [Renderable] {
         if View.self is NeverView.Type {
             var result = [Renderable]()
@@ -61,7 +89,7 @@ extension ViewRenderNode {
     }
 }
 
-extension ViewRenderNode {
+extension RenderNode {
     public func _makeView() -> Any {
         switch reuseStrategy {
         case .automatic:
@@ -75,5 +103,24 @@ extension ViewRenderNode {
     public func _updateView(_ view: Any) {
         guard let view = view as? View else { return }
         return updateView(view)
+    }
+}
+
+extension RenderNode {
+    public func frame(at index: Int) -> CGRect? {
+        guard let size = children.get(index)?.size, let position = positions.get(index) else { return nil }
+        return CGRect(origin: position, size: size)
+    }
+
+    public func frame(id: String) -> CGRect? {
+        if self.id == id {
+            return CGRect(origin: .zero, size: size)
+        }
+        for (index, child) in children.enumerated() {
+            if let frame = child.frame(id: id) {
+                return frame + positions[index]
+            }
+        }
+        return nil
     }
 }
