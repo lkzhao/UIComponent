@@ -266,6 +266,7 @@ public class ComponentEngine {
                 UIView.performWithoutAnimation {
                     view.bounds.size = frame.bounds.size
                     view.center = frame.center
+                    view.layoutIfNeeded()
                     if ComponentEngine.disableUpdateAnimation {
                         viewData.renderNode._updateView(view)
                     }
