@@ -22,7 +22,7 @@ public struct ComponentViewComponent<View: ComponentDisplayableView>: ViewCompon
 public struct ComponentViewRenderNode<View: ComponentDisplayableView>: ViewRenderNode {
     public let size: CGSize
     public let component: Component
-    public let renderNode: RenderNode
+    public let renderNode: AnyRenderNode
 
     private var viewRenderNode: (any ViewRenderNode)? {
         renderNode as? (any ViewRenderNode)

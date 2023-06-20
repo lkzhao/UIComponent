@@ -11,7 +11,7 @@ public struct VisibleFrameInsets: Component {
         self.insets = insets
     }
 
-    public func layout(_ constraint: Constraint) -> RenderNode {
+    public func layout(_ constraint: Constraint) -> AnyRenderNode {
         VisibleFrameInsetRenderNode(child: child.layout(constraint), insets: insets)
     }
 }
@@ -25,29 +25,33 @@ public struct DynamicVisibleFrameInset: Component {
         self.insetProvider = insetProvider
     }
 
-    public func layout(_ constraint: Constraint) -> RenderNode {
+    public func layout(_ constraint: Constraint) -> AnyRenderNode {
         DynamicVisibleFrameInsetRenderNode(child: child.layout(constraint), insetProvider: insetProvider)
     }
 }
 
-struct VisibleFrameInsetRenderNode: RenderNode {
-    let child: RenderNode
+struct VisibleFrameInsetRenderNode: ViewRenderNode {
+    typealias View = NeverView
+
+    let child: AnyRenderNode
     let insets: UIEdgeInsets
 
     var size: CGSize { child.size }
-    var children: [RenderNode] { child.children }
+    var children: [AnyRenderNode] { child.children }
     var positions: [CGPoint] { child.positions }
     func visibleIndexes(in frame: CGRect) -> IndexSet {
         child.visibleIndexes(in: frame.inset(by: insets))
     }
 }
 
-struct DynamicVisibleFrameInsetRenderNode: RenderNode {
-    let child: RenderNode
+struct DynamicVisibleFrameInsetRenderNode: ViewRenderNode {
+    typealias View = NeverView
+
+    let child: AnyRenderNode
     let insetProvider: (CGRect) -> UIEdgeInsets
 
     var size: CGSize { child.size }
-    var children: [RenderNode] { child.children }
+    var children: [AnyRenderNode] { child.children }
     var positions: [CGPoint] { child.positions }
     func visibleIndexes(in frame: CGRect) -> IndexSet {
         child.visibleIndexes(in: frame.inset(by: insetProvider(frame)))

@@ -1,6 +1,7 @@
 //  Created by Luke Zhao on 8/22/20.
 
 import UIKit
+@_implementationOnly import BaseToolbox
 
 public enum ReuseStrategy {
     case automatic, noReuse
@@ -8,7 +9,7 @@ public enum ReuseStrategy {
 }
 
 @dynamicMemberLookup
-public protocol ViewRenderNode<View>: RenderNode {
+public protocol ViewRenderNode<View>: AnyRenderNode {
     associatedtype View: UIView
 
     var id: String? { get }
@@ -20,6 +21,10 @@ public protocol ViewRenderNode<View>: RenderNode {
     func updateView(_ view: View)
 }
 
+public class NeverView: UIView {
+
+}
+
 extension ViewRenderNode {
     public var id: String? { nil }
     public var animator: Animator? { nil }
@@ -28,12 +33,31 @@ extension ViewRenderNode {
     public func makeView() -> View {
         View()
     }
+    public func updateView(_ view: View) {
+
+    }
     public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        let childFrame = CGRect(origin: .zero, size: size)
-        if frame.intersects(childFrame) {
-            return [ViewRenderable(renderNode: self)]
+        if View.self is NeverView.Type {
+            var result = [Renderable]()
+            let indexes = visibleIndexes(in: frame)
+            for i in indexes {
+                let child = children[i]
+                let position = positions[i]
+                let childFrame = CGRect(origin: position, size: child.size)
+                let childVisibleFrame = frame.intersection(childFrame) - position
+                let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
+                    OffsetRenderable(renderable: $0, offset: position, index: i)
+                }
+                result.append(contentsOf: childRenderables)
+            }
+            return result
+        } else {
+            let childFrame = CGRect(origin: .zero, size: size)
+            if frame.intersects(childFrame) {
+                return [ViewRenderable(renderNode: self)]
+            }
+            return []
         }
-        return []
     }
 }
 

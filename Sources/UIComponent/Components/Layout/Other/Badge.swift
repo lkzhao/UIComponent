@@ -33,7 +33,7 @@ public struct Badge: Component {
     let horizontalAlignment: Alignment
     let offset: CGPoint
 
-    public func layout(_ constraint: Constraint) -> RenderNode {
+    public func layout(_ constraint: Constraint) -> AnyRenderNode {
         let childRenderNode = child.layout(constraint)
         let badgeRenderNode = overlay.layout(
             Constraint(

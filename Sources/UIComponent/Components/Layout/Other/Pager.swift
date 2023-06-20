@@ -7,7 +7,7 @@ public protocol Pager: Component, BaseLayoutProtocol {
 }
 
 extension Pager {
-    public func layout(_ constraint: Constraint) -> RenderNode {
+    public func layout(_ constraint: Constraint) -> AnyRenderNode {
         let isUnbounded = main(constraint.maxSize) == .infinity
         guard !isUnbounded else {
             let error = "Pager cannot be wrapped under an unlimited constraint component on its main axis. e.g. under a HStack or VStack"
@@ -17,7 +17,7 @@ extension Pager {
         let pageMain = main(constraint.maxSize)
         let childConstraint = Constraint(minSize: size(main: pageMain, cross: cross(constraint.minSize)),
                                          maxSize: size(main: pageMain, cross: cross(constraint.maxSize)))
-        var renderNodes: [RenderNode] = []
+        var renderNodes: [AnyRenderNode] = []
         var crossMax: CGFloat = 0
         for child in children {
             let node = child.layout(childConstraint)

@@ -3,5 +3,5 @@
 import Foundation
 
 public protocol Component {
-    func layout(_ constraint: Constraint) -> RenderNode
+    func layout(_ constraint: Constraint) -> AnyRenderNode
 }

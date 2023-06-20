@@ -14,7 +14,7 @@ public struct Absolute: Component {
         self.frames = frames
     }
 
-    public func layout(_ constraint: Constraint) -> RenderNode {
+    public func layout(_ constraint: Constraint) -> AnyRenderNode {
         let frame = frames.reduce(frames.first ?? .zero) {
             $0.union($1)
         }

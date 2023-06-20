@@ -17,7 +17,7 @@ public protocol BaseLayoutProtocol {
     @inline(__always) func cross(_ size: CGSize) -> CGFloat
     @inline(__always) func size(main: CGFloat, cross: CGFloat) -> CGSize
     @inline(__always) func point(main: CGFloat, cross: CGFloat) -> CGPoint
-    @inline(__always) func renderNode(size: CGSize, children: [RenderNode], positions: [CGPoint]) -> RenderNode
+    @inline(__always) func renderNode(size: CGSize, children: [AnyRenderNode], positions: [CGPoint]) -> AnyRenderNode
 }
 
 public protocol VerticalLayoutProtocol: BaseLayoutProtocol {}
@@ -43,7 +43,7 @@ extension VerticalLayoutProtocol {
     @inline(__always) public func point(main: CGFloat, cross: CGFloat) -> CGPoint {
         CGPoint(x: cross, y: main)
     }
-    @inline(__always) public func renderNode(size: CGSize, children: [RenderNode], positions: [CGPoint]) -> RenderNode {
+    @inline(__always) public func renderNode(size: CGSize, children: [AnyRenderNode], positions: [CGPoint]) -> AnyRenderNode {
         let max = main(children.max { main($0.size) < main($1.size) }?.size ?? .zero)
         return VerticalRenderNode(size: size, children: children, positions: positions, mainAxisMaxValue: max)
     }
@@ -68,7 +68,7 @@ extension HorizontalLayoutProtocol {
     @inline(__always) public func point(main: CGFloat, cross: CGFloat) -> CGPoint {
         CGPoint(x: main, y: cross)
     }
-    @inline(__always) public func renderNode(size: CGSize, children: [RenderNode], positions: [CGPoint]) -> RenderNode {
+    @inline(__always) public func renderNode(size: CGSize, children: [AnyRenderNode], positions: [CGPoint]) -> AnyRenderNode {
         let max = main(children.max { main($0.size) < main($1.size) }?.size ?? .zero)
         return HorizontalRenderNode(size: size, children: children, positions: positions, mainAxisMaxValue: max)
     }

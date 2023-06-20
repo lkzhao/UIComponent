@@ -24,7 +24,7 @@ public struct ConstraintReader: Component {
         self.builder = builder
     }
 
-    public func layout(_ constraint: Constraint) -> RenderNode {
+    public func layout(_ constraint: Constraint) -> AnyRenderNode {
         builder(constraint).layout(constraint)
     }
 }

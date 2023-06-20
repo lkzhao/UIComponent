@@ -8,8 +8,8 @@ public struct ZStack: Component {
     public var horizontalAlignment: CrossAxisAlignment = .center
     public var children: [Component]
 
-    public func layout(_ constraint: Constraint) -> RenderNode {
-        var renderNodes: [RenderNode] = children.map {
+    public func layout(_ constraint: Constraint) -> AnyRenderNode {
+        var renderNodes: [AnyRenderNode] = children.map {
             $0.layout(Constraint(maxSize: constraint.maxSize))
         }
         let size = CGSize(

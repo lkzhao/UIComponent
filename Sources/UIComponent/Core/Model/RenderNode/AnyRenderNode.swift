@@ -5,7 +5,7 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-public protocol RenderNode {
+public protocol AnyRenderNode {
     /// size of the render node
     var size: CGSize { get }
 
@@ -13,7 +13,7 @@ public protocol RenderNode {
     var positions: [CGPoint] { get }
 
     /// child render nodes
-    var children: [RenderNode] { get }
+    var children: [AnyRenderNode] { get }
 
     /// Get indexes of the children that are visible in the given frame
     /// - Parameter frame: Parent component's visible frame in current component's coordinates.
@@ -28,8 +28,8 @@ public protocol RenderNode {
 
 // MARK: - Default implementation
 
-extension RenderNode {
-    public var children: [RenderNode] { [] }
+extension AnyRenderNode {
+    public var children: [AnyRenderNode] { [] }
     public var positions: [CGPoint] { [] }
 
     public func visibleIndexes(in frame: CGRect) -> IndexSet {
@@ -37,37 +37,25 @@ extension RenderNode {
     }
 
     public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        var result = [Renderable]()
-        let indexes = visibleIndexes(in: frame)
-        for i in indexes {
-            let child = children[i]
-            let position = positions[i]
-            let childFrame = CGRect(origin: position, size: child.size)
-            let childVisibleFrame = frame.intersection(childFrame) - position
-            let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
-                OffsetRenderable(renderable: $0, offset: position, index: i)
-            }
-            result.append(contentsOf: childRenderables)
-        }
-        return result
+        fatalError()
     }
 }
 
-extension RenderNode {
+extension AnyRenderNode {
     public func frame(at index: Int) -> CGRect? {
         guard let size = children.get(index)?.size, let position = positions.get(index) else { return nil }
         return CGRect(origin: position, size: size)
     }
 
     public func frame(id: String) -> CGRect? {
-        if let viewRenderNode = self as? (any ViewRenderNode), viewRenderNode.id == id {
-            return CGRect(origin: .zero, size: size)
-        }
-        for (index, child) in children.enumerated() {
-            if let frame = child.frame(id: id) {
-                return frame + positions[index]
-            }
-        }
+//        if let viewRenderNode = self as? (any ViewRenderNode), viewRenderNode.id == id {
+//            return CGRect(origin: .zero, size: size)
+//        }
+//        for (index, child) in children.enumerated() {
+//            if let frame = child.frame(id: id) {
+//                return frame + positions[index]
+//            }
+//        }
         return nil
     }
 }

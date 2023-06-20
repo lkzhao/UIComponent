@@ -30,7 +30,7 @@ public struct Background: Component {
         self.background = background
     }
 
-    public func layout(_ constraint: Constraint) -> RenderNode {
+    public func layout(_ constraint: Constraint) -> AnyRenderNode {
         let childRenderNode = child.layout(constraint)
         let backgroundRenderNode = background.layout(Constraint(minSize: childRenderNode.size, maxSize: childRenderNode.size))
         return SlowRenderNode(size: childRenderNode.size, children: [backgroundRenderNode, childRenderNode], positions: [.zero, .zero])

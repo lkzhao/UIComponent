@@ -4,14 +4,14 @@ import Foundation
 
 public struct RenderNodeReader: Component {
     let child: Component
-    let reader: (RenderNode) -> Void
+    let reader: (AnyRenderNode) -> Void
 
-    public init(child: Component, _ reader: @escaping (RenderNode) -> Void) {
+    public init(child: Component, _ reader: @escaping (AnyRenderNode) -> Void) {
         self.child = child
         self.reader = reader
     }
 
-    public func layout(_ constraint: Constraint) -> RenderNode {
+    public func layout(_ constraint: Constraint) -> AnyRenderNode {
         let renderNode = child.layout(constraint)
         reader(renderNode)
         return renderNode

@@ -9,7 +9,7 @@ public protocol ViewComponent<R>: Component {
 }
 
 extension ViewComponent {
-    public func layout(_ constraint: Constraint) -> RenderNode {
+    public func layout(_ constraint: Constraint) -> AnyRenderNode {
         layout(constraint) as R
     }
 }
