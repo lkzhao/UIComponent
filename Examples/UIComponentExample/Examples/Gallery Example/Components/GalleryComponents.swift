@@ -10,7 +10,7 @@ struct GalleryItemData: Equatable {
 
 struct GalleryItem: ComponentBuilder {
     let data: GalleryItemData
-    func build() -> Component {
+    func build() -> some Component {
         AsyncImage(data.cover, indicatorType: .activity, configurationBuilder: { $0.transition(.flipFromBottom(0.35)) })
             .contentMode(.scaleAspectFill)
             .clipsToBounds(true)
@@ -20,7 +20,7 @@ struct GalleryItem: ComponentBuilder {
 
 struct GalleryIndexOverlay: ComponentBuilder {
     let index: Int
-    func build() -> Component {
+    func build() -> some Component {
         Text("\(index)").textColor(.white).textAlignment(.center)
     }
 }

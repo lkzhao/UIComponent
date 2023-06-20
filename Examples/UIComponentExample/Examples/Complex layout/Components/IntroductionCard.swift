@@ -14,7 +14,7 @@ struct IntroductionCard: ComponentBuilder {
         Built in layouts including Stack, Flow, & Waterfall.
         Declaritive API based on resultBuilder and modifier syntax.
         Work seemless with existing UIKit views, viewControllers, and transitions.
-        dynamicMemberLookup support for all ViewComponents which can help you easily update your UIKit views.
+        dynamicMemberLookup support for all Components which can help you easily update your UIKit views.
         Animator API to apply animations when cells are being moved, updated, inserted, or deleted.
         Simple architecture for anyone to be able to understand.
         Easy to create your own Components.
@@ -24,7 +24,7 @@ struct IntroductionCard: ComponentBuilder {
     let isExpanded: Bool
     let tapHandler: () -> Void
 
-    func build() -> Component {
+    func build() -> some Component {
         HStack(spacing: 15, alignItems: .stretch) {
             VStack(spacing: 5, alignItems: .center) {
                 AsyncImage(URL(string: "https://unsplash.com/photos/MR2A97jFDAs/download?force=true&w=640")!).size(width: 50, height: 50).update { $0.layer.cornerRadius = 50 / 2 }

@@ -10,7 +10,7 @@ public struct Space: Component {
     public init(width: CGFloat = 0, height: CGFloat = 0) {
         size = CGSize(width: width, height: height)
     }
-    public func layout(_ constraint: Constraint) -> any RenderNode {
+    public func layout(_ constraint: Constraint) -> some RenderNode {
         SpaceRenderNode(size: size.bound(to: constraint))
     }
 }

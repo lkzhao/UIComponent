@@ -4,7 +4,7 @@ import Kingfisher
 import UIComponent
 import UIKit.UIImageView
 
-extension ViewComponent where R.View: UIView {
+extension Component where R.View: UIView {
     fileprivate func shadowAvatar() -> ViewUpdateComponent<Self> {
         update {
             $0.layer.shadowColor = UIColor.black.withAlphaComponent(0.2).cgColor
@@ -21,7 +21,7 @@ struct UserProfile: ComponentBuilder {
     let userName: String
     let introduce: String
 
-    func build() -> Component {
+    func build() -> some Component {
         HStack(spacing: 10, alignItems: .center) {
             AsyncImage(avatar)
                 .contentMode(.scaleAspectFill)

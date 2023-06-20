@@ -57,7 +57,7 @@ class ComplexLayoutViewController: ComponentViewController {
         return button
     }()
 
-    override var component: Component {
+    override var component: any Component {
         VStack(spacing: 20) {
             Text("Complex layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill).id("label")
             VStack(spacing: 10) {
@@ -166,8 +166,8 @@ class ComplexLayoutViewController: ComponentViewController {
                 }
                 .showsHorizontalScrollIndicator(false).with(\.animator, AnimatedReloadAnimator())
                 HStack(spacing: 10) {
-                    SimpleViewComponent<UIButton>(view: resetButton).isEnabled(horizontalListData != ComplexLayoutViewController.defaultHorizontalListData).id("reset")
-                    SimpleViewComponent<UIButton>(view: shuffleButton).isEnabled(!horizontalListData.isEmpty).id("shuffled")
+                    SimpleComponent<UIButton>(view: resetButton).isEnabled(horizontalListData != ComplexLayoutViewController.defaultHorizontalListData).id("reset")
+                    SimpleComponent<UIButton>(view: shuffleButton).isEnabled(!horizontalListData.isEmpty).id("shuffled")
                 }
                 .inset(left: 10)
             }

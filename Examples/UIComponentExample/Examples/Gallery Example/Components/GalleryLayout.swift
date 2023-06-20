@@ -9,22 +9,22 @@ protocol GalleryTemplate {
     func calculateFrames(spacing: CGFloat, side: CGFloat, makeFrame: (Point, Size) -> CGRect) -> [CGRect]
 }
 
-protocol GalleryLayout: Component, BaseLayoutProtocol {
+protocol GalleryLayout: BaseLayoutProtocol {
     var spacing: CGFloat { get }
-    var children: [Component] { get }
+    var children: [any Component] { get }
     var template: [GalleryTemplate] { get }
-    init(spacing: CGFloat, template: [GalleryTemplate], children: [Component])
+    init(spacing: CGFloat, template: [GalleryTemplate], children: [any Component])
 }
 
 extension GalleryLayout {
-    init(spacing: CGFloat = 0, template: [GalleryTemplate], @ComponentArrayBuilder _ content: () -> [Component]) {
+    init(spacing: CGFloat = 0, template: [GalleryTemplate], @ComponentArrayBuilder _ content: () -> [any Component]) {
         self.init(spacing: spacing, template: template, children: content())
     }
 }
 
 extension GalleryLayout {
 
-    func layout(_ constraint: Constraint) -> any RenderNode {
+    func layout(_ constraint: Constraint) -> R {
 
         var allFrames = [CGRect]()
         var index = 0
@@ -67,24 +67,24 @@ extension GalleryLayout {
     }
 }
 
-struct VerticalGallery: GalleryLayout, VerticalLayoutProtocol {
+struct VerticalGallery: Component, GalleryLayout, VerticalLayoutProtocol {
     var spacing: CGFloat
     var template: [GalleryTemplate]
-    var children: [Component]
+    var children: [any Component]
 
-    init(spacing: CGFloat, template: [GalleryTemplate], children: [Component]) {
+    init(spacing: CGFloat, template: [GalleryTemplate], children: [any Component]) {
         self.spacing = spacing
         self.template = template
         self.children = children
     }
 }
 
-struct HorizontalGallery: GalleryLayout, HorizontalLayoutProtocol {
+struct HorizontalGallery: Component, GalleryLayout, HorizontalLayoutProtocol {
     var spacing: CGFloat
     var template: [GalleryTemplate]
-    var children: [Component]
+    var children: [any Component]
 
-    init(spacing: CGFloat, template: [GalleryTemplate], children: [Component]) {
+    init(spacing: CGFloat, template: [GalleryTemplate], children: [any Component]) {
         self.spacing = spacing
         self.template = template
         self.children = children

@@ -27,13 +27,13 @@ public struct Badge: Component {
     public enum Alignment: CaseIterable {
         case start, end, center, stretch, before, after
     }
-    let child: Component
-    let overlay: Component
+    let child: any Component
+    let overlay: any Component
     let verticalAlignment: Alignment
     let horizontalAlignment: Alignment
     let offset: CGPoint
 
-    public func layout(_ constraint: Constraint) -> any RenderNode {
+    public func layout(_ constraint: Constraint) -> some RenderNode {
         let childRenderNode = child.layout(constraint)
         let badgeRenderNode = overlay.layout(
             Constraint(

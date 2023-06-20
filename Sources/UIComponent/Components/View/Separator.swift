@@ -2,7 +2,7 @@
 
 import UIKit
 
-public struct Separator: ViewComponentBuilder {
+public struct Separator: ComponentBuilder {
     public static var defaultSeparatorColor: UIColor = {
         if #available(iOS 13, *) {
             return UIColor.separator
@@ -17,8 +17,8 @@ public struct Separator: ViewComponentBuilder {
         self.color = color
     }
 
-    public func build() -> ConstraintOverrideViewComponent<ViewKeyPathUpdateComponent<SimpleViewComponent<UIView>, UIColor?>> {
-        SimpleViewComponent<UIView>().backgroundColor(color)
+    public func build() -> some Component {
+        SimpleComponent<UIView>().backgroundColor(color)
             .constraint { constraint in
                 if constraint.minSize.height <= 0, constraint.maxSize.width != .infinity {
                     let size = CGSize(width: constraint.maxSize.width, height: 1 / UIScreen.main.scale)

@@ -7,9 +7,9 @@ import UIKit
 /// Wraps a `component` inside a `ComponentDisplayableView`.
 ///
 /// This is used to power the `.view()` and `.scrollView()` modifiers.
-public struct ComponentViewComponent<View: ComponentDisplayableView>: ViewComponent {
-    let component: Component
-    public init(component: Component) {
+public struct ComponentViewComponent<View: ComponentDisplayableView>: Component {
+    let component: any Component
+    public init(component: any Component) {
         self.component = component
     }
     public func layout(_ constraint: Constraint) -> ComponentRenderNode<View> {
@@ -21,11 +21,11 @@ public struct ComponentViewComponent<View: ComponentDisplayableView>: ViewCompon
 /// RenderNode for the `ComponentViewComponent`
 public struct ComponentRenderNode<View: ComponentDisplayableView>: RenderNode {
     public let size: CGSize
-    public let component: Component
+    public let component: any Component
     public let renderNode: any RenderNode
 
     private var viewRenderNode: (any RenderNode)? {
-        renderNode as? (any RenderNode)
+        renderNode
     }
     public var id: String? {
         viewRenderNode?.id

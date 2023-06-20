@@ -2,15 +2,16 @@
 
 import UIKit
 
-public protocol Stack: Component, BaseLayoutProtocol {
+public protocol Stack: BaseLayoutProtocol {
+    associatedtype R: RenderNode
     var spacing: CGFloat { get }
     var justifyContent: MainAxisAlignment { get }
     var alignItems: CrossAxisAlignment { get }
-    var children: [Component] { get }
+    var children: [any Component] { get }
 }
 
 extension Stack {
-    public func layout(_ constraint: Constraint) -> any RenderNode {
+    public func layout(_ constraint: Constraint) -> R {
         var renderNodes = getRenderNodes(constraint)
         let crossMax = renderNodes.reduce(CGFloat(0).clamp(cross(constraint.minSize), cross(constraint.maxSize))) {
             max($0, cross($1.size))

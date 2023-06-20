@@ -14,7 +14,7 @@ class WaterfallLayoutViewController: ComponentViewController {
         return sizes
     }()
 
-    override var component: Component {
+    override var component: any Component {
         VStack(spacing: 20) {
             Text("Waterfall layouts", font: .boldSystemFont(ofSize: 20)).id("label3")
             VStack(spacing: 10) {

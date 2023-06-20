@@ -8,7 +8,7 @@ extension UIFont {
 }
 #endif
 
-public struct Text: ViewComponent {
+public struct Text: Component {
     public let attributedString: NSAttributedString
     public let numberOfLines: Int
     public let lineBreakMode: NSLineBreakMode

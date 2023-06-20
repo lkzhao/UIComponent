@@ -219,7 +219,7 @@ extension Component {
     public func tappableView(
         configuration: TappableViewConfiguration? = nil,
         _ onTap: @escaping (TappableView) -> Void
-    ) -> ViewUpdateComponent<ComponentViewComponent<TappableView>> {
+    ) -> ViewModifierComponent<ComponentViewComponent<TappableView>, UpdateRenderNode<ComponentRenderNode<TappableView>>> {
         ComponentViewComponent<TappableView>(component: self)
             .update {
                 $0.onTap = onTap
@@ -229,7 +229,7 @@ extension Component {
     public func tappableView(
         configuration: TappableViewConfiguration? = nil,
         _ onTap: @escaping () -> Void
-    ) -> ViewUpdateComponent<ComponentViewComponent<TappableView>> {
+    ) -> ViewModifierComponent<ComponentViewComponent<TappableView>, UpdateRenderNode<ComponentRenderNode<TappableView>>> {
         tappableView(configuration: configuration) { _ in
             onTap()
         }

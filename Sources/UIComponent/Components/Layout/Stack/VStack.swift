@@ -2,16 +2,16 @@
 
 import UIKit
 
-public struct VStack: Stack, VerticalLayoutProtocol {
+public struct VStack: Component, Stack, VerticalLayoutProtocol {
     public let spacing: CGFloat
     public let justifyContent: MainAxisAlignment
     public let alignItems: CrossAxisAlignment
-    public let children: [Component]
+    public let children: [any Component]
     public init(
         spacing: CGFloat = 0,
         justifyContent: MainAxisAlignment = .start,
         alignItems: CrossAxisAlignment = .start,
-        children: [Component] = []
+        children: [any Component] = []
     ) {
         self.spacing = spacing
         self.justifyContent = justifyContent
@@ -21,7 +21,7 @@ public struct VStack: Stack, VerticalLayoutProtocol {
 }
 
 extension VStack {
-    public init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
+    public init(spacing: CGFloat = 0, justifyContent: MainAxisAlignment = .start, alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [any Component]) {
         self.init(
             spacing: spacing,
             justifyContent: justifyContent,

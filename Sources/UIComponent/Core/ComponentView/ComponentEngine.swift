@@ -20,7 +20,7 @@ public class ComponentEngine {
     weak var view: ComponentDisplayableView?
 
     /// component for rendering
-    var component: Component? {
+    var component: (any Component)? {
         didSet { setNeedsReload() }
     }
 
@@ -299,7 +299,7 @@ public class ComponentEngine {
     /// This function assigns component with an already calculated render node
     /// This is a performance hack that skips layout for the component if it has already
     /// been layed out.
-    public func reloadWithExisting(component: Component, renderNode: any RenderNode) {
+    public func reloadWithExisting(component: any Component, renderNode: any RenderNode) {
         self.component = component
         self.renderNode = renderNode
         self.shouldSkipNextLayout = true

@@ -8,7 +8,7 @@ struct HorizontalCardItem: ComponentBuilder {
 
     let data: Context
 
-    func build() -> Component {
+    func build() -> some Component {
         HStack(spacing: 10, alignItems: .center) {
             VStack(spacing: 5, justifyContent: .center, alignItems: .center) {
                 Image(systemName: "hand.tap")

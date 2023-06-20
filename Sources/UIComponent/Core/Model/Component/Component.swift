@@ -2,6 +2,8 @@
 
 import Foundation
 
-public protocol Component {
-    func layout(_ constraint: Constraint) -> any RenderNode
+@dynamicMemberLookup
+public protocol Component<R> {
+    associatedtype R: RenderNode
+    func layout(_ constraint: Constraint) -> R
 }

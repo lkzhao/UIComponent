@@ -22,10 +22,10 @@ import Foundation
 /// }
 /// ```
 public struct Overlay: Component {
-    let child: Component
-    let overlay: Component
+    let child: any Component
+    let overlay: any Component
 
-    public func layout(_ constraint: Constraint) -> any RenderNode {
+    public func layout(_ constraint: Constraint) -> some RenderNode {
         let childRenderNode = child.layout(constraint)
         let overlayRenderNode = overlay.layout(Constraint(minSize: childRenderNode.size, maxSize: childRenderNode.size))
         return SlowRenderNode(size: childRenderNode.size, children: [childRenderNode, overlayRenderNode], positions: [.zero, .zero])

@@ -9,7 +9,7 @@ public protocol ComponentDisplayableView: UIView {
 extension ComponentDisplayableView {
 
     /// component to be rendered by this component displayable view
-    public var component: Component? {
+    public var component: (any Component)? {
         get { engine.component }
         set { engine.component = newValue }
     }

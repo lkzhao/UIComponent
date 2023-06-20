@@ -3,7 +3,7 @@
 import UIKit
 
 extension Component {
-    public func `if`(_ value: Bool, apply: (Self) -> Component) -> Component {
+    public func `if`(_ value: Bool, apply: (Self) -> any Component) -> any Component {
         value ? apply(self) : self
     }
 }
@@ -19,26 +19,26 @@ extension Component {
 }
 
 extension Component {
-    public func background(_ component: Component) -> Background {
+    public func background(_ component: any Component) -> Background {
         Background(child: self, background: component)
     }
-    public func background(_ component: () -> Component) -> Background {
+    public func background(_ component: () -> any Component) -> Background {
         Background(child: self, background: component())
     }
 }
 
 extension Component {
-    public func overlay(_ component: Component) -> Overlay {
+    public func overlay(_ component: any Component) -> Overlay {
         Overlay(child: self, overlay: component)
     }
-    public func overlay(_ component: () -> Component) -> Overlay {
+    public func overlay(_ component: () -> any Component) -> Overlay {
         Overlay(child: self, overlay: component())
     }
 }
 
 extension Component {
     public func badge(
-        _ component: Component,
+        _ component: some Component,
         verticalAlignment: Badge.Alignment = .start,
         horizontalAlignment: Badge.Alignment = .end,
         offset: CGPoint = .zero
@@ -55,7 +55,7 @@ extension Component {
         verticalAlignment: Badge.Alignment = .start,
         horizontalAlignment: Badge.Alignment = .end,
         offset: CGPoint = .zero,
-        _ component: () -> Component
+        _ component: () -> some Component
     ) -> Badge {
         Badge(
             child: self,
@@ -77,52 +77,52 @@ extension Component {
 }
 
 extension Component {
-    public func inset(_ amount: CGFloat) -> Component {
+    public func inset(_ amount: CGFloat) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount))
     }
-    public func inset(h: CGFloat, v: CGFloat) -> Component {
+    public func inset(h: CGFloat, v: CGFloat) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
     }
-    public func inset(v: CGFloat, h: CGFloat) -> Component {
+    public func inset(v: CGFloat, h: CGFloat) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
     }
-    public func inset(h: CGFloat) -> Component {
+    public func inset(h: CGFloat) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(top: 0, left: h, bottom: 0, right: h))
     }
-    public func inset(v: CGFloat) -> Component {
+    public func inset(v: CGFloat) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(top: v, left: 0, bottom: v, right: 0))
     }
-    public func inset(top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0) -> Component {
+    public func inset(top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right))
     }
-    public func inset(top: CGFloat, rest: CGFloat) -> Component {
+    public func inset(top: CGFloat, rest: CGFloat) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(top: top, rest: rest))
     }
-    public func inset(left: CGFloat, rest: CGFloat) -> Component {
+    public func inset(left: CGFloat, rest: CGFloat) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(left: left, rest: rest))
     }
-    public func inset(bottom: CGFloat, rest: CGFloat) -> Component {
+    public func inset(bottom: CGFloat, rest: CGFloat) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(bottom: bottom, rest: rest))
     }
-    public func inset(right: CGFloat, rest: CGFloat) -> Component {
+    public func inset(right: CGFloat, rest: CGFloat) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(right: right, rest: rest))
     }
-    public func inset(_ insets: UIEdgeInsets) -> Component {
+    public func inset(_ insets: UIEdgeInsets) -> some Component {
         Insets(child: self, insets: insets)
     }
-    public func inset(_ insetProvider: @escaping (Constraint) -> UIEdgeInsets) -> Component {
+    public func inset(_ insetProvider: @escaping (Constraint) -> UIEdgeInsets) -> some Component {
         DynamicInsets(child: self, insetProvider: insetProvider)
     }
 }
 
 extension Component {
-    public func offset(_ offset: CGPoint) -> Component {
+    public func offset(_ offset: CGPoint) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(top: offset.y, left: offset.x, bottom: -offset.y, right: -offset.x))
     }
-    public func offset(x: CGFloat = 0, y: CGFloat = 0) -> Component {
+    public func offset(x: CGFloat = 0, y: CGFloat = 0) -> some Component {
         Insets(child: self, insets: UIEdgeInsets(top: y, left: x, bottom: -y, right: -x))
     }
-    public func offset(_ offsetProvider: @escaping (Constraint) -> CGPoint) -> Component {
+    public func offset(_ offsetProvider: @escaping (Constraint) -> CGPoint) -> some Component {
         DynamicInsets(child: self) {
             let offset = offsetProvider($0)
             return UIEdgeInsets(top: offset.y, left: offset.x, bottom: -offset.y, right: -offset.x)
@@ -131,82 +131,51 @@ extension Component {
 }
 
 extension Component {
-    public func visibleInset(_ amount: CGFloat) -> Component {
+    public func visibleInset(_ amount: CGFloat) -> some Component {
         VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount))
     }
-    public func visibleInset(h: CGFloat, v: CGFloat) -> Component {
+    public func visibleInset(h: CGFloat, v: CGFloat) -> some Component {
         VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
     }
-    public func visibleInset(v: CGFloat, h: CGFloat) -> Component {
+    public func visibleInset(v: CGFloat, h: CGFloat) -> some Component {
         VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
     }
-    public func visibleInset(h: CGFloat) -> Component {
+    public func visibleInset(h: CGFloat) -> some Component {
         VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: 0, left: h, bottom: 0, right: h))
     }
-    public func visibleInset(v: CGFloat) -> Component {
+    public func visibleInset(v: CGFloat) -> some Component {
         VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: 0, bottom: v, right: 0))
     }
-    public func visibleInset(_ insets: UIEdgeInsets) -> Component {
+    public func visibleInset(_ insets: UIEdgeInsets) -> some Component {
         VisibleFrameInsets(child: self, insets: insets)
     }
-    public func visibleInset(_ insetProvider: @escaping (CGRect) -> UIEdgeInsets) -> Component {
+    public func visibleInset(_ insetProvider: @escaping (CGRect) -> UIEdgeInsets) -> some Component {
         DynamicVisibleFrameInset(child: self, insetProvider: insetProvider)
     }
 }
 
 extension Component {
-    public func maxSize(width: CGFloat = .infinity, height: CGFloat = .infinity) -> Component {
+    public func maxSize(width: CGFloat = .infinity, height: CGFloat = .infinity) -> some Component {
         constraint { c in
             Constraint(minSize: c.minSize, maxSize: CGSize(width: min(width, c.maxSize.width), height: min(height, c.maxSize.height)))
         }
     }
-    public func minSize(width: CGFloat = -.infinity, height: CGFloat = -.infinity) -> Component {
+    public func minSize(width: CGFloat = -.infinity, height: CGFloat = -.infinity) -> some Component {
         constraint { c in
             Constraint(minSize: CGSize(width: max(width, c.minSize.width), height: max(height, c.minSize.height)), maxSize: c.maxSize)
         }
     }
-    public func size(width: SizeStrategy = .fit, height: SizeStrategy = .fit) -> Component {
-        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: width, height: height))
-    }
-    public func size(width: CGFloat, height: SizeStrategy = .fit) -> Component {
-        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(width), height: height))
-    }
-    public func size(width: CGFloat, height: CGFloat) -> Component {
-        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(width), height: .absolute(height)))
-    }
-    public func size(_ size: CGSize) -> Component {
-        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(size.width), height: .absolute(size.height)))
-    }
-    public func size(width: SizeStrategy = .fit, height: CGFloat) -> Component {
-        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: width, height: .absolute(height)))
-    }
-    public func fit() -> Component {
+    public func fit() -> some Component {
         size(width: .fit, height: .fit)
     }
-    public func fill() -> Component {
+    public func fill() -> some Component {
         size(width: .fill, height: .fill)
     }
-    public func centered() -> Component {
+    public func centered() -> some Component {
         ZStack {
             self
         }
         .fill()
-    }
-    public func constraint(_ constraintComponent: @escaping (Constraint) -> Constraint) -> Component {
-        ConstraintOverrideComponent(child: self, transformer: BlockConstraintTransformer(block: constraintComponent))
-    }
-    public func constraint(_ constraint: Constraint) -> Component {
-        ConstraintOverrideComponent(child: self, transformer: PassThroughConstraintTransformer(constraint: constraint))
-    }
-    public func unboundedWidth() -> Component {
-        constraint { c in
-            Constraint(minSize: c.minSize, maxSize: CGSize(width: .infinity, height: c.maxSize.height))
-        }
-    }
-    public func unboundedHeight() -> Component {
-        constraint { c in
-            Constraint(minSize: c.minSize, maxSize: CGSize(width: c.maxSize.width, height: .infinity))
-        }
     }
 }
 
@@ -214,7 +183,7 @@ extension Component {
     /// Read the RenderNode
     /// - Parameter reader: the RenderNode that gets generated on component layout
     /// - Returns: RenderNodeReader
-    public func renderNodeReader(_ reader: @escaping (any RenderNode) -> Void) -> RenderNodeReader {
+    public func renderNodeReader(_ reader: @escaping (any RenderNode) -> Void) -> RenderNodeReader<Self> {
         RenderNodeReader(child: self, reader)
     }
 }

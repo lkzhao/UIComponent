@@ -22,15 +22,15 @@ import UIKit
 /// }
 /// ```
 public struct Background: Component {
-    let child: Component
-    let background: Component
+    let child: any Component
+    let background: any Component
 
-    public init(child: Component, background: Component) {
+    public init(child: any Component, background: any Component) {
         self.child = child
         self.background = background
     }
 
-    public func layout(_ constraint: Constraint) -> any RenderNode {
+    public func layout(_ constraint: Constraint) -> some RenderNode {
         let childRenderNode = child.layout(constraint)
         let backgroundRenderNode = background.layout(Constraint(minSize: childRenderNode.size, maxSize: childRenderNode.size))
         return SlowRenderNode(size: childRenderNode.size, children: [backgroundRenderNode, childRenderNode], positions: [.zero, .zero])

@@ -2,7 +2,7 @@
 
 import UIKit
 
-public struct SimpleViewComponent<View: UIView>: ViewComponent {
+public struct SimpleComponent<View: UIView>: Component {
     public let view: View?
     public let generator: (() -> View)?
     private init(view: View?, generator: (() -> View)?) {
@@ -65,7 +65,7 @@ public struct SimpleRenderNode<View: UIView>: RenderNode {
     public func updateView(_ view: View) {}
 }
 
-extension UIView: ViewComponent {
+extension UIView: Component {
     public func layout(_ constraint: Constraint) -> some RenderNode {
         SimpleRenderNode(size: constraint.isTight ? constraint.maxSize : sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
     }

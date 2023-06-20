@@ -16,7 +16,7 @@ class CardViewController2: ComponentViewController {
         componentView.animator = AnimatedReloadAnimator()
     }
 
-    override var component: Component {
+    override var component: any Component {
         VStack(spacing: 8) {
             for (index, card) in cards.enumerated() {
                 let title = card.title

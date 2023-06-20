@@ -4,7 +4,7 @@ import UIComponent
 
 struct AddCardButton: ComponentBuilder {
     let onTap: () -> Void
-    func build() -> Component {
+    func build() -> some Component {
         HStack(spacing: 10, justifyContent: .center, alignItems: .center) {
             Image(systemName: "plus").tintColor(.label)
             Text("Add")

@@ -2,7 +2,7 @@
 
 import UIKit
 
-public struct Image: ViewComponent {
+public struct Image: Component {
     public let image: UIImage
 
     public init(_ imageName: String) {

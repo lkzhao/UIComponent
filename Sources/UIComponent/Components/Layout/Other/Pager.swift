@@ -1,18 +1,20 @@
 
 import UIKit
 
-public protocol Pager: Component, BaseLayoutProtocol {
+public protocol Pager: BaseLayoutProtocol {
     var alignItems: CrossAxisAlignment { get }
-    var children: [Component] { get }
+    var children: [any Component] { get }
 }
 
 extension Pager {
-    public func layout(_ constraint: Constraint) -> any RenderNode {
+    public func layout(_ constraint: Constraint) -> R {
         let isUnbounded = main(constraint.maxSize) == .infinity
         guard !isUnbounded else {
             let error = "Pager cannot be wrapped under an unlimited constraint component on its main axis. e.g. under a HStack or VStack"
             assertionFailure(error)
-            return Text(error).textColor(.red).layout(constraint)
+            let child = Text(error).textColor(.red)
+            let childNode = child.layout(constraint)
+            return renderNode(size: childNode.size, children: [childNode], positions: [.zero])
         }
         let pageMain = main(constraint.maxSize)
         let childConstraint = Constraint(minSize: size(main: pageMain, cross: cross(constraint.minSize)),
@@ -43,32 +45,32 @@ extension Pager {
     }
 }
 
-public struct HPager: Pager, HorizontalLayoutProtocol {
+public struct HPager: Component, Pager, HorizontalLayoutProtocol {
     public let alignItems: CrossAxisAlignment
-    public let children: [Component]
-    public init(alignItems: CrossAxisAlignment = .start, children: [Component] = []) {
+    public let children: [any Component]
+    public init(alignItems: CrossAxisAlignment = .start, children: [any Component] = []) {
         self.alignItems = alignItems
         self.children = children
     }
 }
 
 extension HPager {
-    public init(alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
+    public init(alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [any Component]) {
         self.init(alignItems: alignItems, children: content())
     }
 }
 
-public struct VPager: Pager, VerticalLayoutProtocol {
+public struct VPager: Component, Pager, VerticalLayoutProtocol {
     public let alignItems: CrossAxisAlignment
-    public let children: [Component]
-    public init(alignItems: CrossAxisAlignment = .start, children: [Component] = []) {
+    public let children: [any Component]
+    public init(alignItems: CrossAxisAlignment = .start, children: [any Component] = []) {
         self.alignItems = alignItems
         self.children = children
     }
 }
 
 extension VPager {
-    public init(alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [Component]) {
+    public init(alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [any Component]) {
         self.init(alignItems: alignItems, children: content())
     }
 }

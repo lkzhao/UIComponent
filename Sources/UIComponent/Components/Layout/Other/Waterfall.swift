@@ -2,14 +2,14 @@
 
 import UIKit
 
-public protocol WaterfallLayoutProtocol: Component, BaseLayoutProtocol {
+public protocol WaterfallLayoutProtocol: BaseLayoutProtocol {
     var columns: Int { get }
     var spacing: CGFloat { get }
-    var children: [Component] { get }
+    var children: [any Component] { get }
 }
 
 extension WaterfallLayoutProtocol {
-    public func layout(_ constraint: Constraint) -> any RenderNode {
+    public func layout(_ constraint: Constraint) -> R {
         var renderNodes: [any RenderNode] = []
         var positions: [CGPoint] = []
 
@@ -45,22 +45,22 @@ extension WaterfallLayoutProtocol {
     }
 }
 
-public struct Waterfall: WaterfallLayoutProtocol, VerticalLayoutProtocol {
+public struct Waterfall: Component, WaterfallLayoutProtocol, VerticalLayoutProtocol {
     public var columns: Int
     public var spacing: CGFloat
-    public var children: [Component]
-    public init(columns: Int = 2, spacing: CGFloat = 0, children: [Component] = []) {
+    public var children: [any Component]
+    public init(columns: Int = 2, spacing: CGFloat = 0, children: [any Component] = []) {
         self.columns = columns
         self.spacing = spacing
         self.children = children
     }
 }
 
-public struct HorizontalWaterfall: WaterfallLayoutProtocol, HorizontalLayoutProtocol {
+public struct HorizontalWaterfall: Component, WaterfallLayoutProtocol, HorizontalLayoutProtocol {
     public var columns: Int
     public var spacing: CGFloat
-    public var children: [Component]
-    public init(columns: Int = 2, spacing: CGFloat = 0, children: [Component] = []) {
+    public var children: [any Component]
+    public init(columns: Int = 2, spacing: CGFloat = 0, children: [any Component] = []) {
         self.columns = columns
         self.spacing = spacing
         self.children = children
@@ -68,13 +68,13 @@ public struct HorizontalWaterfall: WaterfallLayoutProtocol, HorizontalLayoutProt
 }
 
 extension Waterfall {
-    public init(columns: Int = 2, spacing: CGFloat = 0, @ComponentArrayBuilder _ content: () -> [Component]) {
+    public init(columns: Int = 2, spacing: CGFloat = 0, @ComponentArrayBuilder _ content: () -> [any Component]) {
         self.init(columns: columns, spacing: spacing, children: content())
     }
 }
 
 extension HorizontalWaterfall {
-    public init(columns: Int = 2, spacing: CGFloat = 0, @ComponentArrayBuilder _ content: () -> [Component]) {
+    public init(columns: Int = 2, spacing: CGFloat = 0, @ComponentArrayBuilder _ content: () -> [any Component]) {
         self.init(columns: columns, spacing: spacing, children: content())
     }
 }

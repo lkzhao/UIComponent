@@ -41,7 +41,7 @@ class AsyncImageViewController: ComponentViewController {
         }
     }
 
-    override var component: Component {
+    override var component: any Component {
         Waterfall(columns: 2, spacing: 1) {
             for (index, image) in images.enumerated() {
                 AsyncImage(image.url)
@@ -86,7 +86,7 @@ class AsyncImageViewController: ComponentViewController {
 class AsyncImageDetailViewController: ComponentViewController {
     var image: ImageData!
 
-    override var component: Component {
+    override var component: any Component {
         VStack {
             AsyncImage(image.url)
                 .size(width: .fill, height: .aspectPercentage(image.size.height / image.size.width))

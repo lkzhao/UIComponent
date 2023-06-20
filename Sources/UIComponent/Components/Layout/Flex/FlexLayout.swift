@@ -4,13 +4,13 @@
 import UIKit
 
 /// Implementation for `FlexColumn` & `FlexRow`
-public protocol FlexLayout: Component, BaseLayoutProtocol {
+public protocol FlexLayout: BaseLayoutProtocol {
     var lineSpacing: CGFloat { get }
     var interitemSpacing: CGFloat { get }
     var justifyContent: MainAxisAlignment { get }
     var alignItems: CrossAxisAlignment { get }
     var alignContent: MainAxisAlignment { get }
-    var children: [Component] { get }
+    var children: [any Component] { get }
 
     init(
         lineSpacing: CGFloat,
@@ -18,7 +18,7 @@ public protocol FlexLayout: Component, BaseLayoutProtocol {
         justifyContent: MainAxisAlignment,
         alignItems: CrossAxisAlignment,
         alignContent: MainAxisAlignment,
-        children: [Component]
+        children: [any Component]
     )
 }
 
@@ -29,7 +29,7 @@ extension FlexLayout {
         justifyContent: MainAxisAlignment = .start,
         alignItems: CrossAxisAlignment = .start,
         alignContent: MainAxisAlignment = .start,
-        @ComponentArrayBuilder _ content: () -> [Component]
+        @ComponentArrayBuilder _ content: () -> [any Component]
     ) {
         self.init(
             lineSpacing: lineSpacing,
@@ -46,7 +46,7 @@ extension FlexLayout {
         justifyContent: MainAxisAlignment = .start,
         alignItems: CrossAxisAlignment = .start,
         alignContent: MainAxisAlignment = .start,
-        children: [Component]
+        children: [any Component]
     ) {
         self.init(lineSpacing: spacing, interitemSpacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: children)
     }
@@ -56,14 +56,14 @@ extension FlexLayout {
         justifyContent: MainAxisAlignment = .start,
         alignItems: CrossAxisAlignment = .start,
         alignContent: MainAxisAlignment = .start,
-        @ComponentArrayBuilder _ content: () -> [Component]
+        @ComponentArrayBuilder _ content: () -> [any Component]
     ) {
         self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: content())
     }
 }
 
 extension FlexLayout {
-    public func layout(_ constraint: Constraint) -> any RenderNode {
+    public func layout(_ constraint: Constraint) -> R {
         let mainMax = main(constraint.maxSize)
         let crossMax = cross(constraint.maxSize)
         let childConstraint = Constraint(maxSize: size(main: .infinity, cross: crossMax))

@@ -4,7 +4,7 @@ import Kingfisher
 import UIComponent
 import UIKit
 
-public struct AsyncImage: ViewComponentBuilder {
+public struct AsyncImage: ComponentBuilder {
 
     public typealias AsyncIndicatorType = IndicatorType
     public typealias ConfigurationBuilder = (KF.Builder) -> KF.Builder
@@ -33,8 +33,8 @@ public struct AsyncImage: ViewComponentBuilder {
         self.configurationBuilder = configurationBuilder
     }
 
-    public func build() -> ViewUpdateComponent<SimpleViewComponent<UIImageView>> {
-        SimpleViewComponent<UIImageView>()
+    public func build() -> ViewUpdateComponent<SimpleComponent<UIImageView>> {
+        SimpleComponent<UIImageView>()
             .update {
                 $0.kf.indicatorType = indicatorType
                 if let configurationBuilder = configurationBuilder {

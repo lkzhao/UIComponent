@@ -3,29 +3,29 @@
 import UIKit
 
 public struct VisibleFrameInsets: Component {
-    let child: Component
+    let child: any Component
     let insets: UIEdgeInsets
 
-    public init(child: Component, insets: UIEdgeInsets) {
+    public init(child: any Component, insets: UIEdgeInsets) {
         self.child = child
         self.insets = insets
     }
 
-    public func layout(_ constraint: Constraint) -> any RenderNode {
+    public func layout(_ constraint: Constraint) -> some RenderNode {
         VisibleFrameInsetRenderNode(child: child.layout(constraint), insets: insets)
     }
 }
 
 public struct DynamicVisibleFrameInset: Component {
-    let child: Component
+    let child: any Component
     let insetProvider: (CGRect) -> UIEdgeInsets
 
-    public init(child: Component, insetProvider: @escaping (CGRect) -> UIEdgeInsets) {
+    public init(child: any Component, insetProvider: @escaping (CGRect) -> UIEdgeInsets) {
         self.child = child
         self.insetProvider = insetProvider
     }
 
-    public func layout(_ constraint: Constraint) -> any RenderNode {
+    public func layout(_ constraint: Constraint) -> some RenderNode {
         DynamicVisibleFrameInsetRenderNode(child: child.layout(constraint), insetProvider: insetProvider)
     }
 }

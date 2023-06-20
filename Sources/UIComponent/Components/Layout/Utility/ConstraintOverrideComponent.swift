@@ -128,17 +128,7 @@ struct SizeOverrideRenderNode: RenderNode {
     }
 }
 
-struct ConstraintOverrideComponent: Component {
-    let child: Component
-    let transformer: ConstraintTransformer
-    func layout(_ constraint: Constraint) -> any RenderNode {
-        let finalConstraint = transformer.calculate(constraint)
-        let renderNode = child.layout(finalConstraint)
-        return SizeOverrideRenderNode(child: renderNode, size: transformer.bound(size: renderNode.size, to: finalConstraint))
-    }
-}
-
-public struct ConstraintOverrideViewComponent<Content: ViewComponent>: ViewComponent {
+public struct ConstraintOverrideComponent<Content: Component>: Component {
     let child: Content
     let transformer: ConstraintTransformer
     public func layout(_ constraint: Constraint) -> Content.R {

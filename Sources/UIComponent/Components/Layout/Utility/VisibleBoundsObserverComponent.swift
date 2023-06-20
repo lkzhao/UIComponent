@@ -3,9 +3,9 @@
 import Foundation
 
 public struct VisibleBoundsObserverComponent: Component {
-    let child: Component
+    let child: any Component
     let onVisibleBoundsChanged: (CGSize, CGRect) -> ()
-    public func layout(_ constraint: Constraint) -> any RenderNode {
+    public func layout(_ constraint: Constraint) -> some RenderNode {
         VisibleBoundsObserverRenderNode(child: child.layout(constraint), onVisibleBoundsChanged: onVisibleBoundsChanged)
     }
 }

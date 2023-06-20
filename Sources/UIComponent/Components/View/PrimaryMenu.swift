@@ -9,21 +9,21 @@ import UIKit
 
 #if !os(tvOS)
 @available(iOS 14.0, *)
-public struct PrimaryMenuComponent: ViewComponent {
-    let component: Component
+public struct PrimaryMenuComponent: Component {
+    let component: any Component
     let menu: UIMenu
 
-    public init(component: Component, menu: UIMenu) {
+    public init(component: any Component, menu: UIMenu) {
         self.component = component
         self.menu = menu
     }
 
-    public func layout(_ constraint: Constraint) -> UpdateRenderNode<SimpleRenderNode<PrimaryMenu>> {
+    public func layout(_ constraint: Constraint) -> some RenderNode {
         let renderNode = component.layout(Constraint(maxSize: constraint.maxSize))
-        return SimpleViewComponent<PrimaryMenu>().size(renderNode.size).update {
+        return SimpleComponent<PrimaryMenu>().update {
             $0.menu = menu
             $0.contentView.engine.reloadWithExisting(component: component, renderNode: renderNode)
-        }.layout(constraint)
+        }.size(renderNode.size).layout(constraint)
     }
 }
 
@@ -82,7 +82,7 @@ public class PrimaryMenu: UIControl {
         set { _preferredMenuElementOrder = newValue }
     }
 
-    public var component: Component? {
+    public var component: (any Component)? {
         get { contentView.component }
         set { contentView.component = newValue }
     }

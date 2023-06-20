@@ -4,7 +4,7 @@ import UIComponent
 import UIKit
 
 class ViewController: ComponentViewController {
-    override var component: Component {
+    override var component: any Component {
         VStack {
             Join {
                 ExampleItem(name: "Card Example", viewController: CardViewController())
@@ -31,7 +31,7 @@ struct ExampleItem: ComponentBuilder {
         self.name = name
         self.viewController = viewController
     }
-    func build() -> Component {
+    func build() -> some Component {
         VStack {
             Text(name)
         }

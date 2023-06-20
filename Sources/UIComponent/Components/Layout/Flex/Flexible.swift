@@ -13,8 +13,9 @@ public struct Flexible: Component {
     public let flexGrow: CGFloat
     public let flexShrink: CGFloat
     public let alignSelf: CrossAxisAlignment?
-    public let child: Component
-    public func layout(_ constraint: Constraint) -> any RenderNode {
-        child.layout(constraint)
+    public let child: any Component
+    public func layout(_ constraint: Constraint) -> some RenderNode {
+//        child.layout(constraint) // TODO: 
+        InsetsRenderNode(child: child.layout(constraint), insets: .zero)
     }
 }

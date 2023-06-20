@@ -46,7 +46,7 @@ private class CardView: UIView {
     }
 }
 
-private struct CardViewComponent: ViewComponent {
+private struct CardComponent: Component {
     let data: CardData
     let onTap: () -> Void
     func layout(_ constraint: Constraint) -> CardRenderNode {
@@ -80,10 +80,10 @@ class CardViewController: ComponentViewController {
         componentView.animator = AnimatedReloadAnimator()
     }
 
-    override var component: Component {
+    override var component: any Component {
         VStack(spacing: 8) {
             for (index, card) in cards.enumerated() {
-                CardViewComponent(data: card) { [unowned self] in
+                CardComponent(data: card) { [unowned self] in
                     print("Tapped \(card.title)")
                     self.cards.remove(at: index)
                 }
