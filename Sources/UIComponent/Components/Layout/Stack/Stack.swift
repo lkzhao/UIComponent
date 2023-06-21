@@ -3,7 +3,6 @@
 import UIKit
 
 public protocol Stack: BaseLayoutProtocol {
-    associatedtype R: RenderNode
     var spacing: CGFloat { get }
     var justifyContent: MainAxisAlignment { get }
     var alignItems: CrossAxisAlignment { get }

@@ -2,7 +2,7 @@
 
 import UIKit
 
-public struct ViewModifierComponent<Content: Component, Result: RenderNode>: Component where Content.R.View == Result.View {
+public struct ModifierComponent<Content: Component, Result: RenderNode>: Component where Content.R.View == Result.View {
     let content: Content
     let modifier: (Content.R) -> Result
 
@@ -11,59 +11,61 @@ public struct ViewModifierComponent<Content: Component, Result: RenderNode>: Com
     }
 }
 
-public typealias ViewUpdateComponent<Content: Component> = ViewModifierComponent<Content, UpdateRenderNode<Content.R>>
+public typealias UpdateComponent<Content: Component> = ModifierComponent<Content, UpdateRenderNode<Content.R>>
 
-public typealias ViewKeyPathUpdateComponent<Content: Component, Value> = ViewModifierComponent<
+public typealias KeyPathUpdateComponent<Content: Component, Value> = ModifierComponent<
     Content, KeyPathUpdateRenderNode<Value, Content.R>
 >
 
-public typealias ViewIDComponent<Content: Component> = ViewModifierComponent<Content, IDRenderNode<Content.R>>
+public typealias IDComponent<Content: Component> = ModifierComponent<Content, IDRenderNode<Content.R>>
 
-public typealias ViewAnimatorComponent<Content: Component> = ViewModifierComponent<Content, AnimatorRenderNode<Content.R>>
+public typealias AnimatorComponent<Content: Component> = ModifierComponent<Content, AnimatorRenderNode<Content.R>>
 
-public typealias ViewAnimatorWrapperComponent<Content: Component> = ViewModifierComponent<Content, AnimatorWrapperRenderNode<Content.R>>
+public typealias AnimatorWrapperComponent<Content: Component> = ModifierComponent<Content, AnimatorWrapperRenderNode<Content.R>>
 
-public typealias ViewReuseStrategyComponent<Content: Component> = ViewModifierComponent<Content, ReuseStrategyRenderNode<Content.R>>
+public typealias ReuseStrategyComponent<Content: Component> = ModifierComponent<Content, ReuseStrategyRenderNode<Content.R>>
 
 extension Component {
-    public subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<R.View, Value>) -> (Value) -> ViewKeyPathUpdateComponent<Self, Value> {
-        { with(keyPath, $0) }
+    public subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<R.View, Value>) -> (Value) -> KeyPathUpdateComponent<Self, Value> {
+        { value in
+            with(keyPath, value)
+        }
     }
 
-    public func with<Value>(_ keyPath: ReferenceWritableKeyPath<R.View, Value>, _ value: Value) -> ViewKeyPathUpdateComponent<Self, Value> {
-        ViewModifierComponent(content: self) {
+    public func with<Value>(_ keyPath: ReferenceWritableKeyPath<R.View, Value>, _ value: Value) -> KeyPathUpdateComponent<Self, Value> {
+        ModifierComponent(content: self) {
             $0.with(keyPath, value)
         }
     }
 
-    public func id(_ id: String?) -> ViewIDComponent<Self> {
-        ViewModifierComponent(content: self) {
+    public func id(_ id: String?) -> IDComponent<Self> {
+        ModifierComponent(content: self) {
             $0.id(id)
         }
     }
 
-    public func animator(_ animator: Animator?) -> ViewAnimatorComponent<Self> {
-        ViewModifierComponent(content: self) {
+    public func animator(_ animator: Animator?) -> AnimatorComponent<Self> {
+        ModifierComponent(content: self) {
             $0.animator(animator)
         }
     }
 
-    public func reuseStrategy(_ reuseStrategy: ReuseStrategy) -> ViewReuseStrategyComponent<Self> {
-        ViewModifierComponent(content: self) {
+    public func reuseStrategy(_ reuseStrategy: ReuseStrategy) -> ReuseStrategyComponent<Self> {
+        ModifierComponent(content: self) {
             $0.reuseStrategy(reuseStrategy)
         }
     }
 
-    public func update(_ update: @escaping (R.View) -> Void) -> ViewUpdateComponent<Self> {
-        ViewModifierComponent(content: self) {
+    public func update(_ update: @escaping (R.View) -> Void) -> UpdateComponent<Self> {
+        ModifierComponent(content: self) {
             $0.update(update)
         }
     }
 }
 
 extension Component {
-    public func animateUpdate(passthrough: Bool = false, _ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> ViewAnimatorWrapperComponent<Self> {
-        ViewModifierComponent(content: self) {
+    public func animateUpdate(passthrough: Bool = false, _ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> AnimatorWrapperComponent<Self> {
+        ModifierComponent(content: self) {
             $0.animateUpdate(passthrough: passthrough, updateBlock)
         }
     }
@@ -103,9 +105,9 @@ extension Component {
     }
 }
 
-extension Component where R.View: UIView {
-    public func roundedCorner() -> ViewUpdateComponent<Self> {
-        ViewModifierComponent(content: self) { node in
+extension Component {
+    public func roundedCorner() -> UpdateComponent<Self> {
+        ModifierComponent(content: self) { node in
             node.update { view in
                 view.cornerRadius = min(node.size.width, node.size.height) / 2
             }

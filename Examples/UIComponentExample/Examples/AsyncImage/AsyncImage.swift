@@ -33,7 +33,7 @@ public struct AsyncImage: ComponentBuilder {
         self.configurationBuilder = configurationBuilder
     }
 
-    public func build() -> ViewUpdateComponent<ViewComponent<UIImageView>> {
+    public func build() -> UpdateComponent<ViewComponent<UIImageView>> {
         ViewComponent<UIImageView>()
             .update {
                 $0.kf.indicatorType = indicatorType

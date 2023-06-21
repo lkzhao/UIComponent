@@ -43,6 +43,9 @@ extension RenderNodeWrapper {
 public struct UpdateRenderNode<Content: RenderNode>: RenderNodeWrapper {
     public let content: Content
     public let update: (Content.View) -> Void
+    public var shouldRender: Bool {
+        true
+    }
 
     public var reuseStrategy: ReuseStrategy {
         // we don't know what the update block did, so we disable
