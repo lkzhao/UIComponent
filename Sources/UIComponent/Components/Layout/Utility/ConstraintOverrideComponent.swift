@@ -115,10 +115,18 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
     }
 }
 
+public struct SizeOverrideRenderNode<Content: RenderNode>: RenderNodeWrapper {
+    public let content: Content
+    public let size: CGSize
+}
+
 public struct ConstraintOverrideComponent<Content: Component>: Component {
     let child: Content
     let transformer: ConstraintTransformer
-    public func layout(_ constraint: Constraint) -> Content.R {
-        child.layout(transformer.calculate(constraint))
+    public func layout(_ constraint: Constraint) -> SizeOverrideRenderNode<Content.R> {
+        let finalConstraint = transformer.calculate(constraint)
+        let renderNode = child.layout(finalConstraint)
+        return SizeOverrideRenderNode(content: renderNode, size: transformer.bound(size: renderNode.size, to: finalConstraint))
     }
 }
+

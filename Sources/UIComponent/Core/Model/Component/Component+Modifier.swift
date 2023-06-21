@@ -3,8 +3,8 @@
 import UIKit
 
 extension Component {
-    public func `if`(_ value: Bool, apply: (Self) -> any Component) -> any Component {
-        value ? apply(self) : self
+    public func `if`(_ value: Bool, apply: (Self) -> any Component) -> AnyComponent {
+        value ? apply(self).eraseToAnyComponent() : self.eraseToAnyComponent()
     }
 }
 
@@ -38,7 +38,7 @@ extension Component {
 
 extension Component {
     public func badge(
-        _ component: some Component,
+        _ component: any Component,
         verticalAlignment: Badge.Alignment = .start,
         horizontalAlignment: Badge.Alignment = .end,
         offset: CGPoint = .zero
@@ -55,7 +55,7 @@ extension Component {
         verticalAlignment: Badge.Alignment = .start,
         horizontalAlignment: Badge.Alignment = .end,
         offset: CGPoint = .zero,
-        _ component: () -> some Component
+        _ component: () -> any Component
     ) -> Badge {
         Badge(
             child: self,

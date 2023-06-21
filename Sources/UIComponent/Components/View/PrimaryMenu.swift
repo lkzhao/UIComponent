@@ -18,7 +18,7 @@ public struct PrimaryMenuComponent: Component {
         self.menu = menu
     }
 
-    public func layout(_ constraint: Constraint) -> some RenderNode {
+    public func layout(_ constraint: Constraint) -> SizeOverrideRenderNode<UpdateRenderNode<ViewRenderNode<PrimaryMenu>>> {
         let renderNode = component.layout(Constraint(maxSize: constraint.maxSize))
         return ViewComponent<PrimaryMenu>().update {
             $0.menu = menu

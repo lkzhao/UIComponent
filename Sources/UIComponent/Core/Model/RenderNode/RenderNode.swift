@@ -80,7 +80,7 @@ extension RenderNode {
 }
 
 extension RenderNode {
-    public func _makeView() -> Any {
+    internal func _makeView() -> UIView {
         switch reuseStrategy {
         case .automatic:
             return ReuseManager.shared.dequeue(identifier: "\(type(of: self))", makeView())
@@ -90,7 +90,7 @@ extension RenderNode {
             return ReuseManager.shared.dequeue(identifier: key, makeView())
         }
     }
-    public func _updateView(_ view: Any) {
+    internal func _updateView(_ view: UIView) {
         guard let view = view as? View else { return }
         return updateView(view)
     }

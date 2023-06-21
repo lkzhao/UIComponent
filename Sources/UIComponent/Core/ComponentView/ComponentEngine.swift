@@ -262,7 +262,7 @@ public class ComponentEngine {
                     animator.shift(componentView: componentView, delta: contentOffsetDelta, view: view)
                 }
             } else {
-                view = renderable.renderNode._makeView() as! UIView
+                view = renderable.renderNode._makeView()
                 UIView.performWithoutAnimation {
                     view.bounds.size = frame.bounds.size
                     view.center = frame.center

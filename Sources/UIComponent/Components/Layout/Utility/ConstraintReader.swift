@@ -17,14 +17,14 @@ import UIKit
 ///         Space(width: 50, height: 50).size(width: .fill).constraint(constraint)
 ///       }
 ///     }
-public struct ConstraintReader<ChildComponent: Component>: Component {
-    let builder: (Constraint) -> ChildComponent
+public struct ConstraintReader: Component {
+    let builder: (Constraint) -> any Component
 
-    public init(_ builder: @escaping (Constraint) -> ChildComponent) {
+    public init(_ builder: @escaping (Constraint) -> any Component) {
         self.builder = builder
     }
 
     public func layout(_ constraint: Constraint) -> some RenderNode {
-        builder(constraint).layout(constraint)
+        builder(constraint).eraseToAnyComponent().layout(constraint)
     }
 }
