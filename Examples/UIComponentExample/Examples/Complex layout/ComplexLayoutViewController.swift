@@ -166,8 +166,8 @@ class ComplexLayoutViewController: ComponentViewController {
                 }
                 .showsHorizontalScrollIndicator(false).with(\.animator, AnimatedReloadAnimator())
                 HStack(spacing: 10) {
-                    SimpleComponent<UIButton>(view: resetButton).isEnabled(horizontalListData != ComplexLayoutViewController.defaultHorizontalListData).id("reset")
-                    SimpleComponent<UIButton>(view: shuffleButton).isEnabled(!horizontalListData.isEmpty).id("shuffled")
+                    ViewComponent<UIButton>(view: resetButton).isEnabled(horizontalListData != ComplexLayoutViewController.defaultHorizontalListData).id("reset")
+                    ViewComponent<UIButton>(view: shuffleButton).isEnabled(!horizontalListData.isEmpty).id("shuffled")
                 }
                 .inset(left: 10)
             }

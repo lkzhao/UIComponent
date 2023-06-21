@@ -20,7 +20,7 @@ public struct PrimaryMenuComponent: Component {
 
     public func layout(_ constraint: Constraint) -> some RenderNode {
         let renderNode = component.layout(Constraint(maxSize: constraint.maxSize))
-        return SimpleComponent<PrimaryMenu>().update {
+        return ViewComponent<PrimaryMenu>().update {
             $0.menu = menu
             $0.contentView.engine.reloadWithExisting(component: component, renderNode: renderNode)
         }.size(renderNode.size).layout(constraint)
