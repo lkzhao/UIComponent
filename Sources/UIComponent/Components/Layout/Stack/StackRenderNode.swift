@@ -36,7 +36,7 @@ extension StackRenderNode {
 }
 
 public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
-    public typealias View = NeverView
+    public typealias View = UIView
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]
@@ -44,7 +44,7 @@ public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
 }
 
 public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
-    public typealias View = NeverView
+    public typealias View = UIView
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]
@@ -52,7 +52,7 @@ public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
 }
 
 public struct SlowRenderNode: RenderNode {
-    public typealias View = NeverView
+    public typealias View = UIView
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]
@@ -79,7 +79,7 @@ public struct SlowRenderNode: RenderNode {
 }
 
 public struct AlwaysRenderNode: RenderNode {
-    public typealias View = NeverView
+    public typealias View = UIView
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]

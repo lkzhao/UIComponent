@@ -131,51 +131,50 @@ extension Component {
 }
 
 extension Component {
-    public func visibleInset(_ amount: CGFloat) -> some Component {
+    public func visibleInset(_ amount: CGFloat) -> VisibleFrameInsets<Self> {
         VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount))
     }
-    public func visibleInset(h: CGFloat, v: CGFloat) -> some Component {
+    public func visibleInset(h: CGFloat, v: CGFloat) -> VisibleFrameInsets<Self> {
         VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
     }
-    public func visibleInset(v: CGFloat, h: CGFloat) -> some Component {
+    public func visibleInset(v: CGFloat, h: CGFloat) -> VisibleFrameInsets<Self> {
         VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
     }
-    public func visibleInset(h: CGFloat) -> some Component {
+    public func visibleInset(h: CGFloat) -> VisibleFrameInsets<Self> {
         VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: 0, left: h, bottom: 0, right: h))
     }
-    public func visibleInset(v: CGFloat) -> some Component {
+    public func visibleInset(v: CGFloat) -> VisibleFrameInsets<Self> {
         VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: 0, bottom: v, right: 0))
     }
-    public func visibleInset(_ insets: UIEdgeInsets) -> some Component {
+    public func visibleInset(_ insets: UIEdgeInsets) -> VisibleFrameInsets<Self> {
         VisibleFrameInsets(child: self, insets: insets)
     }
-    public func visibleInset(_ insetProvider: @escaping (CGRect) -> UIEdgeInsets) -> some Component {
+    public func visibleInset(_ insetProvider: @escaping (CGRect) -> UIEdgeInsets) -> DynamicVisibleFrameInset<Self> {
         DynamicVisibleFrameInset(child: self, insetProvider: insetProvider)
     }
 }
 
 extension Component {
-    public func maxSize(width: CGFloat = .infinity, height: CGFloat = .infinity) -> some Component {
+    public func maxSize(width: CGFloat = .infinity, height: CGFloat = .infinity) -> ConstraintOverrideComponent<Self> {
         constraint { c in
             Constraint(minSize: c.minSize, maxSize: CGSize(width: min(width, c.maxSize.width), height: min(height, c.maxSize.height)))
         }
     }
-    public func minSize(width: CGFloat = -.infinity, height: CGFloat = -.infinity) -> some Component {
+    public func minSize(width: CGFloat = -.infinity, height: CGFloat = -.infinity) -> ConstraintOverrideComponent<Self> {
         constraint { c in
             Constraint(minSize: CGSize(width: max(width, c.minSize.width), height: max(height, c.minSize.height)), maxSize: c.maxSize)
         }
     }
-    public func fit() -> some Component {
+    public func fit() -> ConstraintOverrideComponent<Self> {
         size(width: .fit, height: .fit)
     }
-    public func fill() -> some Component {
+    public func fill() -> ConstraintOverrideComponent<Self> {
         size(width: .fill, height: .fill)
     }
     public func centered() -> some Component {
         ZStack {
             self
-        }
-        .fill()
+        }.fill()
     }
 }
 
@@ -192,7 +191,7 @@ extension Component {
     /// Observe the visible bounds change of the current component
     /// - Parameter callback: Called when the visible bounds changed with the current component's size and its visible bounds.
     /// - Returns: Component
-    public func onVisibleBoundsChanged(_ callback: @escaping (CGSize, CGRect) -> Void) -> VisibleBoundsObserverComponent {
+    public func onVisibleBoundsChanged(_ callback: @escaping (CGSize, CGRect) -> Void) -> VisibleBoundsObserverComponent<Self> {
         VisibleBoundsObserverComponent(child: self, onVisibleBoundsChanged: callback)
     }
 }

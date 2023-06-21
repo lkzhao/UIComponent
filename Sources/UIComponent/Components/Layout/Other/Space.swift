@@ -16,6 +16,6 @@ public struct Space: Component {
 }
 
 struct SpaceRenderNode: RenderNode {
-    typealias View = NeverView
+    typealias View = UIView
     let size: CGSize
 }

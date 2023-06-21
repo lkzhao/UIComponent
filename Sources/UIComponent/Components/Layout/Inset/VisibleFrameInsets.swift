@@ -2,58 +2,48 @@
 
 import UIKit
 
-public struct VisibleFrameInsets: Component {
-    let child: any Component
+public struct VisibleFrameInsets<Content: Component>: Component {
+    let child: Content
     let insets: UIEdgeInsets
 
-    public init(child: any Component, insets: UIEdgeInsets) {
+    public init(child: Content, insets: UIEdgeInsets) {
         self.child = child
         self.insets = insets
     }
 
-    public func layout(_ constraint: Constraint) -> some RenderNode {
-        VisibleFrameInsetRenderNode(child: child.layout(constraint), insets: insets)
+    public func layout(_ constraint: Constraint) -> VisibleFrameInsetRenderNode<Content.R> {
+        VisibleFrameInsetRenderNode(content: child.layout(constraint), insets: insets)
     }
 }
 
-public struct DynamicVisibleFrameInset: Component {
-    let child: any Component
+public struct DynamicVisibleFrameInset<Content: Component>: Component {
+    let child: Content
     let insetProvider: (CGRect) -> UIEdgeInsets
 
-    public init(child: any Component, insetProvider: @escaping (CGRect) -> UIEdgeInsets) {
+    public init(child: Content, insetProvider: @escaping (CGRect) -> UIEdgeInsets) {
         self.child = child
         self.insetProvider = insetProvider
     }
 
     public func layout(_ constraint: Constraint) -> some RenderNode {
-        DynamicVisibleFrameInsetRenderNode(child: child.layout(constraint), insetProvider: insetProvider)
+        DynamicVisibleFrameInsetRenderNode(content: child.layout(constraint), insetProvider: insetProvider)
     }
 }
 
-struct VisibleFrameInsetRenderNode: RenderNode {
-    typealias View = NeverView
+public struct VisibleFrameInsetRenderNode<Content: RenderNode>: RenderNodeWrapper {
+    public let content: Content
+    public let insets: UIEdgeInsets
 
-    let child: any RenderNode
-    let insets: UIEdgeInsets
-
-    var size: CGSize { child.size }
-    var children: [any RenderNode] { child.children }
-    var positions: [CGPoint] { child.positions }
-    func visibleIndexes(in frame: CGRect) -> IndexSet {
-        child.visibleIndexes(in: frame.inset(by: insets))
+    public func visibleIndexes(in frame: CGRect) -> IndexSet {
+        content.visibleIndexes(in: frame.inset(by: insets))
     }
 }
 
-struct DynamicVisibleFrameInsetRenderNode: RenderNode {
-    typealias View = NeverView
+public struct DynamicVisibleFrameInsetRenderNode<Content: RenderNode>: RenderNodeWrapper {
+    public let content: Content
+    public let insetProvider: (CGRect) -> UIEdgeInsets
 
-    let child: any RenderNode
-    let insetProvider: (CGRect) -> UIEdgeInsets
-
-    var size: CGSize { child.size }
-    var children: [any RenderNode] { child.children }
-    var positions: [CGPoint] { child.positions }
-    func visibleIndexes(in frame: CGRect) -> IndexSet {
-        child.visibleIndexes(in: frame.inset(by: insetProvider(frame)))
+    public func visibleIndexes(in frame: CGRect) -> IndexSet {
+        content.visibleIndexes(in: frame.inset(by: insetProvider(frame)))
     }
 }

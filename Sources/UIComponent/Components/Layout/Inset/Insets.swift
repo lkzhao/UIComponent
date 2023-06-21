@@ -29,7 +29,7 @@ public struct DynamicInsets: Component {
 }
 
 struct InsetsRenderNode: RenderNode {
-    typealias View = NeverView
+    typealias View = UIView
 
     let child: any RenderNode
     let insets: UIEdgeInsets

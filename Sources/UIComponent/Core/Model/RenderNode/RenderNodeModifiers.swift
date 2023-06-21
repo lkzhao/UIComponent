@@ -11,14 +11,26 @@ extension RenderNodeWrapper {
     public var id: String? {
         content.id
     }
-    public var reuseStrategy: ReuseStrategy {
-        content.reuseStrategy
-    }
     public var animator: Animator? {
         content.animator
     }
+    public var reuseStrategy: ReuseStrategy {
+        content.reuseStrategy
+    }
+    public var shouldRender: Bool {
+        content.shouldRender
+    }
     public var size: CGSize {
         content.size
+    }
+    public var positions: [CGPoint] {
+        content.positions
+    }
+    public var children: [any RenderNode] {
+        content.children
+    }
+    public func visibleIndexes(in frame: CGRect) -> IndexSet {
+        content.visibleIndexes(in: frame)
     }
     public func updateView(_ view: Content.View) {
         content.updateView(view)
@@ -48,6 +60,10 @@ public struct KeyPathUpdateRenderNode<Value, Content: RenderNode>: RenderNodeWra
     public let content: Content
     public let valueKeyPath: ReferenceWritableKeyPath<Content.View, Value>
     public let value: Value
+
+    public var shouldRender: Bool {
+        true
+    }
 
     public func updateView(_ view: Content.View) {
         content.updateView(view)

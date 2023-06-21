@@ -17,6 +17,8 @@ public protocol RenderNode<View> {
     var animator: Animator? { get }
     var reuseStrategy: ReuseStrategy { get }
 
+    var shouldRender: Bool { get }
+
     /// size of the render node
     var size: CGSize { get }
 
@@ -30,18 +32,8 @@ public protocol RenderNode<View> {
     /// - Parameter frame: Parent component's visible frame in current component's coordinates.
     func visibleIndexes(in frame: CGRect) -> IndexSet
 
-    /// Get renderables that are visible in the given frame
-    /// - Parameter frame: Parent component's visible frame in current component's coordinates.
-    ///
-    /// The default implementation recursively retrives all Renderable from visible children and combines them
-    func visibleRenderables(in frame: CGRect) -> [Renderable]
-
     func makeView() -> View
     func updateView(_ view: View)
-}
-
-public class NeverView: UIView {
-
 }
 
 extension RenderNode {
@@ -49,6 +41,7 @@ extension RenderNode {
     public var animator: Animator? { nil }
     public var keyPath: String { "\(type(of: self))" }
     public var reuseStrategy: ReuseStrategy { .automatic }
+    public var shouldRender: Bool { children.isEmpty }
 
     public func makeView() -> View {
         View()
@@ -63,29 +56,26 @@ extension RenderNode {
     public func visibleIndexes(in frame: CGRect) -> IndexSet {
         IndexSet(0..<children.count)
     }
+}
 
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        if View.self is NeverView.Type {
-            var result = [Renderable]()
-            let indexes = visibleIndexes(in: frame)
-            for i in indexes {
-                let child = children[i]
-                let position = positions[i]
-                let childFrame = CGRect(origin: position, size: child.size)
-                let childVisibleFrame = frame.intersection(childFrame) - position
-                let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
-                    OffsetRenderable(renderable: $0, offset: position, index: i)
-                }
-                result.append(contentsOf: childRenderables)
-            }
-            return result
-        } else {
-            let childFrame = CGRect(origin: .zero, size: size)
-            if frame.intersects(childFrame) {
-                return [ViewRenderable(renderNode: self)]
-            }
-            return []
+extension RenderNode {
+    internal func visibleRenderables(in frame: CGRect) -> [Renderable] {
+        var result = [Renderable]()
+        if shouldRender, frame.intersects(CGRect(origin: .zero, size: size)) {
+            result.append(ViewRenderable(renderNode: self))
         }
+        let indexes = visibleIndexes(in: frame)
+        for i in indexes {
+            let child = children[i]
+            let position = positions[i]
+            let childFrame = CGRect(origin: position, size: child.size)
+            let childVisibleFrame = frame.intersection(childFrame) - position
+            let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
+                OffsetRenderable(renderable: $0, offset: position, index: i)
+            }
+            result.append(contentsOf: childRenderables)
+        }
+        return result
     }
 }
 
