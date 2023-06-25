@@ -59,7 +59,7 @@ extension RenderNode {
 }
 
 extension RenderNode {
-    internal func visibleRenderables(in frame: CGRect) -> [Renderable] {
+    internal func _visibleRenderables(in frame: CGRect) -> [Renderable] {
         var result = [Renderable]()
         if shouldRender, frame.intersects(CGRect(origin: .zero, size: size)) {
             result.append(ViewRenderable(renderNode: self))
@@ -70,7 +70,7 @@ extension RenderNode {
             let position = positions[i]
             let childFrame = CGRect(origin: position, size: child.size)
             let childVisibleFrame = frame.intersection(childFrame) - position
-            let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
+            let childRenderables = child._visibleRenderables(in: childVisibleFrame).map {
                 OffsetRenderable(renderable: $0, offset: position, index: i)
             }
             result.append(contentsOf: childRenderables)
@@ -109,6 +109,18 @@ extension RenderNode {
         for (index, child) in children.enumerated() {
             if let frame = child.frame(id: id) {
                 return frame + positions[index]
+            }
+        }
+        return nil
+    }
+
+    public func renderNode(id: String) -> (any RenderNode)? {
+        if self.id == id {
+            return self
+        }
+        for child in children {
+            if let node = child.renderNode(id: id) {
+                return node
             }
         }
         return nil

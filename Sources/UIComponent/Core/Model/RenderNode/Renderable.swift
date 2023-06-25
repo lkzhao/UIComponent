@@ -11,68 +11,68 @@ public protocol Renderable {
     var frame: CGRect { get }
 }
 
-public struct ViewRenderable: Renderable {
-    public let renderNode: any RenderNode
-    public init(renderNode: any RenderNode) {
+struct ViewRenderable: Renderable {
+    let renderNode: any RenderNode
+    init(renderNode: any RenderNode) {
         self.renderNode = renderNode
     }
-    public var userDefinedId: String? {
+    var userDefinedId: String? {
         renderNode.id
     }
-    public var id: String {
+    var id: String {
         userDefinedId ?? "\(type(of: self))"
     }
-    public var animator: Animator? {
+    var animator: Animator? {
         renderNode.animator
     }
-    public var frame: CGRect {
+    var frame: CGRect {
         CGRect(origin: .zero, size: renderNode.size)
     }
 }
 
-public struct OffsetRenderable: Renderable {
-    public let renderable: Renderable
-    public let offset: CGPoint
-    public let index: Int
-    public init(renderable: Renderable, offset: CGPoint, index: Int) {
+struct OffsetRenderable: Renderable {
+    let renderable: Renderable
+    let offset: CGPoint
+    let index: Int
+    init(renderable: Renderable, offset: CGPoint, index: Int) {
         self.renderable = renderable
         self.offset = offset
         self.index = index
     }
-    public var userDefinedId: String? {
+    var userDefinedId: String? {
         renderable.userDefinedId
     }
-    public var id: String {
+    var id: String {
         renderable.userDefinedId ?? "\(type(of: self))-\(index).\(renderable.id)"
     }
-    public var animator: Animator? {
+    var animator: Animator? {
         renderable.animator
     }
-    public var renderNode: any RenderNode {
+    var renderNode: any RenderNode {
         renderable.renderNode
     }
-    public var frame: CGRect {
+    var frame: CGRect {
         renderable.frame + offset
     }
 }
 
-public struct IdOverrideRenderable: Renderable {
-    public var id: String
-    public var renderable: Renderable
-    public init(id: String, renderable: Renderable) {
+struct IdOverrideRenderable: Renderable {
+    var id: String
+    var renderable: Renderable
+    init(id: String, renderable: Renderable) {
         self.id = id
         self.renderable = renderable
     }
-    public var userDefinedId: String? {
+    var userDefinedId: String? {
         renderable.userDefinedId
     }
-    public var animator: Animator? {
+    var animator: Animator? {
         renderable.animator
     }
-    public var renderNode: any RenderNode {
+    var renderNode: any RenderNode {
         renderable.renderNode
     }
-    public var frame: CGRect {
+    var frame: CGRect {
         renderable.frame
     }
 }

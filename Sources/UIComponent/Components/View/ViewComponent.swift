@@ -66,7 +66,7 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
 }
 
 extension UIView: Component {
-    public func layout(_ constraint: Constraint) -> some RenderNode {
+    public func layout(_ constraint: Constraint) -> ViewRenderNode<UIView> {
         ViewRenderNode(size: constraint.isTight ? constraint.maxSize : sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
     }
 }

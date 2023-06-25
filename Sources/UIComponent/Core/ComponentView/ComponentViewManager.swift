@@ -23,3 +23,16 @@ internal class ComponentViewMananger {
 public func currentComponentView() -> ComponentDisplayableView? {
     ComponentViewMananger.shared.last
 }
+
+extension Component {
+    /// A block that can be captured inside `layout` or `build` method to trigger a reload on the linked componentView
+    public var reload: () -> Void {
+        guard let componentView = currentComponentView() else {
+            assertionFailure("reloadComponent should only be captured within `layout` or `build` method")
+            return {}
+        }
+        return { [weak componentView] in
+            componentView?.reloadData()
+        }
+    }
+}
