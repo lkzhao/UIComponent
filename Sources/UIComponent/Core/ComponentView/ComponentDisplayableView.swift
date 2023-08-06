@@ -19,6 +19,10 @@ extension ComponentDisplayableView {
         get { engine.animator }
         set { engine.animator = newValue }
     }
+    
+    public var renderNode: (any RenderNode)? {
+        engine.renderNode
+    }
 
     /// visible frame insets that is applied to the view port before fetching the views from the renderNode
     public var visibleFrameInsets: UIEdgeInsets {

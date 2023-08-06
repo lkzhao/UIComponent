@@ -58,7 +58,8 @@ extension Stack {
             primaryOffset += main(child.size) + distributedSpacing
         }
         let intrisicMain = primaryOffset - distributedSpacing
-        let finalMain = justifyContent != .start && primaryBound != .infinity ? max(primaryBound, intrisicMain) : intrisicMain
+        let shouldFillPrimary = justifyContent != .start && primaryBound != .infinity
+        let finalMain = max(shouldFillPrimary ? primaryBound : minPrimary, intrisicMain)
         let finalSize = size(main: finalMain, cross: crossMax)
 
         return renderNode(size: finalSize, children: renderNodes, positions: positions)
