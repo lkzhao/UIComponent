@@ -20,7 +20,7 @@ struct ViewRenderable: Renderable {
         renderNode.id
     }
     var id: String {
-        userDefinedId ?? "\(type(of: self))"
+        userDefinedId ?? renderNode.keyPath
     }
     var animator: Animator? {
         renderNode.animator
