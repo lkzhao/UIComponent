@@ -183,7 +183,7 @@ public class ComponentEngine {
     }
 
     func render(contentOffsetAdjustFn: (() -> CGPoint)? = nil, updateViews: Bool = false) {
-        guard let componentView = view, !isRendering, let component = component else { return }
+        guard let componentView = view, allowReload, !isRendering, let component = component else { return }
         isRendering = true
         defer {
             needsRender = false
