@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,6 +26,7 @@
 		B1CC3F7026789E1F005BCE8C /* CardViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */; };
 		B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7126789F07005BCE8C /* AddCardButton.swift */; };
 		B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7326789F3D005BCE8C /* CardData.swift */; };
+		F8083BD02AEEBF79004DDCE4 /* AvatarCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8083BCF2AEEBF79004DDCE4 /* AvatarCircle.swift */; };
 		F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */; };
 		F858D54026B9459E00410219 /* GalleryComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53D26B9459E00410219 /* GalleryComponents.swift */; };
 		F858D54126B9459E00410219 /* GalleryLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53E26B9459E00410219 /* GalleryLayout.swift */; };
@@ -72,6 +73,7 @@
 		B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController3.swift; sourceTree = "<group>"; };
 		B1CC3F7126789F07005BCE8C /* AddCardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardButton.swift; sourceTree = "<group>"; };
 		B1CC3F7326789F3D005BCE8C /* CardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
+		F8083BCF2AEEBF79004DDCE4 /* AvatarCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarCircle.swift; sourceTree = "<group>"; };
 		F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionCard.swift; sourceTree = "<group>"; };
 		F858D53D26B9459E00410219 /* GalleryComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryComponents.swift; sourceTree = "<group>"; };
 		F858D53E26B9459E00410219 /* GalleryLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryLayout.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				F8E3DD1126A7BC5F0062E58F /* HorizontalCardItem.swift */,
 				F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */,
 				F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */,
+				F8083BCF2AEEBF79004DDCE4 /* AvatarCircle.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 				F858D54226B9459E00410219 /* GalleryViewController.swift in Sources */,
 				F8E3DD1A26A7BEB60062E58F /* Components.swift in Sources */,
 				B16EA6A22677E26F005CFB18 /* AsyncImage.swift in Sources */,
+				F8083BD02AEEBF79004DDCE4 /* AvatarCircle.swift in Sources */,
 				A304892A21C347010026EDA7 /* ViewController.swift in Sources */,
 				B1A24DE9271CD9F80020B728 /* SizeExample.swift in Sources */,
 				F8E3DD1826A7BE300062E58F /* Modifiers.swift in Sources */,

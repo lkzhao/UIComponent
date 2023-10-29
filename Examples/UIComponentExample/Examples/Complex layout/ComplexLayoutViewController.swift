@@ -60,6 +60,28 @@ class ComplexLayoutViewController: ComponentViewController {
     override var component: Component {
         VStack(spacing: 20) {
             Text("Complex layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill).id("label")
+            HStack(spacing: 20) {
+                AvatarCircle(
+                    avatar: AsyncImage("https://source.unsplash.com/random/100×100")
+                        .size(width: 100, height: 100)
+                        .eraseToAnyView()
+                    ,
+                    nickName: Text("Test", font: .systemFont(ofSize: 15, weight: .regular))
+                        .textColor(.darkGray)
+                        .eraseToAnyView()
+                )
+                
+                AvatarCircle(
+                    avatar: AsyncImage("https://source.unsplash.com/random/200×200")
+                        .size(width: 120, height: 120)
+                        .eraseToAnyView()
+                    ,
+                    nickName: Text("Test 2", font: .systemFont(ofSize: 18, weight: .semibold))
+                        .textColor(.label)
+                        .eraseToAnyView()
+                )
+            }
+    
             VStack(spacing: 10) {
                 UserProfile(
                     avatar: "https://unsplash.com/photos/Yn0l7uwBrpw/download?force=true&w=640",
