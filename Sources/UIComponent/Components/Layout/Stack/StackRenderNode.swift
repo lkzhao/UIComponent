@@ -5,7 +5,7 @@ import UIKit
 
 public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
     var size: CGSize { get }
-    var children: [RenderNode] { get }
+    var children: [any RenderNode] { get }
     var positions: [CGPoint] { get }
     var mainAxisMaxValue: CGFloat { get }
 }
@@ -36,25 +36,37 @@ extension StackRenderNode {
 }
 
 public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
+    public typealias View = UIView
     public let size: CGSize
-    public let children: [RenderNode]
+    public let children: [any RenderNode]
     public let positions: [CGPoint]
     public let mainAxisMaxValue: CGFloat
+    public var shouldRenderView: Bool {
+        false
+    }
 }
 
 public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
+    public typealias View = UIView
     public let size: CGSize
-    public let children: [RenderNode]
+    public let children: [any RenderNode]
     public let positions: [CGPoint]
     public let mainAxisMaxValue: CGFloat
+    public var shouldRenderView: Bool {
+        false
+    }
 }
 
 public struct SlowRenderNode: RenderNode {
+    public typealias View = UIView
     public let size: CGSize
-    public let children: [RenderNode]
+    public let children: [any RenderNode]
     public let positions: [CGPoint]
+    public var shouldRenderView: Bool {
+        false
+    }
 
-    public init(size: CGSize, children: [RenderNode], positions: [CGPoint]) {
+    public init(size: CGSize, children: [any RenderNode], positions: [CGPoint]) {
         self.size = size
         self.children = children
         self.positions = positions
@@ -76,34 +88,17 @@ public struct SlowRenderNode: RenderNode {
 }
 
 public struct AlwaysRenderNode: RenderNode {
+    public typealias View = UIView
     public let size: CGSize
-    public let children: [RenderNode]
+    public let children: [any RenderNode]
     public let positions: [CGPoint]
+    public var shouldRenderView: Bool {
+        false
+    }
 
-    public init(size: CGSize, children: [RenderNode], positions: [CGPoint]) {
+    public init(size: CGSize, children: [any RenderNode], positions: [CGPoint]) {
         self.size = size
         self.children = children
         self.positions = positions
-    }
-
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        var result = [Renderable]()
-        for i in 0..<children.count {
-            let child = children[i]
-            let position = positions[i]
-            let childFrame = CGRect(origin: .zero, size: child.size)
-            let childRenderables = child.visibleRenderables(in: childFrame)
-                .map {
-                    Renderable(
-                        id: $0.id,
-                        keyPath: "\(type(of: self))-\(i)." + $0.keyPath,
-                        animator: $0.animator,
-                        renderNode: $0.renderNode,
-                        frame: CGRect(origin: $0.frame.origin + position, size: $0.frame.size)
-                    )
-                }
-            result.append(contentsOf: childRenderables)
-        }
-        return result
     }
 }

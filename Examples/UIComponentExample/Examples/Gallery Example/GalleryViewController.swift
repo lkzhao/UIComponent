@@ -13,7 +13,7 @@ class GalleryViewController: ComponentViewController {
 
     let horizontalData: [GalleryItemData] = (0...33).map { _ in GalleryItemData() }
 
-    override var component: Component {
+    override var component: any Component {
         VStack(spacing: 20) {
             Text("Gallery layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill).inset(h: 20)
             HStack(spacing: 20) {

@@ -4,13 +4,13 @@
 import UIKit
 
 /// Implementation for `FlexColumn` & `FlexRow`
-public protocol FlexLayout: Component, BaseLayoutProtocol {
+public protocol FlexLayout: BaseLayoutProtocol {
     var lineSpacing: CGFloat { get }
     var interitemSpacing: CGFloat { get }
     var justifyContent: MainAxisAlignment { get }
     var alignItems: CrossAxisAlignment { get }
     var alignContent: MainAxisAlignment { get }
-    var children: [Component] { get }
+    var children: [any Component] { get }
 
     init(
         lineSpacing: CGFloat,
@@ -18,7 +18,7 @@ public protocol FlexLayout: Component, BaseLayoutProtocol {
         justifyContent: MainAxisAlignment,
         alignItems: CrossAxisAlignment,
         alignContent: MainAxisAlignment,
-        children: [Component]
+        children: [any Component]
     )
 }
 
@@ -29,7 +29,7 @@ extension FlexLayout {
         justifyContent: MainAxisAlignment = .start,
         alignItems: CrossAxisAlignment = .start,
         alignContent: MainAxisAlignment = .start,
-        @ComponentArrayBuilder _ content: () -> [Component]
+        @ComponentArrayBuilder _ content: () -> [any Component]
     ) {
         self.init(
             lineSpacing: lineSpacing,
@@ -46,7 +46,7 @@ extension FlexLayout {
         justifyContent: MainAxisAlignment = .start,
         alignItems: CrossAxisAlignment = .start,
         alignContent: MainAxisAlignment = .start,
-        children: [Component]
+        children: [any Component]
     ) {
         self.init(lineSpacing: spacing, interitemSpacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: children)
     }
@@ -56,18 +56,18 @@ extension FlexLayout {
         justifyContent: MainAxisAlignment = .start,
         alignItems: CrossAxisAlignment = .start,
         alignContent: MainAxisAlignment = .start,
-        @ComponentArrayBuilder _ content: () -> [Component]
+        @ComponentArrayBuilder _ content: () -> [any Component]
     ) {
         self.init(spacing: spacing, justifyContent: justifyContent, alignItems: alignItems, alignContent: alignContent, children: content())
     }
 }
 
 extension FlexLayout {
-    public func layout(_ constraint: Constraint) -> RenderNode {
+    public func layout(_ constraint: Constraint) -> R {
         let mainMax = main(constraint.maxSize)
         let crossMax = cross(constraint.maxSize)
         let childConstraint = Constraint(maxSize: size(main: .infinity, cross: crossMax))
-        var renderNodes: [RenderNode] = children.map {
+        var renderNodes: [any RenderNode] = children.map {
             $0.layout(childConstraint)
         }
         var positions: [CGPoint] = []
@@ -127,15 +127,15 @@ extension FlexLayout {
             // resize flex items
             let flexCount = children[range]
                 .reduce(0) { result, next in
-                    result + ((next as? Flexible)?.flexGrow ?? 0)
+                    result + ((next as? AnyFlexible)?.flexGrow ?? 0)
                 }
             if flexCount > 0, crossMax != .infinity {
                 let crossPerFlex = max(0, crossMax - cross(lineSize)) / flexCount
                 for index in range {
                     let child = children[index]
-                    if let child = child as? Flexible {
-                        let alignChild = child.alignSelf ?? alignItems
-                        let crossReserved = crossPerFlex * child.flexGrow + cross(renderNodes[index].size)
+                    if let flexChild = child as? AnyFlexible {
+                        let alignChild = flexChild.alignSelf ?? alignItems
+                        let crossReserved = crossPerFlex * flexChild.flexGrow + cross(renderNodes[index].size)
                         let constraint = Constraint(
                             minSize: size(main: (alignChild == .stretch) ? main(lineSize) : 0, cross: crossReserved),
                             maxSize: size(main: .infinity, cross: crossReserved)
@@ -169,7 +169,7 @@ extension FlexLayout {
                     renderNodes[lineStartIndex + itemIndex] = child
                 }
                 var alignValue: CGFloat = 0
-                let alignChild = (childComponent as? Flexible)?.alignSelf ?? alignItems
+                let alignChild = (childComponent as? AnyFlexible)?.alignSelf ?? alignItems
                 switch alignChild {
                 case .start, .stretch:
                     alignValue = 0

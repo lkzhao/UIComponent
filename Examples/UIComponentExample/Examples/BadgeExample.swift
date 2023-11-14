@@ -4,7 +4,7 @@ import UIComponent
 import UIKit
 
 class BadgeViewController: ComponentViewController {
-    override var component: Component {
+    override var component: any Component {
         VStack {
             Text("Badges", font: .boldSystemFont(ofSize: 20)).id("label3")
             VStack(spacing: 10) {
@@ -39,7 +39,7 @@ class BadgeViewController: ComponentViewController {
 struct NumberBadge: ComponentBuilder {
     let text: String
     let isRoundStyle: Bool
-    func build() -> Component {
+    func build() -> some Component {
         Text(
             text,
             font: .systemFont(ofSize: 12)
@@ -82,7 +82,7 @@ struct NumberBadge: ComponentBuilder {
 
 struct BannerBadge: ComponentBuilder {
     let text: String
-    func build() -> Component {
+    func build() -> some Component {
         Text(text, font: .systemFont(ofSize: 11)).textAlignment(.center).textColor(.white).backgroundColor(.systemRed).adjustsFontSizeToFitWidth(true).size(height: .absolute(15))
             .inset(h: 2)
     }

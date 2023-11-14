@@ -18,7 +18,7 @@ class Box: ComponentBuilder {
     convenience init(width: CGFloat = 40, height: CGFloat = 40) {
         self.init("", width: width, height: height)
     }
-    func build() -> Component {
+    func build() -> some Component {
         Space(width: width, height: height).styleColor(.systemBlue).overlay(Text(text).textColor(.white).textAlignment(.center).size(width: .fill, height: .fill))
     }
 }

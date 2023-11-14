@@ -20,7 +20,7 @@ public class ComponentEngine {
     weak var view: ComponentDisplayableView?
 
     /// component for rendering
-    var component: Component? {
+    var component: (any Component)? {
         didSet { setNeedsReload() }
     }
 
@@ -30,7 +30,7 @@ public class ComponentEngine {
     }
 
     /// Current renderNode. This is nil before the layout is done. And it will cache the current RenderNode once the layout is done.
-    var renderNode: RenderNode?
+    var renderNode: (any RenderNode)?
 
     /// internal states
     var needsReload = true
@@ -191,7 +191,7 @@ public class ComponentEngine {
         }
 
         ComponentViewMananger.shared.push(view: componentView)
-        let renderNode: RenderNode
+        let renderNode: any RenderNode
         if let currentRenderNode = self.renderNode {
             renderNode = currentRenderNode
         } else {
@@ -219,13 +219,13 @@ public class ComponentEngine {
 
         // construct private identifiers
         var newIdentifierSet = [String: Int]()
-        for (index, viewData) in newVisibleRenderable.enumerated() {
+        for (index, renderable) in newVisibleRenderable.enumerated() {
             var count = 1
-            let initialId = viewData.id ?? viewData.keyPath
+            let initialId = renderable.id
             var finalId = initialId
             while newIdentifierSet[finalId] != nil {
                 finalId = initialId + String(count)
-                newVisibleRenderable[index].id = finalId
+                newVisibleRenderable[index] = IdOverrideRenderable(id: finalId, renderable: renderable)
                 count += 1
             }
             newIdentifierSet[finalId] = index
@@ -235,9 +235,9 @@ public class ComponentEngine {
 
         // 1st pass, delete all removed cells and move existing cells
         for index in 0..<visibleViews.count {
-            let identifier = visibleRenderable[index].id ?? visibleRenderable[index].keyPath
+            let id = visibleRenderable[index].id
             let cell = visibleViews[index]
-            if let index = newIdentifierSet[identifier] {
+            if let index = newIdentifierSet[id] {
                 newViews[index] = cell
             } else {
                 let animator = visibleRenderable[index].animator ?? animator
@@ -249,30 +249,30 @@ public class ComponentEngine {
         }
 
         // 2nd pass, insert new views
-        for (index, viewData) in newVisibleRenderable.enumerated() {
+        for (index, renderable) in newVisibleRenderable.enumerated() {
             let view: UIView
-            let frame = viewData.frame
-            let animator = viewData.animator ?? animator
+            let frame = renderable.frame
+            let animator = renderable.animator ?? animator
             let containerView = contentView ?? componentView
             if let existingView = newViews[index] {
                 view = existingView
                 if updateViews {
                     // view was on screen before reload, need to update the view.
-                    viewData.renderNode._updateView(view)
+                    renderable.renderNode._updateView(view)
                     animator.shift(componentView: componentView, delta: contentOffsetDelta, view: view)
                 }
             } else {
-                view = viewData.renderNode._makeView() as! UIView
+                view = renderable.renderNode._makeView()
                 UIView.performWithoutAnimation {
                     view.bounds.size = frame.bounds.size
                     view.center = frame.center
                     view.layoutIfNeeded()
                     if ComponentEngine.disableUpdateAnimation {
-                        viewData.renderNode._updateView(view)
+                        renderable.renderNode._updateView(view)
                     }
                 }
                 if !ComponentEngine.disableUpdateAnimation {
-                    viewData.renderNode._updateView(view)
+                    renderable.renderNode._updateView(view)
                 }
                 animator.insert(componentView: componentView, view: view, frame: frame)
                 newViews[index] = view
@@ -290,8 +290,8 @@ public class ComponentEngine {
     /// Useful when a cell's identifier is going to change with the next
     /// reloadData, but you want to keep the same cell view.
     public func replace(identifier: String, with newIdentifier: String) {
-        for (i, viewData) in visibleRenderable.enumerated() where viewData.id == identifier {
-            visibleRenderable[i].id = newIdentifier
+        for (i, renderable) in visibleRenderable.enumerated() where renderable.id == identifier {
+            visibleRenderable[i] = IdOverrideRenderable(id: newIdentifier, renderable: renderable)
             break
         }
     }
@@ -299,7 +299,7 @@ public class ComponentEngine {
     /// This function assigns component with an already calculated render node
     /// This is a performance hack that skips layout for the component if it has already
     /// been layed out.
-    public func reloadWithExisting(component: Component, renderNode: RenderNode) {
+    public func reloadWithExisting(component: any Component, renderNode: any RenderNode) {
         self.component = component
         self.renderNode = renderNode
         self.shouldSkipNextLayout = true

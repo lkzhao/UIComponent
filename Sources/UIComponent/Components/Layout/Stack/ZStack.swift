@@ -6,10 +6,10 @@ import UIKit
 public struct ZStack: Component {
     public var verticalAlignment: CrossAxisAlignment = .center
     public var horizontalAlignment: CrossAxisAlignment = .center
-    public var children: [Component]
+    public var children: [any Component]
 
-    public func layout(_ constraint: Constraint) -> RenderNode {
-        var renderNodes: [RenderNode] = children.map {
+    public func layout(_ constraint: Constraint) -> some RenderNode {
+        var renderNodes: [any RenderNode] = children.map {
             $0.layout(Constraint(maxSize: constraint.maxSize))
         }
         let size = CGSize(
@@ -53,7 +53,7 @@ extension ZStack {
     public init(
         verticalAlignment: CrossAxisAlignment = .center,
         horizontalAlignment: CrossAxisAlignment = .center,
-        @ComponentArrayBuilder _ content: () -> [Component]
+        @ComponentArrayBuilder _ content: () -> [any Component]
     ) {
         self.init(verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, children: content())
     }

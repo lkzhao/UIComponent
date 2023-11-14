@@ -6,15 +6,15 @@ import UIKit
 ///
 /// Renders a list of child components base on the provided `children` and `frames` parameters.
 public struct Absolute: Component {
-    public var children: [Component]
+    public var children: [any Component]
     public var frames: [CGRect]
 
-    public init(children: [Component], frames: [CGRect]) {
+    public init(children: [any Component], frames: [CGRect]) {
         self.children = children
         self.frames = frames
     }
 
-    public func layout(_ constraint: Constraint) -> RenderNode {
+    public func layout(_ constraint: Constraint) -> some RenderNode {
         let frame = frames.reduce(frames.first ?? .zero) {
             $0.union($1)
         }

@@ -2,7 +2,7 @@
 
 import UIKit
 
-public struct SimpleViewComponent<View: UIView>: ViewComponent {
+public struct ViewComponent<View: UIView>: Component {
     public let view: View?
     public let generator: (() -> View)?
     private init(view: View?, generator: (() -> View)?) {
@@ -15,12 +15,12 @@ public struct SimpleViewComponent<View: UIView>: ViewComponent {
     public init(generator: @autoclosure @escaping () -> View) {
         self.init(view: nil, generator: generator)
     }
-    public func layout(_ constraint: Constraint) -> SimpleViewRenderNode<View> {
-        SimpleViewRenderNode(size: (view?.sizeThatFits(constraint.maxSize) ?? .zero).bound(to: constraint), view: view, generator: generator)
+    public func layout(_ constraint: Constraint) -> ViewRenderNode<View> {
+        ViewRenderNode(size: (view?.sizeThatFits(constraint.maxSize) ?? .zero).bound(to: constraint), view: view, generator: generator)
     }
 }
 
-public struct SimpleViewRenderNode<View: UIView>: ViewRenderNode {
+public struct ViewRenderNode<View: UIView>: RenderNode {
     public let size: CGSize
     public let view: View?
     public let generator: (() -> View)?
@@ -65,8 +65,8 @@ public struct SimpleViewRenderNode<View: UIView>: ViewRenderNode {
     public func updateView(_ view: View) {}
 }
 
-extension UIView: ViewComponent {
-    public func layout(_ constraint: Constraint) -> some ViewRenderNode {
-        SimpleViewRenderNode(size: constraint.isTight ? constraint.maxSize : sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
+extension UIView: Component {
+    public func layout(_ constraint: Constraint) -> ViewRenderNode<UIView> {
+        ViewRenderNode(size: constraint.isTight ? constraint.maxSize : sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
     }
 }

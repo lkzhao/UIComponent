@@ -9,7 +9,7 @@ public protocol ComponentDisplayableView: UIView {
 extension ComponentDisplayableView {
 
     /// component to be rendered by this component displayable view
-    public var component: Component? {
+    public var component: (any Component)? {
         get { engine.component }
         set { engine.component = newValue }
     }
@@ -18,6 +18,10 @@ extension ComponentDisplayableView {
     public var animator: Animator {
         get { engine.animator }
         set { engine.animator = newValue }
+    }
+    
+    public var renderNode: (any RenderNode)? {
+        engine.renderNode
     }
 
     /// visible frame insets that is applied to the view port before fetching the views from the renderNode

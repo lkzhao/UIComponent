@@ -1,29 +1,21 @@
 //  Created by Luke Zhao on 10/10/22.
 
-import Foundation
+import UIKit
 
-public struct VisibleBoundsObserverComponent: Component {
-    let child: Component
+public struct VisibleBoundsObserverComponent<Content: Component>: Component {
+    let child: Content
     let onVisibleBoundsChanged: (CGSize, CGRect) -> ()
-    public func layout(_ constraint: Constraint) -> RenderNode {
-        VisibleBoundsObserverRenderNode(child: child.layout(constraint), onVisibleBoundsChanged: onVisibleBoundsChanged)
+    public func layout(_ constraint: Constraint) -> VisibleBoundsObserverRenderNode<Content.R> {
+        VisibleBoundsObserverRenderNode(content: child.layout(constraint), onVisibleBoundsChanged: onVisibleBoundsChanged)
     }
 }
 
-struct VisibleBoundsObserverRenderNode: RenderNode {
-    let child: RenderNode
-    let onVisibleBoundsChanged: (CGSize, CGRect) -> ()
-    var size: CGSize {
-        child.size
-    }
-    var children: [RenderNode] {
-        [child]
-    }
-    var positions: [CGPoint] {
-        [.zero]
-    }
-    func visibleIndexes(in frame: CGRect) -> IndexSet {
+public struct VisibleBoundsObserverRenderNode<Content: RenderNode>: RenderNodeWrapper {
+    public let content: Content
+    public let onVisibleBoundsChanged: (CGSize, CGRect) -> ()
+
+    public func visibleIndexes(in frame: CGRect) -> IndexSet {
         onVisibleBoundsChanged(size, frame)
-        return [0]
+        return content.visibleIndexes(in: frame)
     }
 }

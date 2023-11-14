@@ -22,7 +22,7 @@ import UIKit
 /// ```
 ///
 /// Checkout the `FlexLayoutViewController.swift` for other examples.
-public struct FlexColumn: FlexLayout, HorizontalLayoutProtocol {
+public struct FlexColumn: Component, FlexLayout, HorizontalLayoutProtocol {
     public var lineSpacing: CGFloat
     public var interitemSpacing: CGFloat
 
@@ -30,7 +30,7 @@ public struct FlexColumn: FlexLayout, HorizontalLayoutProtocol {
     public var alignItems: CrossAxisAlignment
     public var justifyContent: MainAxisAlignment
     public var tailJustifyContent: MainAxisAlignment?
-    public var children: [Component]
+    public var children: [any Component]
 
     public init(
         lineSpacing: CGFloat = 0,
@@ -38,7 +38,7 @@ public struct FlexColumn: FlexLayout, HorizontalLayoutProtocol {
         justifyContent: MainAxisAlignment = .start,
         alignItems: CrossAxisAlignment = .start,
         alignContent: MainAxisAlignment = .start,
-        children: [Component]
+        children: [any Component]
     ) {
         self.lineSpacing = lineSpacing
         self.interitemSpacing = interitemSpacing

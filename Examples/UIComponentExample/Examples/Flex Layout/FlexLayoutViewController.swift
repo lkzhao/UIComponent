@@ -5,7 +5,7 @@ import UIKit
 
 class FlexLayoutViewController: ComponentViewController {
 
-    override var component: Component {
+    override var component: any Component {
 
         VStack(spacing: 20) {
             Text("Flex layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)

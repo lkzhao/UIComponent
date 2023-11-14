@@ -11,19 +11,14 @@ This framework allows you to build UI using UIKit with syntax similar to SwiftUI
 * Built in layouts including `Stack`, `Flow`, & `Waterfall`.
 * Declaritive API based on `resultBuilder` and modifier syntax.
 * Work seemless with existing UIKit views, viewControllers, and transitions.
-* `dynamicMemberLookup` support for all ViewComponents which can help you easily update your UIKit views.
+* `dynamicMemberLookup` support for easily updating your UIKit views.
 * `Animator` API to apply animations when cells are being moved, updated, inserted, or deleted.
 * Simple architecture for anyone to be able to understand.
 * Easy to create your own Components.
 * No state management or two-way binding.
 
-## Production Apps that use UIComponent
-* ### [Noto](https://apps.apple.com/us/app/noto-elegant-note/id1459055246)
-  Noto uses **UIComponent** for all of the UI including the text editor. The text editor view is a `ComponentScrollView` with each line rendered as a cell through a custom component. This app showcases the level of flexibility that this framework has compares to SwiftUI. I personally use some SwiftUI in my app, but most of the time, I fallback to UIKit to drill down the exact look and feel that I want while also provide great performance. 
- 
-  <em>Definitely let me know if you know how to create a custom text view using SwiftUI, if that ever becomes a reality, I would probably switch completely.</em>
-
-* ### [Ink](https://apps.apple.com/us/app/ink-note-sketch-annotation/id1499301117)
+### Version 2.0 Migration Guide
+[Here](Version2MigrationGuide.md)
 
 ## How to use
 
@@ -81,5 +76,3 @@ Checkout the example project for more in-depth examples.
 * `.view()`
 * `.tappableView()`
 * `.scrollView()`
-
-## WIP

@@ -6,7 +6,7 @@ import UIKit
 private struct Card: ComponentBuilder {
     let card: CardData
     let onTap: () -> Void
-    func build() -> Component {
+    func build() -> some Component {
         VStack(spacing: 8) {
             Text(card.title, font: UIFont.boldSystemFont(ofSize: 22))
             Text(card.subtitle)
@@ -34,7 +34,7 @@ class CardViewController3: ComponentViewController {
         componentView.animator = AnimatedReloadAnimator()
     }
 
-    override var component: Component {
+    override var component: any Component {
         VStack(spacing: 8) {
             for (index, card) in cards.enumerated() {
                 Card(card: card) { [unowned self] in
