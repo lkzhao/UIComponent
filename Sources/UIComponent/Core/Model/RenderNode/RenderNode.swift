@@ -30,7 +30,17 @@ public protocol RenderNode<View> {
 
     /// Get indexes of the children that are visible in the given frame
     /// - Parameter frame: Parent component's visible frame in current component's coordinates.
+    ///
+    /// Discussion: This method is used in the default implementation of `visibleRenderables(in:)`
+    /// It won't be called if `visibleRenderables(in:)` is overwritten.
+    /// The default implementation for this methods is not optmized and will return all indexes regardless of the frame.
     func visibleIndexes(in frame: CGRect) -> IndexSet
+
+    /// Get renderables that are visible in the given frame
+    /// - Parameter frame: Parent component's visible frame in current component's coordinates.
+    ///
+    /// The default implementation recursively retrives all Renderable from visible children and combines them
+    func visibleRenderables(in frame: CGRect) -> [Renderable]
 
     func makeView() -> View
     func updateView(_ view: View)
@@ -56,10 +66,8 @@ extension RenderNode {
     public func visibleIndexes(in frame: CGRect) -> IndexSet {
         IndexSet(0..<children.count)
     }
-}
 
-extension RenderNode {
-    internal func _visibleRenderables(in frame: CGRect) -> [Renderable] {
+    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
         var result = [Renderable]()
         if shouldRenderView, frame.intersects(CGRect(origin: .zero, size: size)) {
             result.append(ViewRenderable(renderNode: self))
@@ -70,7 +78,7 @@ extension RenderNode {
             let position = positions[i]
             let childFrame = CGRect(origin: position, size: child.size)
             let childVisibleFrame = frame.intersection(childFrame) - position
-            let childRenderables = child._visibleRenderables(in: childVisibleFrame).map {
+            let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
                 OffsetRenderable(renderable: $0, offset: position, index: i)
             }
             result.append(contentsOf: childRenderables)
