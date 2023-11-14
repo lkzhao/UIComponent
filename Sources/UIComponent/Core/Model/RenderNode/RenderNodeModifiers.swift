@@ -5,7 +5,7 @@ import UIKit
 public struct UpdateRenderNode<Content: RenderNode>: RenderNodeWrapper {
     public let content: Content
     public let update: (Content.View) -> Void
-    public var shouldRender: Bool {
+    public var shouldRenderView: Bool {
         true
     }
 
@@ -26,7 +26,7 @@ public struct KeyPathUpdateRenderNode<Value, Content: RenderNode>: RenderNodeWra
     public let valueKeyPath: ReferenceWritableKeyPath<Content.View, Value>
     public let value: Value
 
-    public var shouldRender: Bool {
+    public var shouldRenderView: Bool {
         true
     }
 

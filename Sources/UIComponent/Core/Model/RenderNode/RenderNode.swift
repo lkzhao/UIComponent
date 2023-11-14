@@ -17,7 +17,7 @@ public protocol RenderNode<View> {
     var animator: Animator? { get }
     var reuseStrategy: ReuseStrategy { get }
 
-    var shouldRender: Bool { get }
+    var shouldRenderView: Bool { get }
 
     /// size of the render node
     var size: CGSize { get }
@@ -41,7 +41,7 @@ extension RenderNode {
     public var animator: Animator? { nil }
     public var keyPath: String { "\(type(of: self))" }
     public var reuseStrategy: ReuseStrategy { .automatic }
-    public var shouldRender: Bool { children.isEmpty }
+    public var shouldRenderView: Bool { children.isEmpty }
 
     public func makeView() -> View {
         View()
@@ -61,7 +61,7 @@ extension RenderNode {
 extension RenderNode {
     internal func _visibleRenderables(in frame: CGRect) -> [Renderable] {
         var result = [Renderable]()
-        if shouldRender, frame.intersects(CGRect(origin: .zero, size: size)) {
+        if shouldRenderView, frame.intersects(CGRect(origin: .zero, size: size)) {
             result.append(ViewRenderable(renderNode: self))
         }
         let indexes = visibleIndexes(in: frame)

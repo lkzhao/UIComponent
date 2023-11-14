@@ -37,8 +37,8 @@ public struct AnyRenderNode: RenderNode {
     public var reuseStrategy: ReuseStrategy {
         erasing.reuseStrategy
     }
-    public var shouldRender: Bool {
-        erasing.shouldRender
+    public var shouldRenderView: Bool {
+        erasing.shouldRenderView
     }
     public var size: CGSize {
         erasing.size

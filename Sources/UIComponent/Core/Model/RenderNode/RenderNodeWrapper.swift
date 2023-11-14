@@ -22,8 +22,8 @@ extension RenderNodeWrapper {
     public var reuseStrategy: ReuseStrategy {
         content.reuseStrategy
     }
-    public var shouldRender: Bool {
-        content.shouldRender
+    public var shouldRenderView: Bool {
+        content.shouldRenderView
     }
     public var size: CGSize {
         content.size

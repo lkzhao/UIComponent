@@ -41,7 +41,7 @@ public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
     public let children: [any RenderNode]
     public let positions: [CGPoint]
     public let mainAxisMaxValue: CGFloat
-    public var shouldRender: Bool {
+    public var shouldRenderView: Bool {
         false
     }
 }
@@ -52,7 +52,7 @@ public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
     public let children: [any RenderNode]
     public let positions: [CGPoint]
     public let mainAxisMaxValue: CGFloat
-    public var shouldRender: Bool {
+    public var shouldRenderView: Bool {
         false
     }
 }
@@ -62,7 +62,7 @@ public struct SlowRenderNode: RenderNode {
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]
-    public var shouldRender: Bool {
+    public var shouldRenderView: Bool {
         false
     }
 
@@ -92,7 +92,7 @@ public struct AlwaysRenderNode: RenderNode {
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]
-    public var shouldRender: Bool {
+    public var shouldRenderView: Bool {
         false
     }
 
