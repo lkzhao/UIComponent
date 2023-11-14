@@ -17,7 +17,7 @@ The `.view()` modifier was required because `Space` isn't a `ViewComponent` so i
 Modifiers can also wrap exising components and forces components to render a view. In the above example, `Space` don't usually render a view. But because `.backgroundColor` modifier is applied, it now wraps it in a new `ViewUpdateComponent` which forces it to render a view.
 
 
-Migration Steps:
+### Migration Steps:
 * Rename:
     * `ViewComponent` -> `Component`
     * `ViewComponentBuilder` -> `ComponentBuilder`
