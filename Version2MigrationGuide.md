@@ -28,10 +28,11 @@ Modifiers can also wrap exising components and force components to render a view
     * `ViewAnimatorComponent` -> `AnimatorComponent`
     * `ViewAnimatorWrapperComponent` -> `AnimatorWrapperComponent`
     * `ViewReuseStrategyComponent` -> `ReuseStrategyComponent`
+    * `SimpleViewComponent` -> `ViewComponent`
 * Check if `.view()` is still necessary.
     * In some instances where you only want to render a view, without wrapping a component into a ComponentView. `.view()` is not necessary anymore.
 * When storing `Component` as a property, it needs to be written as `any Component` or specific type of `Component`
 
-* When returning `Component` or `RenderNode` it needs to be `some Component` and `some RenderNode` or specific type of `Component` or `RenderNode` If the type is associated to the protocol. Or `any Component` and `any RenderNode` if the type isn't associated.
+* When returning `Component` or `RenderNode` it needs to be `some Component` and `some RenderNode` or specific type of `Component` or `RenderNode`. Or `any Component` and `any RenderNode` if the return type isn't associated to the protocol.
 
 * Sometimes, when the return type doesn't match the requirement of `some Component` or `some RenderNode` due to multiple types being returned. You can use `.eraseToAnyComponent()` or `eraseToAnyRenderNode()` to bypass the requirement by wrapping it into `AnyComponent` or `AnyRenderNode`
