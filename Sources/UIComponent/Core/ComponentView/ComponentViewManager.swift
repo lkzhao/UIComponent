@@ -2,8 +2,8 @@
 
 import Foundation
 
-internal class ComponentViewMananger {
-    static let shared = ComponentViewMananger()
+internal class ComponentViewManager {
+    static let shared = ComponentViewManager()
     
     private var stack: [ComponentDisplayableView] = []
     
@@ -21,7 +21,7 @@ internal class ComponentViewMananger {
 }
 
 public func currentComponentView() -> ComponentDisplayableView? {
-    ComponentViewMananger.shared.last
+    ComponentViewManager.shared.last
 }
 
 extension Component {
