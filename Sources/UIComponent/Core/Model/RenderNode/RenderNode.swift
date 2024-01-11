@@ -1,7 +1,7 @@
 //  Created by Luke Zhao on 8/22/20.
 
 import UIKit
-@_implementationOnly import BaseToolbox
+
 
 public enum ReuseStrategy {
     case automatic, noReuse
@@ -106,8 +106,8 @@ extension RenderNode {
 
 extension RenderNode {
     public func frame(at index: Int) -> CGRect? {
-        guard let size = children.get(index)?.size, let position = positions.get(index) else { return nil }
-        return CGRect(origin: position, size: size)
+        guard children.count > index, positions.count > index, index >= 0 else { return nil }
+        return CGRect(origin: positions[index], size: children[index].size)
     }
 
     public func frame(id: String) -> CGRect? {

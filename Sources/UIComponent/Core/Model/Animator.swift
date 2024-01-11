@@ -1,6 +1,6 @@
 //  Created by Luke Zhao on 2017-07-19.
 
-@_implementationOnly import BaseToolbox
+
 import UIKit
 
 open class Animator {
@@ -58,8 +58,8 @@ open class Animator {
         view: UIView,
         frame: CGRect
     ) {
-        if view.bounds.size != frame.bounds.size {
-            view.bounds.size = frame.bounds.size
+        if view.bounds.size != frame.size {
+            view.bounds.size = frame.size
         }
         if view.center != frame.center {
             view.center = frame.center

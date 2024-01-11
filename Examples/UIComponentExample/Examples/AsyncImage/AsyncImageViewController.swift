@@ -2,7 +2,6 @@
 
 import UIComponent
 import UIKit
-import BaseToolbox
 
 struct ImageData {
     let url: URL
@@ -46,10 +45,10 @@ class AsyncImageViewController: ComponentViewController {
             for (index, image) in images.enumerated() {
                 AsyncImage(image.url)
                     .size(width: .fill, height: .aspectPercentage(image.size.height / image.size.width))
-                    .tappableView {
+                    .tappableView { [weak self] in
                         let detailVC = AsyncImageDetailViewController()
                         detailVC.image = image
-                        $0.parentViewController?.navigationController?.pushViewController(detailVC, animated: true)
+                        self?.navigationController?.pushViewController(detailVC, animated: true)
                     }
                     .previewBackgroundColor(.systemBackground.withAlphaComponent(0.7))
                     .previewProvider {
@@ -90,8 +89,8 @@ class AsyncImageDetailViewController: ComponentViewController {
         VStack {
             AsyncImage(image.url)
                 .size(width: .fill, height: .aspectPercentage(image.size.height / image.size.width))
-                .tappableView {
-                    $0.parentViewController?.navigationController?.popViewController(animated: true)
+                .tappableView { [weak self] in
+                    self?.navigationController?.popViewController(animated: true)
                 }
         }
     }

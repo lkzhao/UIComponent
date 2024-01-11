@@ -98,7 +98,7 @@ extension Component {
     public func roundedCorner() -> UpdateComponent<Self> {
         ModifierComponent(content: self) { node in
             node.update { view in
-                view.cornerRadius = min(node.size.width, node.size.height) / 2
+                view.layer.cornerRadius = min(node.size.width, node.size.height) / 2
             }
         }
     }
@@ -198,16 +198,16 @@ extension Component {
         Insets(child: self, insets: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right))
     }
     public func inset(top: CGFloat, rest: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: top, rest: rest))
+        Insets(child: self, insets: UIEdgeInsets(top: top, left: rest, bottom: rest, right: rest))
     }
     public func inset(left: CGFloat, rest: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(left: left, rest: rest))
+        Insets(child: self, insets: UIEdgeInsets(top: rest, left: left, bottom: rest, right: rest))
     }
     public func inset(bottom: CGFloat, rest: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(bottom: bottom, rest: rest))
+        Insets(child: self, insets: UIEdgeInsets(top: rest, left: rest, bottom: bottom, right: rest))
     }
     public func inset(right: CGFloat, rest: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(right: right, rest: rest))
+        Insets(child: self, insets: UIEdgeInsets(top: rest, left: rest, bottom: rest, right: right))
     }
     public func inset(_ insets: UIEdgeInsets) -> some Component {
         Insets(child: self, insets: insets)

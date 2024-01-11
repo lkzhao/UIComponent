@@ -1,6 +1,6 @@
 //  Created by y H on 2021/7/25.
 
-@_implementationOnly import BaseToolbox
+
 import UIKit
 
 /// # Badge Component

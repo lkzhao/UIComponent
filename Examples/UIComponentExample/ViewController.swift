@@ -41,3 +41,17 @@ struct ExampleItem: ComponentBuilder {
         }
     }
 }
+
+extension UIView {
+    var parentViewController: UIViewController? {
+        var responder: UIResponder? = self
+        while responder is UIView {
+            responder = responder!.next
+        }
+        return responder as? UIViewController
+    }
+
+    func present(_ viewController: UIViewController, completion: (() -> Void)? = nil) {
+        parentViewController?.present(viewController, animated: true, completion: completion)
+    }
+}

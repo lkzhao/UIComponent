@@ -135,13 +135,13 @@ public class PrimaryMenu: UIControl {
     public override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         let config = configuration ?? PrimaryMenuConfiguration.default
         config.didTap?(self)
-        return UIContextMenuConfiguration(actionProvider: { [menu] suggested in
+        let menuConfiguration = UIContextMenuConfiguration(actionProvider: { [menu] suggested in
             return menu
-        }).then {
-            if #available(iOS 16.0, *) {
-                $0.preferredMenuElementOrder = self.preferredMenuElementOrder
-            }
+        })
+        if #available(iOS 16.0, *) {
+            menuConfiguration.preferredMenuElementOrder = self.preferredMenuElementOrder
         }
+        return menuConfiguration
     }
 
     public override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willDisplayMenuFor configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {

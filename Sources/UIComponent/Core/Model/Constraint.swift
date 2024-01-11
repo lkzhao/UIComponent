@@ -1,6 +1,6 @@
 //  Created by Luke Zhao on 8/22/20.
 
-@_implementationOnly import BaseToolbox
+
 import UIKit
 
 public struct Constraint {
@@ -8,7 +8,8 @@ public struct Constraint {
     public var maxSize: CGSize
     public var isTight: Bool { minSize == maxSize }
 
-    public init(minSize: CGSize = .minSize, maxSize: CGSize = .infinity) {
+    public init(minSize: CGSize = .constraintMinSize,
+                maxSize: CGSize = .constraintMaxSize) {
         self.minSize = minSize
         self.maxSize = maxSize
     }

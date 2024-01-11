@@ -1,7 +1,7 @@
 //  Created by Luke Zhao on 6/8/21.
 
 import UIKit
-@_implementationOnly import BaseToolbox
+
 
 public struct TappableViewConfiguration {
     public static var `default` = TappableViewConfiguration(onHighlightChanged: nil, didTap: nil)
@@ -22,9 +22,11 @@ open class TappableView: ComponentView {
     public var configuration: TappableViewConfiguration?
 
     public private(set) lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
-    public private(set) lazy var doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap)).then {
-        $0.numberOfTapsRequired = 2
-    }
+    public private(set) lazy var doubleTapGestureRecognizer: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap))
+        gesture.numberOfTapsRequired = 2
+        return gesture
+    }()
     public private(set) lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
     #if !os(tvOS)
     public private(set) lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
