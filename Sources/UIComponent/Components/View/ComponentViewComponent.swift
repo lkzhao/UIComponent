@@ -14,7 +14,7 @@ public struct ComponentViewComponent<View: ComponentDisplayableView>: Component 
     }
     public func layout(_ constraint: Constraint) -> ComponentViewRenderNode<View> {
         let renderNode = component.layout(constraint)
-        return ComponentViewRenderNode(size: renderNode.size.bound(to: constraint), component: component, renderNode: renderNode)
+        return ComponentViewRenderNode(size: renderNode.size.bound(to: constraint), component: component, content: renderNode)
     }
 }
 
@@ -22,21 +22,15 @@ public struct ComponentViewComponent<View: ComponentDisplayableView>: Component 
 public struct ComponentViewRenderNode<View: ComponentDisplayableView>: RenderNode {
     public let size: CGSize
     public let component: any Component
-    public let renderNode: any RenderNode
+    public let content: any RenderNode
 
-    private var viewRenderNode: (any RenderNode)? {
-        renderNode
-    }
     public var id: String? {
-        viewRenderNode?.id
+        content.id
     }
     public var animator: Animator? {
-        viewRenderNode?.animator
-    }
-    public var keyPath: String {
-        "\(type(of: self))." + (viewRenderNode?.keyPath ?? "\(type(of: renderNode))")
+        content.animator
     }
     public func updateView(_ view: View) {
-        view.engine.reloadWithExisting(component: component, renderNode: renderNode)
+        view.engine.reloadWithExisting(component: component, renderNode: content)
     }
 }

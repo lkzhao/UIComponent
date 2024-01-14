@@ -13,7 +13,6 @@ public protocol RenderNode<View> {
     associatedtype View: UIView
 
     var id: String? { get }
-    var keyPath: String { get }
     var animator: Animator? { get }
     var reuseStrategy: ReuseStrategy { get }
 
@@ -49,7 +48,6 @@ public protocol RenderNode<View> {
 extension RenderNode {
     public var id: String? { nil }
     public var animator: Animator? { nil }
-    public var keyPath: String { "\(type(of: self))" }
     public var reuseStrategy: ReuseStrategy { .automatic }
     public var shouldRenderView: Bool { children.isEmpty }
 
@@ -70,7 +68,7 @@ extension RenderNode {
     public func visibleRenderables(in frame: CGRect) -> [Renderable] {
         var result = [Renderable]()
         if shouldRenderView, frame.intersects(CGRect(origin: .zero, size: size)) {
-            result.append(ViewRenderable(renderNode: self))
+            result.append(Renderable(frame: CGRect(origin: .zero, size: size), renderNode: self, fallbackId: "\(type(of: self))"))
         }
         let indexes = visibleIndexes(in: frame)
         for i in indexes {
@@ -79,7 +77,7 @@ extension RenderNode {
             let childFrame = CGRect(origin: position, size: child.size)
             let childVisibleFrame = frame.intersection(childFrame) - position
             let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
-                OffsetRenderable(renderable: $0, offset: position, index: i)
+                Renderable(frame: $0.frame + position, renderNode: $0.renderNode, fallbackId: "item-\(i)-\($0.fallbackId)")
             }
             result.append(contentsOf: childRenderables)
         }

@@ -84,23 +84,20 @@ public class ComponentEngine {
         }
     }
     var contentOffset: CGPoint {
-        get { return view?.bounds.origin ?? .zero }
+        get { view?.bounds.origin ?? .zero }
         set { view?.bounds.origin = newValue }
     }
     var contentInset: UIEdgeInsets {
-        guard let view = view as? UIScrollView else { return .zero }
-        return view.adjustedContentInset
+        (view as? UIScrollView)?.adjustedContentInset ?? .zero
     }
     var bounds: CGRect {
-        guard let view = view else { return .zero }
-        return view.bounds
+        view?.bounds ?? .zero
     }
     var adjustedSize: CGSize {
         bounds.size.inset(by: contentInset)
     }
     var zoomScale: CGFloat {
-        guard let view = view as? UIScrollView else { return 1 }
-        return view.zoomScale
+        (view as? UIScrollView)?.zoomScale ?? 1
     }
 
     init(view: ComponentDisplayableView) {
@@ -108,19 +105,17 @@ public class ComponentEngine {
     }
 
     func layoutSubview() {
-        if needsReload {
+        if needsReload || bounds.size != lastRenderBounds.size {
             reloadData()
-        } else if bounds.size != lastRenderBounds.size {
-            invalidateLayout()
         } else if bounds != lastRenderBounds || needsRender {
-            render()
+            render(updateViews: false)
         }
         contentView?.frame = CGRect(origin: .zero, size: contentSize)
         ensureZoomViewIsCentered()
     }
 
     func ensureZoomViewIsCentered() {
-        guard let contentView = contentView else { return }
+        guard let contentView else { return }
         let boundsSize: CGRect
         boundsSize = bounds.inset(by: contentInset)
         var frameToCenter = contentView.frame
@@ -155,13 +150,6 @@ public class ComponentEngine {
         view?.setNeedsLayout()
     }
 
-    // re-layout, but not reloads
-    func invalidateLayout() {
-        guard !isRendering, !isReloading, hasReloaded else { return }
-        renderNode = nil
-        render(updateViews: true)
-    }
-
     // reload all frames. will automatically diff insertion & deletion
     func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
         guard !isReloading, allowReload else { return }
@@ -182,7 +170,7 @@ public class ComponentEngine {
         render(contentOffsetAdjustFn: contentOffsetAdjustFn, updateViews: true)
     }
 
-    func render(contentOffsetAdjustFn: (() -> CGPoint)? = nil, updateViews: Bool = false) {
+    func render(contentOffsetAdjustFn: (() -> CGPoint)? = nil, updateViews: Bool) {
         guard let componentView = view, allowReload, !isRendering, let component = component else { return }
         isRendering = true
         defer {
@@ -221,11 +209,14 @@ public class ComponentEngine {
         var newIdentifierSet = [String: Int]()
         for (index, renderable) in newVisibleRenderable.enumerated() {
             var count = 1
-            let initialId = renderable.id
+            let initialId = renderable.renderNode.id ?? renderable.fallbackId
             var finalId = initialId
             while newIdentifierSet[finalId] != nil {
                 finalId = initialId + String(count)
-                newVisibleRenderable[index] = IdOverrideRenderable(id: finalId, renderable: renderable)
+                let newRenderNode = renderable.renderNode.eraseToAnyRenderNode().id(finalId)
+                newVisibleRenderable[index] = Renderable(frame: renderable.frame,
+                                                         renderNode: newRenderNode,
+                                                         fallbackId: renderable.fallbackId)
                 count += 1
             }
             newIdentifierSet[finalId] = index
@@ -235,12 +226,13 @@ public class ComponentEngine {
 
         // 1st pass, delete all removed cells and move existing cells
         for index in 0..<visibleViews.count {
-            let id = visibleRenderable[index].id
+            let renderable = visibleRenderable[index]
+            let id = renderable.renderNode.id ?? renderable.fallbackId
             let cell = visibleViews[index]
             if let index = newIdentifierSet[id] {
                 newViews[index] = cell
             } else {
-                let animator = visibleRenderable[index].animator ?? animator
+                let animator = renderable.renderNode.animator ?? animator
                 animator.shift(componentView: componentView, delta: contentOffsetDelta, view: cell)
                 animator.delete(componentView: componentView, view: cell) {
                     cell.recycleForUIComponentReuse()
@@ -252,7 +244,7 @@ public class ComponentEngine {
         for (index, renderable) in newVisibleRenderable.enumerated() {
             let view: UIView
             let frame = renderable.frame
-            let animator = renderable.animator ?? animator
+            let animator = renderable.renderNode.animator ?? animator
             let containerView = contentView ?? componentView
             if let existingView = newViews[index] {
                 view = existingView
@@ -290,8 +282,11 @@ public class ComponentEngine {
     /// Useful when a cell's identifier is going to change with the next
     /// reloadData, but you want to keep the same cell view.
     public func replace(identifier: String, with newIdentifier: String) {
-        for (i, renderable) in visibleRenderable.enumerated() where renderable.id == identifier {
-            visibleRenderable[i] = IdOverrideRenderable(id: newIdentifier, renderable: renderable)
+        for (i, renderable) in visibleRenderable.enumerated() where renderable.renderNode.id == identifier {
+            let newRenderNode = renderable.renderNode.eraseToAnyRenderNode().id(newIdentifier)
+            visibleRenderable[i] = Renderable(frame: renderable.frame,
+                                              renderNode: newRenderNode,
+                                              fallbackId: renderable.fallbackId)
             break
         }
     }
@@ -307,6 +302,6 @@ public class ComponentEngine {
 
     /// calculate the size for the current component
     func sizeThatFits(_ size: CGSize) -> CGSize {
-        return component?.layout(Constraint(maxSize: size)).size ?? .zero
+        component?.layout(Constraint(maxSize: size)).size ?? .zero
     }
 }

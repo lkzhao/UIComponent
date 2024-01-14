@@ -8,7 +8,9 @@ extension UIView {
     }
 
     internal var _ckContext: CKContext? {
-        return objc_getAssociatedObject(self, &AssociatedKeys.ckContext) as? CKContext
+        withUnsafePointer(to: &AssociatedKeys.ckContext) {
+            objc_getAssociatedObject(self, $0) as? CKContext
+        }
     }
 
     internal var ckContext: CKContext {
@@ -16,7 +18,9 @@ extension UIView {
             return context
         }
         let context = CKContext()
-        objc_setAssociatedObject(self, &AssociatedKeys.ckContext, context, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        withUnsafePointer(to: &AssociatedKeys.ckContext) {
+            objc_setAssociatedObject(self, $0, context, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
         return context
     }
 }

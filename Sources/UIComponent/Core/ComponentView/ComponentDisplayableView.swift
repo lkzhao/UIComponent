@@ -92,9 +92,6 @@ extension ComponentDisplayableView {
     public func ensureZoomViewIsCentered() {
         engine.ensureZoomViewIsCentered()
     }
-    public func invalidateLayout() {
-        engine.invalidateLayout()
-    }
     public func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
         engine.reloadData(contentOffsetAdjustFn: contentOffsetAdjustFn)
     }
@@ -110,8 +107,8 @@ extension ComponentDisplayableView {
         engine.renderNode?.frame(id: id)
     }
     public func visibleView(id: String) -> UIView? {
-        for (view, renderNode) in zip(visibleViews, visibleRenderable) {
-            if renderNode.id == id {
+        for (view, renderable) in zip(visibleViews, visibleRenderable) {
+            if renderable.renderNode.id == id {
                 return view
             }
         }
