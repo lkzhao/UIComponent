@@ -20,38 +20,35 @@ class ViewController: ComponentViewController {
             } separator: {
                 Separator()
             }
-        }
+        }.environment(ViewControllerEnvironmentKey.self, value: self)
+    }
+}
+
+struct ViewControllerEnvironmentKey: EnvironmentKey {
+    static var defaultValue: UIViewController? {
+        nil
     }
 }
 
 struct ExampleItem: ComponentBuilder {
+    @Environment(ViewControllerEnvironmentKey.self)
+    var parentViewController: UIViewController?
+
     let name: String
     let viewController: () -> UIViewController
+
     init(name: String, viewController: @autoclosure @escaping () -> UIViewController) {
         self.name = name
         self.viewController = viewController
     }
+
     func build() -> some Component {
         VStack {
             Text(name)
         }
         .inset(20)
-        .tappableView {
-            $0.present(viewController())
+        .tappableView { [weak parentViewController] in
+            parentViewController?.present(viewController(), animated: true)
         }
-    }
-}
-
-extension UIView {
-    var parentViewController: UIViewController? {
-        var responder: UIResponder? = self
-        while responder is UIView {
-            responder = responder!.next
-        }
-        return responder as? UIViewController
-    }
-
-    func present(_ viewController: UIViewController, completion: (() -> Void)? = nil) {
-        parentViewController?.present(viewController, animated: true, completion: completion)
     }
 }
