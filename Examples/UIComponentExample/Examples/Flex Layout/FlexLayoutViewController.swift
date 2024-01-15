@@ -8,7 +8,7 @@ class FlexLayoutViewController: ComponentViewController {
     override var component: any Component {
 
         VStack(spacing: 20) {
-            Text("Flex layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
+            Text("Flex layouts").font(.boldSystemFont(ofSize: 20)).size(width: .fill)
 
             VStack(spacing: 10) {
                 Text("Horizontal layouts")
@@ -66,7 +66,7 @@ class FlexLayoutViewController: ComponentViewController {
             .inset(10).styleColor(.systemGroupedBackground)
 
             VStack(spacing: 10) {
-                Text("Justify Content", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
+                Text("Justify Content").font(.boldSystemFont(ofSize: 20)).size(width: .fill)
                 for justifyContent in MainAxisAlignment.allCases {
                     Text("\(justifyContent)").size(width: .fill)
                     Flow(justifyContent: justifyContent) {
@@ -79,7 +79,7 @@ class FlexLayoutViewController: ComponentViewController {
             }
 
             VStack(spacing: 10) {
-                Text("Align Items", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
+                Text("Align Items").font(.boldSystemFont(ofSize: 20)).size(width: .fill)
                 for alignItems in CrossAxisAlignment.allCases {
                     Text("\(alignItems)").size(width: .fill)
                     Flow(alignItems: alignItems) {
@@ -92,7 +92,7 @@ class FlexLayoutViewController: ComponentViewController {
             }
 
             VStack(spacing: 10) {
-                Text("Align Content", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
+                Text("Align Content").font(.boldSystemFont(ofSize: 20)).size(width: .fill)
                 for alignContent in MainAxisAlignment.allCases {
                     Text("\(alignContent)").size(width: .fill)
                     Flow(alignContent: alignContent) {
@@ -105,7 +105,7 @@ class FlexLayoutViewController: ComponentViewController {
             }
 
             VStack(spacing: 10) {
-                Text("Flex", font: .boldSystemFont(ofSize: 20)).size(width: .fill)
+                Text("Flex").font(.boldSystemFont(ofSize: 20)).size(width: .fill)
                 Text("single flex").size(width: .fill)
                 Flow {
                     Box(1)
@@ -141,7 +141,7 @@ class FlexLayoutViewController: ComponentViewController {
             }
 
             VStack(spacing: 10) {
-                Text("Flex align-self", font: .boldSystemFont(ofSize: 20))
+                Text("Flex align-self").font(.boldSystemFont(ofSize: 20))
 
                 for align in CrossAxisAlignment.allCases {
                     Text("number 1 align-self \(align)").size(width: .fill)

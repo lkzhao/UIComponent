@@ -38,8 +38,8 @@ struct UserProfile: ComponentBuilder {
 
             VStack(spacing: 4) {
                 Text(userName)
-                Text(introduce, font: .systemFont(ofSize: 13, weight: .light)).textColor(.secondaryLabel)
-                Text("🤔🤔🤔", font: .systemFont(ofSize: 12, weight: .light)).textColor(.secondaryLabel)
+                Text(introduce).font(.systemFont(ofSize: 13, weight: .light)).textColor(.secondaryLabel)
+                Text("🤔🤔🤔").font(.systemFont(ofSize: 12, weight: .light)).textColor(.secondaryLabel)
             }
             .flex()
 

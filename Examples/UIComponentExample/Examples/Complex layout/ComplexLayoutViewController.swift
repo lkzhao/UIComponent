@@ -59,7 +59,7 @@ class ComplexLayoutViewController: ComponentViewController {
 
     override var component: any Component {
         VStack(spacing: 20) {
-            Text("Complex layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill).id("label")
+            Text("Complex layouts").font(.boldSystemFont(ofSize: 20)).size(width: .fill).id("label")
             VStack(spacing: 10) {
                 UserProfile(
                     avatar: "https://unsplash.com/photos/Yn0l7uwBrpw/download?force=true&w=640",
@@ -88,7 +88,7 @@ class ComplexLayoutViewController: ComponentViewController {
                 self.isExpanded.toggle()
             }
 
-            Text("Tag view", font: .boldSystemFont(ofSize: 20)).id("label2")
+            Text("Tag view").font(.boldSystemFont(ofSize: 20)).id("label2")
             VStack(spacing: 10) {
                 Text("Tags row")
                 Flow(spacing: 5, alignItems: .center) {
@@ -96,7 +96,7 @@ class ComplexLayoutViewController: ComponentViewController {
                         Text("Empty Tag")
                     } else {
                         for (index, tag) in tags.enumerated() {
-                            Text(tag.name, font: .systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.color)
+                            Text(tag.name).font(.systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.color)
                                 .tappableView { [unowned self] in
                                     self.tags.remove(at: index)
                                 }
@@ -105,7 +105,7 @@ class ComplexLayoutViewController: ComponentViewController {
                     }
                     HStack(alignItems: .center) {
                         Image(systemName: "plus")
-                        Text("Add new", font: .systemFont(ofSize: 14, weight: .regular)).textColor(.systemBlue)
+                        Text("Add new").font(.systemFont(ofSize: 14, weight: .regular)).textColor(.systemBlue)
                     }
                     .inset(h: 10, v: 5).styleColor(.systemGray5)
                     .tappableView { [unowned self] in
@@ -120,7 +120,7 @@ class ComplexLayoutViewController: ComponentViewController {
                         Text("Empty Tag")
                     } else {
                         for (index, tag) in tags.enumerated() {
-                            Text(tag.name, font: .systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.color)
+                            Text(tag.name).font(.systemFont(ofSize: 14, weight: .regular)).textColor(.label).inset(h: 10, v: 5).styleColor(tag.color)
                                 .tappableView { [unowned self] in
                                     self.tags.remove(at: index)
                                 }
@@ -129,7 +129,7 @@ class ComplexLayoutViewController: ComponentViewController {
                     }
                     HStack(alignItems: .center) {
                         Image(systemName: "plus")
-                        Text("Add new", font: .systemFont(ofSize: 14, weight: .regular)).textColor(.systemBlue)
+                        Text("Add new").font(.systemFont(ofSize: 14, weight: .regular)).textColor(.systemBlue)
                     }
                     .inset(h: 10, v: 5).styleColor(.systemGray5)
                     .tappableView { [unowned self] in
@@ -149,7 +149,7 @@ class ComplexLayoutViewController: ComponentViewController {
                 Text("Horizontal list").inset(left: 10)
                 HStack(spacing: 10, alignItems: .center) {
                     if horizontalListData.isEmpty {
-                        Text("No data here", font: .systemFont(ofSize: 17, weight: .medium)).flex()
+                        Text("No data here").font(.systemFont(ofSize: 17, weight: .medium)).flex()
                     } else {
                         for (offset, element) in horizontalListData.enumerated() {
                             HorizontalCardItem(data: element)

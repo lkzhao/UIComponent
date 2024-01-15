@@ -21,7 +21,7 @@ class CardViewController2: ComponentViewController {
             for (index, card) in cards.enumerated() {
                 let title = card.title
                 VStack(spacing: 8) {
-                    Text(title, font: UIFont.boldSystemFont(ofSize: 22))
+                    Text(title).font(UIFont.boldSystemFont(ofSize: 22))
                     Text(card.subtitle)
                 }
                 .inset(h: 20, v: 16).size(width: .fill)

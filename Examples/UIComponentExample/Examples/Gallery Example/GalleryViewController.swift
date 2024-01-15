@@ -15,7 +15,7 @@ class GalleryViewController: ComponentViewController {
 
     override var component: any Component {
         VStack(spacing: 20) {
-            Text("Gallery layouts", font: .boldSystemFont(ofSize: 20)).size(width: .fill).inset(h: 20)
+            Text("Gallery layouts").font(.boldSystemFont(ofSize: 20)).size(width: .fill).inset(h: 20)
             HStack(spacing: 20) {
                 for layout in GalleryFrames.LayoutType.allCases {
                     let template = GalleryFrames(layout: layout)

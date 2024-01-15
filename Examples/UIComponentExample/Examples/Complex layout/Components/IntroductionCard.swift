@@ -29,7 +29,7 @@ struct IntroductionCard: ComponentBuilder {
             VStack(spacing: 5, alignItems: .center) {
                 AsyncImage(URL(string: "https://unsplash.com/photos/MR2A97jFDAs/download?force=true&w=640")!).size(width: 50, height: 50).update { $0.layer.cornerRadius = 50 / 2 }
                     .clipsToBounds(true)
-                Text("isExpand: \(isExpanded)", font: .systemFont(ofSize: 10, weight: .light)).textAlignment(.center).id("label.state").size(width: .fill)
+                Text("isExpand: \(isExpanded)").font(.systemFont(ofSize: 10, weight: .light)).textAlignment(.center).id("label.state").size(width: .fill)
                 Spacer()
                 Image(systemName: isExpanded ? "rectangle.compress.vertical" : "rectangle.expand.vertical")
                     .tappableView {
@@ -38,9 +38,9 @@ struct IntroductionCard: ComponentBuilder {
             }
             .size(width: 100)
             VStack(spacing: 5) {
-                Text("UIComponent", font: .boldSystemFont(ofSize: 17))
-                Text("Powerful layout", font: .systemFont(ofSize: 14)).textColor(.link)
-                Text(longText, font: .systemFont(ofSize: 13), numberOfLines: isExpanded ? 0 : 3).textColor(.secondaryLabel)
+                Text("UIComponent").font(.boldSystemFont(ofSize: 17))
+                Text("Powerful layout").font(.systemFont(ofSize: 14)).textColor(.link)
+                Text(longText, numberOfLines: isExpanded ? 0 : 3).font(.systemFont(ofSize: 13)).textColor(.secondaryLabel)
             }
             .flex()
         }

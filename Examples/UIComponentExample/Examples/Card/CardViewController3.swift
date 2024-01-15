@@ -8,7 +8,7 @@ private struct Card: ComponentBuilder {
     let onTap: () -> Void
     func build() -> some Component {
         VStack(spacing: 8) {
-            Text(card.title, font: UIFont.boldSystemFont(ofSize: 22))
+            Text(card.title).font(UIFont.boldSystemFont(ofSize: 22))
             Text(card.subtitle)
         }
         .inset(h: 20, v: 16).size(width: .fill).tappableView(onTap).id(card.id)

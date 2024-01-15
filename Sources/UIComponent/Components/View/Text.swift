@@ -8,19 +8,36 @@ extension UIFont {
 }
 #endif
 
+public enum TextContent {
+    case string(String)
+    case attributedString(NSAttributedString)
+}
+
 public struct Text: Component {
-    public let attributedString: NSAttributedString
+    @Environment(FontEnvironmentKey.self) var font
+    public let content: TextContent
     public let numberOfLines: Int
     public let lineBreakMode: NSLineBreakMode
     public let isSwiftAttributedString: Bool
 
     public init(
         _ text: String,
-        font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
         numberOfLines: Int = 0,
         lineBreakMode: NSLineBreakMode = .byWordWrapping
     ) {
-        self.attributedString = NSAttributedString(string: text, attributes: [.font: font])
+        self.content = .string(text)
+        self.numberOfLines = numberOfLines
+        self.lineBreakMode = lineBreakMode
+        self.isSwiftAttributedString = false
+    }
+
+    public init(
+        _ text: String,
+        font: UIFont,
+        numberOfLines: Int = 0,
+        lineBreakMode: NSLineBreakMode = .byWordWrapping
+    ) {
+        self.content = .attributedString(NSAttributedString(string: text, attributes: [.font: font]))
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
         self.isSwiftAttributedString = false
@@ -32,7 +49,7 @@ public struct Text: Component {
         numberOfLines: Int = 0,
         lineBreakMode: NSLineBreakMode = .byWordWrapping
     ) {
-        self.attributedString = NSAttributedString(attributedString)
+        self.content = .attributedString(NSAttributedString(attributedString))
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
         self.isSwiftAttributedString = true
@@ -43,13 +60,20 @@ public struct Text: Component {
         numberOfLines: Int = 0,
         lineBreakMode: NSLineBreakMode = .byWordWrapping
     ) {
-        self.attributedString = attributedString
+        self.content = .attributedString(attributedString)
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
         self.isSwiftAttributedString = false
     }
 
     public func layout(_ constraint: Constraint) -> TextRenderNode {
+        let attributedString: NSAttributedString
+        switch content {
+        case .string(let string):
+            attributedString = NSAttributedString(string: string, attributes: [.font: font])
+        case .attributedString(let string):
+            attributedString = string
+        }
         if numberOfLines != 0 || isSwiftAttributedString {
             // Slower route
             //
@@ -106,5 +130,17 @@ public struct TextRenderNode: RenderNode {
         label.attributedText = attributedString
         label.numberOfLines = numberOfLines
         label.lineBreakMode = lineBreakMode
+    }
+}
+
+public struct FontEnvironmentKey: EnvironmentKey {
+    public static var defaultValue: UIFont {
+        UIFont.systemFont(ofSize: UIFont.systemFontSize)
+    }
+}
+
+public extension Component {
+    func font(_ font: UIFont) -> EnvironmentComponent<UIFont, Self> {
+        environment(FontEnvironmentKey.self, value: font)
     }
 }
