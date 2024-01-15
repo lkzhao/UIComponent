@@ -2,21 +2,45 @@
 
 import Foundation
 
-private class EnvironmentManager {
-    static let shared = EnvironmentManager()
+internal class EnvironmentManager {
+    internal static let shared = EnvironmentManager()
+
+    private struct EnvironmentValues {
+        let values: [ObjectIdentifier: Any]
+        init() {
+            values = [:]
+        }
+        init<Value>(existing: EnvironmentValues, key: any EnvironmentKey<Value>.Type, value: Value) {
+            values = existing.values.merging([ObjectIdentifier(key): value]) { $1 }
+        }
+        subscript<Value>(key: any EnvironmentKey<Value>.Type) -> Value {
+            values[ObjectIdentifier(key)] as? Value ?? key.defaultValue
+        }
+    }
 
     private var stack: [EnvironmentValues] = []
 
-    var current: EnvironmentValues {
+    private var current: EnvironmentValues {
         stack.last ?? EnvironmentValues()
     }
 
-    func push<K, Value>(key: K.Type, value: Value) where K : EnvironmentKey, K.Value == Value {
+    internal func value<Value>(key: any EnvironmentKey<Value>.Type) -> Value {
+        current[key]
+    }
+
+    internal func push<Value>(key: any EnvironmentKey<Value>.Type, value: Value) {
         stack.append(EnvironmentValues(existing: current, key: key, value: value))
     }
 
-    func pop() {
+    internal func pop() {
         stack.removeLast()
+    }
+
+    internal func with<Value, Result>(key: any EnvironmentKey<Value>.Type, value: Value, accessor: () throws -> Result) rethrows -> Result {
+        push(key: key, value: value)
+        let result = try accessor()
+        pop()
+        return result
     }
 }
 
@@ -28,7 +52,7 @@ private class EnvironmentManager {
     }
 
     public var wrappedValue: Value {
-        EnvironmentManager.shared.current[key]
+        EnvironmentManager.shared.value(key: key)
     }
 }
 
@@ -37,35 +61,26 @@ public protocol EnvironmentKey<Value> {
     static var defaultValue: Self.Value { get }
 }
 
-public struct EnvironmentValues {
-    let values: [ObjectIdentifier: Any]
-    public init() {
-        values = [:]
-    }
-    public init<Value>(existing: EnvironmentValues, key: any EnvironmentKey<Value>.Type, value: Value) {
-        values = existing.values.merging([ObjectIdentifier(key): value]) { $1 }
-    }
-    public subscript<Value>(key: any EnvironmentKey<Value>.Type) -> Value {
-        values[ObjectIdentifier(key)] as? Value ?? key.defaultValue
-    }
-
-}
-
 public struct EnvironmentComponent<Value, Child: Component>: Component {
     let key: any EnvironmentKey<Value>.Type
     let value: Value
     let child: Child
 
     public func layout(_ constraint: Constraint) -> Child.R {
-        EnvironmentManager.shared.push(key: key, value: value)
-        let result = child.layout(constraint)
-        EnvironmentManager.shared.pop()
-        return result
+        EnvironmentManager.shared.with(key: key, value: value) {
+            child.layout(constraint)
+        }
     }
 }
 
 public extension Component {
     func environment<Value>(_ key: any EnvironmentKey<Value>.Type, value: Value) -> EnvironmentComponent<Value, Self> {
         EnvironmentComponent(key: key, value: value, child: self)
+    }
+}
+
+public struct CurrentComponentViewEnvironmentKey: EnvironmentKey {
+    public static var defaultValue: ComponentDisplayableView? {
+        nil
     }
 }

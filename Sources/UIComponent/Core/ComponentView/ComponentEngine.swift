@@ -178,7 +178,7 @@ public class ComponentEngine {
             isRendering = false
         }
 
-        ComponentViewManager.shared.push(view: componentView)
+        EnvironmentManager.shared.push(key: CurrentComponentViewEnvironmentKey.self, value: componentView)
         let renderNode: any RenderNode
         if let currentRenderNode = self.renderNode {
             renderNode = currentRenderNode
@@ -198,7 +198,8 @@ public class ComponentEngine {
         let visibleFrame = (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
 
         var newVisibleRenderable = renderNode.visibleRenderables(in: visibleFrame)
-        ComponentViewManager.shared.pop()
+        EnvironmentManager.shared.pop()
+
         if contentSize != renderNode.size * zoomScale {
             // update contentSize if it is changed. Some renderNodes update
             // its size when visibleRenderables(in: visibleFrame) is called. e.g. InfiniteLayout
