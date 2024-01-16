@@ -2,11 +2,15 @@
 
 import UIKit
 
-public enum SizeStrategy {
+public enum SizeStrategy: ExpressibleByFloatLiteral {
     case fill, fit
     case absolute(CGFloat)
     case percentage(CGFloat)
     case aspectPercentage(CGFloat)
+
+    public init(floatLiteral value: FloatLiteralType) {
+        self = .absolute(value)
+    }
 }
 
 public protocol ConstraintTransformer {

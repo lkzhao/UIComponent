@@ -4,8 +4,22 @@ List of all built-in modifiers
 
 ## Overview
 
-<!--@START_MENU_TOKEN@-->Text<!--@END_MENU_TOKEN@-->
+Modifiers are a way to customize the behavior of a component. They can be chained together to produce a different version of the original component.
 
-### Section header
+### Custom Modifier
 
-<!--@START_MENU_TOKEN@-->Text<!--@END_MENU_TOKEN@-->
+To write a custom modifier.
+```swift
+extension Component {
+    func applyShadow() -> some Component {
+        ShadowComponent(content: self)
+    }
+}
+```
+
+### Size modifiers
+
+@Links(visualStyle: list) {
+- ``Component/size(_:)``
+- ``Component/size(width:height:)``
+}
