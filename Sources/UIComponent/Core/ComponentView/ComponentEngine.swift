@@ -31,10 +31,10 @@ public class ComponentEngine {
 
     /// The default animator for the components rendered by this engine.
     var animator: Animator = Animator() {
-        didSet { setNeedsReload() }
+        didSet { setNeedsRender() }
     }
 
-    /// The current `RenderNode`. This is `nil` before the layout is done and will cache the current `RenderNode` once the layout is done.
+    /// The current `RenderNode`. This is `nil` before the layout is done.
     var renderNode: (any RenderNode)?
 
     /// Internal state to track if a reload is needed.
@@ -44,8 +44,8 @@ public class ComponentEngine {
     var needsRender = false
     
     /// Internal state to determine if the next layout should be skipped.
-    var shouldSkipNextLayout = false
-    
+    var skipNextLayout = false
+
     /// The number of times the view has been reloaded.
     var reloadCount = 0
     
@@ -148,48 +148,21 @@ public class ComponentEngine {
         ensureZoomViewIsCentered()
     }
 
-    /// Ensures that the zoom view is centered within the scroll view if it is smaller than the scroll view's bounds.
-    func ensureZoomViewIsCentered() {
-        guard let contentView else { return }
-        let boundsSize: CGRect
-        boundsSize = bounds.inset(by: contentInset)
-        var frameToCenter = contentView.frame
-
-        if centerContentViewHorizontally, frameToCenter.size.width < boundsSize.width {
-            frameToCenter.origin.x = (boundsSize.width - frameToCenter.size.width) * 0.5
-        } else {
-            frameToCenter.origin.x = 0
-        }
-
-        if centerContentViewVertically, frameToCenter.size.height < boundsSize.height {
-            frameToCenter.origin.y = (boundsSize.height - frameToCenter.size.height) * 0.5
-        } else {
-            frameToCenter.origin.y = 0
-        }
-
-        contentView.frame = frameToCenter
-    }
-
-    /// Marks the view as needing a reload and schedules a layout update.
+    /// Marks the view as needing a reload (layout + render) and schedules an update.
     func setNeedsReload() {
         needsReload = true
         view?.setNeedsLayout()
     }
 
-    /// Invalidates the current layout and marks the view as needing a render.
-    func setNeedsInvalidateLayout() {
-        renderNode = nil
-        setNeedsRender()
-    }
-
-    /// Marks the view as needing a render and schedules a layout update.
+    /// Marks the view as needing a render (no layout) and schedules an update.
+    /// A renderNode must be present
     func setNeedsRender() {
         needsRender = true
         view?.setNeedsLayout()
     }
 
-    /// Reloads all frames and automatically diffs insertion and deletion.
-    /// - Parameter contentOffsetAdjustFn: An optional closure that adjusts the content offset.
+    /// Reloads the view, rendering the component.
+    /// - Parameter contentOffsetAdjustFn: An optional closure that adjusts the content offset after the layout is finished, but berfore any view is rendered.
     func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
         guard !isReloading, allowReload else { return }
         isReloading = true
@@ -202,46 +175,44 @@ public class ComponentEngine {
             }
         }
 
-        if !shouldSkipNextLayout {
-            renderNode = nil
-        }
-        shouldSkipNextLayout = false
-        render(contentOffsetAdjustFn: contentOffsetAdjustFn, updateViews: true)
+        layoutComponent()
+        adjustContentOffset(contentOffsetAdjustFn: contentOffsetAdjustFn)
+        render(updateViews: true)
     }
 
-    /// Renders the component, optionally updating views and adjusting the content offset.
-    /// - Parameters:
-    ///   - contentOffsetAdjustFn: An optional closure that adjusts the content offset.
-    ///   - updateViews: A Boolean value that determines if the views should be updated.
-    func render(contentOffsetAdjustFn: (() -> CGPoint)? = nil, updateViews: Bool) {
-        guard let componentView = view, allowReload, !isRendering, let component = component else { return }
-        isRendering = true
-        defer {
-            needsRender = false
-            isRendering = false
+    private func layoutComponent() {
+        if skipNextLayout {
+            skipNextLayout = false
+            return
         }
-
+        guard let componentView = view, let component else { return }
         EnvironmentManager.shared.push(key: CurrentComponentViewEnvironmentKey.self, value: componentView)
-        let renderNode: any RenderNode
-        if let currentRenderNode = self.renderNode {
-            renderNode = currentRenderNode
-        } else {
-            renderNode = component.layout(Constraint(maxSize: adjustedSize))
-            contentSize = renderNode.size * zoomScale
-            self.renderNode = renderNode
-        }
+        let renderNode = component.layout(Constraint(maxSize: adjustedSize))
+        EnvironmentManager.shared.pop()
 
+        contentSize = renderNode.size * zoomScale
+        self.renderNode = renderNode
+    }
+
+    private func adjustContentOffset(contentOffsetAdjustFn: (() -> CGPoint)?) {
         let oldContentOffset = contentOffset
         if let offset = contentOffsetAdjustFn?() {
             contentOffset = offset
         }
         contentOffsetDelta = contentOffset - oldContentOffset
+    }
+
+    /// Renders the render node based on the visibleFrame, optionally updating views.
+    /// - Parameters:
+    ///   - updateViews: A Boolean value that determines if the views should be updated.
+    func render(updateViews: Bool) {
+        guard let componentView = view, allowReload, !isRendering, let renderNode else { return }
+        isRendering = true
 
         animator.willUpdate(componentView: componentView)
         let visibleFrame = (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
 
         var newVisibleRenderable = renderNode.visibleRenderables(in: visibleFrame)
-        EnvironmentManager.shared.pop()
 
         if contentSize != renderNode.size * zoomScale {
             // update contentSize if it is changed. Some renderNodes update
@@ -320,6 +291,37 @@ public class ComponentEngine {
         visibleRenderable = newVisibleRenderable
         visibleViews = newViews as! [UIView]
         lastRenderBounds = bounds
+        needsRender = false
+        isRendering = false
+    }
+
+    /// Ensures that the zoom view is centered within the scroll view if it is smaller than the scroll view's bounds.
+    func ensureZoomViewIsCentered() {
+        guard let contentView else { return }
+        let boundsSize: CGRect
+        boundsSize = bounds.inset(by: contentInset)
+        var frameToCenter = contentView.frame
+
+        if centerContentViewHorizontally, frameToCenter.size.width < boundsSize.width {
+            frameToCenter.origin.x = (boundsSize.width - frameToCenter.size.width) * 0.5
+        } else {
+            frameToCenter.origin.x = 0
+        }
+
+        if centerContentViewVertically, frameToCenter.size.height < boundsSize.height {
+            frameToCenter.origin.y = (boundsSize.height - frameToCenter.size.height) * 0.5
+        } else {
+            frameToCenter.origin.y = 0
+        }
+
+        contentView.frame = frameToCenter
+    }
+
+    /// Calculates the size that fits the current component within the given size.
+    /// - Parameter size: The size within which the component should fit.
+    /// - Returns: The size that fits the component.
+    func sizeThatFits(_ size: CGSize) -> CGSize {
+        component?.layout(Constraint(maxSize: size)).size ?? .zero
     }
 
     /// Replaces a cell's identifier with a new identifier.
@@ -340,7 +342,7 @@ public class ComponentEngine {
         }
     }
 
-    /// Reloads the component with an existing render node, skipping layout.
+    /// Reloads the component with an existing render node, skipping reload.
     /// This is a performance hack that skips layout for the component if it has already been layed out.
     /// - Parameters:
     ///   - component: The component to be reloaded.
@@ -348,13 +350,6 @@ public class ComponentEngine {
     public func reloadWithExisting(component: any Component, renderNode: any RenderNode) {
         self.component = component
         self.renderNode = renderNode
-        self.shouldSkipNextLayout = true
-    }
-
-    /// Calculates the size that fits the current component within the given size.
-    /// - Parameter size: The size within which the component should fit.
-    /// - Returns: The size that fits the component.
-    func sizeThatFits(_ size: CGSize) -> CGSize {
-        component?.layout(Constraint(maxSize: size)).size ?? .zero
+        self.skipNextLayout = true
     }
 }

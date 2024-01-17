@@ -86,11 +86,6 @@ extension ComponentDisplayableView {
         engine.setNeedsReload()
     }
 
-    /// Marks this view as needing an invalidation of its layout.
-    public func setNeedsInvalidateLayout() {
-        engine.setNeedsInvalidateLayout()
-    }
-
     /// Marks this view as needing a render.
     public func setNeedsRender() {
         engine.setNeedsRender()

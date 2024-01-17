@@ -27,9 +27,6 @@ public struct ComponentViewRenderNode<View: ComponentDisplayableView>: RenderNod
     public var id: String? {
         content.id
     }
-    public var animator: Animator? {
-        content.animator
-    }
     public func updateView(_ view: View) {
         view.engine.reloadWithExisting(component: component, renderNode: content)
     }
