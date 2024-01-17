@@ -503,6 +503,50 @@ extension Component {
             }
         }
     }
+
+    // MARK: - TappableView modifiers
+    /// Creates a tappable view component from the current component.
+    /// - Parameters:
+    ///   - configuration: Optional `TappableViewConfiguration` to configure the tappable view.
+    ///   - onTap: The closure to be called when the tappable view is tapped.
+    /// - Returns: An `AnyComponentOfView` wrapping a `TappableView`.
+    public func tappableView(
+        configuration: TappableViewConfiguration? = nil,
+        _ onTap: @escaping (TappableView) -> Void
+    ) -> AnyComponentOfView<TappableView> {
+        ComponentViewComponent<TappableView>(component: self).onTap(onTap).configuration(configuration).eraseToAnyComponentOfView()
+    }
+
+    /// Creates a tappable view component from the current component with a simple tap action.
+    /// - Parameters:
+    ///   - configuration: Optional `TappableViewConfiguration` to configure the tappable view.
+    ///   - onTap: The closure to be called when the tappable view is tapped.
+    /// - Returns: An `AnyComponentOfView` wrapping a `TappableView`.
+    public func tappableView(
+        configuration: TappableViewConfiguration? = nil,
+        _ onTap: @escaping () -> Void
+    ) -> AnyComponentOfView<TappableView> {
+        tappableView(configuration: configuration) { _ in
+            onTap()
+        }.eraseToAnyComponentOfView()
+    }
+}
+
+
+// MARK: - Type erase modifiers
+
+extension Component {
+    /// Wraps the current component in a type-erased `AnyComponent` container.
+    /// - Returns: An type erased component that
+    public func eraseToAnyComponent() -> AnyComponent {
+        AnyComponent(self)
+    }
+
+    /// Wraps the current component in a type-erased `AnyComponentOfView` container.
+    /// - Returns: An `AnyComponentOfView` instance that renders the same view as the current component.
+    public func eraseToAnyComponentOfView() -> AnyComponentOfView<R.View> {
+        AnyComponentOfView(child: self)
+    }
 }
 
 // MARK: - Experimental

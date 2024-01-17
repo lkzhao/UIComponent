@@ -1,23 +1,28 @@
 //  Created by Luke Zhao on 2017-07-21.
 
 import UIKit
-
+/// `ReuseManager` is a class that manages the reuse of `UIView` objects to improve performance.
+/// It stores reusable views in a dictionary and provides methods to enqueue and dequeue these views.
+/// It also handles the cleanup of views that are no longer needed.
 open class ReuseManager: NSObject {
+    /// Shared instance of `ReuseManager`.
     public static let shared = ReuseManager()
 
-    /// Time it takes for ReuseManager to
-    /// dump all reusableViews to save memory
+    /// The time interval after which the reusable views are cleaned up.
     public var lifeSpan: TimeInterval = 5.0
 
-    /// When `removeFromSuperviewWhenReuse` is enabled,
-    /// cells will always be removed from ComponentView during reuse.
-    /// This is slower but it doesn't influence the `isHidden` property
-    /// of individual cells.
+    /// A Boolean value that determines whether a view should be removed from its superview when it is enqueued for reuse.
     public var removeFromSuperviewWhenReuse = true
 
+    /// A dictionary that maps identifiers to arrays of reusable `UIView` objects.
     var reusableViews: [String: [UIView]] = [:]
+    /// An optional `Timer` that triggers the cleanup of reusable views.
     var cleanupTimer: Timer?
 
+    /// Enqueues a `UIView` for reuse by adding it to the `reusableViews` dictionary.
+    /// - Parameters:
+    ///   - identifier: A string that uniquely identifies the type of the view.
+    ///   - view: The `UIView` to be enqueued.
     public func enqueue<T: UIView>(identifier: String = NSStringFromClass(T.self), view: T) {
         view.ckContext.reuseIdentifier = nil
         view.ckContext.reuseManager = nil
@@ -44,6 +49,11 @@ open class ReuseManager: NSObject {
         }
     }
 
+    /// Dequeues a reusable `UIView` if available, or creates a new one using the provided closure.
+    /// - Parameters:
+    ///   - identifier: A string that uniquely identifies the type of the view.
+    ///   - defaultView: A closure that creates a new instance of the view if no reusable view is available.
+    /// - Returns: A `UIView` that is either dequeued from the reusable views or created anew.
     public func dequeue<T: UIView>(
         identifier: String = NSStringFromClass(T.self),
         _ defaultView: @autoclosure () -> T
@@ -58,6 +68,11 @@ open class ReuseManager: NSObject {
         return view
     }
 
+    /// Dequeues a reusable `UIView` if available, or creates a new one by initializing the provided type.
+    /// - Parameters:
+    ///   - identifier: A string that uniquely identifies the type of the view.
+    ///   - type: The type of the view to be dequeued or created.
+    /// - Returns: A `UIView` that is either dequeued from the reusable views or created anew.
     public func dequeue<T: UIView>(
         identifier: String = NSStringFromClass(T.self),
         type: T.Type
@@ -65,6 +80,7 @@ open class ReuseManager: NSObject {
         return dequeue(identifier: identifier, type.init())
     }
 
+    /// Cleans up all reusable views by removing them from their superview and clearing the `reusableViews` dictionary.
     @objc func cleanup() {
         for views in reusableViews.values {
             for view in views {

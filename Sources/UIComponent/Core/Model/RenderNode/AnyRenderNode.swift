@@ -31,6 +31,9 @@ public struct AnyRenderNode: RenderNode {
     public func visibleIndexes(in frame: CGRect) -> IndexSet {
         erasing.visibleIndexes(in: frame)
     }
+    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
+        erasing.visibleRenderables(in: frame)
+    }
     public func updateView(_ view: UIView) {
         erasing._updateView(view)
     }
@@ -39,8 +42,42 @@ public struct AnyRenderNode: RenderNode {
     }
 }
 
-extension RenderNode {
-    public func eraseToAnyRenderNode() -> AnyRenderNode {
-        AnyRenderNode(self)
+public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
+    public let erasing: any RenderNode
+    public init(_ erasing: any RenderNode) {
+        self.erasing = erasing
+    }
+    public var id: String? {
+        erasing.id
+    }
+    public var animator: Animator? {
+        erasing.animator
+    }
+    public var reuseStrategy: ReuseStrategy {
+        erasing.reuseStrategy
+    }
+    public var shouldRenderView: Bool {
+        erasing.shouldRenderView
+    }
+    public var size: CGSize {
+        erasing.size
+    }
+    public var positions: [CGPoint] {
+        erasing.positions
+    }
+    public var children: [any RenderNode] {
+        erasing.children
+    }
+    public func visibleIndexes(in frame: CGRect) -> IndexSet {
+        erasing.visibleIndexes(in: frame)
+    }
+    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
+        erasing.visibleRenderables(in: frame)
+    }
+    public func updateView(_ view: View) {
+        erasing._updateView(view)
+    }
+    public func makeView() -> View {
+        erasing._makeView() as! View
     }
 }

@@ -94,3 +94,12 @@ extension RenderNode {
         AnimatorWrapperRenderNode(content: self, passthroughUpdate: passthrough, updateBlock: updateBlock)
     }
 }
+
+extension RenderNode {
+    public func eraseToAnyRenderNode() -> AnyRenderNode {
+        AnyRenderNode(self)
+    }
+    public func eraseToAnyRenderNodeOfView() -> AnyRenderNodeOfView<View> {
+        AnyRenderNodeOfView(self)
+    }
+}
