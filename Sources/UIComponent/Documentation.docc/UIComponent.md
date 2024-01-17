@@ -26,7 +26,6 @@ UIComponent is a declarative and modern framework to build user interfaces with 
 @Links(visualStyle: list) {
 - <doc:CustomComponent>
 - <doc:Animation>
-- <doc:Modifiers>
 - <doc:Architecture>
 - <doc:SwiftUICompare>
 }
