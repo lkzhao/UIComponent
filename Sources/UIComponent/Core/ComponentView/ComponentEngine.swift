@@ -186,9 +186,10 @@ public class ComponentEngine {
             return
         }
         guard let componentView = view, let component else { return }
-        EnvironmentManager.shared.push(key: CurrentComponentViewEnvironmentKey.self, value: componentView)
-        let renderNode = component.layout(Constraint(maxSize: adjustedSize))
-        EnvironmentManager.shared.pop()
+
+        let renderNode = EnvironmentValues.with(\.currentComponentView, value: componentView) {
+            component.layout(Constraint(maxSize: adjustedSize))
+        }
 
         contentSize = renderNode.size * zoomScale
         self.renderNode = renderNode

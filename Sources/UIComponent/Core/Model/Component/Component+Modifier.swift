@@ -88,11 +88,38 @@ extension Component {
         ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: width, height: height))
     }
 
+    /// Sets an absolute width and uses a specified strategy for the height of the component.
+    /// - Parameters:
+    ///   - width: A `CGFloat` value that specifies the absolute width for the component.
+    ///   - height: A `SizeStrategy` value that determines the height sizing strategy. Defaults to `.fit`.
+    /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden width and height constraints.
+    public func size(width: CGFloat, height: SizeStrategy = .fit) -> ConstraintOverrideComponent<Self> {
+        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(width), height: height))
+    }
+
+    /// Uses a specified strategy for the width and sets an absolute height for the component.
+    /// - Parameters:
+    ///   - width: A `SizeStrategy` value that determines the width sizing strategy. Defaults to `.fit`.
+    ///   - height: A `CGFloat` value that specifies the absolute height for the component.
+    /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden width and height constraints.
+    public func size(width: SizeStrategy = .fit, height: CGFloat) -> ConstraintOverrideComponent<Self> {
+        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: width, height: .absolute(height)))
+    }
+
     /// Sets an absolute size for the component.
     /// - Parameter size: A `CGSize` value that specifies the absolute size for the component.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden size constraints.
     public func size(_ size: CGSize) -> ConstraintOverrideComponent<Self> {
         ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(size.width), height: .absolute(size.height)))
+    }
+
+    /// Sets an absolute size for the component.
+    /// - Parameters:
+    ///   - width: A `CGFloat` value that specifies the absolute width for the component.
+    ///   - height: A `CGFloat` value that specifies the absolute height for the component.
+    /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden width and height constraints.
+    public func size(width: CGFloat, height: CGFloat) -> ConstraintOverrideComponent<Self> {
+        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(width), height: .absolute(height)))
     }
 
     /// Applies a custom constraint transformation to the component.
@@ -528,7 +555,7 @@ extension Component {
     ) -> AnyComponentOfView<TappableView> {
         tappableView(configuration: configuration) { _ in
             onTap()
-        }.eraseToAnyComponentOfView()
+        }
     }
 }
 
