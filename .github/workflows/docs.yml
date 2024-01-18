@@ -36,7 +36,7 @@ jobs:
         xcrun docc process-archive transform-for-static-hosting \
         "$PWD/.derivedData/Build/Products/Debug-iphonesimulator/UIComponent.doccarchive" \
         --output-path ".docs" \
-        --hosting-base-path "UIComponent"
+        --hosting-base-path "/UIComponent"
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
@@ -51,4 +51,4 @@ jobs:
 
     steps:
     - name: Deploy Docs
-      uses: actions/deploy-pages@v4.0.3
+      uses: actions/deploy-pages@v4
