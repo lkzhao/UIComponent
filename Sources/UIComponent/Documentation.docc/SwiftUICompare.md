@@ -32,6 +32,7 @@ Widget Support | No | Yes
 * More control over the layout and render process
     * Easier to build advanced features
     * Less stuggle when SwiftUI's View doesn't support a particular feature.
+    * Able to optimize layout and UI update on performance critical surfaces.
 * Support `for-loop` and `switch` statement in the result builder
 * Support ViewController transitions
 * Less buggy compare to SwiftUI (Even on iOS 17)
