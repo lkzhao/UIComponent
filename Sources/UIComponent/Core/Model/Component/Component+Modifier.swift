@@ -536,28 +536,55 @@ extension Component {
     }
 
     // MARK: - TappableView modifiers
+
     /// Creates a tappable view component from the current component.
     /// - Parameters:
-    ///   - configuration: Optional `TappableViewConfiguration` to configure the tappable view.
+    ///   - configuration: Optional `TappableViewConfig` to configure the tappable view.
     ///   - onTap: The closure to be called when the tappable view is tapped.
-    /// - Returns: An `AnyComponentOfView` wrapping a `TappableView`.
+    @available(*, deprecated, message: "Use .tappableView(_:).tappableViewConfig(_:) instead")
     public func tappableView(
-        configuration: TappableViewConfiguration? = nil,
+        configuration: TappableViewConfig,
         _ onTap: @escaping (TappableView) -> Void
-    ) -> AnyComponentOfView<TappableView> {
-        ComponentViewComponent<TappableView>(component: self).onTap(onTap).configuration(configuration).eraseToAnyComponentOfView()
+    ) -> EnvironmentComponent<TappableViewConfig, TappableViewComponent> {
+        TappableViewComponent(
+            component: self,
+            onTap: onTap
+        ).tappableViewConfig(configuration)
     }
 
     /// Creates a tappable view component from the current component with a simple tap action.
     /// - Parameters:
-    ///   - configuration: Optional `TappableViewConfiguration` to configure the tappable view.
+    ///   - configuration: Optional `TappableViewConfig` to configure the tappable view.
     ///   - onTap: The closure to be called when the tappable view is tapped.
-    /// - Returns: An `AnyComponentOfView` wrapping a `TappableView`.
+    @available(*, deprecated, message: "Use .tappableView(_:).tappableViewConfig(_:) instead")
     public func tappableView(
-        configuration: TappableViewConfiguration? = nil,
+        configuration: TappableViewConfig,
         _ onTap: @escaping () -> Void
-    ) -> AnyComponentOfView<TappableView> {
+    ) -> EnvironmentComponent<TappableViewConfig, TappableViewComponent> {
         tappableView(configuration: configuration) { _ in
+            onTap()
+        }
+    }
+
+    /// Creates a tappable view component from the current component.
+    /// - Parameters:
+    ///   - onTap: The closure to be called when the tappable view is tapped.
+    public func tappableView(
+        _ onTap: @escaping (TappableView) -> Void
+    ) -> TappableViewComponent {
+        TappableViewComponent(
+            component: self,
+            onTap: onTap
+        )
+    }
+
+    /// Creates a tappable view component from the current component with a simple tap action.
+    /// - Parameters:
+    ///   - onTap: The closure to be called when the tappable view is tapped.
+    public func tappableView(
+        _ onTap: @escaping () -> Void
+    ) -> TappableViewComponent {
+        tappableView { _ in
             onTap()
         }
     }

@@ -2,9 +2,16 @@
 
 import UIKit
 
-
-public struct TappableViewConfiguration {
-    public static var `default` = TappableViewConfiguration(onHighlightChanged: nil, didTap: nil)
+public struct TappableViewConfig {
+    @available(*, deprecated, message: "Use TappableViewConfigEnvironmentKey.defaultValue instead")
+    public static var `default`: TappableViewConfig {
+        get {
+            TappableViewConfigEnvironmentKey.defaultValue
+        }
+        set {
+            TappableViewConfigEnvironmentKey.defaultValue = newValue
+        }
+    }
 
     // place to apply highlight state or animation to the TappableView
     public var onHighlightChanged: ((TappableView, Bool) -> Void)?
@@ -18,8 +25,17 @@ public struct TappableViewConfiguration {
     }
 }
 
+@available(*, deprecated, message: "Use `TappableViewConfig` instead")
+public typealias TappableViewConfiguration = TappableViewConfig
+
 open class TappableView: ComponentView {
-    public var configuration: TappableViewConfiguration?
+    public var config: TappableViewConfig?
+
+    @available(*, deprecated, message: "Use `config` instead")
+    public var configuration: TappableViewConfig? {
+        get { config }
+        set { config = newValue }
+    }
 
     public private(set) lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
     public private(set) lazy var doubleTapGestureRecognizer: UITapGestureRecognizer = {
@@ -112,8 +128,7 @@ open class TappableView: ComponentView {
     open var isHighlighted: Bool = false {
         didSet {
             guard isHighlighted != oldValue else { return }
-            let config = configuration ?? TappableViewConfiguration.default
-            config.onHighlightChanged?(self, isHighlighted)
+            config?.onHighlightChanged?(self, isHighlighted)
         }
     }
 
@@ -147,8 +162,7 @@ open class TappableView: ComponentView {
     }
 
     @objc open func didTap() {
-        let config = configuration ?? TappableViewConfiguration.default
-        config.didTap?(self)
+        config?.didTap?(self)
         onTap?(self)
     }
 
@@ -190,7 +204,7 @@ extension TappableView: UIContextMenuInteractionDelegate {
         }
     }
 
-    public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration)
+    public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration config: UIContextMenuConfiguration)
         -> UITargetedPreview?
     {
         if let previewBackgroundColor {
@@ -203,7 +217,7 @@ extension TappableView: UIContextMenuInteractionDelegate {
 
     public func contextMenuInteraction(
         _ interaction: UIContextMenuInteraction,
-        willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration,
+        willPerformPreviewActionForMenuWith config: UIContextMenuConfiguration,
         animator: UIContextMenuInteractionCommitAnimating
     ) {
         if let onCommitPreview {
