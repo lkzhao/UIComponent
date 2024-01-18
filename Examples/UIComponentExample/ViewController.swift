@@ -20,18 +20,12 @@ class ViewController: ComponentViewController {
             } separator: {
                 Separator()
             }
-        }.environment(ViewControllerEnvironmentKey.self, value: self)
-    }
-}
-
-struct ViewControllerEnvironmentKey: EnvironmentKey {
-    static var defaultValue: UIViewController? {
-        nil
+        }.viewController(self)
     }
 }
 
 struct ExampleItem: ComponentBuilder {
-    @Environment(ViewControllerEnvironmentKey.self)
+    @Environment(\.viewController)
     var parentViewController: UIViewController?
 
     let name: String
@@ -48,7 +42,27 @@ struct ExampleItem: ComponentBuilder {
         }
         .inset(20)
         .tappableView { [weak parentViewController] in
+            print("Test")
             parentViewController?.present(viewController(), animated: true)
         }
+    }
+}
+
+struct ViewControllerEnvironmentKey: EnvironmentKey {
+    static var defaultValue: UIViewController? {
+        nil
+    }
+}
+
+extension EnvironmentValues {
+    var viewController: UIViewController? {
+        get { self[ViewControllerEnvironmentKey.self] }
+        set { self[ViewControllerEnvironmentKey.self] = newValue }
+    }
+}
+
+extension Component {
+    func viewController(_ viewController: UIViewController) -> some Component {
+        weakEnvironment(\.viewController, value: viewController)
     }
 }

@@ -14,7 +14,7 @@ public enum TextContent {
 }
 
 public struct Text: Component {
-    @Environment(FontEnvironmentKey.self) var font
+    @Environment(\.font) var font
     public let content: TextContent
     public let numberOfLines: Int
     public let lineBreakMode: NSLineBreakMode
@@ -139,8 +139,15 @@ public struct FontEnvironmentKey: EnvironmentKey {
     }
 }
 
+public extension EnvironmentValues {
+    var font: UIFont {
+        get { self[FontEnvironmentKey.self] }
+        set { self[FontEnvironmentKey.self] = newValue }
+    }
+}
+
 public extension Component {
     func font(_ font: UIFont) -> EnvironmentComponent<UIFont, Self> {
-        environment(FontEnvironmentKey.self, value: font)
+        environment(\.font, value: font)
     }
 }

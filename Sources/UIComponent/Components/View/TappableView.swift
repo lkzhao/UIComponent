@@ -216,24 +216,3 @@ extension TappableView: UIContextMenuInteractionDelegate {
     }
 }
 #endif
-
-extension Component {
-    public func tappableView(
-        configuration: TappableViewConfiguration? = nil,
-        _ onTap: @escaping (TappableView) -> Void
-    ) -> ModifierComponent<ComponentViewComponent<TappableView>, UpdateRenderNode<ComponentViewRenderNode<TappableView>>> {
-        ComponentViewComponent<TappableView>(component: self)
-            .update {
-                $0.onTap = onTap
-                $0.configuration = configuration
-            }
-    }
-    public func tappableView(
-        configuration: TappableViewConfiguration? = nil,
-        _ onTap: @escaping () -> Void
-    ) -> ModifierComponent<ComponentViewComponent<TappableView>, UpdateRenderNode<ComponentViewRenderNode<TappableView>>> {
-        tappableView(configuration: configuration) { _ in
-            onTap()
-        }
-    }
-}

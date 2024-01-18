@@ -41,7 +41,7 @@ open class ComponentScrollView: UIScrollView, ComponentDisplayableView {
     open override func safeAreaInsetsDidChange() {
         super.safeAreaInsetsDidChange()
         if contentInsetAdjustmentBehavior != .never {
-            setNeedsInvalidateLayout()
+            setNeedsReload()
         }
     }
 

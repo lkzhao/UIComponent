@@ -2,48 +2,108 @@
 
 import UIKit
 
-
-public enum ReuseStrategy {
-    case automatic, noReuse
-    case key(String)
-}
-
+/// Render nodes are responsible for storing the layout information, generating UIView for rendering, and updating UIView upon reload.
 @dynamicMemberLookup
 public protocol RenderNode<View> {
+    /// The `UIView` class that this render node is associated with.
+    /// It doesn't matter if ``RenderNode/shouldRenderView-79ciz`` is `false`.
     associatedtype View: UIView
 
+    /// A unique identifier for the render node.
     var id: String? { get }
+
+    /// An animator responsible for animating view changes.
     var animator: Animator? { get }
+
+    /// The strategy to use when reusing views.
     var reuseStrategy: ReuseStrategy { get }
 
+    /// A Boolean value indicating whether the render node should render its own view.
     var shouldRenderView: Bool { get }
 
-    /// size of the render node
+    /// The size of the render node.
     var size: CGSize { get }
 
-    /// positions of child render nodes
+    /// The positions of child render nodes relative to this node's origin.
     var positions: [CGPoint] { get }
 
-    /// child render nodes
+    /// The child render nodes of this node.
     var children: [any RenderNode] { get }
 
-    /// Get indexes of the children that are visible in the given frame
-    /// - Parameter frame: Parent component's visible frame in current component's coordinates.
+    /// Returns the indexes of the children that are visible within the given frame.
     ///
-    /// Discussion: This method is used in the default implementation of `visibleRenderables(in:)`
+    /// - Parameter frame: The frame within which to determine visibility of children.
+    /// - Returns: The indexes of the children that are visible within the given frame.
+    ///
+    /// This method is used in the default implementation of `visibleRenderables(in:)`.
     /// It won't be called if `visibleRenderables(in:)` is overwritten.
     /// The default implementation for this methods is not optmized and will return all indexes regardless of the frame.
     func visibleIndexes(in frame: CGRect) -> IndexSet
 
-    /// Get renderables that are visible in the given frame
-    /// - Parameter frame: Parent component's visible frame in current component's coordinates.
+    /// Returns the renderables that are visible within the given frame.
     ///
-    /// The default implementation recursively retrives all Renderable from visible children and combines them
+    /// - Parameter frame: The frame within which to determine visibility of renderables.
+    /// - Returns: The renderables that are visible within the given frame.
+    ///
+    /// The default implementation calls ``RenderNode/visibleIndexes(in:)-1jtpe`` to get the visible childrens.
+    /// and recursively retrives all Renderable from visible children and combines them.
     func visibleRenderables(in frame: CGRect) -> [Renderable]
 
+    /// Creates a new view instance for this render node.
     func makeView() -> View
+
+    /// Updates the provided view with the current state of this render node.
+    ///
+    /// - Parameter view: The view to update.
     func updateView(_ view: View)
 }
+
+// MARK: - Helper methods
+
+extension RenderNode {
+    /// Returns the frame of the child render node at the specified index.
+    ///
+    /// - Parameter index: The index of the child render node.
+    /// - Returns: The frame of the child render node if the index is valid, otherwise nil.
+    public func frame(at index: Int) -> CGRect? {
+        guard children.count > index, positions.count > index, index >= 0 else { return nil }
+        return CGRect(origin: positions[index], size: children[index].size)
+    }
+
+    /// Returns the frame of the render node with the specified identifier.
+    ///
+    /// - Parameter id: The identifier of the render node.
+    /// - Returns: The frame of the render node if found, otherwise nil.
+    public func frame(id: String) -> CGRect? {
+        if self.id == id {
+            return CGRect(origin: .zero, size: size)
+        }
+        for (index, child) in children.enumerated() {
+            if let frame = child.frame(id: id) {
+                return frame + positions[index]
+            }
+        }
+        return nil
+    }
+
+    /// Returns the render node with the specified identifier.
+    ///
+    /// - Parameter id: The identifier of the render node.
+    /// - Returns: The render node if found, otherwise nil.
+    public func renderNode(id: String) -> (any RenderNode)? {
+        if self.id == id {
+            return self
+        }
+        for child in children {
+            if let node = child.renderNode(id: id) {
+                return node
+            }
+        }
+        return nil
+    }
+}
+
+// MARK: - Default implementation
 
 extension RenderNode {
     public var id: String? { nil }
@@ -85,6 +145,8 @@ extension RenderNode {
     }
 }
 
+// MARK: - Internal methods
+
 extension RenderNode {
     internal func _makeView() -> UIView {
         switch reuseStrategy {
@@ -99,36 +161,5 @@ extension RenderNode {
     internal func _updateView(_ view: UIView) {
         guard let view = view as? View else { return }
         return updateView(view)
-    }
-}
-
-extension RenderNode {
-    public func frame(at index: Int) -> CGRect? {
-        guard children.count > index, positions.count > index, index >= 0 else { return nil }
-        return CGRect(origin: positions[index], size: children[index].size)
-    }
-
-    public func frame(id: String) -> CGRect? {
-        if self.id == id {
-            return CGRect(origin: .zero, size: size)
-        }
-        for (index, child) in children.enumerated() {
-            if let frame = child.frame(id: id) {
-                return frame + positions[index]
-            }
-        }
-        return nil
-    }
-
-    public func renderNode(id: String) -> (any RenderNode)? {
-        if self.id == id {
-            return self
-        }
-        for child in children {
-            if let node = child.renderNode(id: id) {
-                return node
-            }
-        }
-        return nil
     }
 }

@@ -2,57 +2,82 @@
 
 import Foundation
 
-internal class EnvironmentManager {
-    internal static let shared = EnvironmentManager()
+internal enum EnvironmentValuesKey<Value> {
+    case keyPath(WritableKeyPath<EnvironmentValues, Value>)
+    case keyType(any EnvironmentKey<Value>.Type)
+}
 
-    private struct EnvironmentValues {
-        let values: [ObjectIdentifier: Any]
-        init() {
-            values = [:]
+public struct EnvironmentValues {
+    private var values: [ObjectIdentifier: Any] = [:]
+
+    public subscript<Value>(keyType: any EnvironmentKey<Value>.Type) -> Value {
+        get {
+            values[ObjectIdentifier(keyType)] as? Value ?? keyType.defaultValue
         }
-        init<Value>(existing: EnvironmentValues, key: any EnvironmentKey<Value>.Type, value: Value) {
-            values = existing.values.merging([ObjectIdentifier(key): value]) { $1 }
-        }
-        subscript<Value>(key: any EnvironmentKey<Value>.Type) -> Value {
-            values[ObjectIdentifier(key)] as? Value ?? key.defaultValue
+        set {
+            values[ObjectIdentifier(keyType)] = newValue
         }
     }
 
-    private var stack: [EnvironmentValues] = []
+    private static var stack: [EnvironmentValues] = []
+    public private(set) static var current = EnvironmentValues()
 
-    private var current: EnvironmentValues {
-        stack.last ?? EnvironmentValues()
+    internal static func saveCurrentValues() {
+        stack.append(current)
     }
 
-    internal func value<Value>(key: any EnvironmentKey<Value>.Type) -> Value {
-        current[key]
+    internal static func restoreCurrentValues() {
+        guard let last = stack.popLast() else {
+            assertionFailure("Inbalanced environment save/restore")
+            return
+        }
+        current = last
     }
 
-    internal func push<Value>(key: any EnvironmentKey<Value>.Type, value: Value) {
-        stack.append(EnvironmentValues(existing: current, key: key, value: value))
-    }
-
-    internal func pop() {
-        stack.removeLast()
-    }
-
-    internal func with<Value, Result>(key: any EnvironmentKey<Value>.Type, value: Value, accessor: () throws -> Result) rethrows -> Result {
-        push(key: key, value: value)
+    internal static func with<Value, Result>(key: EnvironmentValuesKey<Value>, value: Value, accessor: () throws -> Result) rethrows -> Result {
+        saveCurrentValues()
+        switch key {
+        case let .keyType(keyType):
+            current[keyType] = value
+        case let .keyPath(keyPath):
+            current[keyPath: keyPath] = value
+        }
         let result = try accessor()
-        pop()
+        restoreCurrentValues()
         return result
+    }
+
+    public static func with<Value, Result>(_ keyType: any EnvironmentKey<Value>.Type, value: Value, accessor: () throws -> Result) rethrows -> Result {
+        try with(key: .keyType(keyType), value: value, accessor: accessor)
+    }
+
+    public static func with<Value, Result>(_ keyPath: WritableKeyPath<EnvironmentValues, Value>, value: Value, accessor: () throws -> Result) rethrows -> Result {
+        try with(key: .keyPath(keyPath), value: value, accessor: accessor)
     }
 }
 
 @frozen @propertyWrapper public struct Environment<Value> {
-    let key: any EnvironmentKey<Value>.Type
+    public enum EnvironmentAccessorKey {
+        case keyPath(KeyPath<EnvironmentValues, Value>)
+        case keyType(any EnvironmentKey<Value>.Type)
+    }
+    let key: EnvironmentAccessorKey
 
-    public init(_ key: any EnvironmentKey<Value>.Type) {
-        self.key = key
+    public init(_ keyPath: KeyPath<EnvironmentValues, Value>) {
+        self.key = .keyPath(keyPath)
+    }
+
+    public init(_ keyType: any EnvironmentKey<Value>.Type) {
+        self.key = .keyType(keyType)
     }
 
     public var wrappedValue: Value {
-        EnvironmentManager.shared.value(key: key)
+        switch key {
+        case let .keyPath(keyPath):
+            EnvironmentValues.current[keyPath: keyPath]
+        case let .keyType(keyType):
+            EnvironmentValues.current[keyType]
+        }
     }
 }
 
@@ -62,25 +87,82 @@ public protocol EnvironmentKey<Value> {
 }
 
 public struct EnvironmentComponent<Value, Child: Component>: Component {
-    let key: any EnvironmentKey<Value>.Type
+    let key: EnvironmentValuesKey<Value>
     let value: Value
     let child: Child
 
+    public init(keyPath: WritableKeyPath<EnvironmentValues, Value>, value: Value, child: Child) {
+        self.key = .keyPath(keyPath)
+        self.value = value
+        self.child = child
+    }
+
+    public init(keyType: any EnvironmentKey<Value>.Type, value: Value, child: Child) {
+        self.key = .keyType(keyType)
+        self.value = value
+        self.child = child
+    }
+
     public func layout(_ constraint: Constraint) -> Child.R {
-        EnvironmentManager.shared.with(key: key, value: value) {
+        EnvironmentValues.with(key: key, value: value) {
             child.layout(constraint)
         }
     }
 }
 
+public struct WeakEnvironmentComponent<Value: AnyObject, Child: Component>: Component {
+    let key: EnvironmentValuesKey<Value?>
+    weak var value: Value?
+    let child: Child
+
+    public init(keyPath: WritableKeyPath<EnvironmentValues, Value?>, value: Value?, child: Child) {
+        self.key = .keyPath(keyPath)
+        self.value = value
+        self.child = child
+    }
+
+    public init(keyType: any EnvironmentKey<Value?>.Type, value: Value?, child: Child) {
+        self.key = .keyType(keyType)
+        self.value = value
+        self.child = child
+    }
+
+    public func layout(_ constraint: Constraint) -> Child.R {
+        if let value {
+            EnvironmentValues.with(key: key, value: value) {
+                child.layout(constraint)
+            }
+        } else {
+            child.layout(constraint)
+        }
+    }
+}
+
+
 public extension Component {
-    func environment<Value>(_ key: any EnvironmentKey<Value>.Type, value: Value) -> EnvironmentComponent<Value, Self> {
-        EnvironmentComponent(key: key, value: value, child: self)
+    func environment<Value>(_ keyPath: WritableKeyPath<EnvironmentValues, Value>, value: Value) -> EnvironmentComponent<Value, Self> {
+        EnvironmentComponent(keyPath: keyPath, value: value, child: self)
+    }
+    func environment<Value>(_ keyType: any EnvironmentKey<Value>.Type, value: Value) -> EnvironmentComponent<Value, Self> {
+        EnvironmentComponent(keyType: keyType, value: value, child: self)
+    }
+    func weakEnvironment<Value: AnyObject>(_ keyPath: WritableKeyPath<EnvironmentValues, Value?>, value: Value?) -> WeakEnvironmentComponent<Value, Self> {
+        WeakEnvironmentComponent(keyPath: keyPath, value: value, child: self)
+    }
+    func weakEnvironment<Value: AnyObject>(_ keyType: any EnvironmentKey<Value?>.Type, value: Value?) -> WeakEnvironmentComponent<Value, Self> {
+        WeakEnvironmentComponent(keyType: keyType, value: value, child: self)
     }
 }
 
 public struct CurrentComponentViewEnvironmentKey: EnvironmentKey {
     public static var defaultValue: ComponentDisplayableView? {
         nil
+    }
+}
+
+public extension EnvironmentValues {
+    var currentComponentView: ComponentDisplayableView? {
+        get { self[CurrentComponentViewEnvironmentKey.self] }
+        set { self[CurrentComponentViewEnvironmentKey.self] = newValue }
     }
 }

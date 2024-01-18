@@ -28,16 +28,6 @@ public struct PrimaryMenuComponent: Component {
 }
 
 @available(iOS 14.0, *)
-public extension Component {
-    func primaryMenu(_ menuBuilder: () -> UIMenu) -> PrimaryMenuComponent {
-        PrimaryMenuComponent(component: self, menu: menuBuilder())
-    }
-    func primaryMenu(_ menu: UIMenu) -> PrimaryMenuComponent {
-        PrimaryMenuComponent(component: self, menu: menu)
-    }
-}
-
-@available(iOS 14.0, *)
 public struct PrimaryMenuConfiguration {
     public static var `default` = PrimaryMenuConfiguration(onHighlightChanged: nil, didTap: nil)
 
