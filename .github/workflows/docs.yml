@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up Pages
-      uses: actions/configure-pages@v1
+      uses: actions/configure-pages@v4
     - name: Generate Docs
       run: |
         xcrun xcodebuild docbuild \
@@ -34,7 +34,7 @@ jobs:
         --output-path ".docs" \
         --hosting-base-path "UIComponent"
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
+      uses: actions/upload-pages-artifact@v3
       with:
         path: .docs
 
@@ -47,4 +47,4 @@ jobs:
 
     steps:
     - name: Deploy Docs
-      uses: actions/deploy-pages@v2
+      uses: actions/deploy-pages@v4.0.3
