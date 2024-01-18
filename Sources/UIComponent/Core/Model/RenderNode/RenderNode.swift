@@ -58,6 +58,51 @@ public protocol RenderNode<View> {
     func updateView(_ view: View)
 }
 
+// MARK: - Helper methods
+
+extension RenderNode {
+    /// Returns the frame of the child render node at the specified index.
+    ///
+    /// - Parameter index: The index of the child render node.
+    /// - Returns: The frame of the child render node if the index is valid, otherwise nil.
+    public func frame(at index: Int) -> CGRect? {
+        guard children.count > index, positions.count > index, index >= 0 else { return nil }
+        return CGRect(origin: positions[index], size: children[index].size)
+    }
+
+    /// Returns the frame of the render node with the specified identifier.
+    ///
+    /// - Parameter id: The identifier of the render node.
+    /// - Returns: The frame of the render node if found, otherwise nil.
+    public func frame(id: String) -> CGRect? {
+        if self.id == id {
+            return CGRect(origin: .zero, size: size)
+        }
+        for (index, child) in children.enumerated() {
+            if let frame = child.frame(id: id) {
+                return frame + positions[index]
+            }
+        }
+        return nil
+    }
+
+    /// Returns the render node with the specified identifier.
+    ///
+    /// - Parameter id: The identifier of the render node.
+    /// - Returns: The render node if found, otherwise nil.
+    public func renderNode(id: String) -> (any RenderNode)? {
+        if self.id == id {
+            return self
+        }
+        for child in children {
+            if let node = child.renderNode(id: id) {
+                return node
+            }
+        }
+        return nil
+    }
+}
+
 // MARK: - Default implementation
 
 extension RenderNode {
@@ -116,38 +161,5 @@ extension RenderNode {
     internal func _updateView(_ view: UIView) {
         guard let view = view as? View else { return }
         return updateView(view)
-    }
-}
-
-// MARK: - Helper methods
-
-extension RenderNode {
-    public func frame(at index: Int) -> CGRect? {
-        guard children.count > index, positions.count > index, index >= 0 else { return nil }
-        return CGRect(origin: positions[index], size: children[index].size)
-    }
-
-    public func frame(id: String) -> CGRect? {
-        if self.id == id {
-            return CGRect(origin: .zero, size: size)
-        }
-        for (index, child) in children.enumerated() {
-            if let frame = child.frame(id: id) {
-                return frame + positions[index]
-            }
-        }
-        return nil
-    }
-
-    public func renderNode(id: String) -> (any RenderNode)? {
-        if self.id == id {
-            return self
-        }
-        for child in children {
-            if let node = child.renderNode(id: id) {
-                return node
-            }
-        }
-        return nil
     }
 }

@@ -2,11 +2,20 @@
 
 import UIKit
 
+/// A type-erased wrapper for any `RenderNode`.
 public struct AnyRenderNode: RenderNode {
+    /// The underlying `RenderNode` instance being type-erased.
     public let erasing: any RenderNode
+    
+    /// Initializes a new `AnyRenderNode` with the provided `RenderNode`.
+    ///
+    /// - Parameter erasing: The `RenderNode` instance to type-erase.
     public init(_ erasing: any RenderNode) {
         self.erasing = erasing
     }
+
+    // MARK: - RenderNode methods
+
     public var id: String? {
         erasing.id
     }
@@ -39,11 +48,20 @@ public struct AnyRenderNode: RenderNode {
     }
 }
 
+/// A type-erased wrapper for any `RenderNode` specialized for a specific `UIView` subclass.
 public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
+    /// The underlying `RenderNode` instance being type-erased.
     public let erasing: any RenderNode
+    
+    /// Initializes a new `AnyRenderNodeOfView` with the provided `RenderNode`.
+    ///
+    /// - Parameter erasing: The `RenderNode` instance to type-erase.
     public init(_ erasing: any RenderNode) {
         self.erasing = erasing
     }
+
+    // MARK: - RenderNode methods
+
     public var id: String? {
         erasing.id
     }
