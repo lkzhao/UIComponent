@@ -51,6 +51,10 @@ extension Component {
     }
 
     /// Associates an animator with the component.
+    ///
+    /// There is also the ``Component/animateInsert(_:)``, ``Component/animateUpdate(passthrough:_:)``, and ``Component/animateDelete(_:)``
+    /// modifiers that can be used to override insertions, updates, and deletions animation separately.
+    ///
     /// - Parameter animator: An optional `Animator` object that defines how the component's updates are animated.
     /// - Returns: An `AnimatorComponent` that represents the modified component with an associated animator.
     public func animator(_ animator: Animator?) -> AnimatorComponent<Self> {
@@ -595,12 +599,35 @@ extension Component {
     }
 }
 
-// MARK: - Experimental
+// MARK: - Animation modifiers
 
 extension Component {
+    /// Animates layout update to the component (frame change).
+    /// - Parameters:
+    ///   - passthrough: A Boolean value that determines whether the animator update method will be called for the content component.
+    ///   - updateBlock: A closure that is called to perform the layout update animation.
+    /// - Returns: An `AnimatorWrapperComponent` containing the modified component.
     public func animateUpdate(passthrough: Bool = false, _ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> AnimatorWrapperComponent<Self> {
         ModifierComponent(content: self) {
             $0.animateUpdate(passthrough: passthrough, updateBlock)
+        }
+    }
+
+    /// Animates the insertion of the component.
+    /// - Parameter insertBlock: A closure that is called to perform the insertion animation.
+    /// - Returns: An `AnimatorWrapperComponent` containing the modified component.
+    public func animateInsert(_ insertBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> AnimatorWrapperComponent<Self> {
+        ModifierComponent(content: self) {
+            $0.animateInsert(insertBlock)
+        }
+    }
+
+    /// Animates the deletion of the component.
+    /// - Parameter deleteBlock: A closure that is called to perform the deletion animation.
+    /// - Returns: An `AnimatorWrapperComponent` containing the modified component.
+    public func animateDelete(_ deleteBlock: @escaping (ComponentDisplayableView, UIView, () -> Void) -> Void) -> AnimatorWrapperComponent<Self> {
+        ModifierComponent(content: self) {
+            $0.animateDelete(deleteBlock)
         }
     }
 }

@@ -93,6 +93,12 @@ extension RenderNode {
     func animateUpdate(passthrough: Bool = false, _ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> AnimatorWrapperRenderNode<Self> {
         AnimatorWrapperRenderNode(content: self, passthroughUpdate: passthrough, updateBlock: updateBlock)
     }
+    func animateInsert(_ insertBlock: @escaping (ComponentDisplayableView, UIView, CGRect) -> Void) -> AnimatorWrapperRenderNode<Self> {
+        AnimatorWrapperRenderNode(content: self, passthroughUpdate: false, insertBlock: insertBlock)
+    }
+    func animateDelete(_ deleteBlock: @escaping (ComponentDisplayableView, UIView, () -> Void) -> Void) -> AnimatorWrapperRenderNode<Self> {
+        AnimatorWrapperRenderNode(content: self, passthroughUpdate: false, deleteBlock: deleteBlock)
+    }
 }
 
 extension RenderNode {
