@@ -13,8 +13,8 @@ jobs:
     steps:
       - name: List Xcode installations
         run: sudo ls -1 /Applications | grep "Xcode"
-      - name: Select Xcode 15.1
-        run: sudo xcode-select -s /Applications/Xcode_15.1.app/Contents/Developer
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build and Test
