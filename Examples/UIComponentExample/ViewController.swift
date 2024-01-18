@@ -48,25 +48,21 @@ struct ExampleItem: ComponentBuilder {
     }
 }
 
-struct WeakBox<Value: AnyObject> {
-    weak var value: Value?
-}
-
 struct ViewControllerEnvironmentKey: EnvironmentKey {
-    static var defaultValue: WeakBox<UIViewController>? {
+    static var defaultValue: UIViewController? {
         nil
     }
 }
 
 extension EnvironmentValues {
     var viewController: UIViewController? {
-        get { self[ViewControllerEnvironmentKey.self]?.value }
-        set { self[ViewControllerEnvironmentKey.self] = WeakBox(value: newValue) }
+        get { self[ViewControllerEnvironmentKey.self] }
+        set { self[ViewControllerEnvironmentKey.self] = newValue }
     }
 }
 
 extension Component {
-    func viewController(_ viewController: UIViewController?) -> some Component {
-        environment(ViewControllerEnvironmentKey.self, value: WeakBox(value: viewController))
+    func viewController(_ viewController: UIViewController) -> some Component {
+        weakEnvironment(\.viewController, value: viewController)
     }
 }

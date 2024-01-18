@@ -110,12 +110,47 @@ public struct EnvironmentComponent<Value, Child: Component>: Component {
     }
 }
 
+public struct WeakEnvironmentComponent<Value: AnyObject, Child: Component>: Component {
+    let key: EnvironmentValuesKey<Value?>
+    weak var value: Value?
+    let child: Child
+
+    public init(keyPath: WritableKeyPath<EnvironmentValues, Value?>, value: Value?, child: Child) {
+        self.key = .keyPath(keyPath)
+        self.value = value
+        self.child = child
+    }
+
+    public init(keyType: any EnvironmentKey<Value?>.Type, value: Value?, child: Child) {
+        self.key = .keyType(keyType)
+        self.value = value
+        self.child = child
+    }
+
+    public func layout(_ constraint: Constraint) -> Child.R {
+        if let value {
+            EnvironmentValues.with(key: key, value: value) {
+                child.layout(constraint)
+            }
+        } else {
+            child.layout(constraint)
+        }
+    }
+}
+
+
 public extension Component {
     func environment<Value>(_ keyPath: WritableKeyPath<EnvironmentValues, Value>, value: Value) -> EnvironmentComponent<Value, Self> {
         EnvironmentComponent(keyPath: keyPath, value: value, child: self)
     }
     func environment<Value>(_ keyType: any EnvironmentKey<Value>.Type, value: Value) -> EnvironmentComponent<Value, Self> {
         EnvironmentComponent(keyType: keyType, value: value, child: self)
+    }
+    func weakEnvironment<Value: AnyObject>(_ keyPath: WritableKeyPath<EnvironmentValues, Value?>, value: Value?) -> WeakEnvironmentComponent<Value, Self> {
+        WeakEnvironmentComponent(keyPath: keyPath, value: value, child: self)
+    }
+    func weakEnvironment<Value: AnyObject>(_ keyType: any EnvironmentKey<Value?>.Type, value: Value?) -> WeakEnvironmentComponent<Value, Self> {
+        WeakEnvironmentComponent(keyType: keyType, value: value, child: self)
     }
 }
 
