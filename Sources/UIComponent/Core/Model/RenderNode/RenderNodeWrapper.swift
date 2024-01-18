@@ -37,9 +37,6 @@ extension RenderNodeWrapper {
     public func visibleIndexes(in frame: CGRect) -> IndexSet {
         content.visibleIndexes(in: frame)
     }
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        content.visibleRenderables(in: frame)
-    }
     public func updateView(_ view: Content.View) {
         content.updateView(view)
     }

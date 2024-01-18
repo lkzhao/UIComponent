@@ -31,9 +31,6 @@ public struct AnyRenderNode: RenderNode {
     public func visibleIndexes(in frame: CGRect) -> IndexSet {
         erasing.visibleIndexes(in: frame)
     }
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        erasing.visibleRenderables(in: frame)
-    }
     public func updateView(_ view: UIView) {
         erasing._updateView(view)
     }
@@ -70,9 +67,6 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
     }
     public func visibleIndexes(in frame: CGRect) -> IndexSet {
         erasing.visibleIndexes(in: frame)
-    }
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        erasing.visibleRenderables(in: frame)
     }
     public func updateView(_ view: View) {
         erasing._updateView(view)
