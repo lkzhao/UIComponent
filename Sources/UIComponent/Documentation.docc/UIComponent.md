@@ -16,9 +16,11 @@ UIComponent is a declarative and modern framework to build user interfaces with 
 ### Getting Started
 
 @Links(visualStyle: list) {
+    - <doc:Installation>
     - <doc:ComponentBasics>
     - <doc:CustomView>
     - <doc:StateManagement>
+    - ``Component``
 }
 
 ### Advanced Topics

@@ -8,7 +8,7 @@
 
 ### Custom RenderNode
 
-Implementing a ``RenderNode`` can be quite complex. For most  requirements, you should be able to achieve your goals by creating a custom ``Component`` or utilizing an existing ``RenderNode``.
+Implementing a ``RenderNode`` can be quite complex. For most  tasks, you should be able to achieve your goals by creating a custom ``Component`` or utilizing an existing ``RenderNode``.
 
 To create a custom ``RenderNode``, you need to write a struct that conforms to ``RenderNode`` protocol.
 

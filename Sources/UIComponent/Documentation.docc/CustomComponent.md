@@ -96,8 +96,3 @@ struct MyVStack: Component {
     }
 }
 ```
-
-
-##### Custom View Component
-
-WIP
