@@ -26,17 +26,19 @@ jobs:
     - name: Set up Pages
       uses: actions/configure-pages@v1
     - name: Generate Docs
-      uses: fwcd/swift-docc-action@v1
-      with:
-        target: UIComponent
-        output: ./public
-        transform-for-static-hosting: 'true'
-        disable-indexing: 'true'
-        hosting-base-path: UIComponent
+      run: |
+        xcrun xcodebuild docbuild \
+        -scheme UIComponent \
+        -destination 'generic/platform=iOS Simulator' \
+        -derivedDataPath "$PWD/.derivedData"
+        xcrun docc process-archive transform-for-static-hosting \
+        "$PWD/.derivedData/Build/Products/Debug-iphonesimulator/UIComponent.doccarchive" \
+        --output-path ".docs" \
+        --hosting-base-path "UIComponent"
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with:
-        path: ./public
+        path: .docs
 
   deploy:
     environment:
@@ -47,4 +49,4 @@ jobs:
 
     steps:
     - name: Deploy Docs
-      uses: actions/deploy-pages@v1
+      uses: actions/deploy-pages@v2
