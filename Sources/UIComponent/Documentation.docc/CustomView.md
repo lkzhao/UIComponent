@@ -1,5 +1,11 @@
 # Custom View
 
+@Metadata {
+    @PageImage(
+        purpose: card, 
+        source: "CustomView")
+}
+
 Learn how to use custom views inside UIComponent
 
 Rendering a custom view inside UIComponent is straightforward.

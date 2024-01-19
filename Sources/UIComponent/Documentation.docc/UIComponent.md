@@ -10,11 +10,9 @@ A modern, declarative approach to building user interfaces with UIKit.
 
 UIComponent is a declarative and modern framework to build user interfaces with UIKit. With the power of `@resultBuilder` and `@dynamicMemberLookup`, your UIKit interface can be easily constructed with a syntax similar to SwiftUI. UIComponent also embraces unidirectional data flow instead of two way binding, and offers great performance and optimization opportunities.
 
-## Topics
-
 ### Getting Started
 
-@Links(visualStyle: list) {
+@Links(visualStyle: detailedGrid) {
     - <doc:Installation>
     - <doc:ComponentBasics>
     - <doc:CustomView>

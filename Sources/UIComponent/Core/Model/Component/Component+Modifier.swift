@@ -537,7 +537,7 @@ extension Component {
 
     // MARK: - TappableView modifiers
 
-    /// Creates a tappable view component from the current component.
+    /// Creates a tappable view component from the current component with a tap action. See ``TappableView`` for detail.
     /// - Parameters:
     ///   - configuration: Optional `TappableViewConfig` to configure the tappable view.
     ///   - onTap: The closure to be called when the tappable view is tapped.
@@ -552,7 +552,7 @@ extension Component {
         ).tappableViewConfig(configuration)
     }
 
-    /// Creates a tappable view component from the current component with a simple tap action.
+    /// Creates a tappable view component from the current component with a tap action. See ``TappableView`` for detail.
     /// - Parameters:
     ///   - configuration: Optional `TappableViewConfig` to configure the tappable view.
     ///   - onTap: The closure to be called when the tappable view is tapped.
@@ -566,7 +566,7 @@ extension Component {
         }
     }
 
-    /// Creates a tappable view component from the current component.
+    /// Creates a tappable view component from the current component with a tap action. See ``TappableView`` for detail.
     /// - Parameters:
     ///   - onTap: The closure to be called when the tappable view is tapped.
     public func tappableView(
@@ -578,7 +578,7 @@ extension Component {
         )
     }
 
-    /// Creates a tappable view component from the current component with a simple tap action.
+    /// Creates a tappable view component from the current component with a tap action. See ``TappableView`` for detail.
     /// - Parameters:
     ///   - onTap: The closure to be called when the tappable view is tapped.
     public func tappableView(
@@ -613,14 +613,14 @@ public extension Component {
 // MARK: - Type erase modifiers
 
 extension Component {
-    /// Wraps the current component in a type-erased `AnyComponent` container.
-    /// - Returns: An type erased component that
+    /// Wraps the current component in a type-erased ``AnyComponent`` container.
+    /// - Returns: A type erased ``AnyComponent`` that renders the same view as the current component.
     public func eraseToAnyComponent() -> AnyComponent {
         AnyComponent(self)
     }
 
-    /// Wraps the current component in a type-erased `AnyComponentOfView` container.
-    /// - Returns: An `AnyComponentOfView` instance that renders the same view as the current component.
+    /// Wraps the current component in a type-erased ``AnyComponentOfView`` container.
+    /// - Returns: A type erased``AnyComponentOfView`` that renders the same view as the current component.
     public func eraseToAnyComponentOfView() -> AnyComponentOfView<R.View> {
         AnyComponentOfView(child: self)
     }

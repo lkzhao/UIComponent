@@ -1,5 +1,11 @@
 # Installation
 
+@Metadata {
+    @PageImage(
+        purpose: card, 
+        source: "Installation")
+}
+
 Learn how to install the UIComponent framework
 
 ## Overview
@@ -15,7 +21,7 @@ Learn how to install the UIComponent framework
 import UIComponent
 ```
 
-### Through `Package.swift`
+### Through Package.swift
 
 Add the following to your `Package.swift` file under `dependencies`:
 
@@ -33,7 +39,7 @@ Add `"UIComponent"` to your target's dependencies.
 ```
 
 
-##### Example `Package.swift`:
+###### Example Package.swift:
 ```swift
 let package = Package(
     name: "MyPackage",

@@ -1,8 +1,16 @@
-# State Management
+# Responding to State changes
 
-Manage state changes and trigger UI updates.
+@Metadata {
+    @PageImage(
+        purpose: card, 
+        source: "StateManagement")
+}
 
-UIComponent doesn't have `State` or `Binding` like SwiftUI. Instead, it emphasizes unidirectional data flow. When an event occurs, you should propogate it to the top level `View` or `ViewController` that host the ComponentView and update the `component` field with the new Component hierarchy.
+State management and UI updates
+
+Unlike SwiftUI, UIComponent doesn't have any state management constructs like ``State``, ``Observable``, or ``Binding``. This is by design to keep the framework simple with as few concepts as possible. The responsibility of updating UI is on you whenever the state of your application changes.
+
+We recommend writing a `reloadComponent` method and update the `component` field whenever the state changes. This ensures that the UI is always up to date with the latest state.
 
 ```swift
 struct MyViewModel {
@@ -27,7 +35,7 @@ class MyViewController: UIViewController {
     func reloadComponent() {
         componentView.component = VStack {
             Text("Count: \(viewModel.count)")
-            Text("Increment").tappableView { [weak self] in
+            Text("Increase").tappableView { [weak self] in
                 self?.viewModel.count += 1
             }
         }
@@ -35,39 +43,73 @@ class MyViewController: UIViewController {
 }
 ```
 
-For complex UI, sometimes you don't want to propergate every action to the top level `ViewController`. If this is the case, we recommend creating a custom View that manages the local state.
+### Performance
+You might be thinking that recreating the entire Component tree every time is inefficient. Especially when there are thousands of views. But you might be surprised to know how fast they really are.
+
+There are a few reasons to why this is quick to do.
+* Components are swift value types, which are super cheap to construct because they are statically created on the stack rather than on the heap.
+* Although the Component tree is recreated, UIComponent can smartly compare the old Component tree with the new one, and only applies the changes to the UIView hierarchy. This is similar to how [React's Virtual DOM](https://legacy.reactjs.org/docs/faq-internals.html) works.
+* Expensive UIViews are not created unless they become visible.
+* UIComponent can also recycle the views that are no longer visible. This is similar to how the ``UITableView`` works.
+
+If you are worried about performance, there are are few optimization tricks that you can follow in <doc:PerformanceOptimization>.
+
+### Handling Local State
+
+For complex UI, sometimes you don't want to propergate every action to the top level. If this is the case, we recommend creating a custom View that manages the local state.
 
 ```swift
 class ProfileCell: ComponentView {
-    // set externally
+    // external state
     var profile: Profile?  {
         didSet {
             guard profile != oldValue else { return }
+            loadImage()
             reloadComponent()
         }
     }
     // internal state
-    private var isExpanded: Bool = false {
+    private var profileImage: UIImage? {
         didSet {
-            guard isExpanded != oldValue else { return }
+            guard image != oldValue else { return }
             reloadComponent()
         }
     }
+
     func reloadComponent() {
-        componentView.component = VStack {
+        component = VStack {
             HStack {
-                Image(profile.image).size(width: 50, height: 50).roundedCorner()
+                Image(profileImage ?? UIImage(named: "placeholder")!)
+                    .size(width: 50, height: 50)
+                    .roundedCorner()
                 Text(profile.name).flex()
-                Image(systemName: "chevron.down").tappableView { [weak self] in
-                    self?.isExpanded.toggle()
-                }
             }
-            if isExpanded {
-                Text(profile.description)
-            }
+        }
+    }
+
+    func loadImage() {
+        guard let profile else { return }
+        Task {
+            profileImage = try? await ImageLoader.loadImage(profile.imageURL)
         }
     }
 }
 ```
 
-> Tip: We recommend using a redux-like unidirectional application architecture to manage the state of your application. Something like the [swift-composable-architecture](https://github.com/pointfreeco/swift-composable-architecture) can work really well with UIComponent
+Then you can use it like:
+
+```swift
+VStack {
+    for profile in profiles {
+        ViewComponent<ProfileCell>()
+            .profile(profile)
+            .size(width: .fill, height: 100)
+    }
+}
+```
+
+### Architecture recommendation
+
+Because UIComponent doesn't have its own state management solution, it should work well with most exist application architecture solutions. 
+
+We do recommend using a redux-like uni-directional application architecture to manage the state of your application. This gives your application a centralized state management system. Checkout the [swift-composable-architecture](https://github.com/pointfreeco/swift-composable-architecture) if you are interested in this topic.

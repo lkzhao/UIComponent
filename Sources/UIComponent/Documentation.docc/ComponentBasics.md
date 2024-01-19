@@ -102,7 +102,7 @@ extension Component {
 
 #### Handling User Actions
 
-UIComponent provides a simple ``Component/tappableView(configuration:_:)-19m6g`` modifier that allows you to handle tap actions. Simply wrap your Component with the `tappableView` modifier and provide a closure to handle the tap action.
+UIComponent provides a simple ``Component/tappableView(_:)-ew7m`` modifier that allows you to handle tap actions. Simply wrap your Component with the modifier and provide a closure to handle the tap action.
 
 ```swift
 Text("Tap Me").tappableView { [weak self] in
@@ -112,4 +112,4 @@ Text("Tap Me").tappableView { [weak self] in
 
 There are more actions and customization that the tappableView can handle, including doubleTap, longPress, contextMenu, dropping. See ``TappableView`` for more details.
 
-> Tip: For more complex actions and customization, like gestures, context menu, drag and drop, etc... We recommend creating a custom view to handle them. This allow it to be more flexible and reusable.
+> Tip: For more advanced customization, like gestures, context menu, drag and drop, etc... We recommend creating a custom view to handle them. This allow it to be more flexible and reusable.
