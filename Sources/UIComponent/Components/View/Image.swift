@@ -2,7 +2,7 @@
 
 import UIKit
 
-/// Represents an image component that renders an UIImageView
+/// An image component that renders an UIImageView
 public struct Image: Component {
     /// The underlying `UIImage` instance.
     public let image: UIImage
