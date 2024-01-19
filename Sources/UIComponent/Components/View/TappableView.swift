@@ -40,7 +40,6 @@ public typealias TappableViewConfiguration = TappableViewConfig
 /// It can be configured using ``TappableViewConfig`` and supports various gestures such as tap, double tap, and long press.
 /// 
 /// ### Handle Gesture
-///
 /// Assign a block to ``onTap``, ``onDoubleTap``, ``onLongPress`` to handle the corresponding gesture.
 /// Normally, this class is created by using the ``Component/tappableView(_:)-ew7m`` modifier instead of manually creating an instance.
 ///
@@ -55,7 +54,6 @@ public typealias TappableViewConfiguration = TappableViewConfig
 /// ```
 ///
 /// ### Display Context Menu
-///
 /// TappableView supports long press context menu. Simply assign a ``contextMenuProvider`` and return a ``UIMenu`` to be displayed.
 /// ```swift
 /// Text("Show Menu").tappableView {
