@@ -5,14 +5,15 @@ import UIKit
 public struct UpdateRenderNode<Content: RenderNode>: RenderNodeWrapper {
     public let content: Content
     public let update: (Content.View) -> Void
-    public var shouldRenderView: Bool {
-        true
-    }
 
     public var reuseStrategy: ReuseStrategy {
         // we don't know what the update block did, so we disable
         // reuse so that we don't get inconsistent state
         .noReuse
+    }
+
+    public func shouldRenderView(in frame: CGRect) -> Bool {
+        frame.intersects(CGRect(origin: .zero, size: size))
     }
 
     public func updateView(_ view: Content.View) {
@@ -26,13 +27,13 @@ public struct KeyPathUpdateRenderNode<Value, Content: RenderNode>: RenderNodeWra
     public let valueKeyPath: ReferenceWritableKeyPath<Content.View, Value>
     public let value: Value
 
-    public var shouldRenderView: Bool {
-        true
-    }
-
     public func updateView(_ view: Content.View) {
         content.updateView(view)
         view[keyPath: valueKeyPath] = value
+    }
+
+    public func shouldRenderView(in frame: CGRect) -> Bool {
+        frame.intersects(CGRect(origin: .zero, size: size))
     }
 }
 

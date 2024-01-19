@@ -2,14 +2,21 @@
 
 import UIKit
 
+/// An enumeration that defines different strategies for sizing elements.
+/// - `fill`: The element should expand to fill the available space.
+/// - `fit`: The element should be contained within the available space, but fit to its own size.
+/// - `absolute`: The element should be sized to an absolute value in points.
+/// - `percentage`: The element should be sized relative to its parent, based on a percentage.
+/// - `aspectPercentage`: The element should be sized based on a percentage of its intrinsic aspect ratio.
 public enum SizeStrategy {
-    case fill, fit
+    case fill
+    case fit
     case absolute(CGFloat)
     case percentage(CGFloat)
     case aspectPercentage(CGFloat)
 }
 
-public protocol ConstraintTransformer {
+protocol ConstraintTransformer {
     func calculate(_ constraint: Constraint) -> Constraint
     func bound(size: CGSize, to constraint: Constraint) -> CGSize
 }

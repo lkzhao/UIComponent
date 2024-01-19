@@ -34,12 +34,12 @@ public struct VisibleFrameInsetRenderNode<Content: RenderNode>: RenderNodeWrappe
     public let content: Content
     public let insets: UIEdgeInsets
 
-    public func visibleIndexes(in frame: CGRect) -> IndexSet {
-        content.visibleIndexes(in: frame.inset(by: insets))
+    public func shouldRenderView(in frame: CGRect) -> Bool {
+        content.shouldRenderView(in: frame.inset(by: insets))
     }
 
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        content.visibleRenderables(in: frame.inset(by: insets))
+    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
+        content.visibleIndexes(in: frame.inset(by: insets))
     }
 }
 
@@ -47,11 +47,11 @@ public struct DynamicVisibleFrameInsetRenderNode<Content: RenderNode>: RenderNod
     public let content: Content
     public let insetProvider: (CGRect) -> UIEdgeInsets
 
-    public func visibleIndexes(in frame: CGRect) -> IndexSet {
-        content.visibleIndexes(in: frame.inset(by: insetProvider(frame)))
+    public func shouldRenderView(in frame: CGRect) -> Bool {
+        content.shouldRenderView(in: frame.inset(by: insetProvider(frame)))
     }
 
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        content.visibleRenderables(in: frame.inset(by: insetProvider(frame)))
+    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
+        content.visibleIndexes(in: frame.inset(by: insetProvider(frame)))
     }
 }

@@ -25,9 +25,6 @@ public struct AnyRenderNode: RenderNode {
     public var reuseStrategy: ReuseStrategy {
         erasing.reuseStrategy
     }
-    public var shouldRenderView: Bool {
-        erasing.shouldRenderView
-    }
     public var size: CGSize {
         erasing.size
     }
@@ -37,7 +34,10 @@ public struct AnyRenderNode: RenderNode {
     public var children: [any RenderNode] {
         erasing.children
     }
-    public func visibleIndexes(in frame: CGRect) -> IndexSet {
+    public func shouldRenderView(in frame: CGRect) -> Bool {
+        erasing.shouldRenderView(in: frame)
+    }
+    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         erasing.visibleIndexes(in: frame)
     }
     public func updateView(_ view: UIView) {
@@ -71,9 +71,6 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
     public var reuseStrategy: ReuseStrategy {
         erasing.reuseStrategy
     }
-    public var shouldRenderView: Bool {
-        erasing.shouldRenderView
-    }
     public var size: CGSize {
         erasing.size
     }
@@ -83,7 +80,10 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
     public var children: [any RenderNode] {
         erasing.children
     }
-    public func visibleIndexes(in frame: CGRect) -> IndexSet {
+    public func shouldRenderView(in frame: CGRect) -> Bool {
+        erasing.shouldRenderView(in: frame)
+    }
+    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         erasing.visibleIndexes(in: frame)
     }
     public func updateView(_ view: View) {

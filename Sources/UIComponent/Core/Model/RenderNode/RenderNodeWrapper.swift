@@ -22,9 +22,6 @@ extension RenderNodeWrapper {
     public var reuseStrategy: ReuseStrategy {
         content.reuseStrategy
     }
-    public var shouldRenderView: Bool {
-        content.shouldRenderView
-    }
     public var size: CGSize {
         content.size
     }
@@ -34,7 +31,10 @@ extension RenderNodeWrapper {
     public var children: [any RenderNode] {
         content.children
     }
-    public func visibleIndexes(in frame: CGRect) -> IndexSet {
+    public func shouldRenderView(in frame: CGRect) -> Bool {
+        content.shouldRenderView(in: frame)
+    }
+    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         content.visibleIndexes(in: frame)
     }
     public func updateView(_ view: Content.View) {

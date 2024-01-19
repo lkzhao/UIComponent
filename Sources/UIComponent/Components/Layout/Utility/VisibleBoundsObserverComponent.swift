@@ -14,7 +14,7 @@ public struct VisibleBoundsObserverRenderNode<Content: RenderNode>: RenderNodeWr
     public let content: Content
     public let onVisibleBoundsChanged: (CGSize, CGRect) -> ()
 
-    public func visibleIndexes(in frame: CGRect) -> IndexSet {
+    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         onVisibleBoundsChanged(size, frame)
         return content.visibleIndexes(in: frame)
     }

@@ -11,7 +11,7 @@ public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
 }
 
 extension StackRenderNode {
-    public func visibleIndexes(in frame: CGRect) -> IndexSet {
+    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         guard let start = firstVisibleIndex(in: frame) else { return [] }
         var index = start
         let endPoint = main(frame.origin) + main(frame.size)
@@ -41,7 +41,7 @@ public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
     public let children: [any RenderNode]
     public let positions: [CGPoint]
     public let mainAxisMaxValue: CGFloat
-    public var shouldRenderView: Bool {
+    public func shouldRenderView(in frame: CGRect) -> Bool {
         false
     }
 }
@@ -52,7 +52,7 @@ public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
     public let children: [any RenderNode]
     public let positions: [CGPoint]
     public let mainAxisMaxValue: CGFloat
-    public var shouldRenderView: Bool {
+    public func shouldRenderView(in frame: CGRect) -> Bool {
         false
     }
 }
@@ -62,7 +62,7 @@ public struct SlowRenderNode: RenderNode {
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]
-    public var shouldRenderView: Bool {
+    public func shouldRenderView(in frame: CGRect) -> Bool {
         false
     }
 
@@ -72,7 +72,7 @@ public struct SlowRenderNode: RenderNode {
         self.positions = positions
     }
 
-    public func visibleIndexes(in frame: CGRect) -> IndexSet {
+    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         var result = [Int]()
 
         for (i, origin) in positions.enumerated() {
@@ -92,7 +92,7 @@ public struct AlwaysRenderNode: RenderNode {
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]
-    public var shouldRenderView: Bool {
+    public func shouldRenderView(in frame: CGRect) -> Bool {
         false
     }
 
