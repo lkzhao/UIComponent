@@ -6,6 +6,6 @@ import CoreGraphics
 public typealias Spacer = Flexible<Space>
 extension Spacer {
     public init() {
-        self.init(flexGrow: 1, flexShrink: 0, alignSelf: nil, child: Space())
+        self.init(flexGrow: 1, flexShrink: 0, alignSelf: nil, content: Space())
     }
 }

@@ -19,19 +19,19 @@ import UIKit
 /// ```
 public struct AnyComponent: Component {
     /// The underlying component being type-erased.
-    public let erasing: any Component
-    
+    public let content: any Component
+
     /// Initializes a new type-erased component with the provided component.
-    /// - Parameter erasing: The component to be type-erased.
-    public init(_ erasing: any Component) {
-        self.erasing = erasing
+    /// - Parameter content: The component to be type-erased.
+    public init(content: any Component) {
+        self.content = content
     }
     
     /// Lays out the component within the given constraints and returns a type-erased render node.
     /// - Parameter constraint: The constraints to use for laying out the component.
     /// - Returns: A type-erased `AnyRenderNode` representing the layout of the component.
     public func layout(_ constraint: Constraint) -> AnyRenderNode {
-        erasing.layout(constraint).eraseToAnyRenderNode()
+        content.layout(constraint).eraseToAnyRenderNode()
     }
 }
 
@@ -42,19 +42,19 @@ public struct AnyComponent: Component {
 /// SomeComponent().eraseToAnyComponentOfView()
 /// ```
 public struct AnyComponentOfView<View: UIView>: Component {
-    /// The child component being type-erased.
-    public let child: any Component
-    
-    /// Initializes a new type-erased component with the provided child component.
-    /// - Parameter child: The child component to be type-erased, which must produce a `View` of the specified type.
-    public init<Child: Component>(child: Child) where Child.R.View == View {
-        self.child = child
+    /// The content component being type-erased.
+    public let content: any Component
+
+    /// Initializes a new type-erased component with the provided content component.
+    /// - Parameter content: The content component to be type-erased, which must produce a `View` of the specified type.
+    public init<Content: Component>(content: Content) where Content.R.View == View {
+        self.content = content
     }
     
-    /// Lays out the child component within the given constraints and returns a type-erased render node specialized for the `View` type.
-    /// - Parameter constraint: The constraints to use for laying out the child component.
-    /// - Returns: A type-erased `AnyRenderNodeOfView` representing the layout of the child component.
+    /// Lays out the content component within the given constraints and returns a type-erased render node specialized for the `View` type.
+    /// - Parameter constraint: The constraints to use for laying out the content component.
+    /// - Returns: A type-erased `AnyRenderNodeOfView` representing the layout of the content component.
     public func layout(_ constraint: Constraint) -> AnyRenderNodeOfView<View> {
-        AnyRenderNodeOfView(child.layout(constraint))
+        AnyRenderNodeOfView(content.layout(constraint))
     }
 }

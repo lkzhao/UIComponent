@@ -89,7 +89,7 @@ extension Component {
     ///   - height: A `SizeStrategy` value that determines the height sizing strategy. Defaults to `.fit`.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden size constraints.
     public func size(width: SizeStrategy = .fit, height: SizeStrategy = .fit) -> ConstraintOverrideComponent<Self> {
-        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: width, height: height))
+        ConstraintOverrideComponent(content: self, transformer: SizeStrategyConstraintTransformer(width: width, height: height))
     }
 
     /// Sets an absolute width and uses a specified strategy for the height of the component.
@@ -98,7 +98,7 @@ extension Component {
     ///   - height: A `SizeStrategy` value that determines the height sizing strategy. Defaults to `.fit`.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden width and height constraints.
     public func size(width: CGFloat, height: SizeStrategy = .fit) -> ConstraintOverrideComponent<Self> {
-        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(width), height: height))
+        ConstraintOverrideComponent(content: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(width), height: height))
     }
 
     /// Uses a specified strategy for the width and sets an absolute height for the component.
@@ -107,14 +107,14 @@ extension Component {
     ///   - height: A `CGFloat` value that specifies the absolute height for the component.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden width and height constraints.
     public func size(width: SizeStrategy = .fit, height: CGFloat) -> ConstraintOverrideComponent<Self> {
-        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: width, height: .absolute(height)))
+        ConstraintOverrideComponent(content: self, transformer: SizeStrategyConstraintTransformer(width: width, height: .absolute(height)))
     }
 
     /// Sets an absolute size for the component.
     /// - Parameter size: A `CGSize` value that specifies the absolute size for the component.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden size constraints.
     public func size(_ size: CGSize) -> ConstraintOverrideComponent<Self> {
-        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(size.width), height: .absolute(size.height)))
+        ConstraintOverrideComponent(content: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(size.width), height: .absolute(size.height)))
     }
 
     /// Sets an absolute size for the component.
@@ -123,21 +123,21 @@ extension Component {
     ///   - height: A `CGFloat` value that specifies the absolute height for the component.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden width and height constraints.
     public func size(width: CGFloat, height: CGFloat) -> ConstraintOverrideComponent<Self> {
-        ConstraintOverrideComponent(child: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(width), height: .absolute(height)))
+        ConstraintOverrideComponent(content: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(width), height: .absolute(height)))
     }
 
     /// Applies a custom constraint transformation to the component.
     /// - Parameter constraintComponent: A closure that takes a `Constraint` and returns a modified `Constraint`.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with custom constraints.
     public func constraint(_ constraintComponent: @escaping (Constraint) -> Constraint) -> ConstraintOverrideComponent<Self> {
-        ConstraintOverrideComponent(child: self, transformer: BlockConstraintTransformer(block: constraintComponent))
+        ConstraintOverrideComponent(content: self, transformer: BlockConstraintTransformer(block: constraintComponent))
     }
 
     /// Overrides the component's constraints with the specified constraints.
     /// - Parameter constraint: A `Constraint` object that specifies the constraints to be applied to the component.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden constraints.
     public func constraint(_ constraint: Constraint) -> ConstraintOverrideComponent<Self> {
-        ConstraintOverrideComponent(child: self, transformer: PassThroughConstraintTransformer(constraint: constraint))
+        ConstraintOverrideComponent(content: self, transformer: PassThroughConstraintTransformer(constraint: constraint))
     }
 
     /// Removes the upper bound on the component's width, allowing it to grow indefinitely.
@@ -229,14 +229,14 @@ extension Component {
     /// - Parameter component: The component to be used as the background.
     /// - Returns: A `Background` component that layers the background behind the current component.
     public func background(_ component: any Component) -> Background {
-        Background(child: self, background: component)
+        Background(content: self, background: component)
     }
 
     /// Wraps the component with a background component, using a closure that returns the background component.
     /// - Parameter component: A closure that returns the component to be used as the background.
     /// - Returns: A `Background` component that layers the background behind the current component.
     public func background(_ component: () -> any Component) -> Background {
-        Background(child: self, background: component())
+        Background(content: self, background: component())
     }
 
     // MARK: - Overlay modifiers
@@ -245,14 +245,14 @@ extension Component {
     /// - Parameter component: The component to be used as the overlay.
     /// - Returns: An `Overlay` component that layers the overlay on top of the current component.
     public func overlay(_ component: any Component) -> Overlay {
-        Overlay(child: self, overlay: component)
+        Overlay(content: self, overlay: component)
     }
 
     /// Wraps the component with an overlay component, using a closure that returns the overlay component.
     /// - Parameter component: A closure that returns the component to be used as the overlay.
     /// - Returns: An `Overlay` component that layers the overlay on top of the current component.
     public func overlay(_ component: () -> any Component) -> Overlay {
-        Overlay(child: self, overlay: component())
+        Overlay(content: self, overlay: component())
     }
 
     // MARK: - Badge modifiers
@@ -271,7 +271,7 @@ extension Component {
         offset: CGPoint = .zero
     ) -> Badge {
         Badge(
-            child: self,
+            content: self,
             overlay: component,
             verticalAlignment: verticalAlignment,
             horizontalAlignment: horizontalAlignment,
@@ -293,7 +293,7 @@ extension Component {
         _ component: () -> any Component
     ) -> Badge {
         Badge(
-            child: self,
+            content: self,
             overlay: component(),
             verticalAlignment: verticalAlignment,
             horizontalAlignment: horizontalAlignment,
@@ -310,7 +310,7 @@ extension Component {
     ///   - alignSelf: The alignment of this component within a flex container. Defaults to nil.
     /// - Returns: A `Flexible` component that wraps the current component with the specified layout properties.
     public func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> Flexible<Self> {
-        Flexible(flexGrow: flex, flexShrink: flex, alignSelf: alignSelf, child: self)
+        Flexible(flexGrow: flex, flexShrink: flex, alignSelf: alignSelf, content: self)
     }
 
     /// Applies flexible layout properties to the component with specified grow and shrink factors.
@@ -321,7 +321,7 @@ extension Component {
     ///   - alignSelf: The alignment of this component within a flex container. Defaults to nil.
     /// - Returns: A `Flexible` component that wraps the current component with the specified layout properties.
     public func flex(flexGrow: CGFloat, flexShrink: CGFloat, alignSelf: CrossAxisAlignment? = nil) -> Flexible<Self> {
-        Flexible(flexGrow: flexGrow, flexShrink: flexShrink, alignSelf: alignSelf, child: self)
+        Flexible(flexGrow: flexGrow, flexShrink: flexShrink, alignSelf: alignSelf, content: self)
     }
 
     // MARK: - Inset modifiers
@@ -330,7 +330,7 @@ extension Component {
     /// - Parameter amount: The padding amount to be applied to all edges.
     /// - Returns: A component wrapped with the specified amount of padding.
     public func inset(_ amount: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount))
+        Insets(content: self, insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount))
     }
 
     /// Applies horizontal and vertical padding to the component.
@@ -339,7 +339,7 @@ extension Component {
     ///   - v: The vertical padding amount.
     /// - Returns: A component wrapped with the specified horizontal and vertical padding.
     public func inset(h: CGFloat, v: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
+        Insets(content: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
     }
 
     /// Applies vertical and horizontal padding to the component.
@@ -348,21 +348,21 @@ extension Component {
     ///   - h: The horizontal padding amount.
     /// - Returns: A component wrapped with the specified vertical and horizontal padding.
     public func inset(v: CGFloat, h: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
+        Insets(content: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
     }
 
     /// Applies horizontal padding to the component.
     /// - Parameter h: The horizontal padding amount.
     /// - Returns: A component wrapped with the specified horizontal padding.
     public func inset(h: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: 0, left: h, bottom: 0, right: h))
+        Insets(content: self, insets: UIEdgeInsets(top: 0, left: h, bottom: 0, right: h))
     }
 
     /// Applies vertical padding to the component.
     /// - Parameter v: The vertical padding amount.
     /// - Returns: A component wrapped with the specified vertical padding.
     public func inset(v: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: v, left: 0, bottom: v, right: 0))
+        Insets(content: self, insets: UIEdgeInsets(top: v, left: 0, bottom: v, right: 0))
     }
 
     /// Applies padding to the component with specific values for each edge.
@@ -373,7 +373,7 @@ extension Component {
     ///   - right: The padding amount for the right edge.
     /// - Returns: A component wrapped with the specified edge padding.
     public func inset(top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right))
+        Insets(content: self, insets: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right))
     }
 
     /// Applies padding to the component with a specific value for the top edge and uniform padding for the remaining edges.
@@ -382,7 +382,7 @@ extension Component {
     ///   - rest: The padding amount for the remaining edges.
     /// - Returns: A component wrapped with the specified padding.
     public func inset(top: CGFloat, rest: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: top, left: rest, bottom: rest, right: rest))
+        Insets(content: self, insets: UIEdgeInsets(top: top, left: rest, bottom: rest, right: rest))
     }
 
     /// Applies padding to the component with a specific value for the left edge and uniform padding for the remaining edges.
@@ -391,7 +391,7 @@ extension Component {
     ///   - rest: The padding amount for the remaining edges.
     /// - Returns: A component wrapped with the specified padding.
     public func inset(left: CGFloat, rest: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: rest, left: left, bottom: rest, right: rest))
+        Insets(content: self, insets: UIEdgeInsets(top: rest, left: left, bottom: rest, right: rest))
     }
 
     /// Applies padding to the component with a specific value for the bottom edge and uniform padding for the remaining edges.
@@ -400,7 +400,7 @@ extension Component {
     ///   - rest: The padding amount for the remaining edges.
     /// - Returns: A component wrapped with the specified padding.
     public func inset(bottom: CGFloat, rest: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: rest, left: rest, bottom: bottom, right: rest))
+        Insets(content: self, insets: UIEdgeInsets(top: rest, left: rest, bottom: bottom, right: rest))
     }
 
     /// Applies padding to the component with a specific value for the right edge and uniform padding for the remaining edges.
@@ -409,21 +409,21 @@ extension Component {
     ///   - rest: The padding amount for the remaining edges.
     /// - Returns: A component wrapped with the specified padding.
     public func inset(right: CGFloat, rest: CGFloat) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: rest, left: rest, bottom: rest, right: right))
+        Insets(content: self, insets: UIEdgeInsets(top: rest, left: rest, bottom: rest, right: right))
     }
 
     /// Applies padding to the component using the specified `UIEdgeInsets`.
     /// - Parameter insets: The `UIEdgeInsets` value to apply as padding.
     /// - Returns: A component wrapped with the specified padding.
     public func inset(_ insets: UIEdgeInsets) -> some Component {
-        Insets(child: self, insets: insets)
+        Insets(content: self, insets: insets)
     }
 
     /// Applies dynamic padding to the component based on constraints at layout time.
     /// - Parameter insetProvider: A closure that provides `UIEdgeInsets` based on the given `Constraint`.
     /// - Returns: A component that dynamically adjusts its padding based on the provided insets.
     public func inset(_ insetProvider: @escaping (Constraint) -> UIEdgeInsets) -> some Component {
-        DynamicInsets(child: self, insetProvider: insetProvider)
+        DynamicInsets(content: self, insetProvider: insetProvider)
     }
 
     // MARK: - Offset modifiers
@@ -432,7 +432,7 @@ extension Component {
     /// - Parameter offset: The `CGPoint` value to apply as an offset.
     /// - Returns: A component offset by the specified point.
     public func offset(_ offset: CGPoint) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: offset.y, left: offset.x, bottom: -offset.y, right: -offset.x))
+        Insets(content: self, insets: UIEdgeInsets(top: offset.y, left: offset.x, bottom: -offset.y, right: -offset.x))
     }
 
     /// Applies an offset to the component using separate x and y values.
@@ -441,14 +441,14 @@ extension Component {
     ///   - y: The vertical offset.
     /// - Returns: A component offset by the specified x and y values.
     public func offset(x: CGFloat = 0, y: CGFloat = 0) -> some Component {
-        Insets(child: self, insets: UIEdgeInsets(top: y, left: x, bottom: -y, right: -x))
+        Insets(content: self, insets: UIEdgeInsets(top: y, left: x, bottom: -y, right: -x))
     }
 
     /// Applies a dynamic offset to the component based on constraints at layout time.
     /// - Parameter offsetProvider: A closure that provides a `CGPoint` based on the given `Constraint`.
     /// - Returns: A component that dynamically adjusts its offset based on the provided point.
     public func offset(_ offsetProvider: @escaping (Constraint) -> CGPoint) -> some Component {
-        DynamicInsets(child: self) {
+        DynamicInsets(content: self) {
             let offset = offsetProvider($0)
             return UIEdgeInsets(top: offset.y, left: offset.x, bottom: -offset.y, right: -offset.x)
         }
@@ -460,7 +460,7 @@ extension Component {
     /// - Parameter amount: The padding amount for all edges.
     /// - Returns: A component wrapped with the specified visible frame insets.
     public func visibleInset(_ amount: CGFloat) -> VisibleFrameInsets<Self> {
-        VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount))
+        VisibleFrameInsets(content: self, insets: UIEdgeInsets(top: amount, left: amount, bottom: amount, right: amount))
     }
 
     /// Applies visible frame insets to the component with specified horizontal and vertical padding.
@@ -469,7 +469,7 @@ extension Component {
     ///   - v: The padding amount for the vertical edges.
     /// - Returns: A component wrapped with the specified visible frame insets.
     public func visibleInset(h: CGFloat, v: CGFloat) -> VisibleFrameInsets<Self> {
-        VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
+        VisibleFrameInsets(content: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
     }
 
     /// Applies visible frame insets to the component with specified vertical and horizontal padding.
@@ -478,49 +478,49 @@ extension Component {
     ///   - h: The padding amount for the horizontal edges.
     /// - Returns: A component wrapped with the specified visible frame insets.
     public func visibleInset(v: CGFloat, h: CGFloat) -> VisibleFrameInsets<Self> {
-        VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
+        VisibleFrameInsets(content: self, insets: UIEdgeInsets(top: v, left: h, bottom: v, right: h))
     }
 
     /// Applies visible frame insets to the component with specified horizontal padding.
     /// - Parameter h: The padding amount for the horizontal edges.
     /// - Returns: A component wrapped with the specified visible frame insets.
     public func visibleInset(h: CGFloat) -> VisibleFrameInsets<Self> {
-        VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: 0, left: h, bottom: 0, right: h))
+        VisibleFrameInsets(content: self, insets: UIEdgeInsets(top: 0, left: h, bottom: 0, right: h))
     }
 
     /// Applies visible frame insets to the component with specified vertical padding.
     /// - Parameter v: The padding amount for the vertical edges.
     /// - Returns: A component wrapped with the specified visible frame insets.
     public func visibleInset(v: CGFloat) -> VisibleFrameInsets<Self> {
-        VisibleFrameInsets(child: self, insets: UIEdgeInsets(top: v, left: 0, bottom: v, right: 0))
+        VisibleFrameInsets(content: self, insets: UIEdgeInsets(top: v, left: 0, bottom: v, right: 0))
     }
 
     /// Applies visible frame insets to the component using the specified `UIEdgeInsets`.
     /// - Parameter insets: The `UIEdgeInsets` value to apply as visible frame insets.
     /// - Returns: A component wrapped with the specified visible frame insets.
     public func visibleInset(_ insets: UIEdgeInsets) -> VisibleFrameInsets<Self> {
-        VisibleFrameInsets(child: self, insets: insets)
+        VisibleFrameInsets(content: self, insets: insets)
     }
 
     /// Applies dynamic visible frame insets to the component based on constraints at layout time.
     /// - Parameter insetProvider: A closure that provides `UIEdgeInsets` based on the given `CGRect`.
     /// - Returns: A component that dynamically adjusts its visible frame insets based on the provided insets.
     public func visibleInset(_ insetProvider: @escaping (CGRect) -> UIEdgeInsets) -> DynamicVisibleFrameInset<Self> {
-        DynamicVisibleFrameInset(child: self, insetProvider: insetProvider)
+        DynamicVisibleFrameInset(content: self, insetProvider: insetProvider)
     }
 
     /// Provides a reader for the render node of the component.
     /// - Parameter reader: A closure that receives the render node.
     /// - Returns: A `RenderNodeReader` component that allows reading the render node.
     public func renderNodeReader(_ reader: @escaping (any RenderNode) -> Void) -> RenderNodeReader<Self> {
-        RenderNodeReader(child: self, reader)
+        RenderNodeReader(content: self, reader)
     }
 
     /// Adds a callback to be invoked when the visible bounds of the component change.
     /// - Parameter callback: A closure that is called with the new size and visible rectangle.
     /// - Returns: A `VisibleBoundsObserverComponent` that invokes the callback when the visible bounds change.
     public func onVisibleBoundsChanged(_ callback: @escaping (CGSize, CGRect) -> Void) -> VisibleBoundsObserverComponent<Self> {
-        VisibleBoundsObserverComponent(child: self, onVisibleBoundsChanged: callback)
+        VisibleBoundsObserverComponent(content: self, onVisibleBoundsChanged: callback)
     }
 
     // MARK: - View property modifiers
@@ -616,13 +616,13 @@ extension Component {
     /// Wraps the current component in a type-erased ``AnyComponent`` container.
     /// - Returns: A type erased ``AnyComponent`` that renders the same view as the current component.
     public func eraseToAnyComponent() -> AnyComponent {
-        AnyComponent(self)
+        AnyComponent(content: self)
     }
 
     /// Wraps the current component in a type-erased ``AnyComponentOfView`` container.
     /// - Returns: A type erased``AnyComponentOfView`` that renders the same view as the current component.
     public func eraseToAnyComponentOfView() -> AnyComponentOfView<R.View> {
-        AnyComponentOfView(child: self)
+        AnyComponentOfView(content: self)
     }
 }
 

@@ -14,7 +14,7 @@ public protocol AnyFlexible {
     var alignSelf: CrossAxisAlignment? { get }
 }
 
-/// Wraps a child component and provide flex layout properties to the parent.
+/// Wraps a content component and provide flex layout properties to the parent.
 ///
 /// Instead of using it directly, you can use `.flex()` modifier on any component to mark it as flexible.
 ///
@@ -26,14 +26,14 @@ public struct Flexible<Content: Component>: Component, AnyFlexible {
     public let flexShrink: CGFloat
     /// The alignment of this component on the cross axis, if different from the default.
     public let alignSelf: CrossAxisAlignment?
-    /// The child component that this `Flexible` component wraps.
-    public let child: Content
+    /// The content component that this `Flexible` component wraps.
+    public let content: Content
     
-    /// Lays out the child component within the given constraints and wraps it in a `FlexibleRenderNode`.
-    /// - Parameter constraint: The constraints to use when laying out the child component.
-    /// - Returns: A `FlexibleRenderNode` containing the laid out child component.
+    /// Lays out the content component within the given constraints and wraps it in a `FlexibleRenderNode`.
+    /// - Parameter constraint: The constraints to use when laying out the content component.
+    /// - Returns: A `FlexibleRenderNode` containing the laid out content component.
     public func layout(_ constraint: Constraint) -> FlexibleRenderNode<Content.R> {
-        FlexibleRenderNode(content: child.layout(constraint))
+        FlexibleRenderNode(content: content.layout(constraint))
     }
 }
 

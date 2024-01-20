@@ -2,11 +2,11 @@
 
 import UIKit
 
-/// Renders a single `child` with a `background` component below the child.
-/// The size of the `child` is calculated first, then the size is applied to the `background` component.
+/// Renders a single `content` component with a `background` component below the content.
+/// The size of the `content` is calculated first, then the size is applied to the `background` component.
 /// The intrinsic size of the `background` component is ignored.
 ///
-/// Alternative of the `Background` layout is the `Overlay` layout  which puts the primary `child` component
+/// Alternative of the `Background` layout is the `Overlay` layout  which puts the primary `content` component
 /// behind the `overlay` component.
 ///
 /// Instead of using it directly, you can easily create Background layout by using the `.background` modifier.
@@ -21,22 +21,22 @@ import UIKit
 /// ```
 public struct Background: Component {
     /// The component that is being rendered.
-    public let child: any Component
+    public let content: any Component
     /// The component that is used as a background.
     public let background: any Component
 
-    /// Initializes a new `Background` component with a given `child` and `background`.
+    /// Initializes a new `Background` component with a given `content` and `background`.
     /// - Parameters:
-    ///   - child: The component to be rendered on top of the `background`.
-    ///   - background: The component to be used as a background, rendered below the `child`.
-    public init(child: any Component, background: any Component) {
-        self.child = child
+    ///   - content: The component to be rendered on top of the `background`.
+    ///   - background: The component to be used as a background, rendered below the `content`.
+    public init(content: any Component, background: any Component) {
+        self.content = content
         self.background = background
     }
 
     public func layout(_ constraint: Constraint) -> some RenderNode {
-        let childRenderNode = child.layout(constraint)
-        let backgroundRenderNode = background.layout(Constraint(minSize: childRenderNode.size, maxSize: childRenderNode.size))
-        return SlowRenderNode(size: childRenderNode.size, children: [backgroundRenderNode, childRenderNode], positions: [.zero, .zero])
+        let contentRenderNode = content.layout(constraint)
+        let backgroundRenderNode = background.layout(Constraint(minSize: contentRenderNode.size, maxSize: contentRenderNode.size))
+        return SlowRenderNode(size: contentRenderNode.size, children: [backgroundRenderNode, contentRenderNode], positions: [.zero, .zero])
     }
 }

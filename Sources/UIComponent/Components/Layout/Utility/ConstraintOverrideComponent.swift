@@ -132,26 +132,26 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
     }
 }
 
-/// A component that overrides the constraints of its child component.
-/// It uses a `ConstraintTransformer` to calculate the final constraints that will be applied to the child.
+/// A component that overrides the constraints of its content component.
+/// It uses a `ConstraintTransformer` to calculate the final constraints that will be applied to the content.
 public struct ConstraintOverrideComponent<Content: Component>: Component {
-    /// The child component that will be affected by the `ConstraintTransformer`.
-    public let child: Content
-    /// The transformer used to calculate and apply constraints to the `child` component.
+    /// The content component that will be affected by the `ConstraintTransformer`.
+    public let content: Content
+    /// The transformer used to calculate and apply constraints to the `content` component.
     public let transformer: ConstraintTransformer
 
-    /// Initializes a `ConstraintOverrideComponent` with a given child component and a constraint transformer.
+    /// Initializes a `ConstraintOverrideComponent` with a given content component and a constraint transformer.
     /// - Parameters:
-    ///   - child: The child component that will be affected by the constraint transformations.
-    ///   - transformer: The `ConstraintTransformer` that will be used to calculate and apply constraints to the child component.
-    init(child: Content, transformer: ConstraintTransformer) {
-        self.child = child
+    ///   - content: The content component that will be affected by the constraint transformations.
+    ///   - transformer: The `ConstraintTransformer` that will be used to calculate and apply constraints to the content component.
+    init(content: Content, transformer: ConstraintTransformer) {
+        self.content = content
         self.transformer = transformer
     }
 
     public func layout(_ constraint: Constraint) -> SizeOverrideRenderNode<Content.R> {
         let finalConstraint = transformer.calculate(constraint)
-        let renderNode = child.layout(finalConstraint)
+        let renderNode = content.layout(finalConstraint)
         return SizeOverrideRenderNode(content: renderNode, size: transformer.bound(size: renderNode.size, to: finalConstraint))
     }
 }
