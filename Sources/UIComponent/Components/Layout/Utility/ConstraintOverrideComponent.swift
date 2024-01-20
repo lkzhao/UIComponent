@@ -16,8 +16,18 @@ public enum SizeStrategy {
     case aspectPercentage(CGFloat)
 }
 
-protocol ConstraintTransformer {
+/// A protocol defining methods for transforming constraints and adjusting sizes.
+public protocol ConstraintTransformer {
+    /// Calculates a new `Constraint` based on the given `constraint`.
+    /// - Parameter constraint: The original `Constraint` to be transformed.
+    /// - Returns: A new `Constraint` that has been transformed.
     func calculate(_ constraint: Constraint) -> Constraint
+    
+    /// Adjusts the given `size` to fit within the bounds of the `constraint`.
+    /// - Parameters:
+    ///   - size: The original `CGSize` to be adjusted.
+    ///   - constraint: The `Constraint` within which the `size` must fit.
+    /// - Returns: A new `CGSize` that fits within the `constraint`.
     func bound(size: CGSize, to constraint: Constraint) -> CGSize
 }
 
@@ -122,14 +132,23 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
     }
 }
 
-public struct SizeOverrideRenderNode<Content: RenderNode>: RenderNodeWrapper {
-    public let content: Content
-    public let size: CGSize
-}
-
+/// A component that overrides the constraints of its child component.
+/// It uses a `ConstraintTransformer` to calculate the final constraints that will be applied to the child.
 public struct ConstraintOverrideComponent<Content: Component>: Component {
-    let child: Content
-    let transformer: ConstraintTransformer
+    /// The child component that will be affected by the `ConstraintTransformer`.
+    public let child: Content
+    /// The transformer used to calculate and apply constraints to the `child` component.
+    public let transformer: ConstraintTransformer
+
+    /// Initializes a `ConstraintOverrideComponent` with a given child component and a constraint transformer.
+    /// - Parameters:
+    ///   - child: The child component that will be affected by the constraint transformations.
+    ///   - transformer: The `ConstraintTransformer` that will be used to calculate and apply constraints to the child component.
+    init(child: Content, transformer: ConstraintTransformer) {
+        self.child = child
+        self.transformer = transformer
+    }
+
     public func layout(_ constraint: Constraint) -> SizeOverrideRenderNode<Content.R> {
         let finalConstraint = transformer.calculate(constraint)
         let renderNode = child.layout(finalConstraint)
@@ -137,3 +156,18 @@ public struct ConstraintOverrideComponent<Content: Component>: Component {
     }
 }
 
+/// A render node wrapper that overrides the size of its content.
+/// It contains the original content render node and the size that should be applied to it.
+public struct SizeOverrideRenderNode<Content: RenderNode>: RenderNodeWrapper {
+    public let content: Content
+    public let size: CGSize
+
+    /// Initializes a `SizeOverrideRenderNode` with a given content render node and a specific size.
+    /// - Parameters:
+    ///   - content: The content render node whose size will be overridden.
+    ///   - size: The new size to apply to the content render node.
+    public init(content: Content, size: CGSize) {
+        self.content = content
+        self.size = size
+    }
+}

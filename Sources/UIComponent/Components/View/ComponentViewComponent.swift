@@ -2,8 +2,6 @@
 
 import UIKit
 
-/// # ComponentViewComponent
-///
 /// Wraps a `component` inside a `ComponentDisplayableView`.
 ///
 /// This is used to power the `.view()` and `.scrollView()` modifiers.

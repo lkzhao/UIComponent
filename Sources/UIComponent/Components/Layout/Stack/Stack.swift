@@ -2,10 +2,15 @@
 
 import UIKit
 
+/// A protocol representing a stack layout and provide the stack layout implementation.
 public protocol Stack: BaseLayoutProtocol {
+    /// The space between adjacent children in the stack.
     var spacing: CGFloat { get }
+    /// The distribution of children along the main axis.
     var justifyContent: MainAxisAlignment { get }
+    /// The alignment of children along the cross axis.
     var alignItems: CrossAxisAlignment { get }
+    /// The child components within the stack.
     var children: [any Component] { get }
 }
 

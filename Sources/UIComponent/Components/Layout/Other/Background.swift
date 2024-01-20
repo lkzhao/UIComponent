@@ -2,8 +2,6 @@
 
 import UIKit
 
-/// # Background Component
-///
 /// Renders a single `child` with a `background` component below the child.
 /// The size of the `child` is calculated first, then the size is applied to the `background` component.
 /// The intrinsic size of the `background` component is ignored.
@@ -22,9 +20,15 @@ import UIKit
 /// }
 /// ```
 public struct Background: Component {
-    let child: any Component
-    let background: any Component
+    /// The component that is being rendered.
+    public let child: any Component
+    /// The component that is used as a background.
+    public let background: any Component
 
+    /// Initializes a new `Background` component with a given `child` and `background`.
+    /// - Parameters:
+    ///   - child: The component to be rendered on top of the `background`.
+    ///   - background: The component to be used as a background, rendered below the `child`.
     public init(child: any Component, background: any Component) {
         self.child = child
         self.background = background

@@ -3,10 +3,15 @@
 
 import UIKit
 
+/// A base render node protocol for a stack that provide implementation for ``visibleIndexes(in:)``
 public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
+    /// The size of the render node.
     var size: CGSize { get }
+    /// The child render nodes.
     var children: [any RenderNode] { get }
+    /// The positions of each child render node.
     var positions: [CGPoint] { get }
+    /// The maximum value along the main axis.
     var mainAxisMaxValue: CGFloat { get }
 }
 
@@ -35,6 +40,12 @@ extension StackRenderNode {
     }
 }
 
+/// A type of render node that is optimized for horizontal layout.
+///
+/// - Renders children when they are inside the visible frame.
+/// - It uses binary search to check which children are visible.
+/// - Children must be sorted by their x position value.
+/// - Needs to provide a mainAxisMaxValue with the max width of the children.
 public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
     public typealias View = UIView
     public let size: CGSize
@@ -46,6 +57,12 @@ public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
     }
 }
 
+/// A type of render node that is optimized for vertical layout.
+///
+/// - Renders children when they are inside the visible frame.
+/// - It uses binary search to check which children are visible.
+/// - Children must be sorted by their y position value.
+/// - Needs to provide a mainAxisMaxValue with the max height of the children.
 public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
     public typealias View = UIView
     public let size: CGSize
@@ -57,6 +74,10 @@ public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
     }
 }
 
+/// A type of render node for generic layout use
+///
+/// - Renders children when they are inside the visible frame.
+/// - This could be slow because it needs to loop through all children to check whether they are inside the visible frame.
 public struct SlowRenderNode: RenderNode {
     public typealias View = UIView
     public let size: CGSize
@@ -87,6 +108,10 @@ public struct SlowRenderNode: RenderNode {
     }
 }
 
+/// A type of render node for generic layout use
+///
+/// - Renders all childrens all the time.
+/// - Not suitable for rendering a list of items.
 public struct AlwaysRenderNode: RenderNode {
     public typealias View = UIView
     public let size: CGSize

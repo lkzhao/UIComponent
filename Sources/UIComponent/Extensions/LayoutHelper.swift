@@ -2,27 +2,40 @@
 
 import UIKit
 
+/// An enumeration to define the main axis alignment of a layout.
 public enum MainAxisAlignment: CaseIterable {
     case start, end, center, spaceBetween, spaceAround, spaceEvenly
 }
 
+/// An enumeration to define the cross axis alignment of a layout.
 public enum CrossAxisAlignment: CaseIterable {
     case start, end, center, stretch
 }
 
+/// Protocol defining the base layout behavior.
+/// It should be used with either the `VerticalLayoutProtocol` or `HorizontalLayoutProtocol` to provide a concrete implementation of the methods.
 public protocol BaseLayoutProtocol {
     associatedtype R: RenderNode
+    /// Retrieves the main axis value from a `CGPoint`.
     @inline(__always) func main(_ size: CGPoint) -> CGFloat
+    /// Retrieves the cross axis value from a `CGPoint`.
     @inline(__always) func cross(_ size: CGPoint) -> CGFloat
+    /// Retrieves the main axis value from a `CGSize`.
     @inline(__always) func main(_ size: CGSize) -> CGFloat
+    /// Retrieves the cross axis value from a `CGSize`.
     @inline(__always) func cross(_ size: CGSize) -> CGFloat
+    /// Creates a `CGSize` given main and cross axis values.
     @inline(__always) func size(main: CGFloat, cross: CGFloat) -> CGSize
+    /// Creates a `CGPoint` given main and cross axis values.
     @inline(__always) func point(main: CGFloat, cross: CGFloat) -> CGPoint
+    /// Generates a render node for the layout.
     @inline(__always) func renderNode(size: CGSize, children: [any RenderNode], positions: [CGPoint]) -> R
 }
 
+/// Protocol for layouts that align children vertically.
 public protocol VerticalLayoutProtocol: BaseLayoutProtocol {}
 
+/// Protocol for layouts that align children horizontally.
 public protocol HorizontalLayoutProtocol: BaseLayoutProtocol {}
 
 extension VerticalLayoutProtocol {

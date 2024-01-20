@@ -2,11 +2,21 @@
 
 import UIKit
 
+/// A simple Animator implementation that applies a transform and fade
+/// animation during deletion and insertion.
 public class AnimatedReloadAnimator: Animator {
+    /// The 3D transform applied to the view during animation.
     public var transform: CATransform3D
+    /// The duration of the animation in seconds.
     public var duration: TimeInterval
+    /// A Boolean value that determines whether the animation should be applied in a cascading manner.
     public var cascade: Bool
 
+    /// Initializes a new animator with the specified transform, duration, and cascade options.
+    /// - Parameters:
+    ///   - transform: The 3D transform to apply to the view during animation. Defaults to the identity transform.
+    ///   - duration: The duration of the animation in seconds. Defaults to 0.5 seconds.
+    ///   - cascade: A Boolean value that determines whether the animation should be applied in a cascading manner. Defaults to `false`.
     public init(
         transform: CATransform3D = CATransform3DIdentity,
         duration: TimeInterval = 0.5,

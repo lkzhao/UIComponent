@@ -2,11 +2,19 @@
 
 import UIKit
 
+/// `WrapperAnimator` is a subclass of `Animator` that allows for additional
+/// animation handling by providing custom blocks for insert, update, and delete operations.
+/// It can also pass through these update operation to another animator if needed.
 public class WrapperAnimator: Animator {
+    /// The underlying animator that can be used to perform animations along side the custom animation blocks.
     public var content: Animator?
+    /// Determines whether the `WrapperAnimator` should pass the update operation to the underlying `content` animator after executing `updateBlock`.
     public var passthroughUpdate: Bool = false
+    /// A block that is executed when a new view is inserted. If `nil`, the insert operation is passed to the underlying `content` animator.
     public var insertBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
+    /// A block that is executed when a view needs to be updated. If `nil`, the update operation is passed to the underlying `content` animator.
     public var updateBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
+    /// A block that is executed when a view is deleted. If `nil`, the delete operation is passed to the underlying `content` animator.
     public var deleteBlock: ((ComponentDisplayableView, UIView, () -> Void) -> Void)?
 
     public override func shift(componentView: ComponentDisplayableView, delta: CGPoint, view: UIView) {

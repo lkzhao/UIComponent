@@ -1,8 +1,12 @@
 
 import UIKit
 
+/// A protocol that defines the properties and behaviors of a pager component.
+/// A pager is responsible for laying out a series of components in a swipeable full screen pager format.
 public protocol Pager: BaseLayoutProtocol {
+    /// Defines how child components are aligned along the cross axis.
     var alignItems: CrossAxisAlignment { get }
+    /// An array of components that the pager will manage and layout.
     var children: [any Component] { get }
 }
 
@@ -45,9 +49,17 @@ extension Pager {
     }
 }
 
+/// A horizontal pager component that lays out its children in a horizontal swipeable pager format.
 public struct HPager: Component, Pager, HorizontalLayoutProtocol {
+    /// Defines how child components are aligned along the cross axis.
     public let alignItems: CrossAxisAlignment
+    /// An array of components that the pager will manage and layout.
     public let children: [any Component]
+    
+    /// Initializes a new horizontal pager with alignment and children.
+    /// - Parameters:
+    ///   - alignItems: The alignment of children along the cross axis. Defaults to `.start`.
+    ///   - children: An array of components to be laid out in the pager. Defaults to an empty array.
     public init(alignItems: CrossAxisAlignment = .start, children: [any Component] = []) {
         self.alignItems = alignItems
         self.children = children
@@ -55,14 +67,26 @@ public struct HPager: Component, Pager, HorizontalLayoutProtocol {
 }
 
 extension HPager {
+    /// Initializes a new horizontal pager with alignment and a result builder for children components.
+    /// - Parameters:
+    ///   - alignItems: The alignment of children along the cross axis. Defaults to `.start`.
+    ///   - content: A result builder closure that returns an array of components to be laid out in the pager.
     public init(alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [any Component]) {
         self.init(alignItems: alignItems, children: content())
     }
 }
 
+/// A vertical pager component that lays out its children in a vertical swipeable pager format.
 public struct VPager: Component, Pager, VerticalLayoutProtocol {
+    /// Defines how child components are aligned along the cross axis.
     public let alignItems: CrossAxisAlignment
+    /// An array of components that the pager will manage and layout.
     public let children: [any Component]
+    
+    /// Initializes a new vertical pager with alignment and children.
+    /// - Parameters:
+    ///   - alignItems: The alignment of children along the cross axis. Defaults to `.start`.
+    ///   - children: An array of components to be laid out in the pager. Defaults to an empty array.
     public init(alignItems: CrossAxisAlignment = .start, children: [any Component] = []) {
         self.alignItems = alignItems
         self.children = children
@@ -70,6 +94,10 @@ public struct VPager: Component, Pager, VerticalLayoutProtocol {
 }
 
 extension VPager {
+    /// Initializes a new vertical pager with alignment and a result builder for children components.
+    /// - Parameters:
+    ///   - alignItems: The alignment of children along the cross axis. Defaults to `.start`.
+    ///   - content: A result builder closure that returns an array of components to be laid out in the pager.
     public init(alignItems: CrossAxisAlignment = .start, @ComponentArrayBuilder _ content: () -> [any Component]) {
         self.init(alignItems: alignItems, children: content())
     }

@@ -3,6 +3,9 @@
 
 import UIKit
 
+/// Animator is a base class that provides default implementations for animations
+/// related to the insertion, deletion, and updating of views within a `ComponentDisplayableView`.
+/// Subclasses can override these methods to provide custom animation behavior.
 open class Animator {
 
     public init() {}

@@ -2,10 +2,18 @@
 
 import Foundation
 
+/// A `RenderNodeReader` is a component that allows reading the layout result of its child component.
+/// It provides a mechanism to access the render node produced by the child component after layout.
 public struct RenderNodeReader<ChildComponent: Component>: Component {
-    let child: ChildComponent
-    let reader: (ChildComponent.R) -> Void
+    /// The child component that this `RenderNodeReader` will use for layout.
+    public let child: ChildComponent
+    /// The closure that will be called with the layout result of the child component.
+    public let reader: (ChildComponent.R) -> Void
 
+    /// Initializes a new `RenderNodeReader` with a child component and a reader closure.
+    /// - Parameters:
+    ///   - child: The child component that will be laid out.
+    ///   - reader: A closure that is called with the result of the child's layout.
     public init(child: ChildComponent, _ reader: @escaping (ChildComponent.R) -> Void) {
         self.child = child
         self.reader = reader
