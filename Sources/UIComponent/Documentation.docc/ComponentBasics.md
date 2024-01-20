@@ -102,7 +102,7 @@ extension Component {
 
 #### Handling User Actions
 
-UIComponent provides a simple ``Component/tappableView(_:)-ew7m`` modifier that allows you to handle tap actions. Simply wrap your Component with the modifier and provide a closure to handle the tap action.
+UIComponent provides a ``Component/tappableView(_:)-ew7m`` modifier that allows you to handle tap actions. Simply wrap your Component with the modifier and provide a closure to handle the tap action.
 
 ```swift
 Text("Tap Me").tappableView { [weak self] in

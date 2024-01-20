@@ -609,6 +609,44 @@ public extension Component {
     }
 }
 
+// MARK: - Environment modifiers
+public extension Component {
+    /// Applies an environment value to the component for the given key path.
+    /// - Parameters:
+    ///   - keyPath: A key path to a specific environment value.
+    ///   - value: The value to set for the environment key.
+    /// - Returns: An `EnvironmentComponent` that provides the environment value to the component.
+    func environment<Value>(_ keyPath: WritableKeyPath<EnvironmentValues, Value>, value: Value) -> EnvironmentComponent<Value, Self> {
+        EnvironmentComponent(keyPath: keyPath, value: value, content: self)
+    }
+
+    /// Applies an environment value to the component for the given environment key type.
+    /// - Parameters:
+    ///   - keyType: The type of the environment key.
+    ///   - value: The value to set for the environment key.
+    /// - Returns: An `EnvironmentComponent` that provides the environment value to the component.
+    func environment<Value>(_ keyType: any EnvironmentKey<Value>.Type, value: Value) -> EnvironmentComponent<Value, Self> {
+        EnvironmentComponent(keyType: keyType, value: value, content: self)
+    }
+
+    /// Applies a weakly referenced environment value to the component for the given key path.
+    /// - Parameters:
+    ///   - keyPath: A key path to a specific environment value.
+    ///   - value: The weakly referenced value to set for the environment key.
+    /// - Returns: A `WeakEnvironmentComponent` that provides the weak environment value to the component.
+    func weakEnvironment<Value: AnyObject>(_ keyPath: WritableKeyPath<EnvironmentValues, Value?>, value: Value?) -> WeakEnvironmentComponent<Value, Self> {
+        WeakEnvironmentComponent(keyPath: keyPath, value: value, content: self)
+    }
+
+    /// Applies a weakly referenced environment value to the component for the given environment key type.
+    /// - Parameters:
+    ///   - keyType: The type of the environment key.
+    ///   - value: The weakly referenced value to set for the environment key.
+    /// - Returns: A `WeakEnvironmentComponent` that provides the weak environment value to the component.
+    func weakEnvironment<Value: AnyObject>(_ keyType: any EnvironmentKey<Value?>.Type, value: Value?) -> WeakEnvironmentComponent<Value, Self> {
+        WeakEnvironmentComponent(keyType: keyType, value: value, content: self)
+    }
+}
 
 // MARK: - Type erase modifiers
 

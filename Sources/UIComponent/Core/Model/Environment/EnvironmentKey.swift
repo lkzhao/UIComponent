@@ -1,0 +1,17 @@
+//
+//  File.swift
+//  
+//
+//  Created by Luke Zhao on 1/20/24.
+//
+
+import Foundation
+
+/// A protocol that defines a specific environment key.
+///
+/// See ``Environment`` on how to create a custom ``EnvironmentKey``.
+public protocol EnvironmentKey<Value> {
+    associatedtype Value
+    /// The default value for the environment key.
+    static var defaultValue: Value { get }
+}
