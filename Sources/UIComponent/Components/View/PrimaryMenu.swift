@@ -8,9 +8,9 @@
 import UIKit
 
 #if !os(tvOS)
-@available(iOS 14.0, *)
 /// `PrimaryMenuConfig` defines the configuration for a `PrimaryMenu`.
 /// It provides customization options such as highlight state changes and tap actions.
+@available(iOS 14.0, *)
 public struct PrimaryMenuConfig {
     /// The default configuration for all PrimaryMenu instances.
     /// This static property is deprecated and you should use `PrimaryMenuConfigEnvironmentKey.defaultValue` instead.

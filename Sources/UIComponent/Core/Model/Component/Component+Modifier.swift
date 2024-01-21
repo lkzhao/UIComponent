@@ -2,16 +2,22 @@
 
 import UIKit
 
+/// A component produced by the ``Component/update(_:)`` modifier
 public typealias UpdateComponent<Content: Component> = ModifierComponent<Content, UpdateRenderNode<Content.R>>
 
+/// A component produced by the ``Component/with(_:_:)`` modifier
 public typealias KeyPathUpdateComponent<Content: Component, Value> = ModifierComponent<Content, KeyPathUpdateRenderNode<Value, Content.R>>
 
+/// A component produced by the ``Component/id(_:)`` modifier
 public typealias IDComponent<Content: Component> = ModifierComponent<Content, IDRenderNode<Content.R>>
 
+/// A component produced by the ``Component/animator(_:)`` modifier
 public typealias AnimatorComponent<Content: Component> = ModifierComponent<Content, AnimatorRenderNode<Content.R>>
 
+/// A component produced by ``Component/animateInsert(_:)``, ``Component/animateUpdate(passthrough:_:)``, & ``Component/animateUpdate(passthrough:_:)``  modifiers
 public typealias AnimatorWrapperComponent<Content: Component> = ModifierComponent<Content, AnimatorWrapperRenderNode<Content.R>>
 
+/// A component produced by the ``Component/reuseStrategy(_:)`` modifier
 public typealias ReuseStrategyComponent<Content: Component> = ModifierComponent<Content, ReuseStrategyRenderNode<Content.R>>
 
 extension Component {
