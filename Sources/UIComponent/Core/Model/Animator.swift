@@ -6,16 +6,14 @@ import UIKit
 /// Animator is a base class that provides default implementations for animations
 /// related to the insertion, deletion, and updating of views within a `ComponentDisplayableView`.
 /// Subclasses can override these methods to provide custom animation behavior.
-open class Animator {
-
-    public init() {}
+public protocol Animator {
 
     /// Called before ComponentView perform any update to the cells.
     /// This method is only called when your animator is the componentView's root animator (i.e. componentView.animator)
     ///
     /// - Parameters:
     ///   - componentView: the ComponentView performing the update
-    open func willUpdate(componentView: ComponentDisplayableView) {}
+    func willUpdate(componentView: ComponentDisplayableView)
 
     /// Called when ComponentView inserts a view into its subviews.
     ///
@@ -25,11 +23,11 @@ open class Animator {
     ///   - componentView: source ComponentView
     ///   - view: the view being inserted
     ///   - frame: frame provided by the layout
-    open func insert(
+    func insert(
         componentView: ComponentDisplayableView,
         view: UIView,
         frame: CGRect
-    ) {}
+    )
 
     /// Called when ComponentView deletes a view from its subviews.
     ///
@@ -39,13 +37,11 @@ open class Animator {
     /// - Parameters:
     ///   - componentView: source ComponentView
     ///   - view: the view being deleted
-    open func delete(
+    func delete(
         componentView: ComponentDisplayableView,
         view: UIView,
         completion: @escaping () -> Void
-    ) {
-        completion()
-    }
+    )
 
     /// Called when:
     ///   * the view has just been inserted
@@ -56,7 +52,38 @@ open class Animator {
     ///   - componentView: source ComponentView
     ///   - view: the view being updated
     ///   - frame: frame provided by the layout
-    open func update(
+    func update(
+        componentView: ComponentDisplayableView,
+        view: UIView,
+        frame: CGRect
+    )
+
+    /// Called when contentOffset changes during reloadData
+    ///
+    /// - Parameters:
+    ///   - componentView: source ComponentView
+    ///   - delta: changes in contentOffset
+    ///   - view: the view being updated
+    func shift(componentView: ComponentDisplayableView, delta: CGPoint, view: UIView)
+}
+
+// MARK: - Default implementation
+
+public extension Animator {
+    func willUpdate(componentView: ComponentDisplayableView) {}
+    func insert(
+        componentView: ComponentDisplayableView,
+        view: UIView,
+        frame: CGRect
+    ) {}
+    func delete(
+        componentView: ComponentDisplayableView,
+        view: UIView,
+        completion: @escaping () -> Void
+    ) {
+        completion()
+    }
+    func update(
         componentView: ComponentDisplayableView,
         view: UIView,
         frame: CGRect
@@ -68,14 +95,10 @@ open class Animator {
             view.center = frame.center
         }
     }
-
-    /// Called when contentOffset changes during reloadData
-    ///
-    /// - Parameters:
-    ///   - componentView: source ComponentView
-    ///   - delta: changes in contentOffset
-    ///   - view: the view being updated
-    open func shift(componentView: ComponentDisplayableView, delta: CGPoint, view: UIView) {
+    func shift(componentView: ComponentDisplayableView, delta: CGPoint, view: UIView) {
         view.center += delta
     }
 }
+
+/// A simple animator that does nothing
+public struct BaseAnimator: Animator {}

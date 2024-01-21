@@ -7,7 +7,9 @@
 
 import Foundation
 
-public protocol RenderNodeWrapper: RenderNode {
+/// A protocol that wraps a content `RenderNode` to and pass through all the render node methods.
+/// Its render node methods can be overriden by the conforming type.
+public protocol RenderNodeWrapper<Content>: RenderNode {
     associatedtype Content: RenderNode
     var content: Content { get }
 }

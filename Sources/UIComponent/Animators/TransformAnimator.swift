@@ -2,9 +2,12 @@
 
 import UIKit
 
+@available(*, deprecated, renamed: "TransformAnimator")
+public typealias AnimatedReloadAnimator = TransformAnimator
+
 /// A simple Animator implementation that applies a transform and fade
 /// animation during deletion and insertion.
-public class AnimatedReloadAnimator: Animator {
+public struct TransformAnimator: Animator {
     /// The 3D transform applied to the view during animation.
     public var transform: CATransform3D
     /// The duration of the animation in seconds.
@@ -25,10 +28,9 @@ public class AnimatedReloadAnimator: Animator {
         self.transform = transform
         self.duration = duration
         self.cascade = cascade
-        super.init()
     }
 
-    public override func delete(componentView: ComponentDisplayableView, view: UIView, completion: @escaping () -> Void) {
+    public func delete(componentView: ComponentDisplayableView, view: UIView, completion: @escaping () -> Void) {
         if componentView.isReloading, componentView.bounds.intersects(view.frame) {
             UIView.animate(
                 withDuration: duration,
@@ -49,7 +51,7 @@ public class AnimatedReloadAnimator: Animator {
         }
     }
 
-    public override func insert(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
+    public func insert(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
         view.bounds.size = frame.size
         view.center = frame.center
         if componentView.isReloading, componentView.hasReloaded, componentView.bounds.intersects(frame) {
@@ -72,7 +74,7 @@ public class AnimatedReloadAnimator: Animator {
         }
     }
 
-    public override func update(componentView _: ComponentDisplayableView, view: UIView, frame: CGRect) {
+    public func update(componentView _: ComponentDisplayableView, view: UIView, frame: CGRect) {
         if view.center != frame.center {
             UIView.animate(
                 withDuration: duration,

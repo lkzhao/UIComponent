@@ -33,7 +33,7 @@ public struct TappableViewConfig {
     }
 }
 
-@available(*, deprecated, message: "Use `TappableViewConfig` instead")
+@available(*, deprecated, renamed: "TappableViewConfig")
 public typealias TappableViewConfiguration = TappableViewConfig
 
 /// TappableView is a subclass of ``ComponentView`` that responds to tap and gesture events.
@@ -82,7 +82,7 @@ open class TappableView: ComponentView {
     public var config: TappableViewConfig?
 
     /// Deprecated: Use `config` instead.
-    @available(*, deprecated, message: "Use `config` instead")
+    @available(*, deprecated, renamed: "config")
     public var configuration: TappableViewConfig? {
         get { config }
         set { config = newValue }

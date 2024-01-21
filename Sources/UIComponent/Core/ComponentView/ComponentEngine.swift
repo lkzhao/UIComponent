@@ -30,7 +30,7 @@ public class ComponentEngine {
     }
 
     /// The default animator for the components rendered by this engine.
-    var animator: Animator = Animator() {
+    var animator: Animator = BaseAnimator() {
         didSet { setNeedsRender() }
     }
 

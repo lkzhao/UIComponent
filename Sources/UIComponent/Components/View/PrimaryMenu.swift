@@ -40,6 +40,10 @@ public struct PrimaryMenuConfig {
     }
 }
 
+@available(*, deprecated, renamed: "PrimaryMenuConfig")
+@available(iOS 14.0, *)
+public typealias PrimaryMenuConfiguration = PrimaryMenuConfig
+
 /// A UIControl subclass that displays a context menu when tapped.
 @available(iOS 14.0, *)
 public class PrimaryMenu: UIControl {
@@ -50,7 +54,7 @@ public class PrimaryMenu: UIControl {
     public var config: PrimaryMenuConfig?
 
     /// Deprecated: Use `config` instead.
-    @available(*, deprecated, message: "Use `config` instead")
+    @available(*, deprecated, renamed: "config")
     public var configuration: PrimaryMenuConfig? {
         get { config }
         set { config = newValue }

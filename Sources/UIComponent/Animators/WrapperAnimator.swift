@@ -17,11 +17,11 @@ public class WrapperAnimator: Animator {
     /// A block that is executed when a view is deleted. If `nil`, the delete operation is passed to the underlying `content` animator.
     public var deleteBlock: ((ComponentDisplayableView, UIView, () -> Void) -> Void)?
 
-    public override func shift(componentView: ComponentDisplayableView, delta: CGPoint, view: UIView) {
+    public func shift(componentView: ComponentDisplayableView, delta: CGPoint, view: UIView) {
         (content ?? componentView.animator).shift(componentView: componentView, delta: delta, view: view)
     }
 
-    public override func update(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
+    public func update(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
         if let updateBlock {
             updateBlock(componentView, view, frame)
             if passthroughUpdate {
@@ -32,7 +32,7 @@ public class WrapperAnimator: Animator {
         }
     }
 
-    public override func insert(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
+    public func insert(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
         if let insertBlock {
             insertBlock(componentView, view, frame)
         } else {
@@ -40,7 +40,7 @@ public class WrapperAnimator: Animator {
         }
     }
 
-    public override func delete(componentView: ComponentDisplayableView, view: UIView, completion: @escaping () -> Void) {
+    public func delete(componentView: ComponentDisplayableView, view: UIView, completion: @escaping () -> Void) {
         if let deleteBlock {
             deleteBlock(componentView, view, completion)
         } else {
