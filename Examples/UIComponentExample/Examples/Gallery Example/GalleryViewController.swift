@@ -66,7 +66,7 @@ class GalleryViewController: ComponentViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        componentView.animator = AnimatedReloadAnimator()
+        componentView.animator = TransformAnimator()
     }
 
 }

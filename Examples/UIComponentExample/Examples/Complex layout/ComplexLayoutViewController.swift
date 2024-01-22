@@ -112,7 +112,7 @@ class ComplexLayoutViewController: ComponentViewController {
                         self.didTapAddTag()
                     }
                 }
-                .view().with(\.animator, AnimatedReloadAnimator())
+                .view().with(\.animator, TransformAnimator())
                 Separator()
                 Text("Tags column")
                 FlexColumn(spacing: 5) {
@@ -136,7 +136,7 @@ class ComplexLayoutViewController: ComponentViewController {
                         self.didTapAddTag()
                     }
                 }
-                .size(height: 130).view().with(\.animator, AnimatedReloadAnimator())
+                .size(height: 130).view().with(\.animator, TransformAnimator())
 
                 Text("Shuffle tags").textColor(.systemBlue)
                     .tappableView { [unowned self] in
@@ -164,7 +164,7 @@ class ComplexLayoutViewController: ComponentViewController {
                     let cellFrame = scrollView.frame(id: ComplexLayoutViewController.defaultHorizontalListData[5].id)!
                     scrollView.scrollRectToVisible(CGRect(center: cellFrame.center, size: scrollView.bounds.size), animated: false)  // scroll to item 5 as the center
                 }
-                .showsHorizontalScrollIndicator(false).with(\.animator, AnimatedReloadAnimator())
+                .showsHorizontalScrollIndicator(false).with(\.animator, TransformAnimator())
                 HStack(spacing: 10) {
                     ViewComponent<UIButton>(view: resetButton).isEnabled(horizontalListData != ComplexLayoutViewController.defaultHorizontalListData).id("reset")
                     ViewComponent<UIButton>(view: shuffleButton).isEnabled(!horizontalListData.isEmpty).id("shuffled")
@@ -178,7 +178,7 @@ class ComplexLayoutViewController: ComponentViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        componentView.animator = AnimatedReloadAnimator()
+        componentView.animator = TransformAnimator()
     }
 
     @objc func resetHorizontalListData() {

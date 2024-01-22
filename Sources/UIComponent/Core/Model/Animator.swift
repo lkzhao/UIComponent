@@ -101,4 +101,6 @@ public extension Animator {
 }
 
 /// A simple animator that does nothing
-public struct BaseAnimator: Animator {}
+public struct BaseAnimator: Animator {
+    public init() {}
+}
