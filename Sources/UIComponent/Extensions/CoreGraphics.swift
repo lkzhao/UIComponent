@@ -4,12 +4,16 @@
 import UIKit
 
 extension CGSize {
+    /// A size with infinite width and height.
     static public let infinity: CGSize = CGSize(width: CGFloat.infinity, height: CGFloat.infinity)
 
+    /// A size with negative infinite width and height.
     static public let negativeInfinity: CGSize = CGSize(width: -CGFloat.infinity, height: -CGFloat.infinity)
 
+    /// Represents the maximum size constraint.
     static public let constraintMaxSize: CGSize = .infinity
 
+    /// Represents the minimum size constraint.
     static public let constraintMinSize: CGSize = .negativeInfinity
 }
 

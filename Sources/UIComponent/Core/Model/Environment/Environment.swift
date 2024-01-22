@@ -5,49 +5,75 @@ import Foundation
 /// A property wrapper that provides access to environment values.
 /// It allows the injection of environment-specific values into your component tree.
 ///
+/// A few benefit of using Environment:
+/// - pass arbitrary data down the component tree without the need to explicitly pass it through each component.
+/// - allow components to access environment values without knowing the details of the environment.
+/// - allow components to be tested in isolation by providing a test environment.
+///
+/// ### Access an environment value
+///
+/// In your ``Component`` or ``ComponentBuilder``, use the ``Environment`` property wrapper to create a property that can access the environment value.
 /// ```swift
-/// // Access the current component view within a component
 /// @Environment(\.currentComponentView) var currentComponentView
 /// ```
 ///
-/// ### To create a custom environment value
+/// Inside ``Component/layout(_:)`` or ``ComponentBuilder/build()`` you can access the environment value directly.
 /// ```swift
-/// // Create a custom environment key with a default value provider
+///     VStack {
+///         // ...
+///     }.inset { [weak currentComponentView] _ in
+///         currentComponentView?.safeAreaInsets ?? .zero
+///     }
+/// }
+/// ```
+///
+/// ### To create a custom environment value
+///
+/// Create a custom environment key with a default value provider:
+/// ```swift
 /// struct CurrentUserEnvironmentKey: EnvironmentKey {
 ///     static var defaultValue: User? {
 ///         nil
 ///     }
 /// }
+/// ```
 ///
-/// // Extend EnvironmentValues to provide a convenient access to the current user value
+/// Extend EnvironmentValues to provide a convenient access to the current user value
+/// ```swift
 /// extension EnvironmentValues {
 ///     var currentUser: User? {
 ///         get { self[CurrentUserEnvironmentKey.self] }
 ///         set { self[CurrentUserEnvironmentKey.self] = newValue }
 ///     }
 /// }
+/// ```
 ///
-/// // Extend Component to provide a convenient way to set the current user value
+/// Extend Component to provide a convenient way to set the current user value
+/// ```swift
 /// extension Component {
 ///     func currentUser(_ user: User) -> EnvironmentComponent<User?, Self> {
 ///         environment(\.currentUser, value: user)
 ///     }
 /// }
+/// ```
 ///
+/// Use the ``Environment`` property wrapper to access the environmentvalue
+/// ```swift
 /// struct ProfileComponent: ComponentBuilder {
-///     // Use the `@Environment` property wrapper to access the current user value
-///     @Environment(\.currentUser)
-///     var user: User?
-///
+///     // Use the `@Environment` property wrapper to access the environment value
+///     @Environment(\.currentUser) var user: User?
 ///     func build() -> some Component {
 ///         VStack {
-///             // access the environment value inside ``ComponetBuilder/build()`` or ``Compoent/layout(_:)``.
 ///             if let user {
 ///                 Text(user.name)
 ///             }
 ///         }
 ///     }
 /// }
+/// ```
+/// From the parent component, you can set the environment value for its child component.
+/// ```swift
+/// ProfileComponent().currentUser(user)
 /// ```
 @propertyWrapper public struct Environment<Value> {
     /// The key used to access the environment value.
