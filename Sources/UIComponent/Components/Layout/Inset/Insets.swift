@@ -57,7 +57,7 @@ struct InsetsRenderNode: RenderNode {
     }
 
     /// The content render nodes of this render node.
-    var contentren: [any RenderNode] {
+    var children: [any RenderNode] {
         [content]
     }
 
