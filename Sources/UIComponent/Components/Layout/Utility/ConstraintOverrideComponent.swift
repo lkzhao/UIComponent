@@ -149,10 +149,14 @@ public struct ConstraintOverrideComponent<Content: Component>: Component {
         self.transformer = transformer
     }
 
-    public func layout(_ constraint: Constraint) -> SizeOverrideRenderNode<Content.R> {
+    public func layout(_ constraint: Constraint) -> AnyRenderNodeOfView<Content.R.View> {
         let finalConstraint = transformer.calculate(constraint)
-        let renderNode = content.layout(finalConstraint)
-        return SizeOverrideRenderNode(content: renderNode, size: transformer.bound(size: renderNode.size, to: finalConstraint))
+        if finalConstraint.isTight {
+            return LazyRenderNode(component: content, size: finalConstraint.minSize).eraseToAnyRenderNodeOfView()
+        } else {
+            let renderNode = content.layout(finalConstraint)
+            return SizeOverrideRenderNode(content: renderNode, size: transformer.bound(size: renderNode.size, to: finalConstraint)).eraseToAnyRenderNodeOfView()
+        }
     }
 }
 
@@ -168,6 +172,25 @@ public struct SizeOverrideRenderNode<Content: RenderNode>: RenderNodeWrapper {
     ///   - size: The new size to apply to the content render node.
     public init(content: Content, size: CGSize) {
         self.content = content
+        self.size = size
+    }
+}
+
+public class LazyRenderNode<Content: Component>: RenderNodeWrapper {
+    public let component: Content
+    private var _content: Content.R?
+    public var content: Content.R {
+        if _content == nil {
+            _content = component.layout(.init(tightSize: size))
+        }
+        return _content!
+    }
+    public var didLayout: Bool {
+        _content != nil
+    }
+    public let size: CGSize
+    init(component: Content, size: CGSize) {
+        self.component = component
         self.size = size
     }
 }

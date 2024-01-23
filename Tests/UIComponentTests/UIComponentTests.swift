@@ -22,6 +22,52 @@ final class UIComponentTests: XCTestCase {
             componentView.layoutIfNeeded()
         }
     }
+    func testLazyLayout() {
+        let componentView = ComponentView()
+        componentView.component = VStack {
+            Text(text1).size(width: 300, height: 600)
+            Text(text2).size(width: 300, height: 600)
+        }
+        componentView.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 600))
+        componentView.layoutIfNeeded()
+        let vRenderNode = componentView.engine.renderNode as? VerticalRenderNode
+        XCTAssertNotNil(vRenderNode)
+        let firstText = vRenderNode!.children[0] as? AnyRenderNodeOfView<UILabel>
+        let secondText = vRenderNode!.children[1] as? AnyRenderNodeOfView<UILabel>
+        XCTAssertNotNil(firstText)
+        XCTAssertNotNil(secondText)
+        XCTAssertEqual(componentView.engine.visibleRenderable.count, 1)
+        let lazyNode1 = firstText!.erasing as? LazyRenderNode<Text>
+        let lazyNode2 = secondText!.erasing as? LazyRenderNode<Text>
+        XCTAssertEqual(lazyNode1!.didLayout, true)
+        XCTAssertEqual(lazyNode2!.didLayout, false)
+    }
+    func testPerfLazyLayout() {
+        let rawLayoutTime = measureTime {
+            VStack {
+                for _ in 0..<10000 {
+                    Text(text1)
+                }
+            }
+        }
+        let fixedSizeLayoutTime = measureTime {
+            VStack {
+                for _ in 0..<10000 {
+                    Text(text1).size(width: .fill, height: 50)
+                }
+            }
+        }
+        print(fixedSizeLayoutTime, rawLayoutTime)
+        XCTAssertLessThan(fixedSizeLayoutTime * 2, rawLayoutTime)
+    }
+    func measureTime(_ component: () -> any Component) -> TimeInterval {
+        let componentView = ComponentView()
+        let startTime = CACurrentMediaTime()
+        componentView.component = component()
+        componentView.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 600))
+        componentView.layoutIfNeeded()
+        return CACurrentMediaTime() - startTime
+    }
     func testPerfTextLayout() {
         measure {
             for _ in 0..<1000 {
