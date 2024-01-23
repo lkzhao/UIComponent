@@ -26,4 +26,7 @@ UIComponent is a declarative and modern framework to build user interfaces with 
 - <doc:Animation>
 - <doc:Architecture>
 - <doc:SwiftUICompare>
+- <doc:PerformanceOptimization>
+- <doc:Component>
+- <doc:Environment>
 }

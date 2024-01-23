@@ -111,7 +111,7 @@ public struct AnimatorWrapperRenderNode<Content: RenderNode>: RenderNodeWrapper 
     var updateBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
     var deleteBlock: ((ComponentDisplayableView, UIView, () -> Void) -> Void)?
     public var animator: Animator? {
-        let wrapper = WrapperAnimator()
+        var wrapper = WrapperAnimator()
         wrapper.content = content.animator
         wrapper.passthroughUpdate = passthroughUpdate
         wrapper.insertBlock = insertBlock

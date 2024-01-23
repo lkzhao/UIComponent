@@ -5,7 +5,7 @@ import UIKit
 /// `WrapperAnimator` is a subclass of `Animator` that allows for additional
 /// animation handling by providing custom blocks for insert, update, and delete operations.
 /// It can also pass through these update operation to another animator if needed.
-public class WrapperAnimator: Animator {
+public struct WrapperAnimator: Animator {
     /// The underlying animator that can be used to perform animations along side the custom animation blocks.
     public var content: Animator?
     /// Determines whether the `WrapperAnimator` should pass the update operation to the underlying `content` animator after executing `updateBlock`.
