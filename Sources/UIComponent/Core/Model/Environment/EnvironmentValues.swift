@@ -38,7 +38,7 @@ public struct EnvironmentValues {
     }
 
     /// The current environment values.
-    public private(set) static var current: EnvironmentValues {
+    public internal(set) static var current: EnvironmentValues {
         get {
             Thread.current.threadDictionary["currentEnvironmentValues"] as? EnvironmentValues ?? EnvironmentValues()
         }

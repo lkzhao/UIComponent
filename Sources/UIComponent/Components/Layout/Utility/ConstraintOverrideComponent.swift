@@ -152,7 +152,7 @@ public struct ConstraintOverrideComponent<Content: Component>: Component {
     public func layout(_ constraint: Constraint) -> AnyRenderNodeOfView<Content.R.View> {
         let finalConstraint = transformer.calculate(constraint)
         if finalConstraint.isTight {
-            return LazyRenderNode(component: content, size: finalConstraint.minSize).eraseToAnyRenderNodeOfView()
+            return LazyRenderNode(component: content, environmentValues: EnvironmentValues.current, size: finalConstraint.minSize).eraseToAnyRenderNodeOfView()
         } else {
             let renderNode = content.layout(finalConstraint)
             return SizeOverrideRenderNode(content: renderNode, size: transformer.bound(size: renderNode.size, to: finalConstraint)).eraseToAnyRenderNodeOfView()
@@ -181,7 +181,10 @@ public class LazyRenderNode<Content: Component>: RenderNodeWrapper {
     private var _content: Content.R?
     public var content: Content.R {
         if _content == nil {
+            EnvironmentValues.saveCurrentValues()
+            EnvironmentValues.current = environmentValues
             _content = component.layout(.init(tightSize: size))
+            EnvironmentValues.restoreCurrentValues()
         }
         return _content!
     }
@@ -189,8 +192,10 @@ public class LazyRenderNode<Content: Component>: RenderNodeWrapper {
         _content != nil
     }
     public let size: CGSize
-    init(component: Content, size: CGSize) {
+    let environmentValues: EnvironmentValues
+    init(component: Content, environmentValues: EnvironmentValues, size: CGSize) {
         self.component = component
+        self.environmentValues = environmentValues
         self.size = size
     }
 }
