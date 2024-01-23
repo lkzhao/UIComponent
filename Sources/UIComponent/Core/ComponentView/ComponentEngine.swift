@@ -20,7 +20,12 @@ public class ComponentEngine {
     
     /// A static weak reference to a delegate that decides if a component view should reload.
     public static weak var reloadDelegate: ComponentReloadDelegate?
-    
+
+    private static let asyncLayoutQueue = DispatchQueue(label: "com.component.layout", qos: .userInteractive)
+
+    /// A flag indicating whether the layout should be performed asynchronously on a background thread
+    public var asyncLayout = false
+
     /// The view that is managed by this engine.
     weak var view: ComponentDisplayableView?
 
@@ -175,24 +180,50 @@ public class ComponentEngine {
             }
         }
 
-        layoutComponent()
-        adjustContentOffset(contentOffsetAdjustFn: contentOffsetAdjustFn)
-        render(updateViews: true)
-    }
-
-    private func layoutComponent() {
         if skipNextLayout {
             skipNextLayout = false
-            return
+            adjustContentOffset(contentOffsetAdjustFn: contentOffsetAdjustFn)
+            render(updateViews: true)
+        } else if asyncLayout {
+            layoutComponentAsync(contentOffsetAdjustFn: contentOffsetAdjustFn)
+        } else {
+            layoutComponent(contentOffsetAdjustFn: contentOffsetAdjustFn)
         }
+    }
+
+    private var asyncLayoutID: UUID?
+    private func layoutComponentAsync(contentOffsetAdjustFn: (() -> CGPoint)?) {
+        guard let componentView = view, let component else { return }
+
+        let adjustedSize = adjustedSize
+        let asyncLayoutID = UUID()
+        self.asyncLayoutID = asyncLayoutID
+        Self.asyncLayoutQueue.async { [weak self] in
+            let renderNode = EnvironmentValues.with(\.currentComponentView, value: componentView) {
+                component.layout(Constraint(maxSize: adjustedSize))
+            }
+            DispatchQueue.main.async {
+                guard let self, self.asyncLayoutID == asyncLayoutID else { return }
+                self.didFinishLayout(renderNode: renderNode, contentOffsetAdjustFn: contentOffsetAdjustFn)
+            }
+        }
+    }
+
+    private func layoutComponent(contentOffsetAdjustFn: (() -> CGPoint)?) {
         guard let componentView = view, let component else { return }
 
         let renderNode = EnvironmentValues.with(\.currentComponentView, value: componentView) {
             component.layout(Constraint(maxSize: adjustedSize))
         }
+        
+        didFinishLayout(renderNode: renderNode, contentOffsetAdjustFn: contentOffsetAdjustFn)
+    }
 
+    private func didFinishLayout(renderNode: any RenderNode, contentOffsetAdjustFn: (() -> CGPoint)?) {
         contentSize = renderNode.size * zoomScale
         self.renderNode = renderNode
+        adjustContentOffset(contentOffsetAdjustFn: contentOffsetAdjustFn)
+        render(updateViews: true)
     }
 
     private func adjustContentOffset(contentOffsetAdjustFn: (() -> CGPoint)?) {

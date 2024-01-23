@@ -28,10 +28,24 @@ public struct EnvironmentValues {
     }
 
     /// A stack to keep track of the current environment values for nested environment changes.
-    private static var stack: [EnvironmentValues] = []
-    
+    private static var stack: [EnvironmentValues] {
+        get {
+            Thread.current.threadDictionary["currentEnvironmentValuesStack"] as? [EnvironmentValues] ?? []
+        }
+        set {
+            Thread.current.threadDictionary["currentEnvironmentValuesStack"] = newValue
+        }
+    }
+
     /// The current environment values.
-    public private(set) static var current = EnvironmentValues()
+    public private(set) static var current: EnvironmentValues {
+        get {
+            Thread.current.threadDictionary["currentEnvironmentValues"] as? EnvironmentValues ?? EnvironmentValues()
+        }
+        set {
+            Thread.current.threadDictionary["currentEnvironmentValues"] = newValue
+        }
+    }
 
     /// Saves the current environment values onto the stack.
     internal static func saveCurrentValues() {
