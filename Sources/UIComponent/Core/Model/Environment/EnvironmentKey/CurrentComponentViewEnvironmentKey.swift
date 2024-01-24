@@ -12,6 +12,9 @@ public struct CurrentComponentViewEnvironmentKey: EnvironmentKey {
     public static var defaultValue: ComponentDisplayableView? {
         nil
     }
+    public static var isWeak: Bool {
+        true
+    }
 }
 
 public extension EnvironmentValues {
