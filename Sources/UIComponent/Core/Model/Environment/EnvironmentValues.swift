@@ -20,11 +20,36 @@ public struct EnvironmentValues {
     /// - Returns: The value associated with the key, or the key's default value if it's not present.
     public subscript<Value>(keyType: any EnvironmentKey<Value>.Type) -> Value {
         get {
-            values[ObjectIdentifier(keyType)] as? Value ?? keyType.defaultValue
+            if keyType.isWeak {
+                (values[ObjectIdentifier(keyType)] as? Weak)?.value as? Value ?? keyType.defaultValue
+            } else {
+                values[ObjectIdentifier(keyType)] as? Value ?? keyType.defaultValue
+            }
         }
         set {
-            values[ObjectIdentifier(keyType)] = newValue
+            if keyType.isWeak {
+                let newValue = newValue as AnyObject
+                values[ObjectIdentifier(keyType)] = Weak(value: newValue)
+            } else {
+                values[ObjectIdentifier(keyType)] = newValue
+            }
         }
+    }
+
+    private mutating func merge(other: EnvironmentValues) {
+        values.merge(other.values) { $1 }
+    }
+
+    public init() {}
+
+    public init<Value>(_ key: any EnvironmentKey<Value>.Type, value: Value) {
+        self.init()
+        self[key] = value
+    }
+
+    public init<Value>(_ keyPath: WritableKeyPath<Self, Value>, value: Value) {
+        self.init()
+        self[keyPath: keyPath] = value
     }
 
     /// A stack to keep track of the current environment values for nested environment changes.
@@ -68,39 +93,12 @@ public struct EnvironmentValues {
     ///   - accessor: A closure to execute with the modified environment.
     /// - Throws: Rethrows any errors thrown by the `accessor` closure.
     /// - Returns: The result of the `accessor` closure.
-    internal static func with<Value, Result>(key: EnvironmentWritableValuesKey<Value>, value: Value, accessor: () throws -> Result) rethrows -> Result {
+    internal static func with<Result>(values: EnvironmentValues, accessor: () throws -> Result) rethrows -> Result {
         saveCurrentValues()
-        switch key {
-        case let .keyType(keyType):
-            current[keyType] = value
-        case let .keyPath(keyPath):
-            current[keyPath: keyPath] = value
-        }
+        current.merge(other: values)
         let result = try accessor()
         restoreCurrentValues()
         return result
-    }
-
-    /// Executes a given closure with a temporarily modified environment for a specific key type.
-    /// - Parameters:
-    ///   - keyType: The type of the key for the value to access.
-    ///   - value: The temporary value to set for the given key type.
-    ///   - accessor: A closure to execute with the modified environment.
-    /// - Throws: Rethrows any errors thrown by the `accessor` closure.
-    /// - Returns: The result of the `accessor` closure.
-    public static func with<Value, Result>(_ keyType: any EnvironmentKey<Value>.Type, value: Value, accessor: () throws -> Result) rethrows -> Result {
-        try with(key: .keyType(keyType), value: value, accessor: accessor)
-    }
-
-    /// Executes a given closure with a temporarily modified environment for a specific key path.
-    /// - Parameters:
-    ///   - keyPath: The key path of the value to modify.
-    ///   - value: The temporary value to set for the given key path.
-    ///   - accessor: A closure to execute with the modified environment.
-    /// - Throws: Rethrows any errors thrown by the `accessor` closure.
-    /// - Returns: The result of the `accessor` closure.
-    public static func with<Value, Result>(_ keyPath: WritableKeyPath<EnvironmentValues, Value>, value: Value, accessor: () throws -> Result) rethrows -> Result {
-        try with(key: .keyPath(keyPath), value: value, accessor: accessor)
     }
 }
 
@@ -113,11 +111,6 @@ internal enum EnvironmentValuesKey<Value> {
     case keyType(any EnvironmentKey<Value>.Type)
 }
 
-/// An enumeration that defines keys for accessing values in the environment.
-/// This is used internally for accessing environment values. Both type can be used to access the same value.
-/// - `keyPath`: A writable key path to a specific value within `EnvironmentValues`.
-/// - `keyType`: An EnvironmentKey type.
-internal enum EnvironmentWritableValuesKey<Value> {
-    case keyPath(WritableKeyPath<EnvironmentValues, Value>)
-    case keyType(any EnvironmentKey<Value>.Type)
+fileprivate struct Weak {
+    weak var value: AnyObject?
 }

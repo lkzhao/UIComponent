@@ -199,7 +199,7 @@ public class ComponentEngine {
         let asyncLayoutID = UUID()
         self.asyncLayoutID = asyncLayoutID
         Self.asyncLayoutQueue.async { [weak self] in
-            let renderNode = EnvironmentValues.with(\.currentComponentView, value: componentView) {
+            let renderNode = EnvironmentValues.with(values: .init(\.currentComponentView, value: componentView)) {
                 component.layout(Constraint(maxSize: adjustedSize))
             }
             DispatchQueue.main.async {
@@ -212,7 +212,7 @@ public class ComponentEngine {
     private func layoutComponent(contentOffsetAdjustFn: (() -> CGPoint)?) {
         guard let componentView = view, let component else { return }
 
-        let renderNode = EnvironmentValues.with(\.currentComponentView, value: componentView) {
+        let renderNode = EnvironmentValues.with(values: .init(\.currentComponentView, value: componentView)) {
             component.layout(Constraint(maxSize: adjustedSize))
         }
         

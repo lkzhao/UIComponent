@@ -22,6 +22,9 @@ final class UIComponentTests: XCTestCase {
             componentView.layoutIfNeeded()
         }
     }
+
+    /// Test to make sure component with fixed size are
+    /// not being layouted when not visible
     func testLazyLayout() {
         let componentView = ComponentView()
         componentView.component = VStack {
@@ -42,7 +45,52 @@ final class UIComponentTests: XCTestCase {
         XCTAssertEqual(lazyNode1!.didLayout, true)
         XCTAssertEqual(lazyNode2!.didLayout, false)
     }
-    func testPerfLazyLayout() {
+    /// Test to make sure environment is passed down to lazy layout even when layout is performed later
+    func testLazyLayoutEnvironment() {
+        let componentView = ComponentView()
+        var text1ComponentView: ComponentDisplayableView?
+        var text2ComponentView: ComponentDisplayableView?
+        componentView.component = VStack {
+            ConstraintReader { _ in
+                text1ComponentView = Environment(\.currentComponentView).wrappedValue
+                return Text(text1)
+            }.size(width: 300, height: 600)
+            ConstraintReader { _ in
+                text2ComponentView = Environment(\.currentComponentView).wrappedValue
+                return Text(text2)
+            }.size(width: 300, height: 600)
+        }
+        componentView.bounds = CGRect(x: 0, y: 0, width: 300, height: 600)
+        componentView.layoutIfNeeded()
+        XCTAssertIdentical(text1ComponentView, componentView)
+        XCTAssertNil(text2ComponentView)
+        componentView.bounds = CGRect(x: 0, y: 10, width: 300, height: 600)
+        componentView.layoutIfNeeded()
+        XCTAssertIdentical(text1ComponentView, componentView)
+        XCTAssertIdentical(text2ComponentView, componentView)
+    }
+    /// Test to make sure weak environment value is correctly release even when captured by a lazy layout
+    func testLazyLayoutWeakEnvironment() {
+        var componentView: ComponentView? = ComponentView()
+        weak var componentView2 = componentView
+        weak var text1ComponentView: ComponentDisplayableView?
+        componentView?.component = VStack {
+            ConstraintReader { _ in
+                text1ComponentView = Environment(\.currentComponentView).wrappedValue
+                return Text(text1)
+            }.size(width: 300, height: 600)
+            Text(text2).size(width: 300, height: 600)
+        }
+        componentView?.bounds = CGRect(x: 0, y: 0, width: 300, height: 600)
+        componentView?.layoutIfNeeded()
+        XCTAssertNotNil(componentView2)
+        XCTAssertNotNil(text1ComponentView)
+        XCTAssertIdentical(text1ComponentView, componentView)
+        componentView = nil
+        XCTAssertNil(text1ComponentView)
+        XCTAssertNil(componentView2)
+    }
+    func testLazyLayoutPerf() {
         let rawLayoutTime = measureTime {
             VStack {
                 for _ in 0..<10000 {
@@ -57,7 +105,8 @@ final class UIComponentTests: XCTestCase {
                 }
             }
         }
-        print(fixedSizeLayoutTime, rawLayoutTime)
+        print("Layout 10000 text with fixed sized used \(fixedSizeLayoutTime)s.")
+        print("Layout 10000 text with dynamic sized used \(rawLayoutTime)s.")
         XCTAssertLessThan(fixedSizeLayoutTime * 2, rawLayoutTime)
     }
     func measureTime(_ component: () -> any Component) -> TimeInterval {
