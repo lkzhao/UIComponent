@@ -19,11 +19,10 @@ import Foundation
 ///
 /// Inside ``Component/layout(_:)`` or ``ComponentBuilder/build()`` you can access the environment value directly.
 /// ```swift
-///     VStack {
-///         // ...
-///     }.inset { [weak currentComponentView] _ in
-///         currentComponentView?.safeAreaInsets ?? .zero
-///     }
+/// VStack {
+///     // ...
+/// }.inset { [weak currentComponentView] _ in
+///     currentComponentView?.safeAreaInsets ?? .zero
 /// }
 /// ```
 ///
@@ -71,7 +70,9 @@ import Foundation
 ///     }
 /// }
 /// ```
+///
 /// From the parent component, you can set the environment value for its child component.
+///
 /// ```swift
 /// ProfileComponent().currentUser(user)
 /// ```
