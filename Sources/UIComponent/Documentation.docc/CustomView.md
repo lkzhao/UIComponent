@@ -43,8 +43,7 @@ Using ``ViewComponent`` offers many benefits:
 
 Imagine you are rendering a feed with thousands of views. Using ``ViewComponent`` is much faster and uses less memory than creating and storing the views yourself.
 
-> Important: When using a ``ViewComponent``, you should always assign a `size`. Since views are lazily initialized, the layout doesn't know how big the view will take up before rendering it. \
-> See __[Layout](./layout.md)__ for more details.
+> Important: When using a ``ViewComponent``, you should always assign a `size`. Since views are lazily initialized, the layout doesn't know how big the view will take up before rendering it.
 
 ##### Updating Custom View
 

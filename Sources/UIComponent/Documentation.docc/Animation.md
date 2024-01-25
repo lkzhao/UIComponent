@@ -64,7 +64,7 @@ Text("Animated Insert/Delete/Update")
 To create a custom animator, implement the following 3 methods and perform the corresponding animation when needed.
 
 @Links(visualStyle: list) {
-- ``Animator/insert(componentView:view:frame:)-2k2ro``
+- ``Animator/insert(componentView:view:frame:)-9g90``
 - ``Animator/delete(componentView:view:completion:)-umbr``
 - ``Animator/update(componentView:view:frame:)-15tud``
 }

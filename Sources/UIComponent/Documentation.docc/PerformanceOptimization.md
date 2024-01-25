@@ -41,7 +41,7 @@ VStack {
 }
 ```
 
-> Except for the ``SizeStrategy/fit`` ``SizeStrategy``, all other size strategy including ``SizeStrategy/fill``, ``SizeStrategy/absolute(_:)``, ``SizeStrategy/percentage(_:)``, ``SizeStrategy/aspectPercentage(_:)`` all supports this lazy layout optimization.
+> Except for the ``SizeStrategy/fit``, all other size strategy including ``SizeStrategy/fill``, ``SizeStrategy/absolute(_:)``, ``SizeStrategy/percentage(_:)``, ``SizeStrategy/aspectPercentage(_:)`` all supports this lazy layout optimization.
 
 #### Manually calculate the size
 You can also provide a simple size block to calculate the size of each cell instead of relying on UIComponent to calculate for you. Keep in mind that the calculation should be kept simple, otherwise there is no benefit on doing manual size calculation.
