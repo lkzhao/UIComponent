@@ -52,6 +52,9 @@ struct ViewControllerEnvironmentKey: EnvironmentKey {
     static var defaultValue: UIViewController? {
         nil
     }
+    static var isWeak: Bool {
+        true
+    }
 }
 
 extension EnvironmentValues {
@@ -63,6 +66,6 @@ extension EnvironmentValues {
 
 extension Component {
     func viewController(_ viewController: UIViewController) -> some Component {
-        weakEnvironment(\.viewController, value: viewController)
+        environment(\.viewController, value: viewController)
     }
 }

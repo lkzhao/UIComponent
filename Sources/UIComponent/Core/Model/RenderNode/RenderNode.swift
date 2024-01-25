@@ -98,7 +98,7 @@ extension RenderNode {
 extension RenderNode {
     public var id: String? { nil }
     public var animator: Animator? { nil }
-    public var reuseStrategy: ReuseStrategy { .automatic }
+    public var reuseStrategy: ReuseStrategy { .key("\(type(of: self))") }
 
     public func makeView() -> View {
         View()
@@ -124,8 +124,6 @@ extension RenderNode {
 extension RenderNode {
     internal func _makeView() -> UIView {
         switch reuseStrategy {
-        case .automatic:
-            return ReuseManager.shared.dequeue(identifier: "\(type(of: self))", makeView())
         case .noReuse:
             return makeView()
         case .key(let key):

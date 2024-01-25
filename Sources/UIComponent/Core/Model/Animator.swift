@@ -31,12 +31,12 @@ public protocol Animator {
 
     /// Called when ComponentView deletes a view from its subviews.
     ///
-    /// Perform any deletion animation, then call `enqueue(view: view)`
-    /// after the animation finishes
+    /// Perform any deletion animation, then call the `completion` block when finished.
     ///
     /// - Parameters:
     ///   - componentView: source ComponentView
     ///   - view: the view being deleted
+    ///   - completion: call this block when finished
     func delete(
         componentView: ComponentDisplayableView,
         view: UIView,

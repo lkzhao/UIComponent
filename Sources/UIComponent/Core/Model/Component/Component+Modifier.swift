@@ -678,7 +678,7 @@ extension Component {
     /// Animates the deletion of the component.
     /// - Parameter deleteBlock: A closure that is called to perform the deletion animation.
     /// - Returns: An `AnimatorWrapperComponent` containing the modified component.
-    public func animateDelete(_ deleteBlock: @escaping (ComponentDisplayableView, UIView, () -> Void) -> Void) -> AnimatorWrapperComponent<Self> {
+    public func animateDelete(_ deleteBlock: @escaping (ComponentDisplayableView, UIView, @escaping () -> Void) -> Void) -> AnimatorWrapperComponent<Self> {
         ModifierComponent(content: self) {
             $0.animateDelete(deleteBlock)
         }

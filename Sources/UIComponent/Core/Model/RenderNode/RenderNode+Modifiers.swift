@@ -109,7 +109,7 @@ public struct AnimatorWrapperRenderNode<Content: RenderNode>: RenderNodeWrapper 
     var passthroughUpdate: Bool
     var insertBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
     var updateBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
-    var deleteBlock: ((ComponentDisplayableView, UIView, () -> Void) -> Void)?
+    var deleteBlock: ((ComponentDisplayableView, UIView, @escaping () -> Void) -> Void)?
     public var animator: Animator? {
         var wrapper = WrapperAnimator()
         wrapper.content = content.animator
@@ -141,7 +141,7 @@ extension RenderNode {
     /// Applies a delete animation to the render node.
     /// - Parameter deleteBlock: A closure that defines the animation for deleting the view.
     /// - Returns: An `AnimatorWrapperRenderNode` configured with the delete animation.
-    func animateDelete(_ deleteBlock: @escaping (ComponentDisplayableView, UIView, () -> Void) -> Void) -> AnimatorWrapperRenderNode<Self> {
+    func animateDelete(_ deleteBlock: @escaping (ComponentDisplayableView, UIView, @escaping () -> Void) -> Void) -> AnimatorWrapperRenderNode<Self> {
         AnimatorWrapperRenderNode(content: self, passthroughUpdate: false, deleteBlock: deleteBlock)
     }
 }

@@ -15,7 +15,7 @@ public struct WrapperAnimator: Animator {
     /// A block that is executed when a view needs to be updated. If `nil`, the update operation is passed to the underlying `content` animator.
     public var updateBlock: ((ComponentDisplayableView, UIView, CGRect) -> Void)?
     /// A block that is executed when a view is deleted. If `nil`, the delete operation is passed to the underlying `content` animator.
-    public var deleteBlock: ((ComponentDisplayableView, UIView, () -> Void) -> Void)?
+    public var deleteBlock: ((ComponentDisplayableView, UIView, @escaping () -> Void) -> Void)?
 
     public func shift(componentView: ComponentDisplayableView, delta: CGPoint, view: UIView) {
         (content ?? componentView.animator).shift(componentView: componentView, delta: delta, view: view)
