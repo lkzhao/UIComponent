@@ -38,7 +38,7 @@ public struct SpaceRenderNode: RenderNode {
         self.size = size
     }
 
-    public func shouldRenderView(in frame: CGRect) -> Bool {
+    public var shouldRenderView: Bool {
         false
     }
 }

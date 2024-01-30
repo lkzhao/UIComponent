@@ -33,8 +33,8 @@ extension RenderNodeWrapper {
     public var children: [any RenderNode] {
         content.children
     }
-    public func shouldRenderView(in frame: CGRect) -> Bool {
-        content.shouldRenderView(in: frame)
+    public var shouldRenderView: Bool {
+        content.shouldRenderView
     }
     public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         content.visibleIndexes(in: frame)

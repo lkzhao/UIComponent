@@ -23,6 +23,20 @@ final class UIComponentTests: XCTestCase {
         }
     }
 
+    func testVisibleInsets() {
+        let componentView = ComponentView()
+        componentView.component = VStack(spacing: 100) {
+            Text(text1).size(width: 300, height: 300)
+            Text(text2).size(width: 300, height: 300)
+        }.inset(100).visibleInset(-100)
+        componentView.frame = CGRect(origin: .zero, size: CGSize(width: 500, height: 400))
+        componentView.layoutIfNeeded()
+        XCTAssertEqual(componentView.engine.visibleRenderable.count, 1)
+        componentView.frame = CGRect(origin: .zero, size: CGSize(width: 500, height: 500))
+        componentView.layoutIfNeeded()
+        XCTAssertEqual(componentView.engine.visibleRenderable.count, 2)
+    }
+
     /// Test to make sure component with fixed size are
     /// not being layouted when not visible
     func testLazyLayout() {

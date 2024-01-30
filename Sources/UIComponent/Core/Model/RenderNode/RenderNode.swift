@@ -8,6 +8,9 @@ public protocol RenderNode<View> {
     /// The `UIView` class that this render node represents.
     associatedtype View: UIView
 
+    /// A Boolean value indicating whether the render node should render its own view.
+    var shouldRenderView: Bool { get }
+
     /// A unique identifier for the render node.
     var id: String? { get }
 
@@ -34,10 +37,12 @@ public protocol RenderNode<View> {
     /// The default implementation for this methods is not optmized and will return all indexes regardless of the frame.
     func visibleIndexes(in frame: CGRect) -> any Collection<Int>
 
-    /// A Boolean value indicating whether the render node should render its own view within the given frame.
+    /// Returns the visible frame given the parent visible frame.
     ///
-    /// - Parameter frame: The frame that is visible.
-    func shouldRenderView(in frame: CGRect) -> Bool
+    /// - Parameter frame: The parent visible frame.
+    ///
+    /// The default implementation will return the parent visible frame. This method is used by the VisibleFrameInset components to adjust the visible frame.
+    func visibleFrame(in frame: CGRect) -> CGRect
 
     /// Creates a new view instance for this render node.
     func makeView() -> View
@@ -99,6 +104,7 @@ extension RenderNode {
     public var id: String? { nil }
     public var animator: Animator? { nil }
     public var reuseStrategy: ReuseStrategy { .key("\(type(of: self))") }
+    public var shouldRenderView: Bool { children.isEmpty }
 
     public func makeView() -> View {
         View()
@@ -110,12 +116,11 @@ extension RenderNode {
     public var children: [any RenderNode] { [] }
     public var positions: [CGPoint] { [] }
 
-    public func shouldRenderView(in frame: CGRect) -> Bool {
-        children.isEmpty && frame.intersects(CGRect(origin: .zero, size: size))
-    }
-
     public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         IndexSet(0..<children.count)
+    }
+    public func visibleFrame(in frame: CGRect) -> CGRect {
+        frame
     }
 }
 
@@ -136,7 +141,8 @@ extension RenderNode {
     }
     internal func _visibleRenderables(in frame: CGRect) -> [Renderable] {
         var result = [Renderable]()
-        if shouldRenderView(in: frame) {
+        let frame = visibleFrame(in: frame)
+        if shouldRenderView, frame.intersects(CGRect(origin: .zero, size: size)) {
             result.append(Renderable(frame: CGRect(origin: .zero, size: size), renderNode: self, fallbackId: "\(type(of: self))"))
         }
         let indexes = visibleIndexes(in: frame)

@@ -34,8 +34,8 @@ public struct AnyRenderNode: RenderNode {
     public var children: [any RenderNode] {
         erasing.children
     }
-    public func shouldRenderView(in frame: CGRect) -> Bool {
-        erasing.shouldRenderView(in: frame)
+    public var shouldRenderView: Bool {
+        erasing.shouldRenderView
     }
     public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         erasing.visibleIndexes(in: frame)
@@ -80,8 +80,8 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
     public var children: [any RenderNode] {
         erasing.children
     }
-    public func shouldRenderView(in frame: CGRect) -> Bool {
-        erasing.shouldRenderView(in: frame)
+    public var shouldRenderView: Bool {
+        erasing.shouldRenderView
     }
     public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         erasing.visibleIndexes(in: frame)

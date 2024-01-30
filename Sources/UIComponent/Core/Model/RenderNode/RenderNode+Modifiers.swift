@@ -13,8 +13,8 @@ public struct UpdateRenderNode<Content: RenderNode>: RenderNodeWrapper {
         .noReuse
     }
 
-    public func shouldRenderView(in frame: CGRect) -> Bool {
-        frame.intersects(CGRect(origin: .zero, size: size))
+    public var shouldRenderView: Bool {
+        true // UIView has custom property. So we should render it.
     }
 
     public func updateView(_ view: Content.View) {
@@ -34,8 +34,8 @@ public struct KeyPathUpdateRenderNode<Value, Content: RenderNode>: RenderNodeWra
         view[keyPath: valueKeyPath] = value
     }
 
-    public func shouldRenderView(in frame: CGRect) -> Bool {
-        frame.intersects(CGRect(origin: .zero, size: size))
+    public var shouldRenderView: Bool {
+        true // UIView has custom property. So we should render it.
     }
 }
 
