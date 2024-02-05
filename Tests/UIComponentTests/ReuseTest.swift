@@ -110,4 +110,72 @@ final class ReuseTests: XCTestCase {
         // the UILabel should not be reused
         XCTAssertNotEqual(existingLabel, newLabel)
     }
+
+    func testNoReuseWithSameAttributes() {
+        componentView.component = Text("1").reuseStrategy(.noReuse).textColor(.red).id("1")
+        componentView.reloadData()
+        XCTAssertEqual(componentView.renderNode?.reuseStrategy, .noReuse)
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let existingLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(existingLabel)
+        XCTAssertEqual(existingLabel?.text, "1")
+        XCTAssertEqual(existingLabel?.textColor, .red)
+        componentView.component = Text("2").reuseStrategy(.noReuse).textColor(.red).id("2")
+        componentView.reloadData()
+        XCTAssertEqual(componentView.renderNode?.reuseStrategy, .noReuse)
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let newLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(newLabel)
+        XCTAssertEqual(newLabel?.text, "2")
+
+        // the UILabel should not be reused
+        XCTAssertNotEqual(existingLabel, newLabel)
+    }
+
+    func testNoReuseWithViewComponent() {
+        let label1 = UILabel()
+        label1.text = "1"
+        let label2 = UILabel()
+        label2.text = "2"
+        componentView.component = ViewComponent(view: label1).textColor(.red)
+        componentView.reloadData()
+        XCTAssertEqual(componentView.renderNode?.reuseStrategy, .noReuse)
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let existingLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(existingLabel)
+        XCTAssertEqual(existingLabel?.text, "1")
+        XCTAssertEqual(existingLabel?.textColor, .red)
+        XCTAssertEqual(existingLabel, label1)
+        componentView.component = ViewComponent(view: label2).textColor(.red)
+        componentView.reloadData()
+        XCTAssertEqual(componentView.renderNode?.reuseStrategy, .noReuse)
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let newLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(newLabel)
+        XCTAssertEqual(newLabel?.text, "2")
+        XCTAssertEqual(newLabel?.textColor, .red)
+        XCTAssertEqual(newLabel, label2)
+        XCTAssertNotEqual(existingLabel, newLabel)
+    }
+
+    func testStructureIdentity() {
+        componentView.component = Text("1").reuseStrategy(.noReuse).textColor(.red)
+        componentView.reloadData()
+        XCTAssertEqual(componentView.renderNode?.reuseStrategy, .noReuse)
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let existingLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(existingLabel)
+        XCTAssertEqual(existingLabel?.text, "1")
+        XCTAssertEqual(existingLabel?.textColor, .red)
+        componentView.component = Text("2").reuseStrategy(.noReuse).textColor(.red)
+        componentView.reloadData()
+        XCTAssertEqual(componentView.renderNode?.reuseStrategy, .noReuse)
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let newLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(newLabel)
+        XCTAssertEqual(newLabel?.text, "2")
+
+        // Although the UILabels are using no reuse, they have the same structure identity, so they should be the same instance
+        XCTAssertEqual(existingLabel, newLabel)
+    }
 }
