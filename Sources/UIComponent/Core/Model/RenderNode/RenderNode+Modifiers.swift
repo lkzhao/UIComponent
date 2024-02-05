@@ -10,7 +10,7 @@ public struct UpdateRenderNode<Content: RenderNode>: RenderNodeWrapper {
     public var reuseStrategy: ReuseStrategy {
         // we don't know what the update block did, so we disable
         // reuse so that we don't get inconsistent state
-        .noReuse
+        content.reuseStrategy == .automatic ? .noReuse : content.reuseStrategy
     }
 
     public var shouldRenderView: Bool {
@@ -28,11 +28,6 @@ public struct KeyPathUpdateRenderNode<Value, Content: RenderNode>: RenderNodeWra
     public let content: Content
     public let valueKeyPath: ReferenceWritableKeyPath<Content.View, Value>
     public let value: Value
-
-    public var reuseStrategy: ReuseStrategy {
-        // not using content's reuseStrategy because our type should be different than the content type
-        .key("\(type(of: self))")
-    }
 
     public func updateView(_ view: Content.View) {
         content.updateView(view)

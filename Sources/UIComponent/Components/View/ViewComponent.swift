@@ -59,7 +59,7 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
     }
     /// The reuse strategy for the view, determining whether it should be reused or automatically managed.
     public var reuseStrategy: ReuseStrategy {
-        view == nil ? .key("\(type(of: self))") : .noReuse
+        view == nil ? .automatic : .noReuse
     }
 
     /// Initializes a `ViewRenderNode` with a specified size, optional view, and optional generator.
