@@ -27,13 +27,21 @@ public struct Separator: ComponentBuilder {
         ViewComponent<UIView>().backgroundColor(color)
             .constraint { constraint in
                 if constraint.minSize.height <= 0, constraint.maxSize.width != .infinity {
-                    let size = CGSize(width: constraint.maxSize.width, height: 1 / UIScreen.main.scale)
+                    let size = CGSize(width: constraint.maxSize.width, height: 1 / screenScale())
                     return Constraint(minSize: size, maxSize: size)
                 } else if constraint.minSize.width <= 0, constraint.maxSize.height != .infinity {
-                    let size = CGSize(width: 1 / UIScreen.main.scale, height: constraint.maxSize.height)
+                    let size = CGSize(width: 1 / screenScale(), height: constraint.maxSize.height)
                     return Constraint(minSize: size, maxSize: size)
                 }
                 return constraint
             }
     }
+}
+
+private func screenScale() -> CGFloat {
+    #if os(visionOS)
+    return 2.0
+    #else
+    return UIScreen.main.scale
+    #endif
 }
