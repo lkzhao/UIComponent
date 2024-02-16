@@ -518,7 +518,7 @@ extension Component {
     /// Provides a reader for the render node of the component.
     /// - Parameter reader: A closure that receives the render node.
     /// - Returns: A `RenderNodeReader` component that allows reading the render node.
-    public func renderNodeReader(_ reader: @escaping (any RenderNode) -> Void) -> RenderNodeReader<Self> {
+    public func renderNodeReader(_ reader: @escaping (Self.R) -> Void) -> RenderNodeReader<Self> {
         RenderNodeReader(content: self, reader)
     }
 

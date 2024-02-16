@@ -34,15 +34,19 @@ public protocol RenderNode<View> {
     /// - Parameter frame: The frame within which to determine visibility of children.
     /// - Returns: The indexes of the children that are visible within the given frame.
     ///
+    /// This method is used in the default implementation of `visibleRenderables(in:)`.
+    /// It won't be called if `visibleRenderables(in:)` is overwritten.
     /// The default implementation for this methods is not optmized and will return all indexes regardless of the frame.
     func visibleIndexes(in frame: CGRect) -> any Collection<Int>
 
-    /// Returns the visible frame given the parent visible frame.
+    /// Returns the renderables that are visible within the given frame.
     ///
-    /// - Parameter frame: The parent visible frame.
+    /// - Parameter frame: The frame within which to determine visibility of renderables.
+    /// - Returns: The renderables that are visible within the given frame.
     ///
-    /// The default implementation will return the parent visible frame. This method is used by the VisibleFrameInset components to adjust the visible frame.
-    func visibleFrame(in frame: CGRect) -> CGRect
+    /// The default implementation calls ``RenderNode/visibleIndexes(in:)-1jtpe`` to get the visible childrens. It also calls
+    /// and recursively retrives all Renderable from visible children and combines them.
+    func visibleRenderables(in frame: CGRect) -> [Renderable]
 
     /// Creates a new view instance for this render node.
     func makeView() -> View
@@ -119,8 +123,29 @@ extension RenderNode {
     public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         IndexSet(0..<children.count)
     }
-    public func visibleFrame(in frame: CGRect) -> CGRect {
-        frame
+
+    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
+        defaultVisibleRenderablesImplementation(in: frame)
+    }
+
+    @inlinable
+    public func defaultVisibleRenderablesImplementation(in frame: CGRect) -> [Renderable] {
+        var result = [Renderable]()
+        if shouldRenderView, frame.intersects(CGRect(origin: .zero, size: size)) {
+            result.append(Renderable(frame: CGRect(origin: .zero, size: size), renderNode: self, fallbackId: "\(type(of: self))"))
+        }
+        let indexes = visibleIndexes(in: frame)
+        for i in indexes {
+            let child = children[i]
+            let position = positions[i]
+            let childFrame = CGRect(origin: position, size: child.size)
+            let childVisibleFrame = frame.intersection(childFrame) - position
+            let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
+                Renderable(frame: $0.frame + position, renderNode: $0.renderNode, fallbackId: "item-\(i)-\($0.fallbackId)")
+            }
+            result.append(contentsOf: childRenderables)
+        }
+        return result
     }
 }
 
@@ -140,24 +165,5 @@ extension RenderNode {
     internal func _updateView(_ view: UIView) {
         guard let view = view as? View else { return }
         return updateView(view)
-    }
-    internal func _visibleRenderables(in frame: CGRect) -> [Renderable] {
-        var result = [Renderable]()
-        let frame = visibleFrame(in: frame)
-        if shouldRenderView, frame.intersects(CGRect(origin: .zero, size: size)) {
-            result.append(Renderable(frame: CGRect(origin: .zero, size: size), renderNode: self, fallbackId: "\(type(of: self))"))
-        }
-        let indexes = visibleIndexes(in: frame)
-        for i in indexes {
-            let child = children[i]
-            let position = positions[i]
-            let childFrame = CGRect(origin: position, size: child.size)
-            let childVisibleFrame = frame.intersection(childFrame) - position
-            let childRenderables = child._visibleRenderables(in: childVisibleFrame).map {
-                Renderable(frame: $0.frame + position, renderNode: $0.renderNode, fallbackId: "item-\(i)-\($0.fallbackId)")
-            }
-            result.append(contentsOf: childRenderables)
-        }
-        return result
     }
 }
