@@ -44,7 +44,7 @@ public struct AnyRenderNode: RenderNode {
         erasing._updateView(view)
     }
     public func makeView() -> UIView {
-        erasing._makeView()
+        erasing.makeView()
     }
 }
 
@@ -90,6 +90,6 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
         erasing._updateView(view)
     }
     public func makeView() -> View {
-        erasing._makeView() as! View
+        erasing.makeView() as! View
     }
 }
