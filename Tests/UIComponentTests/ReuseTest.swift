@@ -74,6 +74,46 @@ final class ReuseTests: XCTestCase {
         XCTAssertNotEqual(existingLabel, newLabel)
     }
 
+    func testNoReuseWhenNoReuseStrategyWithAnyComponentOfView() {
+        componentView.component = Text("1").eraseToAnyComponentOfView().reuseStrategy(.noReuse)
+        componentView.reloadData()
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let existingLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(existingLabel)
+        XCTAssertEqual(existingLabel?.text, "1")
+        componentView.component = VStack {
+            Text("2").eraseToAnyComponentOfView().reuseStrategy(.noReuse)
+        }
+        componentView.reloadData()
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let newLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(newLabel)
+        XCTAssertEqual(newLabel?.text, "2")
+
+        // the UILabel should not be reused
+        XCTAssertNotEqual(existingLabel, newLabel)
+    }
+
+    func testNoReuseWhenNoReuseStrategyWithAnyComponent() {
+        componentView.component = Text("1").eraseToAnyComponent().reuseStrategy(.noReuse)
+        componentView.reloadData()
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let existingLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(existingLabel)
+        XCTAssertEqual(existingLabel?.text, "1")
+        componentView.component = VStack {
+            Text("2").eraseToAnyComponent().reuseStrategy(.noReuse)
+        }
+        componentView.reloadData()
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let newLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(newLabel)
+        XCTAssertEqual(newLabel?.text, "2")
+
+        // the UILabel should not be reused
+        XCTAssertNotEqual(existingLabel, newLabel)
+    }
+
     func testReuseWithSameAttributes() {
         componentView.component = Text("1").backgroundColor(.red)
         componentView.reloadData()
