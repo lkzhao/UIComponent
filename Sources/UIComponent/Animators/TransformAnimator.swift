@@ -34,6 +34,10 @@ public struct TransformAnimator: Animator {
         if componentView.isReloading, componentView.bounds.intersects(view.frame) {
             UIView.animate(
                 withDuration: duration,
+                delay: 0,
+                usingSpringWithDamping: 0.9,
+                initialSpringVelocity: 0,
+                options: [.allowUserInteraction],
                 animations: {
                     view.layer.transform = self.transform
                     view.alpha = 0
@@ -94,7 +98,7 @@ public struct TransformAnimator: Animator {
                 delay: 0,
                 usingSpringWithDamping: 0.9,
                 initialSpringVelocity: 0,
-                options: [.allowUserInteraction, .layoutSubviews],
+                options: [.allowUserInteraction],
                 animations: {
                     view.bounds.size = frame.bounds.size
                 },
