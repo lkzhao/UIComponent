@@ -12,6 +12,9 @@ public struct ComponentArrayBuilder {
     public static func buildExpression(_ expression: any Component) -> [any Component] {
         [expression]
     }
+    public static func buildExpression(_ expression: (any Component)?) -> [any Component] {
+        [expression].compactMap { $0 }
+    }
     public static func buildExpression(_ expression: [any Component]) -> [any Component] {
         expression
     }
