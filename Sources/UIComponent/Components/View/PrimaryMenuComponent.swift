@@ -71,8 +71,14 @@ public struct PrimaryMenuRenderNode: RenderNode {
 /// The key for accessing `PrimaryMenuConfig` values within the environment.
 @available(iOS 14.0, *)
 public struct PrimaryMenuConfigEnvironmentKey: EnvironmentKey {
-    /// The default value for `PrimaryMenuConfig`.
-    public static var defaultValue: PrimaryMenuConfig = PrimaryMenuConfig(onHighlightChanged: nil, didTap: nil)
+    public static var defaultValue: PrimaryMenuConfig {
+        get {
+            PrimaryMenuConfig.default
+        }
+        set {
+            PrimaryMenuConfig.default = newValue
+        }
+    }
 }
 
 /// An extension to provide easy access and modification of `PrimaryMenuConfig` within `EnvironmentValues`.

@@ -6,16 +6,7 @@ import UIKit
 /// It contains closures that can be used to customize the behavior of the view when it is tapped or highlighted.
 public struct TappableViewConfig {
     /// The default configuration for all TappableView instances.
-    /// This static property is deprecated and you should use `TappableViewConfigEnvironmentKey.defaultValue` instead.
-    @available(*, deprecated, message: "Use TappableViewConfigEnvironmentKey.defaultValue instead")
-    public static var `default`: TappableViewConfig {
-        get {
-            TappableViewConfigEnvironmentKey.defaultValue
-        }
-        set {
-            TappableViewConfigEnvironmentKey.defaultValue = newValue
-        }
-    }
+    public static var `default`: TappableViewConfig = TappableViewConfig(onHighlightChanged: nil, didTap: nil)
 
     /// Closure to apply highlight state or animation to the TappableView.
     public var onHighlightChanged: ((TappableView, Bool) -> Void)?
@@ -206,7 +197,7 @@ open class TappableView: ComponentView {
     open var isHighlighted: Bool = false {
         didSet {
             guard isHighlighted != oldValue else { return }
-            config?.onHighlightChanged?(self, isHighlighted)
+            (config ?? .default).onHighlightChanged?(self, isHighlighted)
         }
     }
 
@@ -241,7 +232,7 @@ open class TappableView: ComponentView {
 
     /// Called when a tap is recognized.
     @objc open func didTap() {
-        config?.didTap?(self)
+        (config ?? .default).didTap?(self)
         onTap?(self)
     }
 

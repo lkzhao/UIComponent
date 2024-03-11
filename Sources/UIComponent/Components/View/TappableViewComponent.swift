@@ -72,8 +72,14 @@ public struct TappableViewRenderNode: RenderNode {
 
 /// The key for accessing `TappableViewConfig` values within the environment.
 public struct TappableViewConfigEnvironmentKey: EnvironmentKey {
-    /// The default value for `TappableViewConfig`.
-    public static var defaultValue: TappableViewConfig = TappableViewConfig(onHighlightChanged: nil, didTap: nil)
+    public static var defaultValue: TappableViewConfig {
+        get {
+            TappableViewConfig.default
+        }
+        set {
+            TappableViewConfig.default = newValue
+        }
+    }
 }
 
 /// An extension to provide easy access and modification of `TappableViewConfig` within `EnvironmentValues`.

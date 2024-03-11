@@ -13,16 +13,7 @@ import UIKit
 @available(iOS 14.0, *)
 public struct PrimaryMenuConfig {
     /// The default configuration for all PrimaryMenu instances.
-    /// This static property is deprecated and you should use `PrimaryMenuConfigEnvironmentKey.defaultValue` instead.
-    @available(*, deprecated, message: "Use PrimaryMenuConfigEnvironmentKey.defaultValue instead")
-    public static var `default`: PrimaryMenuConfig {
-        get {
-            PrimaryMenuConfigEnvironmentKey.defaultValue
-        }
-        set {
-            PrimaryMenuConfigEnvironmentKey.defaultValue = newValue
-        }
-    }
+    public static var `default`: PrimaryMenuConfig = PrimaryMenuConfig(onHighlightChanged: nil, didTap: nil)
 
     /// Closure to apply highlight state or animation to the TappableView.
     public var onHighlightChanged: ((PrimaryMenu, Bool) -> Void)?
@@ -109,7 +100,7 @@ public class PrimaryMenu: UIControl {
     public private(set) var isPressed: Bool = false {
         didSet {
             guard isPressed != oldValue else { return }
-            config?.onHighlightChanged?(self, isPressed)
+            (config ?? .default).onHighlightChanged?(self, isPressed)
         }
     }
 
@@ -157,7 +148,7 @@ public class PrimaryMenu: UIControl {
     // MARK: - UIContextMenuInteractionDelegate
 
     public override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        config?.didTap?(self)
+        (config ?? .default).didTap?(self)
         let menuConfiguration = UIContextMenuConfiguration(actionProvider: { [menu] suggested in
             return menu
         })
