@@ -25,6 +25,9 @@ public struct AnyRenderNode: RenderNode {
     public var reuseStrategy: ReuseStrategy {
         erasing.reuseStrategy
     }
+    public var defaultReuseKey: String {
+        "AnyRenderNode<\(erasing.defaultReuseKey)>"
+    }
     public var size: CGSize {
         erasing.size
     }
@@ -70,6 +73,9 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
     }
     public var reuseStrategy: ReuseStrategy {
         erasing.reuseStrategy
+    }
+    public var defaultReuseKey: String {
+        "AnyRenderNodeOfView<\(erasing.defaultReuseKey)>"
     }
     public var size: CGSize {
         erasing.size

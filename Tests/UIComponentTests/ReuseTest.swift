@@ -3,6 +3,7 @@
 import XCTest
 
 @testable import UIComponent
+import UIKit
 
 final class ReuseTests: XCTestCase {
     var componentView: ComponentView!
@@ -141,6 +142,25 @@ final class ReuseTests: XCTestCase {
         XCTAssertEqual(existingLabel?.text, "1")
         XCTAssertEqual(existingLabel?.textColor, .red)
         componentView.component = Text("2")
+        componentView.reloadData()
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let newLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(newLabel)
+        XCTAssertEqual(newLabel?.text, "2")
+
+        // the UILabel should not be reused
+        XCTAssertNotEqual(existingLabel, newLabel)
+    }
+
+    func testNoReuseWithDifferentAttributesAndAnyComponentOfView() {
+        componentView.component = Text("1").textColor(.red).eraseToAnyComponentOfView()
+        componentView.reloadData()
+        XCTAssertEqual(componentView.subviews.count, 1)
+        let existingLabel = componentView.subviews.first as? UILabel
+        XCTAssertNotNil(existingLabel)
+        XCTAssertEqual(existingLabel?.text, "1")
+        XCTAssertEqual(existingLabel?.textColor, .red)
+        componentView.component = Text("2").eraseToAnyComponentOfView()
         componentView.reloadData()
         XCTAssertEqual(componentView.subviews.count, 1)
         let newLabel = componentView.subviews.first as? UILabel

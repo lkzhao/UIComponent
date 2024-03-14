@@ -20,6 +20,10 @@ public protocol RenderNode<View> {
     /// The strategy to use when reusing views.
     var reuseStrategy: ReuseStrategy { get }
 
+    /// The default reuse key for the render node. This key will be used when reuseStrategy is set to .automatic.
+    /// This will also be used as fallbackId for structured identity when id is not set.
+    var defaultReuseKey: String { get }
+
     /// The size of the render node.
     var size: CGSize { get }
 
@@ -108,6 +112,7 @@ extension RenderNode {
     public var id: String? { nil }
     public var animator: Animator? { nil }
     public var reuseStrategy: ReuseStrategy { .automatic }
+    public var defaultReuseKey: String { "\(type(of: self))" }
     public var shouldRenderView: Bool { children.isEmpty }
 
     public func makeView() -> View {
@@ -132,7 +137,7 @@ extension RenderNode {
     public func defaultVisibleRenderablesImplementation(in frame: CGRect) -> [Renderable] {
         var result = [Renderable]()
         if shouldRenderView, frame.intersects(CGRect(origin: .zero, size: size)) {
-            result.append(Renderable(frame: CGRect(origin: .zero, size: size), renderNode: self, fallbackId: "\(type(of: self))"))
+            result.append(Renderable(frame: CGRect(origin: .zero, size: size), renderNode: self, fallbackId: defaultReuseKey))
         }
         let indexes = visibleIndexes(in: frame)
         for i in indexes {
@@ -155,7 +160,7 @@ extension RenderNode {
     internal func _makeView() -> UIView {
         switch reuseStrategy {
         case .automatic:
-            return ReuseManager.shared.dequeue(identifier: "\(type(of: self))", makeView())
+            return ReuseManager.shared.dequeue(identifier: defaultReuseKey, makeView())
         case .noReuse:
             return makeView()
         case .key(let key):
