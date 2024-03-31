@@ -58,12 +58,12 @@ public class PrimaryMenu: UIControl {
     public var isShowingMenu = false
 
     /// The menu to be displayed when the control is interacted with.
-    public var menu: UIMenu? {
+    public var menuBuilder: (() -> UIMenu)? {
         didSet {
             guard isShowingMenu else { return }
-            if let menu {
+            if let menuBuilder {
                 contextMenuInteraction?.updateVisibleMenu({ _ in
-                    return menu
+                    return menuBuilder()
                 })
             } else {
                 contextMenuInteraction?.dismissMenu()
@@ -149,8 +149,8 @@ public class PrimaryMenu: UIControl {
 
     public override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         (config ?? .default).didTap?(self)
-        let menuConfiguration = UIContextMenuConfiguration(actionProvider: { [menu] suggested in
-            return menu
+        let menuConfiguration = UIContextMenuConfiguration(actionProvider: { [menuBuilder] suggested in
+            return menuBuilder?()
         })
         if #available(iOS 16.0, *) {
             menuConfiguration.preferredMenuElementOrder = self.preferredMenuElementOrder

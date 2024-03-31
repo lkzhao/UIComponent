@@ -17,12 +17,16 @@ public struct PrimaryMenuComponent: Component {
     /// The underlying component that this `PrimaryMenuComponent` is wrapping.
     public let component: any Component
 
-    /// The menu to be displayed as part of the primary menu component.
-    public let menu: UIMenu
+    /// A builder that constructs the menu to be displayed as part of the primary menu component.
+    public let menuBuilder: () -> UIMenu
+
+    public init(component: any Component, menuBuilder: @escaping () -> UIMenu) {
+        self.component = component
+        self.menuBuilder = menuBuilder
+    }
 
     public init(component: any Component, menu: UIMenu) {
-        self.component = component
-        self.menu = menu
+        self.init(component: component, menuBuilder: { menu })
     }
 
     /// Lays out the component within the given constraints and returns a `PrimaryMenuRenderNode`.
@@ -30,7 +34,7 @@ public struct PrimaryMenuComponent: Component {
     /// - Returns: A `PrimaryMenuRenderNode` representing the laid out component.
     public func layout(_ constraint: Constraint) -> PrimaryMenuRenderNode {
         let renderNode = component.layout(constraint)
-        return PrimaryMenuRenderNode(size: renderNode.size.bound(to: constraint), component: component, content: renderNode, menu: menu, config: config)
+        return PrimaryMenuRenderNode(size: renderNode.size.bound(to: constraint), component: component, content: renderNode, menuBuilder: menuBuilder, config: config)
     }
 }
 
@@ -46,8 +50,8 @@ public struct PrimaryMenuRenderNode: RenderNode {
     /// The rendered content of the component.
     public let content: any RenderNode
 
-    /// The menu to be displayed as part of the primary menu component.
-    public let menu: UIMenu?
+    /// A builder that constructs the menu to be displayed as part of the primary menu component.
+    public let menuBuilder: (() -> UIMenu)?
 
     /// The configuration for the tappable view.
     public let config: PrimaryMenuConfig?
@@ -61,7 +65,7 @@ public struct PrimaryMenuRenderNode: RenderNode {
     /// - Parameter view: The `PrimaryMenu` to update.
     public func updateView(_ view: PrimaryMenu) {
         view.config = config
-        view.menu = menu
+        view.menuBuilder = menuBuilder
         view.contentView.engine.reloadWithExisting(component: component, renderNode: content)
     }
 }
