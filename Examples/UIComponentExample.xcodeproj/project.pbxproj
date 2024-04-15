@@ -26,11 +26,14 @@
 		B1CC3F7026789E1F005BCE8C /* CardViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */; };
 		B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7126789F07005BCE8C /* AddCardButton.swift */; };
 		B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CC3F7326789F3D005BCE8C /* CardData.swift */; };
+		F80A67B22BCD2236006FACFD /* SwipeExampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80A67B12BCD2236006FACFD /* SwipeExampleData.swift */; };
+		F80A67B42BCD248C006FACFD /* SwipeExampleComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80A67B32BCD248C006FACFD /* SwipeExampleComponents.swift */; };
 		F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */; };
 		F858D54026B9459E00410219 /* GalleryComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53D26B9459E00410219 /* GalleryComponents.swift */; };
 		F858D54126B9459E00410219 /* GalleryLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53E26B9459E00410219 /* GalleryLayout.swift */; };
 		F858D54226B9459E00410219 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D53F26B9459E00410219 /* GalleryViewController.swift */; };
 		F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */; };
+		F8D885CF2BC278280003DBA8 /* SwipeActionsExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D885CE2BC278280003DBA8 /* SwipeActionsExample.swift */; };
 		F8E3DD1426A7BC5F0062E58F /* HorizontalCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1126A7BC5F0062E58F /* HorizontalCardItem.swift */; };
 		F8E3DD1526A7BC5F0062E58F /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */; };
 		F8E3DD1626A7BC5F0062E58F /* ComplexLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3DD1326A7BC5F0062E58F /* ComplexLayoutViewController.swift */; };
@@ -72,11 +75,14 @@
 		B1CC3F6F26789E1F005BCE8C /* CardViewController3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController3.swift; sourceTree = "<group>"; };
 		B1CC3F7126789F07005BCE8C /* AddCardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardButton.swift; sourceTree = "<group>"; };
 		B1CC3F7326789F3D005BCE8C /* CardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
+		F80A67B12BCD2236006FACFD /* SwipeExampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeExampleData.swift; sourceTree = "<group>"; };
+		F80A67B32BCD248C006FACFD /* SwipeExampleComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeExampleComponents.swift; sourceTree = "<group>"; };
 		F839CC0D26A90DDF00392BCE /* IntroductionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionCard.swift; sourceTree = "<group>"; };
 		F858D53D26B9459E00410219 /* GalleryComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryComponents.swift; sourceTree = "<group>"; };
 		F858D53E26B9459E00410219 /* GalleryLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryLayout.swift; sourceTree = "<group>"; };
 		F858D53F26B9459E00410219 /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexLayoutViewController.swift; sourceTree = "<group>"; };
+		F8D885CE2BC278280003DBA8 /* SwipeActionsExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeActionsExample.swift; sourceTree = "<group>"; };
 		F8E3DD1126A7BC5F0062E58F /* HorizontalCardItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HorizontalCardItem.swift; sourceTree = "<group>"; };
 		F8E3DD1226A7BC5F0062E58F /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		F8E3DD1326A7BC5F0062E58F /* ComplexLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplexLayoutViewController.swift; sourceTree = "<group>"; };
@@ -182,6 +188,7 @@
 		B1CC3F6C267800B9005BCE8C /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				F8D885CC2BC277E10003DBA8 /* SwipeActions */,
 				B1CC3F6A2678009C005BCE8C /* AsyncImage */,
 				B1CC3F692678008F005BCE8C /* Card */,
 				F8E3DD0F26A7BC5F0062E58F /* Complex layout */,
@@ -192,6 +199,22 @@
 				B1953D682743703C009804F6 /* BadgeExample.swift */,
 			);
 			path = Examples;
+			sourceTree = "<group>";
+		};
+		F80A67AF2BCD2218006FACFD /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F80A67B32BCD248C006FACFD /* SwipeExampleComponents.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F80A67B02BCD221F006FACFD /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F80A67B12BCD2236006FACFD /* SwipeExampleData.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		F858D53B26B9459E00410219 /* Gallery Example */ = {
@@ -218,6 +241,16 @@
 				F88E832126A3E6FA009E7720 /* FlexLayoutViewController.swift */,
 			);
 			path = "Flex Layout";
+			sourceTree = "<group>";
+		};
+		F8D885CC2BC277E10003DBA8 /* SwipeActions */ = {
+			isa = PBXGroup;
+			children = (
+				F80A67B02BCD221F006FACFD /* Data */,
+				F80A67AF2BCD2218006FACFD /* Components */,
+				F8D885CE2BC278280003DBA8 /* SwipeActionsExample.swift */,
+			);
+			path = SwipeActions;
 			sourceTree = "<group>";
 		};
 		F8E3DD0F26A7BC5F0062E58F /* Complex layout */ = {
@@ -323,10 +356,12 @@
 				B1CC3F7226789F07005BCE8C /* AddCardButton.swift in Sources */,
 				F8E3DD1526A7BC5F0062E58F /* UserProfile.swift in Sources */,
 				F839CC0E26A90DDF00392BCE /* IntroductionCard.swift in Sources */,
+				F8D885CF2BC278280003DBA8 /* SwipeActionsExample.swift in Sources */,
 				F8E3DD1626A7BC5F0062E58F /* ComplexLayoutViewController.swift in Sources */,
 				B1B079EE26AB398E003BEAFB /* WaterfallLayoutViewController.swift in Sources */,
 				B1CC3F632677FCFD005BCE8C /* CardViewController.swift in Sources */,
 				F88E832226A3E6FA009E7720 /* FlexLayoutViewController.swift in Sources */,
+				F80A67B22BCD2236006FACFD /* SwipeExampleData.swift in Sources */,
 				F858D54026B9459E00410219 /* GalleryComponents.swift in Sources */,
 				B1CC3F652677FD99005BCE8C /* ComponentViewController.swift in Sources */,
 				B1CC3F672677FF79005BCE8C /* AsyncImageViewController.swift in Sources */,
@@ -342,6 +377,7 @@
 				A304892821C347010026EDA7 /* AppDelegate.swift in Sources */,
 				B1CC3F7426789F3D005BCE8C /* CardData.swift in Sources */,
 				B1CC3F7026789E1F005BCE8C /* CardViewController3.swift in Sources */,
+				F80A67B42BCD248C006FACFD /* SwipeExampleComponents.swift in Sources */,
 				B1CC3F6E26789C55005BCE8C /* CardViewController2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -491,6 +527,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = YNJLN87BST;
 				INFOPLIST_FILE = "$(SRCROOT)/UIComponentExample/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -498,7 +535,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lkzhao.UIComponent.example;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lkzhao.UIComponent.example1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -510,6 +547,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = YNJLN87BST;
 				INFOPLIST_FILE = "$(SRCROOT)/UIComponentExample/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -517,7 +555,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lkzhao.UIComponent.example;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lkzhao.UIComponent.example1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
