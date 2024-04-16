@@ -36,6 +36,7 @@ public struct SwipeConfig {
 }
 
 public class SwipeView: UIView {
+    
     public var actions: [any SwipeAction] {
         set { configActions(with: newValue) }
         get { _actions }
@@ -361,32 +362,40 @@ public class SwipeView: UIView {
     func handlerActionEvent(action: any SwipeAction, actionsContainerView: SwipeActionWrapView, eventFrom: SwipeActionEventFrom) {
         action.handlerAction(completion: { [weak self] afterHandler in
             guard let self else { return }
-            let defaultTransition = SwipeTransition.animated(duration: 0.2, curve: .easeInOut)
-            switch afterHandler {
-            case .close:
-                closeSwipeAction(transition: defaultTransition)
-            case let .swipeFull(completion):
-                actionsContainerView.clickedAction = action
-                let isEdgeAction = action.identifier == actionsContainerView.edgeAction.identifier
-                let offset = isEdgeAction ? frame.width : frame.width + actionsContainerView.contentViewPreferredWidth
-                updateRevealOffsetInternal(
-                    offset: actionsContainerView.horizontalEdge.isLeft ? offset : -offset,
-                    transition: defaultTransition,
-                    forceSwipeOffset: true,
-                    shouldForceSwipeFull: isEdgeAction
-                ) {
-                    completion?()
-                    self.updateRevealOffsetInternal(offset: 0, transition: .immediate)
-                    UIView.transition(with: self, duration: 0.25, options: [.transitionCrossDissolve], animations: nil)
-                }
-            case .alert:
-                Task {
-                    await actionsContainerView.makeAlert(with: action, transition: defaultTransition)
-                }
-            }
+            self.afterHandler(with: afterHandler, action: action)
         }, eventFrom: eventFrom)
     }
-
+    
+    func afterHandler(with afterHandler: SwipeActionAfterHandler, action: (any SwipeAction)?) {
+        let defaultTransition = SwipeTransition.animated(duration: 0.2, curve: .easeInOut)
+        guard let action, let actionWrapViewView = action.wrapView else {
+            closeSwipeAction(transition: defaultTransition)
+            return
+        }
+        switch afterHandler {
+        case .close:
+            closeSwipeAction(transition: defaultTransition)
+        case let .swipeFull(completion):
+            actionWrapViewView.clickedAction = action
+            let isEdgeAction = action.identifier == actionWrapViewView.edgeAction.identifier
+            let offset = isEdgeAction ? frame.width : frame.width + actionWrapViewView.contentViewPreferredWidth
+            updateRevealOffsetInternal(
+                offset: actionWrapViewView.horizontalEdge.isLeft ? offset : -offset,
+                transition: defaultTransition,
+                forceSwipeOffset: true,
+                shouldForceSwipeFull: isEdgeAction
+            ) {
+                completion?()
+                self.updateRevealOffsetInternal(offset: 0, transition: .immediate)
+                UIView.transition(with: self, duration: 0.25, options: [.transitionCrossDissolve], animations: nil)
+            }
+        case .alert:
+            Task {
+                await actionWrapViewView.makeAlert(with: action, transition: defaultTransition)
+            }
+        }
+    }
+    
     public func closeOtherSwipeAction(transition: SwipeTransition) {
         guard let scrollView else { return }
         let views = scrollView.allSubViewsOf(type: Self.self).filter { $0 != self }

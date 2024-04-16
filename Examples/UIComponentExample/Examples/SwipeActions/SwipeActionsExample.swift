@@ -4,19 +4,58 @@ import UIKit
 import UIComponent
 
 class SwipeActionsExample: ComponentViewController {
-    
-    var data: [String] = (0...100).map { "\($0)" } {
-        didSet {
-            reloadComponent()
-        }
-    }
     var emailData = EmailData.mockDatas {
         didSet {
             reloadComponent()
         }
     }
-    var completion: SwipeAction.CompletionAfterHandler?
-    
+
+    var customSwipeAction: SwipeActionComponent {
+        var primaryMenuSwipeAction = SwipeActionComponent.custom(
+            horizontalEdge: .left,
+            backgroundColor: UIColor(red: 0.341, green: 0.333, blue: 0.835, alpha: 1.0),
+            alert: {
+                Text("This is custom action", font: .systemFont(ofSize: 18, weight: .medium))
+                    .textColor(.white)
+                    .adjustsFontSizeToFitWidth(true)
+                    .textAlignment(.center)
+                    .inset(5)
+                    .flex()
+            },
+            actionHandler: { [unowned self] completion, _, form in
+                if form == .alert {
+                    completion(.swipeFull {
+                        self.present(ComponentViewController(), animated: true)
+                    })
+                }
+            }
+        )
+        let primaryMenuComponent = VStack(alignItems: .center) {
+            Image(systemName: "clock.fill")
+                .tintColor(.white)
+            Text("Remind", font: .systemFont(ofSize: 16, weight: .medium))
+                .textColor(.white)
+        }
+        .inset(h: 10)
+        .minSize(width: 74, height: 0)
+        .primaryMenu {
+            let actionHander: UIActionHandler = { action in
+                if action.title == "Remind me later..." {
+                    primaryMenuSwipeAction.manualHandlerAfter(afterHandler: .alert)
+                } else {
+                    primaryMenuSwipeAction.manualHandlerAfter(afterHandler: .close)
+                }
+            }
+            return UIMenu(title: "Remind me", children: [
+                UIAction(title: "Remind me in 1 hour", handler: actionHander),
+                UIAction(title: "Remind me tomorrow", handler: actionHander),
+                UIAction(title: "Remind me later...", handler: actionHander),
+            ])
+        }
+        primaryMenuSwipeAction.component = primaryMenuComponent
+        return primaryMenuSwipeAction
+    }
+
     override var component: any Component {
         VStack(alignItems: .stretch) {
             Join {
@@ -27,29 +66,7 @@ class SwipeActionsExample: ComponentViewController {
                             self.navigationController?.pushViewController(ComponentViewController(), animated: true)
                         }
                         .swipeActions {
-                            SwipeActionComponent(identifier: "remind.me", horizontalEdge: .left, backgroundColor: UIColor(red: 0.341, green: 0.333, blue: 0.835, alpha: 1.0)) {
-                                VStack(alignItems: .center) {
-                                    Image(systemName: "clock.fill")
-                                        .tintColor(.white)
-                                    Text("Remind", font: .systemFont(ofSize: 16, weight: .medium))
-                                        .textColor(.white)
-                                }
-                                .inset(h: 10)
-                                .minSize(width: 74, height: 0)
-                                .primaryMenu { [unowned self] in
-                                    let actionHander: UIActionHandler = { _ in
-                                        self.completion?(.close)
-                                        self.completion = nil
-                                    }
-                                    return UIMenu(title: "Remind me", children: [
-                                        UIAction(title: "Remind me in 1 hour", handler: actionHander),
-                                        UIAction(title: "Remind me tomorrow", handler: actionHander),
-                                        UIAction(title: "Remind me later...", handler: actionHander)
-                                    ])
-                                }
-                            } actionHandler: { [unowned self] completion, action, form in
-                                handlerEmail(action, completion: completion, eventForm: form, index: index)
-                            }
+                            customSwipeAction
                             SwipeActionComponent(identifier: "read", horizontalEdge: .left, backgroundColor: UIColor(red: 0.008, green: 0.475, blue: 0.996, alpha: 1.0)) {
                                 VStack(justifyContent: .center, alignItems: .center) {
                                     Image(systemName: value.unread ? "envelope.open.fill" : "envelope.fill")
@@ -62,6 +79,7 @@ class SwipeActionsExample: ComponentViewController {
                             } actionHandler: { [unowned self] completion, action, form in
                                 handlerEmail(action, completion: completion, eventForm: form, index: index)
                             }
+
                             // MARK: Right
                             SwipeActionComponent(identifier: "more", horizontalEdge: .right, backgroundColor: UIColor(red: 0.553, green: 0.553, blue: 0.553, alpha: 1.0)) {
                                 VStack(justifyContent: .center, alignItems: .center) {
@@ -128,30 +146,22 @@ class SwipeActionsExample: ComponentViewController {
                     .inset(left: 30)
             }
         }
-//        .scrollView()
-//        .with(\.animator, TransformAnimator(cascade: true))
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .done, target: self, action: #selector(self.close))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .done, target: self, action: #selector(close))
         navigationController?.navigationBar.prefersLargeTitles = true
         componentView.contentInsetAdjustmentBehavior = .automatic
         componentView.engine.asyncLayout = true
         componentView.animator = TransformAnimator(cascade: true)
         title = "Email Example"
     }
-    
+
     func handlerEmail(_ action: any SwipeAction, completion: @escaping SwipeAction.CompletionAfterHandler, eventForm: SwipeActionEventFrom, index: Int) {
-        self.completion = nil
         if action.identifier == "read" {
             emailData[index].unread.toggle()
             completion(.close)
-        } else if action.identifier == "remind.me" {
-            if eventForm == .tap {
-                self.completion = completion
-            } else {
-                self.completion = nil
-            }
         } else if action.identifier == "trash" {
             if eventForm == .expanded || eventForm == .alert {
                 let remove: () -> Void = { [unowned self] in
@@ -164,9 +174,8 @@ class SwipeActionsExample: ComponentViewController {
         } else {
             completion(.close)
         }
-        
     }
-    
+
     @objc func close() {
         dismiss(animated: true)
     }

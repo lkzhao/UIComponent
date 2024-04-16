@@ -53,6 +53,19 @@ public extension SwipeAction {
     }
     
     func willShow() {}
+    
+    internal var wrapView: SwipeActionWrapView? {
+        sequence(first: view.superview, next: { $0?.superview }).compactMap { $0 as? SwipeActionWrapView }.first
+    }
+    
+    var swipeView: SwipeView? {
+        sequence(first: view.superview, next: { $0?.superview }).compactMap { $0 as? SwipeView }.first
+    }
+    
+    func manualHandlerAfter(afterHandler: SwipeActionAfterHandler) {
+        guard let swipeView else { return }
+        swipeView.afterHandler(with: afterHandler, action: self)
+    }
 }
 
 public extension SwipeAction {
@@ -62,17 +75,40 @@ public extension SwipeAction {
 }
 
 public struct SwipeActionComponent: SwipeAction {
+    public static let blankActionHandler: ActionHandler = {_, _, _ in}
     public typealias ActionHandler = (_ completion: @escaping CompletionAfterHandler, _ action: any SwipeAction, _ form: SwipeActionEventFrom) -> Void
+    public typealias ComponentWithParameterProvider = () -> any Component
     public typealias ComponentProvider = () -> any Component
     public let identifier: String
     public let horizontalEdge: SwipeHorizontalEdge
     public let view: ComponentView
     public let alert: (any Component)?
     public let background: any Component
-    public let component: any Component
+    public var component: any Component {
+        didSet { view.component = wrapLayout(body: component, justifyContent: horizontalEdge.isLeft ? .end : .start) }
+    }
     public let actionHandler: SwipeActionComponent.ActionHandler
-
-    public init(identifier: String = UUID().uuidString, horizontalEdge: SwipeHorizontalEdge, backgroundColor: UIColor, body: SwipeActionComponent.ComponentProvider, alert: SwipeActionComponent.ComponentProvider? = nil, actionHandler: @escaping SwipeActionComponent.ActionHandler) {
+    
+    public static func custom(identifier: String = UUID().uuidString,
+                              horizontalEdge: SwipeHorizontalEdge,
+                              backgroundColor: UIColor,
+                              body: SwipeActionComponent.ComponentProvider? = nil,
+                              alert: SwipeActionComponent.ComponentProvider? = nil,
+                              actionHandler: @escaping SwipeActionComponent.ActionHandler = blankActionHandler) -> Self {
+        self.init(identifier: identifier,
+                  horizontalEdge: horizontalEdge,
+                  backgroundColor: backgroundColor,
+                  body: body ?? { Space() },
+                  alert: alert,
+                  actionHandler: actionHandler)
+    }
+    
+    public init(identifier: String = UUID().uuidString,
+                horizontalEdge: SwipeHorizontalEdge,
+                backgroundColor: UIColor,
+                body: SwipeActionComponent.ComponentProvider,
+                alert: SwipeActionComponent.ComponentProvider? = nil,
+                actionHandler: @escaping SwipeActionComponent.ActionHandler) {
         self.init(identifier: identifier,
                   horizontalEdge: horizontalEdge,
                   component: body,
@@ -81,7 +117,12 @@ public struct SwipeActionComponent: SwipeAction {
                   actionHandler: actionHandler)
     }
 
-    init(identifier: String, horizontalEdge: SwipeHorizontalEdge, component: SwipeActionComponent.ComponentProvider, background: SwipeActionComponent.ComponentProvider? = nil, alert: ComponentProvider? = nil, actionHandler: @escaping SwipeActionComponent.ActionHandler) {
+    init(identifier: String, 
+         horizontalEdge: SwipeHorizontalEdge,
+         component: SwipeActionComponent.ComponentProvider,
+         background: SwipeActionComponent.ComponentProvider? = nil,
+         alert: ComponentProvider? = nil,
+         actionHandler: @escaping SwipeActionComponent.ActionHandler) {
         self.identifier = identifier
         self.horizontalEdge = horizontalEdge
         let component = component()
@@ -111,22 +152,24 @@ public struct SwipeActionComponent: SwipeAction {
         actionHandler(completion, self, eventFrom)
     }
 
-    func wrapLayout(body: any Component, justifyContent: MainAxisAlignment) -> WrapLayout {
-        WrapLayout(justifyContent: justifyContent, background: background) { body }
+    func wrapLayout(body: any Component, justifyContent: MainAxisAlignment, alignItems: CrossAxisAlignment = .center) -> WrapLayout {
+        WrapLayout(justifyContent: justifyContent, alignItems: alignItems,  background: background) { body }
     }
     
     struct WrapLayout: ComponentBuilder {
         let justifyContent: MainAxisAlignment
+        let alignItems: CrossAxisAlignment
         let components: [any Component]
         let background: any Component
-        init(justifyContent: MainAxisAlignment, background: any Component, @ComponentArrayBuilder _ components: () -> [any Component]) {
+        init(justifyContent: MainAxisAlignment, alignItems: CrossAxisAlignment, background: any Component, @ComponentArrayBuilder _ components: () -> [any Component]) {
             self.justifyContent = justifyContent
+            self.alignItems = alignItems
             self.components = components()
             self.background = background
         }
 
         func build() -> some Component {
-            HStack(justifyContent: justifyContent, alignItems: .center) {
+            HStack(justifyContent: justifyContent, alignItems: alignItems) {
                 components
             }
             .fill()
