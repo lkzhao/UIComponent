@@ -21,8 +21,10 @@ public enum SwipeActionEventFrom {
 }
 
 public enum SwipeActionAfterHandler {
+    public typealias TransitionCompleted = () -> Void
+    case hold
     case close
-    case swipeFull(_ completion: (() -> Void)? = nil)
+    case swipeFull(TransitionCompleted? = nil)
     case alert
 }
 
@@ -34,16 +36,15 @@ public protocol SwipeAction {
     var view: View { get }
     func makeExpandedView() -> UIView?
     func makeAlertView() -> UIView
-    func isSame(_ other: any SwipeAction) -> Bool
     func handlerAction(completion: @escaping CompletionAfterHandler, eventFrom: SwipeActionEventFrom)
     func willShow()
 }
 
 public extension SwipeAction {
-    func isSame(_ other: any SwipeAction) -> Bool {
-        identifier == other.identifier && horizontalEdge == other.horizontalEdge
+    var swipeView: SwipeView? {
+        sequence(first: view.superview, next: { $0?.superview }).compactMap { $0 as? SwipeView }.first
     }
-
+    
     func makeExpandedView() -> UIView? {
         return nil
     }
@@ -54,17 +55,17 @@ public extension SwipeAction {
     
     func willShow() {}
     
-    internal var wrapView: SwipeActionWrapView? {
-        sequence(first: view.superview, next: { $0?.superview }).compactMap { $0 as? SwipeActionWrapView }.first
-    }
-    
-    var swipeView: SwipeView? {
-        sequence(first: view.superview, next: { $0?.superview }).compactMap { $0 as? SwipeView }.first
-    }
-    
     func manualHandlerAfter(afterHandler: SwipeActionAfterHandler) {
         guard let swipeView else { return }
         swipeView.afterHandler(with: afterHandler, action: self)
+    }
+    
+    internal func isSame(_ other: any SwipeAction) -> Bool {
+        identifier == other.identifier && horizontalEdge == other.horizontalEdge
+    }
+    
+    internal var wrapView: SwipeActionWrapView? {
+        sequence(first: view.superview, next: { $0?.superview }).compactMap { $0 as? SwipeActionWrapView }.first
     }
 }
 
@@ -84,7 +85,7 @@ public struct SwipeActionComponent: SwipeAction {
     public let view: ComponentView
     public let alert: (any Component)?
     public let background: any Component
-    public var component: any Component {
+    public var component: (any Component)? {
         didSet { view.component = wrapLayout(body: component, justifyContent: horizontalEdge.isLeft ? .end : .start) }
     }
     public let actionHandler: SwipeActionComponent.ActionHandler
@@ -98,7 +99,7 @@ public struct SwipeActionComponent: SwipeAction {
         self.init(identifier: identifier,
                   horizontalEdge: horizontalEdge,
                   backgroundColor: backgroundColor,
-                  body: body ?? { Space() },
+                  body: body,
                   alert: alert,
                   actionHandler: actionHandler)
     }
@@ -106,7 +107,7 @@ public struct SwipeActionComponent: SwipeAction {
     public init(identifier: String = UUID().uuidString,
                 horizontalEdge: SwipeHorizontalEdge,
                 backgroundColor: UIColor,
-                body: SwipeActionComponent.ComponentProvider,
+                body: SwipeActionComponent.ComponentProvider?,
                 alert: SwipeActionComponent.ComponentProvider? = nil,
                 actionHandler: @escaping SwipeActionComponent.ActionHandler) {
         self.init(identifier: identifier,
@@ -117,15 +118,15 @@ public struct SwipeActionComponent: SwipeAction {
                   actionHandler: actionHandler)
     }
 
-    init(identifier: String, 
+    public init(identifier: String,
          horizontalEdge: SwipeHorizontalEdge,
-         component: SwipeActionComponent.ComponentProvider,
-         background: SwipeActionComponent.ComponentProvider? = nil,
-         alert: ComponentProvider? = nil,
+         component: SwipeActionComponent.ComponentProvider?,
+         background: SwipeActionComponent.ComponentProvider?,
+         alert: ComponentProvider?,
          actionHandler: @escaping SwipeActionComponent.ActionHandler) {
         self.identifier = identifier
         self.horizontalEdge = horizontalEdge
-        let component = component()
+        let component = component?()
         let background = background?() ?? Space()
         self.alert = alert?()
         self.background = background
@@ -152,7 +153,7 @@ public struct SwipeActionComponent: SwipeAction {
         actionHandler(completion, self, eventFrom)
     }
 
-    func wrapLayout(body: any Component, justifyContent: MainAxisAlignment, alignItems: CrossAxisAlignment = .center) -> WrapLayout {
+    func wrapLayout(body: (any Component)?, justifyContent: MainAxisAlignment, alignItems: CrossAxisAlignment = .center) -> WrapLayout {
         WrapLayout(justifyContent: justifyContent, alignItems: alignItems,  background: background) { body }
     }
     

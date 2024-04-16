@@ -37,19 +37,30 @@ class SwipeActionsExample: ComponentViewController {
                 .textColor(.white)
         }
         .inset(h: 10)
-        .minSize(width: 74, height: 0)
+        .minSize(width: 74)
         .primaryMenu {
-            let actionHander: UIActionHandler = { action in
+            let actionHandler: UIActionHandler = { action in
                 if action.title == "Remind me later..." {
                     primaryMenuSwipeAction.manualHandlerAfter(afterHandler: .alert)
+                } else if action.title == "Remind me in 1 hour" {
+                    primaryMenuSwipeAction.manualHandlerAfter(afterHandler: .hold)
+                    let alert = UIAlertController(title: "Alert", message: "Hold swipe...", preferredStyle: .alert)
+                    [SwipeActionAfterHandler.alert, SwipeActionAfterHandler.close, SwipeActionAfterHandler.swipeFull(nil)]
+                        .map { value in
+                            UIAlertAction(title: String(describing: value), style: .default) { _ in
+                                primaryMenuSwipeAction.manualHandlerAfter(afterHandler: value)
+                            }
+                        }.forEach { alert.addAction($0) }
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                    self.present(alert, animated: true)
                 } else {
                     primaryMenuSwipeAction.manualHandlerAfter(afterHandler: .close)
                 }
             }
             return UIMenu(title: "Remind me", children: [
-                UIAction(title: "Remind me in 1 hour", handler: actionHander),
-                UIAction(title: "Remind me tomorrow", handler: actionHander),
-                UIAction(title: "Remind me later...", handler: actionHander),
+                UIAction(title: "Remind me in 1 hour", handler: actionHandler),
+                UIAction(title: "Remind me tomorrow", handler: actionHandler),
+                UIAction(title: "Remind me later...", handler: actionHandler),
             ])
         }
         primaryMenuSwipeAction.component = primaryMenuComponent

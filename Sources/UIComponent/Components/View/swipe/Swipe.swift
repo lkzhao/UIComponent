@@ -393,6 +393,8 @@ public class SwipeView: UIView {
             Task {
                 await actionWrapViewView.makeAlert(with: action, transition: defaultTransition)
             }
+        case .hold:
+            updateRevealOffsetInternal(offset: action.horizontalEdge.isLeft ? actionWrapViewView.preferredWidth : -actionWrapViewView.preferredWidth, transition: defaultTransition)
         }
     }
     
