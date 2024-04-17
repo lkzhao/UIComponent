@@ -34,6 +34,7 @@ public protocol SwipeAction {
     var identifier: String { get }
     var horizontalEdge: SwipeHorizontalEdge { get }
     var view: View { get }
+    var isEnableFadeTransitionAddedExpandedView: Bool { get }
     func makeExpandedView() -> UIView?
     func makeAlertView() -> UIView
     func handlerAction(completion: @escaping CompletionAfterHandler, eventFrom: SwipeActionEventFrom)
@@ -44,6 +45,8 @@ public extension SwipeAction {
     var swipeView: SwipeView? {
         sequence(first: view.superview, next: { $0?.superview }).compactMap { $0 as? SwipeView }.first
     }
+    
+    var isEnableFadeTransitionAddedExpandedView: Bool { true }
     
     func makeExpandedView() -> UIView? {
         return nil
@@ -89,6 +92,7 @@ public struct SwipeActionComponent: SwipeAction {
         didSet { view.component = wrapLayout(body: component, justifyContent: horizontalEdge.isLeft ? .end : .start) }
     }
     public let actionHandler: SwipeActionComponent.ActionHandler
+    public let isEnableFadeTransitionAddedExpandedView: Bool = false
     
     public static func custom(identifier: String = UUID().uuidString,
                               horizontalEdge: SwipeHorizontalEdge,

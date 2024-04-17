@@ -9,7 +9,7 @@ class ComponentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         componentView.contentInsetAdjustmentBehavior = .always
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGroupedBackground
         view.addSubview(componentView)
         reloadComponent()
     }

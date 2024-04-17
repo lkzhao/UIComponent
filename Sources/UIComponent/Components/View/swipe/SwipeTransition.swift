@@ -23,7 +23,7 @@ public enum SwipeTransitionCurve: Equatable {
     case spring(damping: CGFloat, initialVelocity: CGVector)
     case custom(UIViewPropertyAnimator)
 
-    func animator(duration: TimeInterval) -> UIViewPropertyAnimator {
+    internal func animator(duration: TimeInterval) -> UIViewPropertyAnimator {
         switch self {
         case .linear:
             return UIViewPropertyAnimator(duration: duration, curve: .linear)
@@ -39,47 +39,16 @@ public enum SwipeTransitionCurve: Equatable {
             return animator
         }
     }
-
-    var timingFunction: CAMediaTimingFunctionName? {
-        switch self {
-        case .linear:
-            return CAMediaTimingFunctionName.linear
-        case .easeInOut:
-            return CAMediaTimingFunctionName.easeInEaseOut
-        case .easeIn:
-            return CAMediaTimingFunctionName.easeIn
-        case .easeOut:
-            return CAMediaTimingFunctionName.easeOut
-        case .spring:
-            return nil
-        case .custom:
-            return nil
-        }
+    
+    /// Calculates the relative velocity needed for the initial velocity of the animation.
+    internal static func relativeVelocity(forVelocity velocity: CGFloat, from currentValue: CGFloat, to targetValue: CGFloat) -> CGFloat {
+        guard currentValue - targetValue != 0 else { return 0 }
+        return velocity / (targetValue - currentValue)
     }
+
 }
 
 extension SwipeTransition {
-    func animatePositionAdditive(with view: UIView, offset: CGPoint, removeOnCompletion: Bool = false, completion: ((Bool) -> Void)? = nil) {
-        switch self {
-        case .immediate:
-            completion?(true)
-        case let .animated(duration, curve):
-            let animation = CABasicAnimation(keyPath: "position")
-            animation.fromValue = NSValue(cgPoint: offset)
-            animation.toValue = NSValue(cgPoint: CGPoint())
-            animation.isAdditive = true
-            animation.isRemovedOnCompletion = removeOnCompletion
-            animation.fillMode = .forwards
-            if let timingFunction = curve.timingFunction {
-                animation.timingFunction = CAMediaTimingFunction(name: timingFunction)
-            }
-            animation.duration = duration
-            animation.delegate = CALayerAnimationDelegate(animation: animation, completion: completion)
-            animation.speed = 1.0
-            view.layer.add(animation, forKey: "position")
-        }
-    }
-    
     @discardableResult
     func update(animation: @escaping () -> Void, completion: ((Bool) -> Void)? = nil) -> UIViewPropertyAnimator? {
         switch self {
@@ -117,30 +86,18 @@ extension SwipeTransition {
     }
 }
 
-private class CALayerAnimationDelegate: NSObject, CAAnimationDelegate {
-    private let keyPath: String?
-    var completion: ((Bool) -> Void)?
+internal extension UISpringTimingParameters {
     
-    init(animation: CAAnimation, completion: ((Bool) -> Void)?) {
-        if let animation = animation as? CABasicAnimation {
-            self.keyPath = animation.keyPath
-        } else {
-            self.keyPath = nil
-        }
-        self.completion = completion
-        
-        super.init()
+    /// A design-friendly way to create a spring timing curve.
+    ///
+    /// - Parameters:
+    ///   - damping: The 'bounciness' of the animation. Value must be between 0 and 1.
+    ///   - response: The 'speed' of the animation.
+    ///   - initialVelocity: The vector describing the starting motion of the property. Optional, default is `.zero`.
+    convenience init(damping: CGFloat, response: CGFloat, initialVelocity: CGVector = .zero) {
+        let stiffness = pow(2 * .pi / response, 2)
+        let damp = 4 * .pi * damping / response
+        self.init(mass: 1, stiffness: stiffness, damping: damp, initialVelocity: initialVelocity)
     }
     
-    @objc func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        if let anim = anim as? CABasicAnimation {
-            if anim.keyPath != self.keyPath {
-                return
-            }
-        }
-        if let completion = self.completion {
-            completion(flag)
-            self.completion = nil
-        }
-    }
 }

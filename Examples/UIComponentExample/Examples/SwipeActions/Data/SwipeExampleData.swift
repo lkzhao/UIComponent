@@ -1,6 +1,28 @@
 //  Created by y H on 2024/4/15.
 
 import Foundation
+import UIComponent
+
+extension SwipeActionsExample {
+    var defaultActions: [any SwipeAction] {
+        [
+            SwipeActionComponent(horizontalEdge: .right, backgroundColor: .systemRed, body: {
+                Text("First")
+                    .textColor(.white)
+                    .inset(10)
+            }, actionHandler: { completion, action, form in
+                completion(.close)
+            }),
+            SwipeActionComponent(horizontalEdge: .right, backgroundColor: .systemBlue, body: {
+                Text("Second")
+                    .textColor(.white)
+                    .inset(10)
+            }, actionHandler: { completion, action, form in
+                completion(.close)
+            })
+        ]
+    }
+}
 
 struct EmailData: Equatable {
     let from: String
