@@ -4,7 +4,7 @@ import UIKit
 import UIComponent
 
 class SwipeActionsExample: ComponentViewController {
-    var emailData = EmailData.mockDatas {
+    var emailDatas = EmailData.mockDatas {
         didSet {
             reloadComponent()
         }
@@ -69,20 +69,57 @@ class SwipeActionsExample: ComponentViewController {
 
     override var component: any Component {
         VStack(spacing: 10, alignItems: .stretch) {
-            /*
-             Group(title: "Special") {
-                 Cell(title: "Space \n12345\n123")
-                     .backgroundColor(.systemPink)
-                     .with(\.layer.cornerRadius, 15)
-                     .swipeActions {
-                         SwipeActionComponent.divide(horizontalEdge: .right, backgroundColor: .clear, thick: 5)
-                         SwipeActionComponent.rounded(horizontalEdge: .right)
-                         SwipeActionComponent.divide(horizontalEdge: .right, backgroundColor: .clear, thick: 5)
-                         SwipeActionComponent.rounded(horizontalEdge: .right)
-                     }
-                     .swipeConfig(SwipeConfig(layoutEffect: .static))
-             }
-             */
+            Group(title: "Rounded style") {
+                VStack(spacing: 10, alignItems: .stretch) {
+                    Cell(title: "Rounded corners")
+                        .tappableView {
+                            
+                        }
+                        .tappableViewConfig(TappableViewConfig(onHighlightChanged: { view, isHighlight in
+                            UIView.animate(withDuration: 0.25) {
+                                view.alpha = isHighlight ? 0.7 : 1
+                            }
+                        }))
+                        .with(\.layer.cornerRadius, 15)
+                        .backgroundColor(.systemGroupedBackground)
+                        .swipeActions {
+                            SwipeActionComponent.rounded(horizontalEdge: .right)
+                            SwipeActionComponent.rounded(horizontalEdge: .right)
+                            SwipeActionComponent.rounded(horizontalEdge: .left)
+                            SwipeActionComponent.rounded(horizontalEdge: .left)
+                        }
+                        .swipeConfig(SwipeConfig(layoutEffect: .drag,
+                                                gap: 10,
+                                                spacing: 10,
+                                                cornerRadius: 15,
+                                                clipsToBounds: false))
+                    Cell(title: "Rounded corners 2")
+                        .tappableView {
+                            
+                        }
+                        .tappableViewConfig(TappableViewConfig(onHighlightChanged: { view, isHighlight in
+                            UIView.animate(withDuration: 0.25) {
+                                view.alpha = isHighlight ? 0.7 : 1
+                            }
+                        }))
+                        .with(\.layer.cornerRadius, 15)
+                        .backgroundColor(.systemGroupedBackground)
+                        .swipeActions {
+                            SwipeActionComponent.rounded(horizontalEdge: .right, cornerRadius: 0)
+                            SwipeActionComponent.rounded(horizontalEdge: .right, cornerRadius: 0)
+                            SwipeActionComponent.rounded(horizontalEdge: .right, cornerRadius: 0)
+                            SwipeActionComponent.rounded(horizontalEdge: .left, cornerRadius: 0)
+                            SwipeActionComponent.rounded(horizontalEdge: .left, cornerRadius: 0)
+                            SwipeActionComponent.rounded(horizontalEdge: .left, cornerRadius: 0)
+                        }
+                        .swipeConfig(SwipeConfig(layoutEffect: .static,
+                                                gap: 1,
+                                                spacing: 5,
+                                                cornerRadius: 15,
+                                                clipsToBounds: false))
+                }
+                .inset(10)
+            }
             Group(title: "LayoutEffect") {
                 Join {
                     Cell(title: ".drag")
@@ -114,8 +151,9 @@ class SwipeActionsExample: ComponentViewController {
                                 backgroundColor: .systemRed,
                                 body: {
                                     Text("Remove")
+                                        .font(.systemFont(ofSize: 17, weight: .semibold))
                                         .textColor(.white)
-                                        .inset(20)
+                                        .inset(h: 20)
                                 },
                                 actionHandler: { completion, _, _ in
                                     completion(.hold)
@@ -225,9 +263,8 @@ class SwipeActionsExample: ComponentViewController {
             }
             Group(title: "Email example") {
                 Join {
-                    for (index, value) in emailData.enumerated() {
+                    for value in emailDatas  {
                         Email(data: value)
-                            .id(value.from)
                             .tappableView { [unowned self] in
                                 self.navigationController?.pushViewController(ComponentViewController(), animated: true)
                             }
@@ -243,7 +280,8 @@ class SwipeActionsExample: ComponentViewController {
                                     .inset(h: 10)
                                     .minSize(width: 74, height: 0)
                                 } actionHandler: { [unowned self] completion, action, form in
-                                    handlerEmail(action, completion: completion, eventForm: form, index: index)
+                                    print("调用了", index, completion, form)
+                                    handlerEmail(action, data: value, completion: completion, eventForm: form)
                                 }
 
                                 // MARK: Right
@@ -258,7 +296,7 @@ class SwipeActionsExample: ComponentViewController {
                                     .inset(h: 10)
                                     .minSize(width: 74, height: 0)
                                 } actionHandler: { [unowned self] completion, action, form in
-                                    handlerEmail(action, completion: completion, eventForm: form, index: index)
+                                    handlerEmail(action, data: value, completion: completion, eventForm: form)
                                 }
                                 SwipeActionComponent(identifier: "flag", horizontalEdge: .right, backgroundColor: UIColor(red: 0.996, green: 0.624, blue: 0.024, alpha: 1.0)) {
                                     VStack(justifyContent: .center, alignItems: .center) {
@@ -270,7 +308,7 @@ class SwipeActionsExample: ComponentViewController {
                                     .inset(h: 10)
                                     .minSize(width: 74, height: 0)
                                 } actionHandler: { [unowned self] completion, action, form in
-                                    handlerEmail(action, completion: completion, eventForm: form, index: index)
+                                    handlerEmail(action, data: value, completion: completion, eventForm: form)
                                 }
                                 if value.unread {
                                     SwipeActionComponent(identifier: "archive", horizontalEdge: .right, backgroundColor: UIColor(red: 0.749, green: 0.349, blue: 0.945, alpha: 1.0)) {
@@ -283,7 +321,7 @@ class SwipeActionsExample: ComponentViewController {
                                         .inset(h: 10)
                                         .minSize(width: 74, height: 0)
                                     } actionHandler: { [unowned self] completion, action, form in
-                                        handlerEmail(action, completion: completion, eventForm: form, index: index)
+                                        handlerEmail(action, data: value, completion: completion, eventForm: form)
                                     }
                                 } else {
                                     SwipeActionComponent(identifier: "trash", horizontalEdge: .right, backgroundColor: UIColor(red: 0.996, green: 0.271, blue: 0.227, alpha: 1.0)) {
@@ -303,11 +341,12 @@ class SwipeActionsExample: ComponentViewController {
                                                 .textColor(.white)
                                         }
                                     } actionHandler: { [unowned self] completion, action, form in
-                                        handlerEmail(action, completion: completion, eventForm: form, index: index)
+                                        handlerEmail(action, data: value, completion: completion, eventForm: form)
                                     }
                                 }
                             }
                             .swipeConfig(SwipeConfig(layoutEffect: .reveal))
+//                            .id(value.from)
                     }
                 } separator: {
                     Separator()
@@ -327,14 +366,17 @@ class SwipeActionsExample: ComponentViewController {
         componentView.animator = TransformAnimator(cascade: true)
     }
 
-    func handlerEmail(_ action: any SwipeAction, completion: @escaping SwipeAction.CompletionAfterHandler, eventForm: SwipeActionEventFrom, index: Int) {
+    func handlerEmail(_ action: any SwipeAction, data: EmailData, completion: @escaping SwipeAction.CompletionAfterHandler, eventForm: SwipeActionEventFrom) {
+        guard let index = emailDatas.firstIndex(where: { $0.from == data.from }) else { return }
         if action.identifier == "read" {
-            emailData[index].unread.toggle()
+            var data = emailDatas[index]
+            data.unread.toggle()
+            emailDatas[index] = data
             completion(.close)
         } else if action.identifier == "trash" {
             if eventForm == .expanded || eventForm == .alert {
                 let remove: () -> Void = { [unowned self] in
-                    self.emailData.remove(at: index)
+                    self.emailDatas.remove(at: index)
                 }
                 completion(.swipeFull(remove))
             } else {

@@ -4,27 +4,25 @@ import UIComponent
 import UIKit
 
 extension SwipeActionComponent {
-    static func divide(horizontalEdge: SwipeHorizontalEdge, backgroundColor: UIColor, thick: CGFloat) -> Self {
-        self.custom(horizontalEdge: horizontalEdge, backgroundColor: backgroundColor) {
-            Space(width: thick)
-        } actionHandler: { completion, _, _ in
-            completion(.hold)
-        }
-    }
-    static func rounded(horizontalEdge: SwipeHorizontalEdge) -> Self {
+    static func rounded(horizontalEdge: SwipeHorizontalEdge, cornerRadius: CGFloat = 15) -> Self {
         self.init(identifier: UUID().uuidString, horizontalEdge: horizontalEdge) {
             Text("Test")
-                .textColor(.white)
+                .textColor(.secondaryLabel)
                 .inset(h: 20)
         } background: {
             ViewComponent()
-                .backgroundColor(.systemGray)
-                .with(\.layer.cornerRadius, 15)
+                .backgroundColor(.systemGroupedBackground)
+                .with(\.layer.cornerRadius, cornerRadius)
                 .with(\.layer.cornerCurve, .continuous)
         } alert: {
             Space()
+        } configHighlightView: { highlightView, isHighlighted in
+            UIView.performWithoutAnimation {
+                highlightView.layer.cornerRadius = cornerRadius
+            }
+            highlightView.backgroundColor = .black.withAlphaComponent(isHighlighted ? 0.3 : 0)
         } actionHandler: { completion, action, form in
-            
+            completion(.swipeFull(nil))
         }
 
 

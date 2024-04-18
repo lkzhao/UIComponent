@@ -25,11 +25,19 @@ extension SwipeActionsExample {
 }
 
 struct EmailData: Equatable {
-    let from: String
-    let subject: String
-    let body: String
-    let date: Date
-    var unread = Bool.random()
+    var from: String
+    var subject: String
+    var body: String
+    var date: Date
+    var unread: Bool
+    
+    init(from: String, subject: String, body: String, date: Date, unread: Bool = Bool.random()) {
+        self.from = from
+        self.subject = subject
+        self.body = body
+        self.date = date
+        self.unread = unread
+    }
 
     static var mockDatas: [EmailData] {
         [

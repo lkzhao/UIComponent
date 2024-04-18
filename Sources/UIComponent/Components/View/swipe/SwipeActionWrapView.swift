@@ -33,7 +33,7 @@ class ActionWrapView: UIView {
 
     func setHighlighted(_ isHighlighted: Bool, transition: SwipeTransition) {
         transition.update {
-            self.highlightedMaskView.backgroundColor = UIColor.black.withAlphaComponent(isHighlighted ? 0.2 : 0)
+            self.action.configHighlightView(with: self.highlightedMaskView, isHighlighted: isHighlighted)
         }
     }
 
@@ -73,8 +73,17 @@ class SwipeActionWrapView: UIView {
     let actions: [any SwipeAction]
     let horizontalEdge: SwipeHorizontalEdge
     let config: SwipeConfig
+    var totalGap: CGFloat {
+        CGFloat(actions.count - 1) * config.gap
+    }
     var preferredWidth: CGFloat {
-        contentViewPreferredWidth + sideInset
+        (preferredContentWidth + sideInset + totalGap)
+    }
+    var preferredWithoutSideInsetContentWidth: CGFloat {
+        preferredContentWidth + totalGap
+    }
+    var preferredWithoutGapContentWidth: CGFloat {
+        preferredContentWidth + sideInset
     }
 
     var expandedTriggerOffset: CGFloat {
@@ -97,8 +106,8 @@ class SwipeActionWrapView: UIView {
         guard let action = isLeft ? actions.first : actions.last else { fatalError() }
         return action
     }
-
-    let contentViewPreferredWidth: CGFloat
+    
+    let preferredContentWidth: CGFloat
     var clickedAction: (any SwipeAction)? = nil
 
     private var isLeft: Bool
@@ -110,6 +119,7 @@ class SwipeActionWrapView: UIView {
     private var alertContext: (action: any SwipeAction, alertWrapView: ActionWrapView)? = nil
     private var isExpanding = false
     private var isExpanded = false
+    private var isComplete = false
     private var expandedView: UIView?
     private var animator: UIViewPropertyAnimator?
     private lazy var feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
@@ -130,7 +140,7 @@ class SwipeActionWrapView: UIView {
         self.actions = actions
         self.config = config
         self.isLeft = isLeft
-        self.contentViewPreferredWidth = sizes.reduce(0) { $0 + $1 }
+        self.preferredContentWidth = sizes.reduce(0) { $0 + $1 }
         self.horizontalEdge = horizontalEdge
         super.init(frame: .zero)
         setup()
@@ -139,6 +149,8 @@ class SwipeActionWrapView: UIView {
     private func setup() {
         (isLeft ? views.reversed() : views).forEach { addSubview($0) }
         clipsToBounds = true
+        layer.cornerRadius = config.cornerRadius
+        layer.cornerCurve = .continuous
     }
 
     required init?(coder _: NSCoder) {
@@ -187,19 +199,20 @@ class SwipeActionWrapView: UIView {
     func updateOffset(with offset: CGFloat, sideInset: CGFloat, xVelocity: CGFloat, forceSwipeOffset: Bool, anchorAction: (any SwipeAction)?, transition: SwipeTransition) {
         self.sideInset = sideInset
         self.offset = offset
+        self.isComplete = preferredWidth >= offset
         let factor: CGFloat = abs(offset / preferredWidth)
         let boundarySwipeActionFactor: CGFloat = 1.0 + expandedTriggerOffset / preferredWidth
-        
         var totalOffsetX: CGFloat = 0
         var previousFrame = CGRect.zero
         let previousFrames = views.map { $0.frame }
         for (index, (subview, subviewSize)) in zip(views, sizes).enumerated() {
             // layout subviews
+            let gap = index == 0 ? 0 : config.gap
             let fixedWidth = subviewSize + (edgeView == subview ? sideInset : 0)
             let offsetX: CGFloat
             if isLeft {
                 if config.layoutEffect == .drag {
-                    offsetX = index == 0 ? floatInterpolate(factor: min(1, factor), start: -contentViewPreferredWidth, end: 0) : previousFrame.maxX
+                    offsetX = index == 0 ? floatInterpolate(factor: min(1, factor), start: -preferredWithoutSideInsetContentWidth, end: 0) : previousFrame.maxX
                 } else if config.layoutEffect == .reveal {
                     offsetX = floatInterpolate(factor: min(1, factor), start: previousFrame.minX - (index == 0 ? fixedWidth : -sideInset), end: previousFrame.maxX)
                 } else if config.layoutEffect == .static {
@@ -218,8 +231,8 @@ class SwipeActionWrapView: UIView {
                     fatalError()
                 }
             }
-            let flexbleWidth = max(fixedWidth, factor * fixedWidth)
-            let subviewFrame = CGRect(x: offsetX, y: 0, width: flexbleWidth, height: frame.height)
+            let flexbleWidth = max(fixedWidth, (((offset - totalGap) / preferredWithoutGapContentWidth) * fixedWidth))
+            let subviewFrame = CGRect(x: offsetX + gap, y: 0, width: flexbleWidth, height: frame.height)
             transition.update {
                 subview.frame = subviewFrame
             }
@@ -277,9 +290,7 @@ class SwipeActionWrapView: UIView {
             animateAdditive = true
         }
         if animateAdditive {
-            if actions.count > 1 {
-                transition.updateFrame(with: expandedView, frame: expandedViewFrame)
-            }
+            transition.updateFrame(with: expandedView, frame: expandedViewFrame)
             if config.feedbackEnable {
                 feedbackGenerator.impactOccurred()
                 feedbackGenerator.prepare()
@@ -291,7 +302,7 @@ class SwipeActionWrapView: UIView {
     }
 
     func resetExpandedState() {
-        guard let expandedView else { return }
+        guard let expandedView, isComplete else { return }
         expandedView.removeFromSuperview()
         isExpanding = false
         self.expandedView = nil

@@ -17,7 +17,11 @@ public struct SwipeActionsComponent: Component {
     
     public func layout(_ constraint: Constraint) -> some RenderNode {
         let renderNode = component.layout(constraint)
-        return SwipeActionsRenderNode(size: renderNode.size.bound(to: constraint), component: component, content: renderNode, actions: actions, config: config)
+        return SwipeActionsRenderNode(size: renderNode.size.bound(to: constraint), 
+                                      component: component,
+                                      content: renderNode,
+                                      actions: actions,
+                                      config: config)
     }
 }
 

@@ -35,6 +35,7 @@ public protocol SwipeAction {
     var horizontalEdge: SwipeHorizontalEdge { get }
     var view: View { get }
     var isEnableFadeTransitionAddedExpandedView: Bool { get }
+    func configHighlightView(with highlightView: UIView, isHighlighted: Bool)
     func makeExpandedView() -> UIView?
     func makeAlertView() -> UIView
     func handlerAction(completion: @escaping CompletionAfterHandler, eventFrom: SwipeActionEventFrom)
@@ -47,6 +48,8 @@ public extension SwipeAction {
     }
     
     var isEnableFadeTransitionAddedExpandedView: Bool { true }
+    
+    func configHighlightView(with highlightView: UIView, isHighlighted: Bool) {}
     
     func makeExpandedView() -> UIView? {
         return nil
@@ -80,6 +83,10 @@ public extension SwipeAction {
 
 public struct SwipeActionComponent: SwipeAction {
     public static let blankActionHandler: ActionHandler = {_, _, _ in}
+    public static let defaultConfigHighlightView: ConfigHighlightView = { highlightView, isHighlighted in
+        highlightView.backgroundColor = .black.withAlphaComponent(isHighlighted ? 0.3 : 0)
+    }
+    public typealias ConfigHighlightView = (_ highlightView: UIView, _ isHighlighted: Bool) -> Void
     public typealias ActionHandler = (_ completion: @escaping CompletionAfterHandler, _ action: any SwipeAction, _ form: SwipeActionEventFrom) -> Void
     public typealias ComponentWithParameterProvider = () -> any Component
     public typealias ComponentProvider = () -> any Component
@@ -93,18 +100,21 @@ public struct SwipeActionComponent: SwipeAction {
     }
     public let actionHandler: SwipeActionComponent.ActionHandler
     public let isEnableFadeTransitionAddedExpandedView: Bool = false
+    public let configHighlightView: ConfigHighlightView
     
     public static func custom(identifier: String = UUID().uuidString,
                               horizontalEdge: SwipeHorizontalEdge,
                               backgroundColor: UIColor,
                               body: SwipeActionComponent.ComponentProvider? = nil,
                               alert: SwipeActionComponent.ComponentProvider? = nil,
+                              configHighlightView: @escaping ConfigHighlightView = defaultConfigHighlightView,
                               actionHandler: @escaping SwipeActionComponent.ActionHandler = blankActionHandler) -> Self {
         self.init(identifier: identifier,
                   horizontalEdge: horizontalEdge,
                   backgroundColor: backgroundColor,
                   body: body,
                   alert: alert,
+                  configHighlightView: configHighlightView,
                   actionHandler: actionHandler)
     }
     
@@ -113,12 +123,14 @@ public struct SwipeActionComponent: SwipeAction {
                 backgroundColor: UIColor,
                 body: SwipeActionComponent.ComponentProvider?,
                 alert: SwipeActionComponent.ComponentProvider? = nil,
+                configHighlightView: @escaping ConfigHighlightView = defaultConfigHighlightView,
                 actionHandler: @escaping SwipeActionComponent.ActionHandler) {
         self.init(identifier: identifier,
                   horizontalEdge: horizontalEdge,
                   component: body,
                   background: { Space().backgroundColor(backgroundColor) },
-                  alert: alert,
+                  alert: alert, 
+                  configHighlightView: configHighlightView,
                   actionHandler: actionHandler)
     }
 
@@ -127,6 +139,7 @@ public struct SwipeActionComponent: SwipeAction {
          component: SwipeActionComponent.ComponentProvider?,
          background: SwipeActionComponent.ComponentProvider?,
          alert: ComponentProvider?,
+                configHighlightView: @escaping ConfigHighlightView,
          actionHandler: @escaping SwipeActionComponent.ActionHandler) {
         self.identifier = identifier
         self.horizontalEdge = horizontalEdge
@@ -135,6 +148,7 @@ public struct SwipeActionComponent: SwipeAction {
         self.alert = alert?()
         self.background = background
         self.component = component
+        self.configHighlightView = configHighlightView
         self.actionHandler = actionHandler
         self.view = ComponentView()
         self.view.component = wrapLayout(body: component, justifyContent: horizontalEdge.isLeft ? .end : .start)
@@ -155,6 +169,10 @@ public struct SwipeActionComponent: SwipeAction {
     
     public func handlerAction(completion: @escaping CompletionAfterHandler, eventFrom: SwipeActionEventFrom) {
         actionHandler(completion, self, eventFrom)
+    }
+    
+    public func configHighlightView(with highlightView: UIView, isHighlighted: Bool) {
+        self.configHighlightView(highlightView, isHighlighted)
     }
 
     func wrapLayout(body: (any Component)?, justifyContent: MainAxisAlignment, alignItems: CrossAxisAlignment = .center) -> WrapLayout {

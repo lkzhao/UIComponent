@@ -23,9 +23,15 @@ public struct SwipeConfig {
     public var rubberBandFactor: CGFloat
 
     public var layoutEffect: LayoutEffect
+    
+    public var gap: CGFloat
+    public var spacing: CGFloat
 
     public var defaultTransitionCurve: SwipeTransitionCurve
     public var defaultTransitionDuration: TimeInterval
+    
+    public var cornerRadius: CGFloat
+    public var clipsToBounds: Bool
   
     public init(allowsFullSwipe: Bool = true, 
                 edgeBackgroundIgnoreSafeAreaInset: Bool = true,
@@ -33,6 +39,10 @@ public struct SwipeConfig {
                 rubberBandEnable: Bool = true,
                 rubberBandFactor: CGFloat = 0.90,
                 layoutEffect: LayoutEffect = .static,
+                gap: CGFloat = 0,
+                spacing: CGFloat = 0,
+                cornerRadius: CGFloat = 0,
+                clipsToBounds: Bool = true,
                 defaultTransitionCurve: SwipeTransitionCurve = .easeInOut,
                 defaultTransitionDuration: TimeInterval = 0.25) {
         self.allowsFullSwipe = allowsFullSwipe
@@ -41,6 +51,10 @@ public struct SwipeConfig {
         self.rubberBandEnable = rubberBandEnable
         self.rubberBandFactor = rubberBandFactor
         self.layoutEffect = layoutEffect
+        self.gap = gap
+        self.spacing = spacing
+        self.cornerRadius = cornerRadius
+        self.clipsToBounds = clipsToBounds
         self.defaultTransitionCurve = defaultTransitionCurve
         self.defaultTransitionDuration = defaultTransitionDuration
     }
@@ -53,7 +67,9 @@ public class SwipeView: UIView {
         get { _actions }
     }
 
-    public var config: SwipeConfig = .init()
+    public var config: SwipeConfig = .init() {
+        didSet { updateConfig() }
+    }
 
     let contentView = ComponentView()
 
@@ -92,7 +108,7 @@ public class SwipeView: UIView {
         panRecognizer.delegate = self
         panRecognizer.allowAnyDirection = true
         gestureRecognizers = [panRecognizer]
-        clipsToBounds = true
+        updateConfig()
     }
 
     required init?(coder _: NSCoder) {
@@ -118,10 +134,16 @@ public class SwipeView: UIView {
             closeSwipeAction(transition: .animated(duration: config.defaultTransitionDuration, curve: config.defaultTransitionCurve))
         }
     }
+    
+    func updateConfig() {
+        clipsToBounds = config.clipsToBounds
+    }
 
     func defaultTransitionCurve(xVelocity: CGFloat, from: CGFloat, to: CGFloat) -> SwipeTransitionCurve {
         let relativeInitialVelocity = CGVector(dx: SwipeTransitionCurve.relativeVelocity(forVelocity: xVelocity, from: from, to: to), dy: 0)
-        return .spring(damping: 1, initialVelocity: relativeInitialVelocity)
+        let timingParameters = UISpringTimingParameters(damping: 1, response: config.defaultTransitionDuration, initialVelocity: relativeInitialVelocity)
+        let animator = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters)
+        return .custom(animator)
     }
     
     func configActions(with actions: [any SwipeAction]) {
@@ -180,7 +202,7 @@ public class SwipeView: UIView {
             updateRevealOffsetInternal(offset: translation.x, xVelocity: xVelocity, transition: .immediate, anchorAction: nil)
         case .cancelled, .ended:
             if let leftSwipeActionsContainerView {
-                let containerViewSize = CGSize(width: leftSwipeActionsContainerView.preferredWidth, height: frame.height)
+                let containerViewSize = CGSize(width: leftSwipeActionsContainerView.preferredWidth + config.spacing, height: frame.height)
                 var reveal = false
                 if abs(xVelocity) < 100.0 {
                     if initialRevealOffset.isZero && revealOffset > 0.0 {
@@ -205,12 +227,12 @@ public class SwipeView: UIView {
                                                xVelocity: xVelocity,
                                                transition: .animated(duration: 0, curve: defaultTransitionCurve(xVelocity: xVelocity, from: revealOffset, to: containerViewSize.width)),
                                                anchorAction: nil) {
-                        guard recognizer.state != .changed else { return }
+//                        guard recognizer.state != .changed else { return }
                         leftSwipeActionsContainerView.resetExpandedState()
                     }
                 }
             } else if let rightSwipeActionsContainerView {
-                let containerViewSize = CGSize(width: rightSwipeActionsContainerView.preferredWidth, height: frame.height)
+                let containerViewSize = CGSize(width: rightSwipeActionsContainerView.preferredWidth + config.spacing, height: frame.height)
                 var reveal = false
                 if abs(xVelocity) < 100.0 {
                     if initialRevealOffset.isZero && revealOffset < 0.0 {
@@ -235,7 +257,7 @@ public class SwipeView: UIView {
                                                xVelocity: xVelocity,
                                                transition: .animated(duration: 0, curve: defaultTransitionCurve(xVelocity: xVelocity, from: revealOffset, to: -containerViewSize.width)),
                                                anchorAction: nil) {
-                        guard recognizer.state != .changed else { return }
+//                        guard recognizer.state != .changed else { return }
                         rightSwipeActionsContainerView.resetExpandedState()
                     }
                 }
@@ -255,14 +277,10 @@ public class SwipeView: UIView {
                 completion?()
             }
         }
-        if config.allowsFullSwipe {
-            transition.updateOriginX(with: contentView, originX: offset)
-        }
+        transition.updateOriginX(with: contentView, originX: offset)
         if let leftSwipeActionsContainerView {
             leftRevealCompleted = false
             let containerViewSize = CGSize(width: leftSwipeActionsContainerView.preferredWidth, height: frame.height)
-            let containerViewFrame = CGRect(origin: .zero, size: CGSize(width: offset, height: containerViewSize.height))
-            let leftOffset: CGFloat
             let completion = {
                 if CGFloat(offset).isLessThanOrEqualTo(0.0) {
                     leftSwipeActionsContainerView.removeFromSuperview()
@@ -275,7 +293,6 @@ public class SwipeView: UIView {
                 if config.rubberBandEnable && !forceSwipeOffset {
                     transition.updateOriginX(with: contentView, originX: offset)
                 }
-                leftOffset = offset
             } else {
                 if config.rubberBandEnable && !forceSwipeOffset {
                     var distance: CGFloat {
@@ -283,18 +300,16 @@ public class SwipeView: UIView {
                         return offset - (offset >= w ? pow(offset - w, config.rubberBandFactor) : 0)
                     }
                     let distanceOffsetX = offset >= containerViewSize.width ? distance : offset
-                    leftOffset = distanceOffsetX
                     transition.updateOriginX(with: contentView, originX: distanceOffsetX)
                     
-                } else {
-                    leftOffset = offset
                 }
             }
+            let containerViewFrame = CGRect(origin: .zero, size: CGSize(width: max(0, contentView.frame.minX - config.spacing), height: containerViewSize.height))
             transition.updateFrame(with: leftSwipeActionsContainerView, frame: containerViewFrame) {
                 guard $0 else { return }
                 completion()
             }
-            leftSwipeActionsContainerView.updateOffset(with: leftOffset,
+            leftSwipeActionsContainerView.updateOffset(with: contentView.frame.minX - config.spacing,
                                                        sideInset: safeAreaInsets.left,
                                                        xVelocity: xVelocity,
                                                        forceSwipeOffset: forceSwipeOffset,
@@ -304,7 +319,6 @@ public class SwipeView: UIView {
         if let rightSwipeActionsContainerView {
             rightRevealCompleted = false
             let containerViewSize = CGSize(width: rightSwipeActionsContainerView.preferredWidth, height: frame.height)
-            let rightOffset: CGFloat
             let completion = {
                 if CGFloat(0.0).isLessThanOrEqualTo(offset) {
                     rightSwipeActionsContainerView.removeFromSuperview()
@@ -317,7 +331,6 @@ public class SwipeView: UIView {
                 if config.rubberBandEnable && !forceSwipeOffset {
                     transition.updateOriginX(with: contentView, originX: offset)
                 }
-                rightOffset = -offset
             } else {
                 if config.rubberBandEnable && !forceSwipeOffset {
                     var distance: CGFloat {
@@ -326,18 +339,15 @@ public class SwipeView: UIView {
                     }
                     let distanceOffsetX = -offset >= containerViewSize.width ? distance : offset
                     transition.updateOriginX(with: contentView, originX: distanceOffsetX)
-                    rightOffset = -distanceOffsetX
-                } else {
-                    rightOffset = -offset
                 }
             }
-            let containerViewFrame = CGRect(origin: CGPoint(x: min(frame.width, frame.width + contentView.frame.minX), y: 0),
-                                             size: CGSize(width: -contentView.frame.minX, height: containerViewSize.height))
+            let containerViewFrame = CGRect(origin: CGPoint(x: frame.width - abs(contentView.frame.minX) + config.spacing, y: 0),
+                                            size: CGSize(width: max(0, abs(contentView.frame.minX) - config.spacing), height: containerViewSize.height))
             transition.updateFrame(with: rightSwipeActionsContainerView, frame: containerViewFrame) {
                 guard $0 else { return }
                 completion()
             }
-            rightSwipeActionsContainerView.updateOffset(with: rightOffset,
+            rightSwipeActionsContainerView.updateOffset(with: abs(contentView.frame.minX) - config.spacing,
                                                         sideInset: safeAreaInsets.right,
                                                         xVelocity: xVelocity,
                                                         forceSwipeOffset: forceSwipeOffset,
@@ -405,7 +415,7 @@ public class SwipeView: UIView {
         case let .swipeFull(completion):
             let xVelocity = panRecognizer.lastVelocity.x
             actionWrapViewView.clickedAction = action
-            let offset = frame.width
+            let offset = frame.width + config.spacing
             let relativeInitialVelocity = CGVector(dx: SwipeTransitionCurve.relativeVelocity(forVelocity: xVelocity, from: offset, to: actionWrapViewView.horizontalEdge.isLeft ? offset : -offset), dy: 0)
             let timingParameters = UISpringTimingParameters(damping: 1, response: config.defaultTransitionDuration, initialVelocity: relativeInitialVelocity)
             let animator = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters)
