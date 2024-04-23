@@ -66,4 +66,3 @@ struct InsetsRenderNode: RenderNode {
         [CGPoint(x: insets.left, y: insets.top)]
     }
 }
-

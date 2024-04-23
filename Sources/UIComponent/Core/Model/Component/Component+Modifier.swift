@@ -438,7 +438,7 @@ extension Component {
     /// - Parameter offset: The `CGPoint` value to apply as an offset.
     /// - Returns: A component offset by the specified point.
     public func offset(_ offset: CGPoint) -> some Component {
-        Insets(content: self, insets: UIEdgeInsets(top: offset.y, left: offset.x, bottom: -offset.y, right: -offset.x))
+        Offset(content: self, offset: offset)
     }
 
     /// Applies an offset to the component using separate x and y values.
@@ -447,17 +447,14 @@ extension Component {
     ///   - y: The vertical offset.
     /// - Returns: A component offset by the specified x and y values.
     public func offset(x: CGFloat = 0, y: CGFloat = 0) -> some Component {
-        Insets(content: self, insets: UIEdgeInsets(top: y, left: x, bottom: -y, right: -x))
+        Offset(content: self, offset: CGPoint(x: x, y: y))
     }
 
     /// Applies a dynamic offset to the component based on constraints at layout time.
     /// - Parameter offsetProvider: A closure that provides a `CGPoint` based on the given `Constraint`.
     /// - Returns: A component that dynamically adjusts its offset based on the provided point.
     public func offset(_ offsetProvider: @escaping (Constraint) -> CGPoint) -> some Component {
-        DynamicInsets(content: self) {
-            let offset = offsetProvider($0)
-            return UIEdgeInsets(top: offset.y, left: offset.x, bottom: -offset.y, right: -offset.x)
-        }
+        DynamicOffset(content: self, offsetProvider: offsetProvider)
     }
 
     // MARK: - Visible insets modifiers
