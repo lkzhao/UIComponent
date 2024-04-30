@@ -25,6 +25,13 @@ public struct Image: Component {
         
     }
 
+    /// Initializes an `Image` component with an `ImageResource`.
+    /// - Parameter resource: The `ImageResource` to load the image from.
+    @available(iOS 17.0, *)
+    public init(_ resource: ImageResource) {
+        self.init(UIImage(resource: resource))
+    }
+
     /// Initializes an `Image` component with the name of a system image (SFSymbol).
     /// - Parameters:
     ///   - systemName: The name of the system image to load.
