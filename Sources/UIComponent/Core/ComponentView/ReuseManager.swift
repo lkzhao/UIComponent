@@ -15,6 +15,10 @@ public enum ReuseStrategy: Equatable {
     case key(String)
 }
 
+public protocol ReuseableView: UIView {
+    func prepareForReuse()
+}
+
 /// `ReuseManager` is a class that manages the reuse of `UIView` objects to improve performance.
 /// It stores reusable views in a dictionary and provides methods to enqueue and dequeue these views.
 /// It also handles the cleanup of views that are no longer needed.
@@ -74,6 +78,8 @@ open class ReuseManager: NSObject {
     ) -> T {
         let queuedView = reusableViews[identifier]?.popLast() as? T
         let view = queuedView ?? defaultView()
+        view.layer.removeAllAnimations()
+        (view as? ReuseableView)?.prepareForReuse()
         if !removeFromSuperviewWhenReuse {
             view.isHidden = false
         }
