@@ -119,7 +119,7 @@ extension ComponentDisplayableView {
     /// Returns the visible view associated with a given identifier if it exists within the visible renderables.
     public func visibleView(id: String) -> UIView? {
         for (view, renderable) in zip(visibleViews, visibleRenderable) {
-            if renderable.renderNode.id == id {
+            if renderable.id == id {
                 return view
             }
         }

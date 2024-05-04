@@ -134,14 +134,9 @@ extension RenderNode {
     }
 
     public func visibleChildren(in frame: CGRect) -> [RenderNodeChild] {
-        var result = [RenderNodeChild]()
-        for i in visibleIndexes(in: frame) {
-            let child = children[i]
-            let position = positions[i]
-            let renderable = RenderNodeChild(renderNode: child, position: position, index: i)
-            result.append(renderable)
+        visibleIndexes(in: frame).map {
+            RenderNodeChild(renderNode: children[$0], position: positions[$0], index: $0)
         }
-        return result
     }
 
     public func adjustVisibleFrame(frame: CGRect) -> CGRect {
@@ -171,7 +166,7 @@ extension RenderNode {
     internal func _visibleRenderables(in frame: CGRect) -> [Renderable] {
         var result = [Renderable]()
         if shouldRenderView {
-            result.append(Renderable(frame: CGRect(origin: .zero, size: size), renderNode: self, fallbackId: defaultReuseKey))
+            result.append(Renderable(id: id ?? defaultReuseKey, frame: CGRect(origin: .zero, size: size), renderNode: self))
         }
         let frame = adjustVisibleFrame(frame: frame)
         let children = visibleChildren(in: frame)
@@ -179,7 +174,7 @@ extension RenderNode {
             let childFrame = CGRect(origin: child.position, size: child.renderNode.size)
             let childVisibleFrame = frame.intersection(childFrame) - child.position
             let childRenderables = child.renderNode._visibleRenderables(in: childVisibleFrame).map {
-                Renderable(frame: $0.frame + child.position, renderNode: $0.renderNode, fallbackId: "item-\(child.index)-\($0.fallbackId)")
+                Renderable(id: $0.renderNode.id ?? "item-\(child.index)-\($0.id)", frame: $0.frame + child.position, renderNode: $0.renderNode)
             }
             result.append(contentsOf: childRenderables)
         }

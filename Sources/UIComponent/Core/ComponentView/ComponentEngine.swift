@@ -256,14 +256,11 @@ public class ComponentEngine {
         var newIdentifierSet = [String: Int]()
         for (index, renderable) in newVisibleRenderable.enumerated() {
             var count = 1
-            let initialId = renderable.renderNode.id ?? renderable.fallbackId
+            let initialId = renderable.id
             var finalId = initialId
             while newIdentifierSet[finalId] != nil {
                 finalId = initialId + String(count)
-                let newRenderNode = renderable.renderNode.eraseToAnyRenderNode().id(finalId)
-                newVisibleRenderable[index] = Renderable(frame: renderable.frame,
-                                                         renderNode: newRenderNode,
-                                                         fallbackId: renderable.fallbackId)
+                newVisibleRenderable[index].id = finalId
                 count += 1
             }
             newIdentifierSet[finalId] = index
@@ -274,7 +271,7 @@ public class ComponentEngine {
         // 1st pass, delete all removed cells and move existing cells
         for index in 0..<visibleViews.count {
             let renderable = visibleRenderable[index]
-            let id = renderable.renderNode.id ?? renderable.fallbackId
+            let id = renderable.id
             let cell = visibleViews[index]
             if let index = newIdentifierSet[id] {
                 newViews[index] = cell
@@ -365,11 +362,8 @@ public class ComponentEngine {
     ///   - identifier: The current identifier of the cell.
     ///   - newIdentifier: The new identifier to replace the current identifier.
     public func replace(identifier: String, with newIdentifier: String) {
-        for (i, renderable) in visibleRenderable.enumerated() where renderable.renderNode.id == identifier {
-            let newRenderNode = renderable.renderNode.eraseToAnyRenderNode().id(newIdentifier)
-            visibleRenderable[i] = Renderable(frame: renderable.frame,
-                                              renderNode: newRenderNode,
-                                              fallbackId: renderable.fallbackId)
+        for (i, renderable) in visibleRenderable.enumerated() where renderable.id == identifier {
+            visibleRenderable[i].id = newIdentifier
             break
         }
     }
