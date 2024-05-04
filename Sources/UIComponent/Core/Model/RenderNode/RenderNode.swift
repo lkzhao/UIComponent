@@ -43,14 +43,14 @@ public protocol RenderNode<View> {
     /// The default implementation for this methods is not optmized and will return all indexes regardless of the frame.
     func visibleIndexes(in frame: CGRect) -> any Collection<Int>
 
-    /// Returns the renderables that are visible within the given frame.
+    /// Returns the render nodes that are visible within the given frame.
     ///
     /// - Parameter frame: The frame within which to determine visibility of renderables.
-    /// - Returns: The renderables that are visible within the given frame.
+    /// - Returns: The render nodes that are visible within the given frame. The objects to return are `RenderNodeChild` which contains
+    ///            the child render node, the position relative to the parent, and the index of the child (for structure identity only, not used to access `children` or `positions`).
     ///
-    /// The default implementation calls ``RenderNode/visibleIndexes(in:)-1jtpe`` to get the visible childrens. It also calls
-    /// and recursively retrives all Renderable from visible children and combines them.
-    func visibleRenderables(in frame: CGRect) -> [Renderable]
+    /// The default implementation calls ``RenderNode/visibleIndexes(in:)-1jtpe`` to get the visible childrens. And return the corresponding RenderNodeChild by combining data from `children` and `positions`.
+    func visibleChildren(in frame: CGRect) -> [RenderNodeChild]
 
     /// Creates a new view instance for this render node.
     func makeView() -> View
@@ -59,6 +59,10 @@ public protocol RenderNode<View> {
     ///
     /// - Parameter view: The view to update.
     func updateView(_ view: View)
+
+
+    /// Method called before `visibleChildren(in:)` to adjust the visible frame.
+    func adjustVisibleFrame(frame: CGRect) -> CGRect
 }
 
 // MARK: - Helper methods
@@ -129,28 +133,19 @@ extension RenderNode {
         IndexSet(0..<children.count)
     }
 
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        defaultVisibleRenderablesImplementation(in: frame)
-    }
-
-    @inlinable
-    public func defaultVisibleRenderablesImplementation(in frame: CGRect) -> [Renderable] {
-        var result = [Renderable]()
-        if shouldRenderView, frame.intersects(CGRect(origin: .zero, size: size)) {
-            result.append(Renderable(frame: CGRect(origin: .zero, size: size), renderNode: self, fallbackId: defaultReuseKey))
-        }
-        let indexes = visibleIndexes(in: frame)
-        for i in indexes {
+    public func visibleChildren(in frame: CGRect) -> [RenderNodeChild] {
+        var result = [RenderNodeChild]()
+        for i in visibleIndexes(in: frame) {
             let child = children[i]
             let position = positions[i]
-            let childFrame = CGRect(origin: position, size: child.size)
-            let childVisibleFrame = frame.intersection(childFrame) - position
-            let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
-                Renderable(frame: $0.frame + position, renderNode: $0.renderNode, fallbackId: "item-\(i)-\($0.fallbackId)")
-            }
-            result.append(contentsOf: childRenderables)
+            let renderable = RenderNodeChild(renderNode: child, position: position, index: i)
+            result.append(renderable)
         }
         return result
+    }
+
+    public func adjustVisibleFrame(frame: CGRect) -> CGRect {
+        frame
     }
 }
 
@@ -167,8 +162,27 @@ extension RenderNode {
             return ReuseManager.shared.dequeue(identifier: key, makeView())
         }
     }
+
     internal func _updateView(_ view: UIView) {
         guard let view = view as? View else { return }
         return updateView(view)
+    }
+
+    internal func _visibleRenderables(in frame: CGRect) -> [Renderable] {
+        var result = [Renderable]()
+        if shouldRenderView {
+            result.append(Renderable(frame: CGRect(origin: .zero, size: size), renderNode: self, fallbackId: defaultReuseKey))
+        }
+        let frame = adjustVisibleFrame(frame: frame)
+        let children = visibleChildren(in: frame)
+        for child in children {
+            let childFrame = CGRect(origin: child.position, size: child.renderNode.size)
+            let childVisibleFrame = frame.intersection(childFrame) - child.position
+            let childRenderables = child.renderNode._visibleRenderables(in: childVisibleFrame).map {
+                Renderable(frame: $0.frame + child.position, renderNode: $0.renderNode, fallbackId: "item-\(child.index)-\($0.fallbackId)")
+            }
+            result.append(contentsOf: childRenderables)
+        }
+        return result
     }
 }

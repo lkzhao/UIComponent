@@ -75,8 +75,8 @@ public struct VisibleFrameInsetRenderNode<Content: RenderNode>: RenderNodeWrappe
         self.insets = insets
     }
 
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        defaultVisibleRenderablesImplementation(in: frame.inset(by: insets))
+    public func adjustVisibleFrame(frame: CGRect) -> CGRect {
+        frame.inset(by: insets)
     }
 }
 
@@ -99,8 +99,8 @@ public struct DynamicVisibleFrameInsetRenderNode<Content: RenderNode>: RenderNod
         self.insetProvider = insetProvider
     }
 
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        defaultVisibleRenderablesImplementation(in: frame.inset(by: insetProvider(frame)))
+    public func adjustVisibleFrame(frame: CGRect) -> CGRect {
+        frame.inset(by: insetProvider(frame))
     }
 }
 

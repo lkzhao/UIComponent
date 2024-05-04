@@ -46,28 +46,15 @@ public struct DynamicHPagerRenderNode: RenderNode {
         CGSize(width: pageSize.width * CGFloat(count), height: pageSize.height)
     }
 
-    public func visibleIndexes(in frame: CGRect) -> ClosedRange<Int> {
+    public func visibleChildren(in frame: CGRect) -> [RenderNodeChild] {
         let start = Int(frame.minX / pageSize.width)
         let end = Int((frame.maxX - 0.1) / pageSize.width)
-        return start...end
-    }
-
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        let indexes = visibleIndexes(in: frame)
-        let contents = indexes.map {
-            content($0).layout(Constraint(tightSize: pageSize))
+        let indexes = start...end
+        return indexes.map { i in
+            RenderNodeChild(renderNode: content(i).layout(Constraint(tightSize: pageSize)),
+                            position: CGPoint(x: CGFloat(i) * pageSize.width, y: 0),
+                            index: i)
         }
-        var result = [Renderable]()
-        for (i, child) in zip(indexes, contents) {
-            let position = CGPoint(x: CGFloat(i) * pageSize.width, y: 0)
-            let childFrame = CGRect(origin: position, size: pageSize)
-            let childVisibleFrame = frame.intersection(childFrame) - position
-            let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
-                Renderable(frame: $0.frame + position, renderNode: $0.renderNode, fallbackId: "item-\(i)-\($0.fallbackId)")
-            }
-            result.append(contentsOf: childRenderables)
-        }
-        return result
     }
 }
 
@@ -110,27 +97,14 @@ public struct DynamicVPagerRenderNode: RenderNode {
         CGSize(width: pageSize.width, height: pageSize.height * CGFloat(count))
     }
 
-    public func visibleIndexes(in frame: CGRect) -> ClosedRange<Int> {
+    public func visibleChildren(in frame: CGRect) -> [RenderNodeChild] {
         let start = Int(frame.minY / pageSize.height)
         let end = Int((frame.maxY - 0.1) / pageSize.height)
-        return start...end
-    }
-
-    public func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        let indexes = visibleIndexes(in: frame)
-        let contents = indexes.map {
-            content($0).layout(Constraint(tightSize: pageSize))
+        let indexes = start...end
+        return indexes.map { i in
+            RenderNodeChild(renderNode: content(i).layout(Constraint(tightSize: pageSize)),
+                            position: CGPoint(x: 0, y: CGFloat(i) * pageSize.height),
+                            index: i)
         }
-        var result = [Renderable]()
-        for (i, child) in zip(indexes, contents) {
-            let position = CGPoint(x: 0, y: CGFloat(i) * pageSize.height)
-            let childFrame = CGRect(origin: position, size: pageSize)
-            let childVisibleFrame = frame.intersection(childFrame) - position
-            let childRenderables = child.visibleRenderables(in: childVisibleFrame).map {
-                Renderable(frame: $0.frame + position, renderNode: $0.renderNode, fallbackId: "item-\(i)-\($0.fallbackId)")
-            }
-            result.append(contentsOf: childRenderables)
-        }
-        return result
     }
 }

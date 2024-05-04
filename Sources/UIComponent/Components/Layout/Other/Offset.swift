@@ -62,21 +62,4 @@ struct OffsetRenderNode: RenderNode {
     func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
         [0]
     }
-
-    func visibleRenderables(in frame: CGRect) -> [Renderable] {
-        var result = [Renderable]()
-        if shouldRenderView, frame.intersects(CGRect(origin: .zero, size: size)) {
-            result.append(Renderable(frame: CGRect(origin: .zero, size: size), renderNode: self, fallbackId: defaultReuseKey))
-        }
-        let indexes = visibleIndexes(in: frame)
-        for i in indexes {
-            let child = children[i]
-            let position = positions[i]
-            let childRenderables = child.visibleRenderables(in: frame).map {
-                Renderable(frame: $0.frame + position, renderNode: $0.renderNode, fallbackId: "item-\(i)-\($0.fallbackId)")
-            }
-            result.append(contentsOf: childRenderables)
-        }
-        return result
-    }
 }

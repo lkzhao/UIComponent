@@ -244,7 +244,7 @@ public class ComponentEngine {
         animator.willUpdate(componentView: componentView)
         let visibleFrame = (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
 
-        var newVisibleRenderable = renderNode.visibleRenderables(in: visibleFrame)
+        var newVisibleRenderable = renderNode._visibleRenderables(in: visibleFrame)
 
         if contentSize != renderNode.size * zoomScale {
             // update contentSize if it is changed. Some renderNodes update

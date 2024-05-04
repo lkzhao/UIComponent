@@ -18,7 +18,7 @@ final class UIComponentTests: XCTestCase {
                     Text("Test")
                 }
             }
-            componentView.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 600))
+            componentView.frame = CGRect(x: 0, y: 0, width: 300, height: 600)
             componentView.layoutIfNeeded()
         }
     }
@@ -29,12 +29,27 @@ final class UIComponentTests: XCTestCase {
             Text(text1).size(width: 300, height: 300)
             Text(text2).size(width: 300, height: 300)
         }.inset(100).visibleInset(-100)
-        componentView.frame = CGRect(origin: .zero, size: CGSize(width: 500, height: 400))
+        componentView.frame = CGRect(x: 0, y: 0, width: 500, height: 400)
         componentView.layoutIfNeeded()
         XCTAssertEqual(componentView.engine.visibleRenderable.count, 1)
-        componentView.frame = CGRect(origin: .zero, size: CGSize(width: 500, height: 500))
+        componentView.frame = CGRect(x: 0, y: 0, width: 500, height: 500)
         componentView.layoutIfNeeded()
         XCTAssertEqual(componentView.engine.visibleRenderable.count, 2)
+    }
+
+    func testOffsetVisibility() {
+        // Offset shouldn't adjust visibility, it should use the original frame for visibility testing
+        let componentView = ComponentView()
+        componentView.component = ZStack {
+            Text(text1).size(width: 300, height: 300).offset(CGPoint(x: 0, y: 300))
+        }
+        componentView.bounds = CGRect(x: 0, y: 0, width: 300, height: 300)
+        componentView.layoutIfNeeded()
+        XCTAssertEqual(componentView.engine.visibleRenderable.count, 1)
+
+        componentView.bounds = CGRect(x: 0, y: 300, width: 300, height: 300)
+        componentView.layoutIfNeeded()
+        XCTAssertEqual(componentView.engine.visibleRenderable.count, 0)
     }
 
     /// Test to make sure component with fixed size are
@@ -45,7 +60,7 @@ final class UIComponentTests: XCTestCase {
             Text(text1).size(width: 300, height: 600)
             Text(text2).size(width: 300, height: 600)
         }
-        componentView.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 600))
+        componentView.frame = CGRect(x: 0, y: 0, width: 300, height: 600)
         componentView.layoutIfNeeded()
         let vRenderNode = componentView.engine.renderNode as? VerticalRenderNode
         XCTAssertNotNil(vRenderNode)
@@ -127,7 +142,7 @@ final class UIComponentTests: XCTestCase {
         let componentView = ComponentView()
         let startTime = CACurrentMediaTime()
         componentView.component = component()
-        componentView.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 600))
+        componentView.frame = CGRect(x: 0, y: 0, width: 300, height: 600)
         componentView.layoutIfNeeded()
         return CACurrentMediaTime() - startTime
     }
