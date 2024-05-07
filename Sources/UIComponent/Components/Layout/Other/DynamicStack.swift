@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import BaseToolbox
 
 /// A component that lays out its children horizontally in a paging fashion similar to an ``HStack``.
 /// However, instead of creating the child components all at once, it creates them on demand when it needs to render the specific cell.
@@ -123,7 +122,7 @@ extension DynamicStackRenderNode {
         let mainSize = main(constraintSize) + spacing
         let crossSize = cross(constraintSize)
         let start = Int(main(frame.origin) / mainSize)
-        let end = Int((main(frame.bottomRight) - 0.1) / mainSize)
+        let end = Int((main(CGPoint(x: frame.maxX, y: frame.maxY)) - 0.1) / mainSize)
         let indexes = start...end
         let childConstraint = Constraint(minSize: size(main: main(constraintSize), cross: alignItems == .stretch ? cross(constraintSize) : -.infinity), maxSize: constraintSize)
         return indexes.map { i in
