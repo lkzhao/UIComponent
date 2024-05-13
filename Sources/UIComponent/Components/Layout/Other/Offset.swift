@@ -58,8 +58,4 @@ struct OffsetRenderNode: RenderNode {
     var positions: [CGPoint] {
         [offset]
     }
-
-    func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
-        [0]
-    }
 }

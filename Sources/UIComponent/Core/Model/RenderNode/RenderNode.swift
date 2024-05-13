@@ -33,24 +33,17 @@ public protocol RenderNode<View> {
     /// The child render nodes of this node.
     var children: [any RenderNode] { get }
 
-    /// Returns the indexes of the children that are visible within the given frame.
-    ///
-    /// - Parameter frame: The frame within which to determine visibility of children.
-    /// - Returns: The indexes of the children that are visible within the given frame.
-    ///
-    /// This method is used in the default implementation of `visibleRenderables(in:)`.
-    /// It won't be called if `visibleRenderables(in:)` is overwritten.
-    /// The default implementation for this methods is not optmized and will return all indexes regardless of the frame.
-    func visibleIndexes(in frame: CGRect) -> any Collection<Int>
-
     /// Returns the render nodes that are visible within the given frame.
     ///
     /// - Parameter frame: The frame within which to determine visibility of renderables.
     /// - Returns: The render nodes that are visible within the given frame. The objects to return are `RenderNodeChild` which contains
     ///            the child render node, the position relative to the parent, and the index of the child (for structure identity only, not used to access `children` or `positions`).
     ///
-    /// The default implementation calls ``RenderNode/visibleIndexes(in:)-1jtpe`` to get the visible childrens. And return the corresponding RenderNodeChild by combining data from `children` and `positions`.
+    /// The default implementation return all children. And return the corresponding RenderNodeChild by combining data from `children` and `positions`.
     func visibleChildren(in frame: CGRect) -> [RenderNodeChild]
+
+    /// Method called before `visibleChildren(in:)` to adjust the visible frame.
+    func adjustVisibleFrame(frame: CGRect) -> CGRect
 
     /// Creates a new view instance for this render node.
     func makeView() -> View
@@ -59,10 +52,6 @@ public protocol RenderNode<View> {
     ///
     /// - Parameter view: The view to update.
     func updateView(_ view: View)
-
-
-    /// Method called before `visibleChildren(in:)` to adjust the visible frame.
-    func adjustVisibleFrame(frame: CGRect) -> CGRect
 }
 
 // MARK: - Helper methods
@@ -129,12 +118,8 @@ extension RenderNode {
     public var children: [any RenderNode] { [] }
     public var positions: [CGPoint] { [] }
 
-    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
-        IndexSet(0..<children.count)
-    }
-
     public func visibleChildren(in frame: CGRect) -> [RenderNodeChild] {
-        visibleIndexes(in: frame).map {
+        (0..<children.count).map {
             RenderNodeChild(renderNode: children[$0], position: positions[$0], index: $0)
         }
     }

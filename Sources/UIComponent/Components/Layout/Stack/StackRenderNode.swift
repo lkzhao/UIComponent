@@ -3,7 +3,7 @@
 
 import UIKit
 
-/// A base render node protocol for a stack that provide implementation for ``visibleIndexes(in:)``
+/// A base render node protocol for a stack that provide implementation for ``visibleChildren(in:)``
 public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
     /// The size of the render node.
     var size: CGSize { get }
@@ -16,14 +16,16 @@ public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
 }
 
 extension StackRenderNode {
-    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
+    public func visibleChildren(in frame: CGRect) -> [RenderNodeChild] {
         guard let start = firstVisibleIndex(in: frame) else { return [] }
         var index = start
         let endPoint = main(frame.origin) + main(frame.size)
         while index < positions.count, main(positions[index]) < endPoint {
             index += 1
         }
-        return IndexSet(start..<index)
+        return (start..<index).map {
+            RenderNodeChild(renderNode: children[$0], position: positions[$0], index: $0)
+        }
     }
 
     public func firstVisibleIndex(in frame: CGRect) -> Int? {
@@ -96,18 +98,19 @@ public struct SlowRenderNode: RenderNode {
         self.positions = positions
     }
 
-    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
-        var result = [Int]()
+    public func visibleChildren(in frame: CGRect) -> [RenderNodeChild] {
+        var result = [RenderNodeChild]()
 
-        for (i, origin) in positions.enumerated() {
+        for (i, position) in positions.enumerated() {
             let child = children[i]
-            let childFrame = CGRect(origin: origin, size: child.size)
+            let childFrame = CGRect(origin: position, size: child.size)
             if frame.intersects(childFrame) {
-                result.append(i)
+                let nodeChild = RenderNodeChild(renderNode: child, position: position, index: i)
+                result.append(nodeChild)
             }
         }
 
-        return IndexSet(result)
+        return result
     }
 }
 

@@ -22,7 +22,7 @@ public struct DynamicHPager: Component {
     ///   - count: The total number of pages.
     ///   - alignItems: Defines how child components are aligned along the cross axis.
     ///   - content: A closure that provides the content for a given page index.
-    public init(count: Int, alignItems: CrossAxisAlignment, content: @escaping (Int) -> any Component) {
+    public init(count: Int, alignItems: CrossAxisAlignment = .start, content: @escaping (Int) -> any Component) {
         self.count = count
         self.alignItems = alignItems
         self.content = content
@@ -52,7 +52,7 @@ public struct DynamicVPager: Component {
     ///   - count: The total number of pages.
     ///   - alignItems: Defines how child components are aligned along the cross axis.
     ///   - content: A closure that provides the content for a given page index.
-    public init(count: Int, alignItems: CrossAxisAlignment, content: @escaping (Int) -> any Component) {
+    public init(count: Int, alignItems: CrossAxisAlignment = .start, content: @escaping (Int) -> any Component) {
         self.count = count
         self.alignItems = alignItems
         self.content = content

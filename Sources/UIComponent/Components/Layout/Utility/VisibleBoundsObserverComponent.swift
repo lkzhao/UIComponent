@@ -45,8 +45,8 @@ public struct VisibleBoundsObserverRenderNode<Content: RenderNode>: RenderNodeWr
         self.onVisibleBoundsChanged = onVisibleBoundsChanged
     }
 
-    public func visibleIndexes(in frame: CGRect) -> any Collection<Int> {
+    public func visibleChildren(in frame: CGRect) -> [RenderNodeChild] {
         onVisibleBoundsChanged(size, frame)
-        return content.visibleIndexes(in: frame)
+        return content.visibleChildren(in: frame)
     }
 }
