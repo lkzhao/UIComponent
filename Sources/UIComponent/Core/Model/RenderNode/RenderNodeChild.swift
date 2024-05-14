@@ -26,3 +26,9 @@ public struct RenderNodeChild {
         self.index = index
     }
 }
+
+extension RenderNodeChild {
+    public var frame: CGRect {
+        CGRect(origin: position, size: renderNode.size)
+    }
+}
