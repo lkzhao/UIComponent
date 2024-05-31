@@ -42,14 +42,14 @@ public class ComponentEngine {
     /// The current `RenderNode`. This is `nil` before the layout is done.
     var renderNode: (any RenderNode)?
 
+    /// Only render the renderNode, skipping layout.
+    var renderOnly: Bool = false
+
     /// Internal state to track if a reload is needed.
     var needsReload = true
     
     /// Internal state to track if a render is needed.
     var needsRender = false
-    
-    /// Internal state to determine if the next layout should be skipped.
-    var skipNextLayout = false
 
     /// The number of times the view has been reloaded.
     var reloadCount = 0
@@ -180,8 +180,7 @@ public class ComponentEngine {
             }
         }
 
-        if skipNextLayout {
-            skipNextLayout = false
+        if renderOnly {
             adjustContentOffset(contentOffsetAdjustFn: contentOffsetAdjustFn)
             render(updateViews: true)
         } else if asyncLayout {
@@ -376,6 +375,6 @@ public class ComponentEngine {
     public func reloadWithExisting(component: any Component, renderNode: any RenderNode) {
         self.component = component
         self.renderNode = renderNode
-        self.skipNextLayout = true
+        self.renderOnly = true
     }
 }
