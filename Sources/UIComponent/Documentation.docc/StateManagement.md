@@ -22,18 +22,12 @@ class MyViewController: UIViewController {
             reloadComponent()
         }
     }
-    let componentView = ComponentView()
     func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(componentView)
         reloadComponent()
     }
-    func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        componentView.frame = view.bounds
-    }
     func reloadComponent() {
-        componentView.component = VStack {
+        view.componentEngine.component = VStack {
             Text("Count: \(viewModel.count)")
             Text("Increase").tappableView { [weak self] in
                 self?.viewModel.count += 1
@@ -59,7 +53,7 @@ If you are worried about performance, there are are few optimization tricks that
 For complex UI, sometimes you don't want to propergate every action to the top level. If this is the case, we recommend creating a custom View that manages the local state.
 
 ```swift
-class ProfileCell: ComponentView {
+class ProfileCell: UIView {
     // external state
     var profile: Profile?  {
         didSet {
@@ -77,7 +71,7 @@ class ProfileCell: ComponentView {
     }
 
     func reloadComponent() {
-        component = VStack {
+        componentEngine.component = VStack {
             HStack {
                 Image(profileImage ?? UIImage(named: "placeholder")!)
                     .size(width: 50, height: 50)

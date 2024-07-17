@@ -13,7 +13,6 @@ public protocol ComponentReloadDelegate: AnyObject {
 
 /// `ComponentEngine` is the main class that powers the rendering of components.
 /// It manages a `UIView` and handles rendering the component to the view.
-/// See `ComponentView` for a sample implementation.
 public final class ComponentEngine {
     /// A static property to disable animations during view updates.
     public static var disableUpdateAnimation: Bool = false

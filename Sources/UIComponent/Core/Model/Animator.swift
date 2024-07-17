@@ -8,19 +8,19 @@ import UIKit
 /// Subclasses can override these methods to provide custom animation behavior.
 public protocol Animator {
 
-    /// Called before engine perform any update to the cells.
+    /// Called before the component engine perform any update to the cells.
     /// This method is only called when your animator is the componentView's root animator (i.e. componentView.animator)
     ///
     /// - Parameters:
     ///   - componentView: the engine performing the update
     func willUpdate(componentView: UIView)
 
-    /// Called when engine inserts a view into its subviews.
+    /// Called when the component engine inserts a view into its subviews.
     ///
     /// Perform any insertion animation when needed
     ///
     /// - Parameters:
-    ///   - componentView: source view
+    ///   - componentView: source view that host the component
     ///   - view: the view being inserted
     ///   - frame: frame provided by the layout
     func insert(
@@ -29,12 +29,12 @@ public protocol Animator {
         frame: CGRect
     )
 
-    /// Called when ComponentView deletes a view from its subviews.
+    /// Called when the component engine deletes a view from its subviews.
     ///
     /// Perform any deletion animation, then call the `completion` block when finished.
     ///
     /// - Parameters:
-    ///   - componentView: source ComponentView
+    ///   - componentView: source view that host the component
     ///   - view: the view being deleted
     ///   - completion: call this block when finished
     func delete(
@@ -49,7 +49,7 @@ public protocol Animator {
     ///   * the view's screen position changed when user scrolls
     ///
     /// - Parameters:
-    ///   - componentView: source ComponentView
+    ///   - componentView: source view that host the component
     ///   - view: the view being updated
     ///   - frame: frame provided by the layout
     func update(
@@ -61,7 +61,7 @@ public protocol Animator {
     /// Called when contentOffset changes during reloadData
     ///
     /// - Parameters:
-    ///   - componentView: source ComponentView
+    ///   - componentView: source view that host the component
     ///   - delta: changes in contentOffset
     ///   - view: the view being updated
     func shift(componentView: UIView, delta: CGPoint, view: UIView)

@@ -2,7 +2,8 @@
 
 import UIKit
 
-/// A UIView that can render components
+/// A `UIView` that can render components.
+/// It provides simple access to the properties and method of the underlying ``ComponentEngine``
 ///
 /// You can set the ``component`` property with your component tree for it to render
 /// The render happens on the next layout cycle. But you can call ``reloadData`` to force it to render.
@@ -14,7 +15,8 @@ import UIKit
 open class ComponentView: UIView, ComponentDisplayableView {
 }
 
-/// A UIScrollView that can render components
+/// A `UIScrollView` that can render components
+/// It provides simple access to the properties and method of the underlying ``ComponentEngine``
 ///
 /// You can set the ``component`` property with your component tree for it to render
 /// The render happens on the next layout cycle. But you can call ``reloadData`` to force it to render.

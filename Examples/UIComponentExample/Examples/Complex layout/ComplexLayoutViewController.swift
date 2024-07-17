@@ -112,7 +112,7 @@ class ComplexLayoutViewController: ComponentViewController {
                         self.didTapAddTag()
                     }
                 }
-                .view().with(\.animator, TransformAnimator())
+                .view().with(\.componentEngine.animator, TransformAnimator())
                 Separator()
                 Text("Tags column")
                 FlexColumn(spacing: 5) {
@@ -136,7 +136,9 @@ class ComplexLayoutViewController: ComponentViewController {
                         self.didTapAddTag()
                     }
                 }
-                .size(height: 130).view().with(\.animator, TransformAnimator())
+                .size(height: 130)
+                .view()
+                .with(\.componentEngine.animator, TransformAnimator())
 
                 Text("Shuffle tags").textColor(.systemBlue)
                     .tappableView { [unowned self] in
@@ -160,12 +162,13 @@ class ComplexLayoutViewController: ComponentViewController {
                     }
                 }
                 .inset(top: 5, left: 10, bottom: 0, right: 10).visibleInset(-200).scrollView()
-                .onFirstReload { scrollView in
+                .showsHorizontalScrollIndicator(false)
+                .with(\.componentEngine.onFirstReload) { scrollView in
                     guard let scrollView = scrollView as? UIScrollView else { return }
                     let cellFrame = scrollView.componentEngine.frame(id: ComplexLayoutViewController.defaultHorizontalListData[5].id)!
                     scrollView.scrollRectToVisible(CGRect(center: cellFrame.center, size: scrollView.bounds.size), animated: false)  // scroll to item 5 as the center
                 }
-                .showsHorizontalScrollIndicator(false).with(\.animator, TransformAnimator())
+                .with(\.componentEngine.animator, TransformAnimator())
                 HStack(spacing: 10) {
                     ViewComponent<UIButton>(view: resetButton).isEnabled(horizontalListData != ComplexLayoutViewController.defaultHorizontalListData).id("reset")
                     ViewComponent<UIButton>(view: shuffleButton).isEnabled(!horizontalListData.isEmpty).id("shuffled")

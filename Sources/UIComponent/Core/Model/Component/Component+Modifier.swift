@@ -217,16 +217,16 @@ extension Component {
 
     // MARK: - View wrapper modifiers
 
-    /// Wraps the component in a `ComponentViewComponent` with a generic `ComponentView`.
-    /// - Returns: A `ComponentViewComponent` that renders the component within a `ComponentView`.
-    public func view() -> ComponentViewComponent<ComponentView> {
-        ComponentViewComponent(component: self)
+    /// Wraps the component in a `UIView`.
+    /// - Returns: A `ViewWrapperComponent` that renders the component within a UIView.
+    public func view() -> ViewWrapperComponent<UIView> {
+        ViewWrapperComponent(component: self)
     }
 
-    /// Wraps the component in a `ComponentViewComponent` with a `ComponentScrollView`.
-    /// - Returns: A `ComponentViewComponent` that renders the component within a `ComponentScrollView`.
-    public func scrollView() -> ComponentViewComponent<ComponentScrollView> {
-        ComponentViewComponent(component: self)
+    /// Wraps the component in a `UIScrollView`.
+    /// - Returns: A `ViewWrapperComponent` that renders the component within a `UIScrollView`.
+    public func scrollView() -> ViewWrapperComponent<UIScrollView> {
+        ViewWrapperComponent(component: self)
     }
 
     // MARK: - Background modifiers
