@@ -5,11 +5,11 @@
 //  Created by Luke Zhao on 1/20/24.
 //
 
-import Foundation
+import UIKit
 
-/// A environment key that holds a reference to the current `ComponentDisplayableView` displaying the component.
+/// A environment key that holds a reference to the current `UIView` displaying the component.
 public struct CurrentComponentViewEnvironmentKey: EnvironmentKey {
-    public static var defaultValue: ComponentDisplayableView? {
+    public static var defaultValue: UIView? {
         nil
     }
     public static var isWeak: Bool {
@@ -25,7 +25,7 @@ public extension EnvironmentValues {
     /// ```swift
     /// @Environment(\.currentComponentView) var currentComponentView
     /// ```
-    var currentComponentView: ComponentDisplayableView? {
+    var currentComponentView: UIView? {
         get { self[CurrentComponentViewEnvironmentKey.self] }
         set { self[CurrentComponentViewEnvironmentKey.self] = newValue }
     }

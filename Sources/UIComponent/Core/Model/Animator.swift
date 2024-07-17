@@ -4,7 +4,7 @@
 import UIKit
 
 /// Animator is a base class that provides default implementations for animations
-/// related to the insertion, deletion, and updating of views within a `ComponentDisplayableView`.
+/// related to the insertion, deletion, and updating of views within a `UIView`.
 /// Subclasses can override these methods to provide custom animation behavior.
 public protocol Animator {
 
@@ -13,7 +13,7 @@ public protocol Animator {
     ///
     /// - Parameters:
     ///   - componentView: the ComponentView performing the update
-    func willUpdate(componentView: ComponentDisplayableView)
+    func willUpdate(componentView: UIView)
 
     /// Called when ComponentView inserts a view into its subviews.
     ///
@@ -24,7 +24,7 @@ public protocol Animator {
     ///   - view: the view being inserted
     ///   - frame: frame provided by the layout
     func insert(
-        componentView: ComponentDisplayableView,
+        componentView: UIView,
         view: UIView,
         frame: CGRect
     )
@@ -38,7 +38,7 @@ public protocol Animator {
     ///   - view: the view being deleted
     ///   - completion: call this block when finished
     func delete(
-        componentView: ComponentDisplayableView,
+        componentView: UIView,
         view: UIView,
         completion: @escaping () -> Void
     )
@@ -53,7 +53,7 @@ public protocol Animator {
     ///   - view: the view being updated
     ///   - frame: frame provided by the layout
     func update(
-        componentView: ComponentDisplayableView,
+        componentView: UIView,
         view: UIView,
         frame: CGRect
     )
@@ -64,27 +64,27 @@ public protocol Animator {
     ///   - componentView: source ComponentView
     ///   - delta: changes in contentOffset
     ///   - view: the view being updated
-    func shift(componentView: ComponentDisplayableView, delta: CGPoint, view: UIView)
+    func shift(componentView: UIView, delta: CGPoint, view: UIView)
 }
 
 // MARK: - Default implementation
 
 public extension Animator {
-    func willUpdate(componentView: ComponentDisplayableView) {}
+    func willUpdate(componentView: UIView) {}
     func insert(
-        componentView: ComponentDisplayableView,
+        componentView: UIView,
         view: UIView,
         frame: CGRect
     ) {}
     func delete(
-        componentView: ComponentDisplayableView,
+        componentView: UIView,
         view: UIView,
         completion: @escaping () -> Void
     ) {
         completion()
     }
     func update(
-        componentView: ComponentDisplayableView,
+        componentView: UIView,
         view: UIView,
         frame: CGRect
     ) {
@@ -95,7 +95,7 @@ public extension Animator {
             view.center = frame.center
         }
     }
-    func shift(componentView: ComponentDisplayableView, delta: CGPoint, view: UIView) {
+    func shift(componentView: UIView, delta: CGPoint, view: UIView) {
         view.center += delta
     }
 }

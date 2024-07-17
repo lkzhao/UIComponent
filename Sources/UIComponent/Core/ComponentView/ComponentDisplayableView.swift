@@ -2,12 +2,10 @@
 
 import UIKit
 
-/// A protocol that defines a view capable of displaying components.
-public protocol ComponentDisplayableView: UIView {
-    var engine: ComponentEngine { get }
-}
+/// A helper protocol that provides easier access to the underlying component engine's methods
+public protocol ComponentDisplayableView: UIView {}
 
-/// Extension to provide default implementations and additional functionalities to `ComponentDisplayableView`.
+/// Extension to provide easier access to the underlying component engine's methods
 extension ComponentDisplayableView {
 
     /// The component to be rendered by this component displayable view.
@@ -21,7 +19,13 @@ extension ComponentDisplayableView {
         get { engine.animator }
         set { engine.animator = newValue }
     }
-    
+
+    /// A closure that is called after the first reload.
+    public var onFirstReload: ((UIView) -> Void)? {
+        get { engine.onFirstReload }
+        set { engine.onFirstReload = newValue }
+    }
+
     /// The render node associated with the current component.
     public var renderNode: (any RenderNode)? {
         engine.renderNode
@@ -100,29 +104,30 @@ extension ComponentDisplayableView {
     public func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
         engine.reloadData(contentOffsetAdjustFn: contentOffsetAdjustFn)
     }
-}
 
-/// Extension to provide additional functionalities to `ComponentDisplayableView` related to view lookup and frame calculation.
-extension ComponentDisplayableView {
     /// Returns the view at a given point if it exists within the visible views.
     public func view(at point: CGPoint) -> UIView? {
-        visibleViews.first {
-            $0.point(inside: $0.convert(point, from: self), with: nil)
-        }
+        engine.view(at: point)
     }
 
     /// Returns the frame associated with a given identifier if it exists within the render node.
     public func frame(id: String) -> CGRect? {
-        engine.renderNode?.frame(id: id)
+        engine.frame(id: id)
     }
 
     /// Returns the visible view associated with a given identifier if it exists within the visible renderables.
     public func visibleView(id: String) -> UIView? {
-        for (view, renderable) in zip(visibleViews, visibleRenderable) {
-            if renderable.id == id {
-                return view
-            }
-        }
-        return nil
+        engine.visibleView(id: id)
+    }
+}
+
+extension ComponentDisplayableView where Self: UIScrollView {
+    public var contentView: UIView? {
+        get { engine.contentView }
+        set { engine.contentView = newValue }
+    }
+
+    @discardableResult public func scrollTo(id: String, animated: Bool) -> Bool {
+        engine.scrollTo(id: id, animated: animated)
     }
 }
