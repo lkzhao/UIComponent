@@ -31,10 +31,10 @@ final class UIComponentTests: XCTestCase {
         }.inset(100).visibleInset(-100)
         view.frame = CGRect(x: 0, y: 0, width: 500, height: 400)
         view.layoutIfNeeded()
-        XCTAssertEqual(view.componentEngine.visibleRenderable.count, 1)
+        XCTAssertEqual(view.componentEngine.visibleRenderables.count, 1)
         view.frame = CGRect(x: 0, y: 0, width: 500, height: 500)
         view.layoutIfNeeded()
-        XCTAssertEqual(view.componentEngine.visibleRenderable.count, 2)
+        XCTAssertEqual(view.componentEngine.visibleRenderables.count, 2)
     }
 
     func testOffsetVisibility() {
@@ -45,11 +45,11 @@ final class UIComponentTests: XCTestCase {
         }
         view.bounds = CGRect(x: 0, y: 0, width: 300, height: 300)
         view.layoutIfNeeded()
-        XCTAssertEqual(view.componentEngine.visibleRenderable.count, 1)
+        XCTAssertEqual(view.componentEngine.visibleRenderables.count, 1)
 
         view.bounds = CGRect(x: 0, y: 300, width: 300, height: 300)
         view.layoutIfNeeded()
-        XCTAssertEqual(view.componentEngine.visibleRenderable.count, 0)
+        XCTAssertEqual(view.componentEngine.visibleRenderables.count, 0)
     }
 
     /// Test to make sure component with fixed size are
@@ -68,7 +68,7 @@ final class UIComponentTests: XCTestCase {
         let secondText = vRenderNode!.children[1] as? AnyRenderNodeOfView<UILabel>
         XCTAssertNotNil(firstText)
         XCTAssertNotNil(secondText)
-        XCTAssertEqual(view.componentEngine.visibleRenderable.count, 1)
+        XCTAssertEqual(view.componentEngine.visibleRenderables.count, 1)
         let lazyNode1 = firstText!.erasing as? LazyRenderNode<Text>
         let lazyNode2 = secondText!.erasing as? LazyRenderNode<Text>
         XCTAssertEqual(lazyNode1!.didLayout, true)

@@ -72,7 +72,7 @@ extension ComponentDisplayableView {
 
     /// The renderables that are currently visible and being rendered by this view.
     public var visibleRenderable: [Renderable] {
-        componentEngine.visibleRenderable
+        componentEngine.visibleRenderables
     }
 
     /// The bounds of this view when the last render occurred.

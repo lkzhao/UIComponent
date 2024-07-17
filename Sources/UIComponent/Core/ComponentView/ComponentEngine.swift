@@ -75,7 +75,7 @@ public final class ComponentEngine {
     public private(set) var visibleViews: [UIView] = []
 
     /// An array of `Renderable` objects corresponding to the visible views.
-    public private(set) var visibleRenderable: [Renderable] = []
+    public private(set) var visibleRenderables: [Renderable] = []
 
     /// The bounds of the view during the last reload.
     public private(set) var lastRenderBounds: CGRect = .zero
@@ -242,7 +242,7 @@ public final class ComponentEngine {
         animator.willUpdate(hostingView: view)
         let visibleFrame = (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
 
-        var newVisibleRenderable = renderNode._visibleRenderables(in: visibleFrame)
+        var newVisibleRenderables = renderNode._visibleRenderables(in: visibleFrame)
 
         if contentSize != renderNode.size * zoomScale {
             // update contentSize if it is changed. Some renderNodes update
@@ -252,23 +252,23 @@ public final class ComponentEngine {
 
         // construct private identifiers
         var newIdentifierSet = [String: Int]()
-        for (index, renderable) in newVisibleRenderable.enumerated() {
+        for (index, renderable) in newVisibleRenderables.enumerated() {
             var count = 1
             let initialId = renderable.id
             var finalId = initialId
             while newIdentifierSet[finalId] != nil {
                 finalId = initialId + String(count)
-                newVisibleRenderable[index].id = finalId
+                newVisibleRenderables[index].id = finalId
                 count += 1
             }
             newIdentifierSet[finalId] = index
         }
 
-        var newViews = [UIView?](repeating: nil, count: newVisibleRenderable.count)
+        var newViews = [UIView?](repeating: nil, count: newVisibleRenderables.count)
 
         // 1st pass, delete all removed cells and move existing cells
         for index in 0..<visibleViews.count {
-            let renderable = visibleRenderable[index]
+            let renderable = visibleRenderables[index]
             let id = renderable.id
             let cell = visibleViews[index]
             if let index = newIdentifierSet[id] {
@@ -283,7 +283,7 @@ public final class ComponentEngine {
         }
 
         // 2nd pass, insert new views
-        for (index, renderable) in newVisibleRenderable.enumerated() {
+        for (index, renderable) in newVisibleRenderables.enumerated() {
             let cell: UIView
             let frame = renderable.frame
             let animator = renderable.renderNode.animator ?? animator
@@ -315,7 +315,7 @@ public final class ComponentEngine {
             containerView.insertSubview(cell, at: index)
         }
 
-        visibleRenderable = newVisibleRenderable
+        visibleRenderables = newVisibleRenderables
         visibleViews = newViews as! [UIView]
         lastRenderBounds = bounds
         needsRender = false
@@ -360,8 +360,8 @@ public final class ComponentEngine {
     ///   - identifier: The current identifier of the cell.
     ///   - newIdentifier: The new identifier to replace the current identifier.
     public func replace(identifier: String, with newIdentifier: String) {
-        for (i, renderable) in visibleRenderable.enumerated() where renderable.id == identifier {
-            visibleRenderable[i].id = newIdentifier
+        for (i, renderable) in visibleRenderables.enumerated() where renderable.id == identifier {
+            visibleRenderables[i].id = newIdentifier
             break
         }
     }
@@ -396,7 +396,7 @@ extension ComponentEngine {
 
     /// Returns the visible view associated with a given identifier if it exists within the visible renderables.
     public func visibleView(id: String) -> UIView? {
-        for (view, renderable) in zip(visibleViews, visibleRenderable) {
+        for (view, renderable) in zip(visibleViews, visibleRenderables) {
             if renderable.id == id {
                 return view
             }

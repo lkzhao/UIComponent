@@ -14,7 +14,12 @@ UIComponent has 3 main types of objects to render a UI.
 
 ``RenderNode`` is also a tree structure that holds UI informations like ``RenderNode/size``, ``RenderNode/children-85mp2``, and ``RenderNode/positions-34087``.
 
-To render the UI, UIComponent will ask the `RenderNode` for a flat list of ``Renderable`` that should be displayed in the visible frame. 
+To render the UI, UIComponent will ask the `RenderNode` for a flat list of ``RenderNodeChild`` that should be displayed in the visible frame. 
+
+
+##### RenderNodeChild
+    
+``RenderNodeChild`` is an intermediate tree structure that represents all of the render nodes that should be rendered onscreen. The framework will then use this information to generate a list of ``Renderable``s
 
 ##### Renderable
 
@@ -40,13 +45,15 @@ The process from the RenderNode to the **UIView** being rendered onscreen is cal
 * During a reload.
 * Manually calling ``ComponentEngine/setNeedsRender()``
 
-The **render** process performs a **visibility test** by asking the RenderNode to provide a list of Renderables given visible frame using the `_visibleRenderables(in frame: CGRect)` method.
+The **render** process performs a **visibility test** by asking the RenderNode to provide a list of children that are visible using the `visibleChildren(in frame: CGRect)` method.
 
 Each type of RenderNode might have a different visibility test implementation. 
 
-VStack's RenderNode for example, uses binary search to find a list of child RenderNodes that are visible in the provided frame. then it ask each visible child to provide its own list of Renderables. Finally, it merges all Renderable returned by its children into a flattened list.
+``VStack``'s `RenderNode` for example, uses binary search to find a list of child RenderNodes that are visible in the provided frame.
 
-For a RenderNode that represents a view, it will just return a single Renderable that represents the view that will be displayed.
+For a RenderNode that represents a view, it will just return an empty array.
+
+The framework will then generates a list of ``Renderable``s from the resulting ``RenderNodeChild`` array.
 
 ### Display
 
