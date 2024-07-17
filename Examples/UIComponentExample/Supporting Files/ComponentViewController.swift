@@ -4,7 +4,7 @@ import UIComponent
 import UIKit
 
 class ComponentViewController: UIViewController {
-    let componentView = ComponentScrollView()
+    let componentView = UIScrollView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +20,7 @@ class ComponentViewController: UIViewController {
     }
 
     func reloadComponent() {
-        componentView.component = component
+        componentView.componentEngine.component = component
     }
 
     var component: any Component {

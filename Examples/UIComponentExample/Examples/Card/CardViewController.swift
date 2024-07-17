@@ -77,7 +77,7 @@ class CardViewController: ComponentViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        componentView.animator = TransformAnimator()
+        componentView.componentEngine.animator = TransformAnimator()
     }
 
     override var component: any Component {

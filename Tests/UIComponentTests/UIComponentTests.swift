@@ -11,9 +11,9 @@ let maxSize = CGSize(width: 100, height: CGFloat.infinity)
 
 final class UIComponentTests: XCTestCase {
     func testPerfHStackText() {
-        let componentView = ComponentView()
+        let componentView = UIView()
         measure {
-            componentView.component = HStack {
+            componentView.componentEngine.component = HStack {
                 for _ in 0..<10000 {
                     Text("Test")
                 }
@@ -24,8 +24,8 @@ final class UIComponentTests: XCTestCase {
     }
 
     func testVisibleInsets() {
-        let componentView = ComponentView()
-        componentView.component = VStack(spacing: 100) {
+        let componentView = UIView()
+        componentView.componentEngine.component = VStack(spacing: 100) {
             Text(text1).size(width: 300, height: 300)
             Text(text2).size(width: 300, height: 300)
         }.inset(100).visibleInset(-100)
@@ -39,8 +39,8 @@ final class UIComponentTests: XCTestCase {
 
     func testOffsetVisibility() {
         // Offset shouldn't adjust visibility, it should use the original frame for visibility testing
-        let componentView = ComponentView()
-        componentView.component = ZStack {
+        let componentView = UIView()
+        componentView.componentEngine.component = ZStack {
             Text(text1).size(width: 300, height: 300).offset(CGPoint(x: 0, y: 300))
         }
         componentView.bounds = CGRect(x: 0, y: 0, width: 300, height: 300)
@@ -55,8 +55,8 @@ final class UIComponentTests: XCTestCase {
     /// Test to make sure component with fixed size are
     /// not being layouted when not visible
     func testLazyLayout() {
-        let componentView = ComponentView()
-        componentView.component = VStack {
+        let componentView = UIView()
+        componentView.componentEngine.component = VStack {
             Text(text1).size(width: 300, height: 600)
             Text(text2).size(width: 300, height: 600)
         }
@@ -76,10 +76,10 @@ final class UIComponentTests: XCTestCase {
     }
     /// Test to make sure environment is passed down to lazy layout even when layout is performed later
     func testLazyLayoutEnvironment() {
-        let componentView = ComponentView()
+        let componentView = UIView()
         var text1ComponentView: UIView?
         var text2ComponentView: UIView?
-        componentView.component = VStack {
+        componentView.componentEngine.component = VStack {
             ConstraintReader { _ in
                 text1ComponentView = Environment(\.currentComponentView).wrappedValue
                 return Text(text1)
@@ -139,9 +139,9 @@ final class UIComponentTests: XCTestCase {
         XCTAssertLessThan(fixedSizeLayoutTime * 2, rawLayoutTime)
     }
     func measureTime(_ component: () -> any Component) -> TimeInterval {
-        let componentView = ComponentView()
+        let componentView = UIView()
         let startTime = CACurrentMediaTime()
-        componentView.component = component()
+        componentView.componentEngine.component = component()
         componentView.frame = CGRect(x: 0, y: 0, width: 300, height: 600)
         componentView.layoutIfNeeded()
         return CACurrentMediaTime() - startTime

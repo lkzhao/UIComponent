@@ -182,7 +182,7 @@ class ComplexLayoutViewController: ComponentViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        componentView.animator = TransformAnimator()
+        componentView.componentEngine.animator = TransformAnimator()
     }
 
     @objc func resetHorizontalListData() {
