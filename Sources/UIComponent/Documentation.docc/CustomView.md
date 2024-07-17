@@ -17,7 +17,7 @@ In fact, UIComponent treats all ``UIKit/UIView`` as components, so you can inser
 let myCustomView = MyCustomView()
 
 // place it in the Component hierarchy
-componentView.component = VStack {
+view.componentEngine.component = VStack {
     Text("Working with custom view")
     myCustomView
 }

@@ -42,7 +42,7 @@ struct ProfileComponent: ComponentBuilder {
 }
 
 // Usage
-componentView.component = ProfileComponent(profile: myProfile)
+view.componentEngine.component = ProfileComponent(profile: myProfile)
 ```
 
 ##### Custom Layout Component

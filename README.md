@@ -19,6 +19,6 @@ UIComponent is a declarative and modern framework to build user interfaces with 
 - [Internal Architecture](https://lkzhao.com/UIComponent/documentation/uicomponent/architecture)
 - [Compare to SwiftUI](https://lkzhao.com/UIComponent/documentation/uicomponent/swiftuicompare)
 - [Full API Reference](https://lkzhao.com/UIComponent/documentation/uicomponent)
-- [Version 2.0 Migration Guide](Version2MigrationGuide.md)
+- [Migration Guides](https://lkzhao.com/UIComponent/documentation/uicomponent/migrationguides)
 
 > Checkout the [Examples](https://github.com/lkzhao/UIComponent/tree/master/Examples) folder for code examples.

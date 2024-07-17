@@ -217,16 +217,16 @@ extension Component {
 
     // MARK: - View wrapper modifiers
 
-    /// Wraps the component in a `ComponentViewComponent` with a generic `ComponentView`.
-    /// - Returns: A `ComponentViewComponent` that renders the component within a `ComponentView`.
-    public func view() -> ComponentViewComponent<ComponentView> {
-        ComponentViewComponent(component: self)
+    /// Wraps the component in a `UIView`.
+    /// - Returns: A `ViewWrapperComponent` that renders the component within a UIView.
+    public func view() -> ViewWrapperComponent<UIView> {
+        ViewWrapperComponent(component: self)
     }
 
-    /// Wraps the component in a `ComponentViewComponent` with a `ComponentScrollView`.
-    /// - Returns: A `ComponentViewComponent` that renders the component within a `ComponentScrollView`.
-    public func scrollView() -> ComponentViewComponent<ComponentScrollView> {
-        ComponentViewComponent(component: self)
+    /// Wraps the component in a `UIScrollView`.
+    /// - Returns: A `ViewWrapperComponent` that renders the component within a `UIScrollView`.
+    public func scrollView() -> ViewWrapperComponent<UIScrollView> {
+        ViewWrapperComponent(component: self)
     }
 
     // MARK: - Background modifiers
@@ -675,7 +675,7 @@ extension Component {
     ///   - passthrough: A Boolean value that determines whether the animator update method will be called for the content component.
     ///   - updateBlock: A closure that is called to perform the layout update animation.
     /// - Returns: An `AnimatorWrapperComponent` containing the modified component.
-    public func animateUpdate(passthrough: Bool = false, _ updateBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> AnimatorWrapperComponent<Self> {
+    public func animateUpdate(passthrough: Bool = false, _ updateBlock: @escaping ((UIView, UIView, CGRect) -> Void)) -> AnimatorWrapperComponent<Self> {
         ModifierComponent(content: self) {
             $0.animateUpdate(passthrough: passthrough, updateBlock)
         }
@@ -684,7 +684,7 @@ extension Component {
     /// Animates the insertion of the component.
     /// - Parameter insertBlock: A closure that is called to perform the insertion animation.
     /// - Returns: An `AnimatorWrapperComponent` containing the modified component.
-    public func animateInsert(_ insertBlock: @escaping ((ComponentDisplayableView, UIView, CGRect) -> Void)) -> AnimatorWrapperComponent<Self> {
+    public func animateInsert(_ insertBlock: @escaping ((UIView, UIView, CGRect) -> Void)) -> AnimatorWrapperComponent<Self> {
         ModifierComponent(content: self) {
             $0.animateInsert(insertBlock)
         }
@@ -693,7 +693,7 @@ extension Component {
     /// Animates the deletion of the component.
     /// - Parameter deleteBlock: A closure that is called to perform the deletion animation.
     /// - Returns: An `AnimatorWrapperComponent` containing the modified component.
-    public func animateDelete(_ deleteBlock: @escaping (ComponentDisplayableView, UIView, @escaping () -> Void) -> Void) -> AnimatorWrapperComponent<Self> {
+    public func animateDelete(_ deleteBlock: @escaping (UIView, UIView, @escaping () -> Void) -> Void) -> AnimatorWrapperComponent<Self> {
         ModifierComponent(content: self) {
             $0.animateDelete(deleteBlock)
         }

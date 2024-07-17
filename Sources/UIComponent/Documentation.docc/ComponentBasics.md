@@ -22,11 +22,10 @@ VStack(spacing: 8, alignItems: .center) {
 
 ![](ComponentBasics)
 
-To render the ``Component`` on screen, You can use either the ``ComponentView`` or ``ComponentScrollView``, and assign your Component to the ``ComponentDisplayableView/component`` field.
+To render the ``Component`` on a view, assign the component to the ``UIView.componentEngine.component`` property. The view will automatically reload and display the UI.
 
 ```swift
-let componentView = ComponentView()
-componentView.component = VStack(spacing: 8, alignItems: .center) {
+view.componentEngine.component = VStack(spacing: 8, alignItems: .center) {
     Image("logo")
     Text("Hello World!")
 }

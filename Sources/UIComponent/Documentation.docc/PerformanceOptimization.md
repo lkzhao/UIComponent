@@ -67,11 +67,11 @@ VStack {
 You can also create a custom view that wraps your child component. This way the child component won't be constructed or layed out when reloading the list.
 
 ```swift
-class ItemView: ComponentView {
+class ItemView: UIView {
     var item: Item? {
         didSet {
             guard item != oldValue else { return }
-            component = VStack {
+            componentEngine.component = VStack {
                 Image(item.image)
                 Text(item.title)
                 Text(item.subtitle)
@@ -89,15 +89,15 @@ VStack {
 #### Async layout (Beta)
 
 UIComponent also provides an ``ComponentEngine/asyncLayout`` option. 
-This allows the ``ComponentView`` to run layout calculation on a background thread and free up the main UI thread. It should improve the framerate and scroll performance, but it does not improve the layout latency. (i.e. if you layout takes 2 seconds, it will still take 2 seconds to complete, but the user are able to scroll and interact with the app while the calculation is running)
+This allows the ``ComponentEngine`` to run layout calculation on a background thread and free up the main UI thread. It should improve the framerate and scroll performance, but it does not improve the layout latency. (i.e. if you layout takes 2 seconds, it will still take 2 seconds to complete, but the user are able to scroll and interact with the app while the calculation is running)
 
-To enabled async layout on a ``ComponentView``:
+To enabled async layout on a ``ComponentEngine``:
 ```swift
-componentView.engine.asyncLayout = true
+view.componentEngine.asyncLayout = true
 ```
 
 Keep in mind that doing layout on a background thread have a few implications, you should only consider this approach on a performance critical situation:
-1. View hierarchy will not immediately reflect the Component state even if after calling ``ComponentView/reloadData(contentOffsetAdjustFn:)``
+1. View hierarchy will not immediately reflect the Component state even if after calling ``ComponentEngine/reloadData(contentOffsetAdjustFn:)``
 2. Your layout code inside your components must be thread safe.
     * Fortunately, most components are structs which are thread safe by default.
 3. Your layout code must not access UI properties during layout.

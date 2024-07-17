@@ -27,7 +27,7 @@ public struct TappableViewConfig {
 @available(*, deprecated, renamed: "TappableViewConfig")
 public typealias TappableViewConfiguration = TappableViewConfig
 
-/// TappableView is a subclass of ``ComponentView`` that responds to tap and gesture events.
+/// TappableView is view that respond to tap and gesture events.
 /// It can be configured using ``TappableViewConfig`` and supports various gestures such as tap, double tap, and long press.
 /// 
 /// ### Handle Gesture
@@ -68,7 +68,7 @@ public typealias TappableViewConfiguration = TappableViewConfig
 /// }.pointerStyleProvider {
 ///    UIPointerStyle(...) // return the pointer style you want to be displayed
 /// }
-open class TappableView: ComponentView {
+open class TappableView: UIView {
     /// The configuration object for the TappableView, which defines the behavior of the view when it is tapped or highlighted.
     public var config: TappableViewConfig?
 

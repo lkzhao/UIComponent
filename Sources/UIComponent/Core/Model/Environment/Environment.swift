@@ -14,15 +14,15 @@ import Foundation
 ///
 /// In your ``Component`` or ``ComponentBuilder``, use the ``Environment`` property wrapper to create a property that can access the environment value.
 /// ```swift
-/// @Environment(\.currentComponentView) var currentComponentView
+/// @Environment(\.hostingView) var hostingView
 /// ```
 ///
 /// Inside ``Component/layout(_:)`` or ``ComponentBuilder/build()`` you can access the environment value directly.
 /// ```swift
 /// VStack {
 ///     // ...
-/// }.inset { [weak currentComponentView] _ in
-///     currentComponentView?.safeAreaInsets ?? .zero
+/// }.inset { [weak hostingView] _ in
+///     hostingView?.safeAreaInsets ?? .zero
 /// }
 /// ```
 ///

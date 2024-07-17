@@ -51,9 +51,6 @@ public class PrimaryMenu: UIControl {
         set { config = newValue }
     }
 
-    /// The view that displays the menu's content.
-    let contentView = ComponentView()
-
     /// A flag indicating whether the menu is currently being displayed.
     public var isShowingMenu = false
 
@@ -81,12 +78,6 @@ public class PrimaryMenu: UIControl {
         set { _preferredMenuElementOrder = newValue }
     }
 
-    /// The component that is rendered within the `contentView`.
-    public var component: (any Component)? {
-        get { contentView.component }
-        set { contentView.component = newValue }
-    }
-
     /// A type-erased pointer style provider.
     private var _pointerStyleProvider: Any?
 
@@ -110,22 +101,12 @@ public class PrimaryMenu: UIControl {
         super.init(frame: frame)
         showsMenuAsPrimaryAction = true
         isContextMenuInteractionEnabled = true
-        addSubview(contentView)
         accessibilityTraits = .button
-        contentView.addInteraction(UIPointerInteraction(delegate: self))
+        addInteraction(UIPointerInteraction(delegate: self))
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        contentView.frame = bounds
-    }
-
-    public override func sizeThatFits(_ size: CGSize) -> CGSize {
-        contentView.sizeThatFits(size)
     }
 
     // MARK: - Touch Handling
@@ -177,7 +158,7 @@ extension PrimaryMenu: UIPointerInteractionDelegate {
         if let pointerStyleProvider {
             return pointerStyleProvider()
         } else {
-            return UIPointerStyle(effect: .automatic(UITargetedPreview(view: contentView)), shape: nil)
+            return UIPointerStyle(effect: .automatic(UITargetedPreview(view: self)), shape: nil)
         }
     }
 }
