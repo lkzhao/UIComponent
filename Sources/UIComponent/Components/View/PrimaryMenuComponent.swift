@@ -66,7 +66,7 @@ public struct PrimaryMenuRenderNode: RenderNode {
     public func updateView(_ view: PrimaryMenu) {
         view.config = config
         view.menuBuilder = menuBuilder
-        view.contentView.engine.reloadWithExisting(component: component, renderNode: content)
+        view.contentView.componentEngine.reloadWithExisting(component: component, renderNode: content)
     }
 }
 

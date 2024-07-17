@@ -79,7 +79,7 @@ struct FadeAnimator: Animator {
         self.duration = duration
     }
     
-    func delete(componentView: ComponentDisplayableView, view: UIView,
+    func delete(componentView: UIView, view: UIView,
                                 completion: @escaping () -> Void) {
         if  // Only animate when the componentView's component is updated, not when scrolling.
             componentView.isReloading, 
@@ -95,7 +95,7 @@ struct FadeAnimator: Animator {
         }
     }
     
-    func insert(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
+    func insert(componentView: UIView, view: UIView, frame: CGRect) {
         view.bounds.size = frame.bounds.size
         view.center = frame.center
         if  // Only animate when the componentView's component is updated, not when scrolling.

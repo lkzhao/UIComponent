@@ -9,18 +9,18 @@ import UIKit
 
 extension UIView {
     // Access to the underlying Component Engine
-    public var engine: ComponentEngine {
+    public var componentEngine: ComponentEngine {
         get {
-            if let engine = _engine {
-                return engine
+            if let componentEngine = _componentEngine {
+                return componentEngine
             }
-            let engine = ComponentEngine(view: self)
+            let componentEngine = ComponentEngine(view: self)
             _ = UIView.swizzle_setBounds
             _ = UIView.swizzle_layoutSubviews
             _ = UIView.swizzle_sizeThatFits
             _ = UIScrollView.swizzle_safeAreaInsetsDidChange
-            _engine = engine
-            return engine
+            _componentEngine = componentEngine
+            return componentEngine
         }
     }
 }
@@ -31,7 +31,7 @@ private struct AssociatedKeys {
 }
 
 extension UIView {
-    fileprivate var _engine: ComponentEngine? {
+    fileprivate var _componentEngine: ComponentEngine? {
         get {
             objc_getAssociatedObject(self, &AssociatedKeys.componentEngine) as? ComponentEngine
         }
@@ -53,7 +53,7 @@ extension UIView {
     }()
 
     @objc func swizzled_sizeThatFits(_ size: CGSize) -> CGSize {
-        _engine?.sizeThatFits(size) ?? swizzled_sizeThatFits(size)
+        _componentEngine?.sizeThatFits(size) ?? swizzled_sizeThatFits(size)
     }
 
     static let swizzle_layoutSubviews: Void = {
@@ -65,7 +65,7 @@ extension UIView {
 
     @objc func swizzled_layoutSubviews() {
         swizzled_layoutSubviews()
-        _engine?.layoutSubview()
+        _componentEngine?.layoutSubview()
     }
 
     static let swizzle_setBounds: Void = {
@@ -77,7 +77,7 @@ extension UIView {
 
     @objc func swizzled_setBounds(_ bounds: CGRect) {
         swizzled_setBounds(bounds)
-        _engine?.setNeedsRender()
+        _componentEngine?.setNeedsRender()
     }
 }
 
@@ -92,8 +92,8 @@ extension UIScrollView {
     @objc func swizzled_safeAreaInsetsDidChange() {
         guard responds(to: #selector(swizzled_safeAreaInsetsDidChange)) else { return }
         swizzled_safeAreaInsetsDidChange()
-        if let engine = _engine, contentInsetAdjustmentBehavior != .never {
-            engine.setNeedsReload()
+        if let componentEngine = _componentEngine, contentInsetAdjustmentBehavior != .never {
+            componentEngine.setNeedsReload()
         }
     }
 }

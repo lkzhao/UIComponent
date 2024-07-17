@@ -30,8 +30,8 @@ public struct TransformAnimator: Animator {
         self.cascade = cascade
     }
 
-    public func delete(componentView: ComponentDisplayableView, view: UIView, completion: @escaping () -> Void) {
-        if componentView.isReloading, componentView.bounds.intersects(view.frame) {
+    public func delete(componentView: UIView, view: UIView, completion: @escaping () -> Void) {
+        if componentView.componentEngine.isReloading, componentView.bounds.intersects(view.frame) {
             UIView.animate(
                 withDuration: duration,
                 delay: 0,
@@ -43,7 +43,7 @@ public struct TransformAnimator: Animator {
                     view.alpha = 0
                 },
                 completion: { _ in
-                    if !componentView.visibleViews.contains(view) {
+                    if !componentView.componentEngine.visibleViews.contains(view) {
                         view.transform = CGAffineTransform.identity
                         view.alpha = 1
                     }
@@ -55,10 +55,10 @@ public struct TransformAnimator: Animator {
         }
     }
 
-    public func insert(componentView: ComponentDisplayableView, view: UIView, frame: CGRect) {
+    public func insert(componentView: UIView, view: UIView, frame: CGRect) {
         view.bounds.size = frame.size
         view.center = frame.center
-        if componentView.isReloading, componentView.hasReloaded, componentView.bounds.intersects(frame) {
+        if componentView.componentEngine.isReloading, componentView.componentEngine.hasReloaded, componentView.bounds.intersects(frame) {
             let offsetTime: TimeInterval = cascade ? TimeInterval(frame.origin.distance(componentView.bounds.origin) / 3000) : 0
             UIView.performWithoutAnimation {
                 view.layer.transform = transform
@@ -78,7 +78,7 @@ public struct TransformAnimator: Animator {
         }
     }
 
-    public func update(componentView _: ComponentDisplayableView, view: UIView, frame: CGRect) {
+    public func update(componentView _: UIView, view: UIView, frame: CGRect) {
         if view.center != frame.center {
             UIView.animate(
                 withDuration: duration,

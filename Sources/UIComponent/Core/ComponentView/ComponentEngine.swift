@@ -6,13 +6,13 @@ import UIKit
 /// Protocol defining a delegate responsible for determining if a component view should be reloaded.
 public protocol ComponentReloadDelegate: AnyObject {
     /// Asks the delegate if the component view should be reloaded.
-    /// - Parameter view: The `ComponentDisplayableView` that is asking for permission to reload.
+    /// - Parameter view: The `UIView` that is asking for permission to reload.
     /// - Returns: A Boolean value indicating whether the view should be reloaded.
     func componentViewShouldReload(_ view: UIView) -> Bool
 }
 
 /// `ComponentEngine` is the main class that powers the rendering of components.
-/// It manages a `ComponentDisplayableView` and handles rendering the component to the view.
+/// It manages a `UIView` and handles rendering the component to the view.
 /// See `ComponentView` for a sample implementation.
 public final class ComponentEngine {
     /// A static property to disable animations during view updates.
@@ -137,7 +137,7 @@ public final class ComponentEngine {
     }
 
     /// Initializes a new `ComponentEngine` with the given view.
-    /// - Parameter view: The `ComponentDisplayableView` to be managed by the engine.
+    /// - Parameter view: The `UIView` to be managed by the engine.
     init(view: UIView) {
         self.view = view
     }
@@ -380,7 +380,7 @@ public final class ComponentEngine {
 }
 
 
-/// Extension to provide additional functionalities to `ComponentDisplayableView` related to view lookup and frame calculation.
+/// Extension to provide additional functionalities to view lookup and frame calculation.
 extension ComponentEngine {
     /// Returns the view at a given point if it exists within the visible views.
     public func view(at point: CGPoint) -> UIView? {

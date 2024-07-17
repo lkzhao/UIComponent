@@ -93,7 +93,7 @@ This allows the ``ComponentView`` to run layout calculation on a background thre
 
 To enabled async layout on a ``ComponentView``:
 ```swift
-componentView.engine.asyncLayout = true
+componentView.componentEngine.asyncLayout = true
 ```
 
 Keep in mind that doing layout on a background thread have a few implications, you should only consider this approach on a performance critical situation:

@@ -9,7 +9,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        TappableViewConfiguration.default = TappableViewConfiguration { view, isHighlighted in
+        TappableViewConfig.default = TappableViewConfig { view, isHighlighted in
             let scale: CGFloat = isHighlighted ? 0.9 : 1.0
             UIView.animate(withDuration: 0.2) {
                 view.transform = .identity.scaledBy(x: scale, y: scale)

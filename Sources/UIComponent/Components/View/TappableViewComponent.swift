@@ -64,7 +64,7 @@ public struct TappableViewRenderNode: RenderNode {
     public func updateView(_ view: TappableView) {
         view.config = config
         view.onTap = onTap
-        view.engine.reloadWithExisting(component: component, renderNode: content)
+        view.componentEngine.reloadWithExisting(component: component, renderNode: content)
     }
 }
 

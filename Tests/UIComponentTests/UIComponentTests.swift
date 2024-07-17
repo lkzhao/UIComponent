@@ -31,10 +31,10 @@ final class UIComponentTests: XCTestCase {
         }.inset(100).visibleInset(-100)
         componentView.frame = CGRect(x: 0, y: 0, width: 500, height: 400)
         componentView.layoutIfNeeded()
-        XCTAssertEqual(componentView.engine.visibleRenderable.count, 1)
+        XCTAssertEqual(componentView.componentEngine.visibleRenderable.count, 1)
         componentView.frame = CGRect(x: 0, y: 0, width: 500, height: 500)
         componentView.layoutIfNeeded()
-        XCTAssertEqual(componentView.engine.visibleRenderable.count, 2)
+        XCTAssertEqual(componentView.componentEngine.visibleRenderable.count, 2)
     }
 
     func testOffsetVisibility() {
@@ -45,11 +45,11 @@ final class UIComponentTests: XCTestCase {
         }
         componentView.bounds = CGRect(x: 0, y: 0, width: 300, height: 300)
         componentView.layoutIfNeeded()
-        XCTAssertEqual(componentView.engine.visibleRenderable.count, 1)
+        XCTAssertEqual(componentView.componentEngine.visibleRenderable.count, 1)
 
         componentView.bounds = CGRect(x: 0, y: 300, width: 300, height: 300)
         componentView.layoutIfNeeded()
-        XCTAssertEqual(componentView.engine.visibleRenderable.count, 0)
+        XCTAssertEqual(componentView.componentEngine.visibleRenderable.count, 0)
     }
 
     /// Test to make sure component with fixed size are
@@ -62,13 +62,13 @@ final class UIComponentTests: XCTestCase {
         }
         componentView.frame = CGRect(x: 0, y: 0, width: 300, height: 600)
         componentView.layoutIfNeeded()
-        let vRenderNode = componentView.engine.renderNode as? VerticalRenderNode
+        let vRenderNode = componentView.componentEngine.renderNode as? VerticalRenderNode
         XCTAssertNotNil(vRenderNode)
         let firstText = vRenderNode!.children[0] as? AnyRenderNodeOfView<UILabel>
         let secondText = vRenderNode!.children[1] as? AnyRenderNodeOfView<UILabel>
         XCTAssertNotNil(firstText)
         XCTAssertNotNil(secondText)
-        XCTAssertEqual(componentView.engine.visibleRenderable.count, 1)
+        XCTAssertEqual(componentView.componentEngine.visibleRenderable.count, 1)
         let lazyNode1 = firstText!.erasing as? LazyRenderNode<Text>
         let lazyNode2 = secondText!.erasing as? LazyRenderNode<Text>
         XCTAssertEqual(lazyNode1!.didLayout, true)
@@ -77,8 +77,8 @@ final class UIComponentTests: XCTestCase {
     /// Test to make sure environment is passed down to lazy layout even when layout is performed later
     func testLazyLayoutEnvironment() {
         let componentView = ComponentView()
-        var text1ComponentView: ComponentDisplayableView?
-        var text2ComponentView: ComponentDisplayableView?
+        var text1ComponentView: UIView?
+        var text2ComponentView: UIView?
         componentView.component = VStack {
             ConstraintReader { _ in
                 text1ComponentView = Environment(\.currentComponentView).wrappedValue
@@ -102,7 +102,7 @@ final class UIComponentTests: XCTestCase {
     func testLazyLayoutWeakEnvironment() {
         var componentView: ComponentView? = ComponentView()
         weak var componentView2 = componentView
-        weak var text1ComponentView: ComponentDisplayableView?
+        weak var text1ComponentView: UIView?
         componentView?.component = VStack {
             ConstraintReader { _ in
                 text1ComponentView = Environment(\.currentComponentView).wrappedValue
