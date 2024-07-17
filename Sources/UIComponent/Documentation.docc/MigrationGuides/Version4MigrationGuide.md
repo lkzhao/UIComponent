@@ -5,9 +5,9 @@ With version 4.0, UIComponent supports displaying `Component` on any `UIView`, n
 For example, before 4.0, you have to create an instance of `ComponentView` to display a Component
 ```swift
 // before version 4.0
+let componentView = ComponentView()
 override func viewDidLoad() {
     super.viewDidLoad()
-    let componentView = ComponentView()
     componentView.component = VStack {
         Text("Hello World!")
     }
