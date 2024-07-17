@@ -3,28 +3,28 @@
 
 import UIKit
 
-/// Animator is a base class that provides default implementations for animations
-/// related to the insertion, deletion, and updating of views within a `UIView`.
+/// `Animator` is a base class that provides default implementations for animations
+/// related to the insertion, deletion, and updating of views.
 /// Subclasses can override these methods to provide custom animation behavior.
 public protocol Animator {
 
     /// Called before the component engine perform any update to the cells.
-    /// This method is only called when your animator is the componentView's root animator (i.e. componentView.animator)
+    /// This method is only called when your animator is the `ComponentEngine`'s root animator (i.e. `componentEngine.animator`)
     ///
     /// - Parameters:
-    ///   - componentView: the engine performing the update
-    func willUpdate(componentView: UIView)
+    ///   - hostingView: source view that is performing the update
+    func willUpdate(hostingView: UIView)
 
     /// Called when the component engine inserts a view into its subviews.
     ///
     /// Perform any insertion animation when needed
     ///
     /// - Parameters:
-    ///   - componentView: source view that host the component
+    ///   - hostingView: source view that host the component
     ///   - view: the view being inserted
     ///   - frame: frame provided by the layout
     func insert(
-        componentView: UIView,
+        hostingView: UIView,
         view: UIView,
         frame: CGRect
     )
@@ -34,11 +34,11 @@ public protocol Animator {
     /// Perform any deletion animation, then call the `completion` block when finished.
     ///
     /// - Parameters:
-    ///   - componentView: source view that host the component
+    ///   - hostingView: source view that host the component
     ///   - view: the view being deleted
     ///   - completion: call this block when finished
     func delete(
-        componentView: UIView,
+        hostingView: UIView,
         view: UIView,
         completion: @escaping () -> Void
     )
@@ -49,11 +49,11 @@ public protocol Animator {
     ///   * the view's screen position changed when user scrolls
     ///
     /// - Parameters:
-    ///   - componentView: source view that host the component
+    ///   - hostingView: source view that host the component
     ///   - view: the view being updated
     ///   - frame: frame provided by the layout
     func update(
-        componentView: UIView,
+        hostingView: UIView,
         view: UIView,
         frame: CGRect
     )
@@ -61,30 +61,30 @@ public protocol Animator {
     /// Called when contentOffset changes during reloadData
     ///
     /// - Parameters:
-    ///   - componentView: source view that host the component
+    ///   - hostingView: source view that host the component
     ///   - delta: changes in contentOffset
     ///   - view: the view being updated
-    func shift(componentView: UIView, delta: CGPoint, view: UIView)
+    func shift(hostingView: UIView, delta: CGPoint, view: UIView)
 }
 
 // MARK: - Default implementation
 
 public extension Animator {
-    func willUpdate(componentView: UIView) {}
+    func willUpdate(hostingView: UIView) {}
     func insert(
-        componentView: UIView,
+        hostingView: UIView,
         view: UIView,
         frame: CGRect
     ) {}
     func delete(
-        componentView: UIView,
+        hostingView: UIView,
         view: UIView,
         completion: @escaping () -> Void
     ) {
         completion()
     }
     func update(
-        componentView: UIView,
+        hostingView: UIView,
         view: UIView,
         frame: CGRect
     ) {
@@ -95,7 +95,7 @@ public extension Animator {
             view.center = frame.center
         }
     }
-    func shift(componentView: UIView, delta: CGPoint, view: UIView) {
+    func shift(hostingView: UIView, delta: CGPoint, view: UIView) {
         view.center += delta
     }
 }

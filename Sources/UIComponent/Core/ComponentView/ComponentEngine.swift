@@ -3,12 +3,12 @@
 
 import UIKit
 
-/// Protocol defining a delegate responsible for determining if a component view should be reloaded.
-public protocol ComponentReloadDelegate: AnyObject {
-    /// Asks the delegate if the component view should be reloaded.
+/// Protocol defining a delegate responsible for determining if a component engine should be reloaded.
+public protocol ComponentEngineReloadDelegate: AnyObject {
+    /// Asks the delegate if the component engine should be reloaded.
     /// - Parameter view: The `UIView` that is asking for permission to reload.
     /// - Returns: A Boolean value indicating whether the view should be reloaded.
-    func componentViewShouldReload(_ view: UIView) -> Bool
+    func componentEngineShouldReload(_ view: UIView) -> Bool
 }
 
 /// `ComponentEngine` is the main class that powers the rendering of components.
@@ -17,8 +17,8 @@ public final class ComponentEngine {
     /// A static property to disable animations during view updates.
     public static var disableUpdateAnimation: Bool = false
     
-    /// A static weak reference to a delegate that decides if a component view should reload.
-    public static weak var reloadDelegate: ComponentReloadDelegate?
+    /// A static weak reference to a delegate that decides if a component engine should reload.
+    public static weak var reloadDelegate: ComponentEngineReloadDelegate?
 
     private static let asyncLayoutQueue = DispatchQueue(label: "com.component.layout", qos: .userInteractive)
 
@@ -62,7 +62,7 @@ public final class ComponentEngine {
     /// A computed property to determine if reloading is allowed by consulting the `reloadDelegate`.
     var allowReload: Bool {
         guard let view, let reloadDelegate = Self.reloadDelegate else { return true }
-        return reloadDelegate.componentViewShouldReload(view)
+        return reloadDelegate.componentEngineShouldReload(view)
     }
 
     /// Insets for the visible frame. This will be applied to the `visibleFrame` used to retrieve views for the viewport.
@@ -191,13 +191,13 @@ public final class ComponentEngine {
 
     private var asyncLayoutID: UUID?
     private func layoutComponentAsync(contentOffsetAdjustFn: (() -> CGPoint)?) {
-        guard let componentView = view, let component else { return }
+        guard let view, let component else { return }
 
         let adjustedSize = adjustedSize
         let asyncLayoutID = UUID()
         self.asyncLayoutID = asyncLayoutID
         Self.asyncLayoutQueue.async { [weak self] in
-            let renderNode = EnvironmentValues.with(values: .init(\.currentComponentView, value: componentView)) {
+            let renderNode = EnvironmentValues.with(values: .init(\.hostingView, value: view)) {
                 component.layout(Constraint(maxSize: adjustedSize))
             }
             DispatchQueue.main.async {
@@ -208,9 +208,9 @@ public final class ComponentEngine {
     }
 
     private func layoutComponent(contentOffsetAdjustFn: (() -> CGPoint)?) {
-        guard let componentView = view, let component else { return }
+        guard let view, let component else { return }
 
-        let renderNode = EnvironmentValues.with(values: .init(\.currentComponentView, value: componentView)) {
+        let renderNode = EnvironmentValues.with(values: .init(\.hostingView, value: view)) {
             component.layout(Constraint(maxSize: adjustedSize))
         }
         
@@ -236,10 +236,10 @@ public final class ComponentEngine {
     /// - Parameters:
     ///   - updateViews: A Boolean value that determines if the views should be updated.
     private func render(updateViews: Bool) {
-        guard let componentView = view, allowReload, !isRendering, let renderNode else { return }
+        guard let view, allowReload, !isRendering, let renderNode else { return }
         isRendering = true
 
-        animator.willUpdate(componentView: componentView)
+        animator.willUpdate(hostingView: view)
         let visibleFrame = (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
 
         var newVisibleRenderable = renderNode._visibleRenderables(in: visibleFrame)
@@ -275,8 +275,8 @@ public final class ComponentEngine {
                 newViews[index] = cell
             } else {
                 let animator = renderable.renderNode.animator ?? animator
-                animator.shift(componentView: componentView, delta: contentOffsetDelta, view: cell)
-                animator.delete(componentView: componentView, view: cell) {
+                animator.shift(hostingView: view, delta: contentOffsetDelta, view: cell)
+                animator.delete(hostingView: view, view: cell) {
                     cell.recycleForUIComponentReuse()
                 }
             }
@@ -284,35 +284,35 @@ public final class ComponentEngine {
 
         // 2nd pass, insert new views
         for (index, renderable) in newVisibleRenderable.enumerated() {
-            let view: UIView
+            let cell: UIView
             let frame = renderable.frame
             let animator = renderable.renderNode.animator ?? animator
-            let containerView = contentView ?? componentView
+            let containerView = contentView ?? view
             if let existingView = newViews[index] {
-                view = existingView
+                cell = existingView
                 if updateViews {
                     // view was on screen before reload, need to update the view.
-                    renderable.renderNode._updateView(view)
-                    animator.shift(componentView: componentView, delta: contentOffsetDelta, view: view)
+                    renderable.renderNode._updateView(cell)
+                    animator.shift(hostingView: view, delta: contentOffsetDelta, view: cell)
                 }
             } else {
-                view = renderable.renderNode._makeView()
+                cell = renderable.renderNode._makeView()
                 UIView.performWithoutAnimation {
-                    view.bounds.size = frame.bounds.size
-                    view.center = frame.center
-                    view.layoutIfNeeded()
+                    cell.bounds.size = frame.bounds.size
+                    cell.center = frame.center
+                    cell.layoutIfNeeded()
                     if ComponentEngine.disableUpdateAnimation {
-                        renderable.renderNode._updateView(view)
+                        renderable.renderNode._updateView(cell)
                     }
                 }
                 if !ComponentEngine.disableUpdateAnimation {
-                    renderable.renderNode._updateView(view)
+                    renderable.renderNode._updateView(cell)
                 }
-                animator.insert(componentView: componentView, view: view, frame: frame)
-                newViews[index] = view
+                animator.insert(hostingView: view, view: cell, frame: frame)
+                newViews[index] = cell
             }
-            animator.update(componentView: componentView, view: view, frame: frame)
-            containerView.insertSubview(view, at: index)
+            animator.update(hostingView: view, view: cell, frame: frame)
+            containerView.insertSubview(cell, at: index)
         }
 
         visibleRenderable = newVisibleRenderable

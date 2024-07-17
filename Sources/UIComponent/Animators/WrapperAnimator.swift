@@ -17,38 +17,38 @@ public struct WrapperAnimator: Animator {
     /// A block that is executed when a view is deleted. If `nil`, the delete operation is passed to the underlying `content` animator.
     public var deleteBlock: ((UIView, UIView, @escaping () -> Void) -> Void)?
 
-    public func shift(componentView: UIView, delta: CGPoint, view: UIView) {
-        (content ?? componentView.componentEngine.animator).shift(
-            componentView: componentView,
+    public func shift(hostingView: UIView, delta: CGPoint, view: UIView) {
+        (content ?? hostingView.componentEngine.animator).shift(
+            hostingView: hostingView,
             delta: delta,
             view: view
         )
     }
 
-    public func update(componentView: UIView, view: UIView, frame: CGRect) {
+    public func update(hostingView: UIView, view: UIView, frame: CGRect) {
         if let updateBlock {
-            updateBlock(componentView, view, frame)
+            updateBlock(hostingView, view, frame)
             if passthroughUpdate {
-                (content ?? componentView.componentEngine.animator).update(componentView: componentView, view: view, frame: frame)
+                (content ?? hostingView.componentEngine.animator).update(hostingView: hostingView, view: view, frame: frame)
             }
         } else {
-            (content ?? componentView.componentEngine.animator).update(componentView: componentView, view: view, frame: frame)
+            (content ?? hostingView.componentEngine.animator).update(hostingView: hostingView, view: view, frame: frame)
         }
     }
 
-    public func insert(componentView: UIView, view: UIView, frame: CGRect) {
+    public func insert(hostingView: UIView, view: UIView, frame: CGRect) {
         if let insertBlock {
-            insertBlock(componentView, view, frame)
+            insertBlock(hostingView, view, frame)
         } else {
-            (content ?? componentView.componentEngine.animator).insert(componentView: componentView, view: view, frame: frame)
+            (content ?? hostingView.componentEngine.animator).insert(hostingView: hostingView, view: view, frame: frame)
         }
     }
 
-    public func delete(componentView: UIView, view: UIView, completion: @escaping () -> Void) {
+    public func delete(hostingView: UIView, view: UIView, completion: @escaping () -> Void) {
         if let deleteBlock {
-            deleteBlock(componentView, view, completion)
+            deleteBlock(hostingView, view, completion)
         } else {
-            (content ?? componentView.componentEngine.animator).delete(componentView: componentView, view: view, completion: completion)
+            (content ?? hostingView.componentEngine.animator).delete(hostingView: hostingView, view: view, completion: completion)
         }
     }
 }
