@@ -19,7 +19,7 @@ public struct CurrentComponentViewEnvironmentKey: EnvironmentKey {
 
 public extension EnvironmentValues {
     /// The current ``ComponentView`` displaying the component, if one exists.
-    /// This is a built-in environment value that is automatically populated if the Component is layout during a ComponentView reload.
+    /// This is a built-in environment value that is automatically populated if the Component is layout during a reload.
     ///
     /// You can access the current ``ComponentView`` via the ``Environment`` property wrapper inside the ``Component/layout(_:)`` method:
     /// ```swift

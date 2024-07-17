@@ -8,19 +8,19 @@ import UIKit
 /// Subclasses can override these methods to provide custom animation behavior.
 public protocol Animator {
 
-    /// Called before ComponentView perform any update to the cells.
+    /// Called before engine perform any update to the cells.
     /// This method is only called when your animator is the componentView's root animator (i.e. componentView.animator)
     ///
     /// - Parameters:
-    ///   - componentView: the ComponentView performing the update
+    ///   - componentView: the engine performing the update
     func willUpdate(componentView: UIView)
 
-    /// Called when ComponentView inserts a view into its subviews.
+    /// Called when engine inserts a view into its subviews.
     ///
     /// Perform any insertion animation when needed
     ///
     /// - Parameters:
-    ///   - componentView: source ComponentView
+    ///   - componentView: source view
     ///   - view: the view being inserted
     ///   - frame: frame provided by the layout
     func insert(

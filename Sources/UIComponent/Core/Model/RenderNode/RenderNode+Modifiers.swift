@@ -2,7 +2,7 @@
 
 import UIKit
 
-/// A render node that store an update block to be applied to the view when the ComponentView reloads.
+/// A render node that store an update block to be applied to the view during reloads.
 public struct UpdateRenderNode<Content: RenderNode>: RenderNodeWrapper {
     public let content: Content
     public let update: (Content.View) -> Void
