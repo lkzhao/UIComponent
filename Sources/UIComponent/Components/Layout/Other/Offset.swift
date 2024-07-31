@@ -38,24 +38,29 @@ public struct DynamicOffset: Component {
     }
 }
 
-struct OffsetRenderNode: RenderNode {
-    typealias View = UIView
+public struct OffsetRenderNode: RenderNode {
+    public typealias View = UIView
 
-    let content: any RenderNode
-    let offset: CGPoint
+    public let content: any RenderNode
+    public let offset: CGPoint
+
+    public init(content: any RenderNode, offset: CGPoint) {
+        self.content = content
+        self.offset = offset
+    }
 
     /// The size of the render node, adjusted for the insets.
-    var size: CGSize {
+    public var size: CGSize {
         content.size
     }
 
     /// The content render nodes of this render node.
-    var children: [any RenderNode] {
+    public var children: [any RenderNode] {
         [content]
     }
 
     /// The positions of the content render nodes within this render node.
-    var positions: [CGPoint] {
+    public var positions: [CGPoint] {
         [offset]
     }
 }

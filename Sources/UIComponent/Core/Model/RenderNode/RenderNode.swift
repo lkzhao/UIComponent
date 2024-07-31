@@ -156,8 +156,7 @@ extension RenderNode {
         let frame = adjustVisibleFrame(frame: frame)
         let children = visibleChildren(in: frame)
         for child in children {
-            let childFrame = CGRect(origin: child.position, size: child.renderNode.size)
-            let childVisibleFrame = frame.intersection(childFrame) - child.position
+            let childVisibleFrame = frame - child.position
             let childRenderables = child.renderNode._visibleRenderables(in: childVisibleFrame).map {
                 Renderable(id: $0.renderNode.id ?? "item-\(child.index)-\($0.id)", frame: $0.frame + child.position, renderNode: $0.renderNode)
             }
