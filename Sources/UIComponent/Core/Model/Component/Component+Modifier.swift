@@ -122,6 +122,26 @@ extension Component {
     public func size(_ size: CGSize) -> ConstraintOverrideComponent<Self> {
         ConstraintOverrideComponent(content: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(size.width), height: .absolute(size.height)))
     }
+    
+    /// Sets an absolute size for the component based on the constraint.
+    /// - Parameter sizeProvider: A closure that takes a `Constraint` and returns a size.
+    /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden size.
+    public func size(_ sizeProvider: @escaping (Constraint) -> CGSize) -> ConstraintOverrideComponent<Self> {
+        ConstraintOverrideComponent(content: self, transformer: BlockConstraintTransformer(block: {
+            let size = sizeProvider($0)
+            return Constraint(tightSize: size)
+        }))
+    }
+    
+    /// Sets an absolute size for the component based on the max size constraint.
+    /// - Parameter sizeProvider: A closure that takes a max size and returns a modified size.
+    /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden size.
+    public func size(_ sizeProvider: @escaping (CGSize) -> CGSize) -> ConstraintOverrideComponent<Self> {
+        ConstraintOverrideComponent(content: self, transformer: BlockConstraintTransformer(block: {
+            let size = sizeProvider($0.maxSize)
+            return Constraint(tightSize: size)
+        }))
+    }
 
     /// Sets an absolute size for the component.
     /// - Parameters:
