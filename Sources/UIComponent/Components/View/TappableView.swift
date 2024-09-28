@@ -88,7 +88,13 @@ open class TappableView: UIView {
         gesture.numberOfTapsRequired = 2
         return gesture
     }()
-    
+
+    /// A interaction for managing spring loading on the TappableView.
+    public private(set) lazy var springLoadedInteraction = UISpringLoadedInteraction { [weak self] interaction, context in
+        guard let self else { return }
+        self.onSpringLoaded?(self)
+    }
+
     /// A gesture recognizer for detecting long presses on the TappableView.
     public private(set) lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
     
@@ -129,6 +135,17 @@ open class TappableView: UIView {
                 addGestureRecognizer(doubleTapGestureRecognizer)
             } else {
                 removeGestureRecognizer(doubleTapGestureRecognizer)
+            }
+        }
+    }
+
+    /// A closure that is called when the TappableView is spring loaded.
+    public var onSpringLoaded: ((TappableView) -> Void)? {
+        didSet {
+            if onSpringLoaded != nil {
+                addInteraction(springLoadedInteraction)
+            } else {
+                removeInteraction(springLoadedInteraction)
             }
         }
     }
