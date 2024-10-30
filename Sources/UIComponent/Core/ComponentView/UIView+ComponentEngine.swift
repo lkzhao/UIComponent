@@ -19,6 +19,7 @@ extension UIView {
             _ = UIView.swizzle_layoutSubviews
             _ = UIView.swizzle_sizeThatFits
             _ = UIScrollView.swizzle_safeAreaInsetsDidChange
+            _ = UIScrollView.swizzle_setContentInset
             _componentEngine = componentEngine
             return componentEngine
         }
@@ -69,7 +70,7 @@ extension UIView {
     }
 
     static let swizzle_setBounds: Void = {
-        guard let originalMethod = class_getInstanceMethod(UIView.self, NSSelectorFromString("setBounds:")),
+        guard let originalMethod = class_getInstanceMethod(UIView.self, #selector(setter: bounds)),
               let swizzledMethod = class_getInstanceMethod(UIView.self, #selector(swizzled_setBounds(_:)))
         else { return }
         method_exchangeImplementations(originalMethod, swizzledMethod)
@@ -89,11 +90,38 @@ extension UIScrollView {
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }()
 
+    static let swizzle_setContentInset: Void = {
+        guard let originalMethod = class_getInstanceMethod(UIScrollView.self, #selector(setter: contentInset)),
+              let swizzledMethod = class_getInstanceMethod(UIScrollView.self, #selector(swizzled_setContentInset(_:)))
+        else { return }
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+    }()
+
     @objc func swizzled_safeAreaInsetsDidChange() {
         guard responds(to: #selector(swizzled_safeAreaInsetsDidChange)) else { return }
         swizzled_safeAreaInsetsDidChange()
         if let componentEngine = _componentEngine, contentInsetAdjustmentBehavior != .never {
             componentEngine.setNeedsReload()
+        }
+    }
+
+    @objc func swizzled_setContentInset(_ contentInset: UIEdgeInsets) {
+        // when contentOffset is at the top, and contentSize is set
+        // changing contentInset will not trigger a contentOffset change
+        // we manually adjust the contentOffset back to the top
+        // same for the horizontal axis
+        let yAtTop = contentOffset.y <= -adjustedContentInset.top
+        let xAtLeft = contentOffset.x <= -adjustedContentInset.left
+        swizzled_setContentInset(contentInset)
+        var newContentOffset = contentOffset
+        if yAtTop {
+            newContentOffset.y = -adjustedContentInset.top
+        }
+        if xAtLeft {
+            newContentOffset.x = -adjustedContentInset.left
+        }
+        if newContentOffset != contentOffset {
+            contentOffset = newContentOffset
         }
     }
 }
