@@ -322,6 +322,15 @@ public final class ComponentEngine {
         isRendering = false
     }
 
+    // MARK: - Data Caching
+
+    private lazy var cachingData: [String: Any] = [:]
+    internal func loadCachingData<T>(id: String, generator: () -> T) -> T {
+        let data = (cachingData[id] as? T) ?? generator()
+        cachingData[id] = data
+        return data
+    }
+
     /// Ensures that the zoom view is centered within the scroll view if it is smaller than the scroll view's bounds.
     public func ensureZoomViewIsCentered() {
         guard let contentView else { return }
