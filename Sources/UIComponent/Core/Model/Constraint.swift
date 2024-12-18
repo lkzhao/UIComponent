@@ -56,4 +56,36 @@ extension CGSize {
             height: height.clamp(constraint.minSize.height, constraint.maxSize.height)
         )
     }
+
+    /// Constrains the current size to the limits defined by the given `Constraint`, while trying to maintain the aspect ratio.
+    /// - Parameter constraint: The `Constraint` to which the current size should be bound.
+    /// - Returns: A new `CGSize` instance that is within the bounds of the given `Constraint`, while trying maintaining the aspect ratio.
+    public func boundWithAspectRatio(to constraint: Constraint) -> CGSize {
+        let clampedSize = bound(to: constraint)
+        if clampedSize.width != width {
+            let scale = clampedSize.width / width
+            let preferredHeight = height * scale
+            let clampedHeight = preferredHeight.clamp(constraint.minSize.height, constraint.maxSize.height)
+            if clampedHeight != preferredHeight {
+                let scale = clampedHeight / height
+                let preferredWidth = width * scale
+                let clampedWidth = preferredWidth.clamp(constraint.minSize.width, constraint.maxSize.width)
+                return CGSize(width: clampedWidth, height: clampedHeight)
+            }
+            return CGSize(width: clampedSize.width, height: clampedHeight)
+        } else if clampedSize.height != height {
+            let scale = clampedSize.height / height
+            let preferredWidth = width * scale
+            let clampedWidth = preferredWidth.clamp(constraint.minSize.width, constraint.maxSize.width)
+            if clampedWidth != preferredWidth {
+                let scale = clampedWidth / width
+                let preferredHeight = height * scale
+                let clampedHeight = preferredHeight.clamp(constraint.minSize.height, constraint.maxSize.height)
+                return CGSize(width: clampedWidth, height: clampedHeight)
+            }
+            return CGSize(width: clampedWidth, height: clampedSize.height)
+        } else {
+            return clampedSize
+        }
+    }
 }

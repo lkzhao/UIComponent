@@ -62,7 +62,7 @@ public struct Image: Component {
     /// - Parameter constraint: The constraints to use for sizing the image.
     /// - Returns: An `ImageRenderNode` that represents the laid out image.
     public func layout(_ constraint: Constraint) -> ImageRenderNode {
-        ImageRenderNode(image: image, size: image.size.bound(to: constraint))
+        ImageRenderNode(image: image, size: image.size.boundWithAspectRatio(to: constraint))
     }
 }
 
