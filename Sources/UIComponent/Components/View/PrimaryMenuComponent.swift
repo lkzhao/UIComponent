@@ -18,15 +18,22 @@ public struct PrimaryMenuComponent: Component {
     public let component: any Component
 
     /// A builder that constructs the menu to be displayed as part of the primary menu component.
-    public let menuBuilder: () -> UIMenu
+    public let menuBuilder: (PrimaryMenu) -> UIMenu
 
-    public init(component: any Component, menuBuilder: @escaping () -> UIMenu) {
+    public init(component: any Component, menuBuilder: @escaping (PrimaryMenu) -> UIMenu) {
         self.component = component
         self.menuBuilder = menuBuilder
     }
 
+    public init(component: any Component, menuBuilder: @escaping () -> UIMenu) {
+        self.component = component
+        self.menuBuilder = { _ in
+            menuBuilder()
+        }
+    }
+
     public init(component: any Component, menu: UIMenu) {
-        self.init(component: component, menuBuilder: { menu })
+        self.init(component: component, menuBuilder: { _ in menu })
     }
 
     /// Lays out the component within the given constraints and returns a `PrimaryMenuRenderNode`.
@@ -51,7 +58,7 @@ public struct PrimaryMenuRenderNode: RenderNode {
     public let content: any RenderNode
 
     /// A builder that constructs the menu to be displayed as part of the primary menu component.
-    public let menuBuilder: (() -> UIMenu)?
+    public let menuBuilder: ((PrimaryMenu) -> UIMenu)?
 
     /// The configuration for the tappable view.
     public let config: PrimaryMenuConfig?
