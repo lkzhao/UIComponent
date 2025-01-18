@@ -58,6 +58,13 @@ public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
     public var shouldRenderView: Bool {
         false
     }
+
+    public init(size: CGSize, children: [any RenderNode], positions: [CGPoint], mainAxisMaxValue: CGFloat) {
+        self.size = size
+        self.children = children
+        self.positions = positions
+        self.mainAxisMaxValue = mainAxisMaxValue
+    }
 }
 
 /// A type of render node that is optimized for vertical layout.
@@ -75,6 +82,13 @@ public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
     
     public var shouldRenderView: Bool {
         false
+    }
+
+    public init(size: CGSize, children: [any RenderNode], positions: [CGPoint], mainAxisMaxValue: CGFloat) {
+        self.size = size
+        self.children = children
+        self.positions = positions
+        self.mainAxisMaxValue = mainAxisMaxValue
     }
 }
 
