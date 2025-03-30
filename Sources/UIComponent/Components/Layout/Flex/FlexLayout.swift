@@ -125,14 +125,17 @@ extension FlexLayout {
         
         // Iterate over the render nodes to calculate the size of each line.
         for renderNode in renderNodes {
-            // Check if adding the current item would exceed the max cross size and if it's not the first item in the line.
-            if currentLineWidth + cross(renderNode.size) > crossMax, currentLineItemCount != 0 {
-                // Save the current line data and reset the line variables.
+            let itemWidth = cross(renderNode.size)
+            let itemHeight = main(renderNode.size)
+
+            // Change: If not the first item, check if adding spacing and the item exceeds crossMax.
+            if currentLineItemCount > 0, currentLineWidth + interitemSpacing + itemWidth > crossMax {
+                // Save the current line data without subtracting extra spacing.
                 lineData.append(
                     (
                         lineSize: size(
                             main: currentLineMaxHeight,
-                            cross: currentLineWidth - CGFloat(currentLineItemCount) * interitemSpacing
+                            cross: currentLineWidth
                         ),
                         count: currentLineItemCount
                     )
@@ -142,9 +145,13 @@ extension FlexLayout {
                 currentLineWidth = 0
                 currentLineItemCount = 0
             }
+            // Change: Only add interitemSpacing if this is not the first item.
+            if currentLineItemCount > 0 {
+                currentLineWidth += interitemSpacing
+            }
             // Update the current line's max height and width, and increment the item count.
-            currentLineMaxHeight = max(currentLineMaxHeight, main(renderNode.size))
-            currentLineWidth += cross(renderNode.size) + interitemSpacing
+            currentLineWidth += itemWidth
+            currentLineMaxHeight = max(currentLineMaxHeight, itemHeight)
             currentLineItemCount += 1
         }
         
@@ -154,7 +161,7 @@ extension FlexLayout {
                 (
                     lineSize: size(
                         main: currentLineMaxHeight,
-                        cross: currentLineWidth - CGFloat(currentLineItemCount) * interitemSpacing
+                        cross: currentLineWidth
                     ),
                     count: currentLineItemCount
                 )
