@@ -24,6 +24,10 @@ public final class ComponentEngine {
 
     /// A flag indicating whether the layout should be performed asynchronously on a background thread
     public var asyncLayout = false
+    
+    /// Force disable animations during view updates.
+    /// If unset, the default value from `ComponentEngine.disableUpdateAnimation` will be used.
+    public var disableUpdateAnimation: Bool?
 
     /// The view that is managed by this engine.
     weak var view: UIView?
@@ -301,11 +305,11 @@ public final class ComponentEngine {
                     cell.bounds.size = frame.bounds.size
                     cell.center = frame.center
                     cell.layoutIfNeeded()
-                    if ComponentEngine.disableUpdateAnimation {
+                    if disableUpdateAnimation ?? ComponentEngine.disableUpdateAnimation {
                         renderable.renderNode._updateView(cell)
                     }
                 }
-                if !ComponentEngine.disableUpdateAnimation {
+                if !(disableUpdateAnimation ?? ComponentEngine.disableUpdateAnimation) {
                     renderable.renderNode._updateView(cell)
                 }
                 animator.insert(hostingView: view, view: cell, frame: frame)
