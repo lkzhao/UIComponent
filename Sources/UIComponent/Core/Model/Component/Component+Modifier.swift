@@ -341,9 +341,11 @@ extension Component {
     /// - Parameters:
     ///   - flex: The flex factor to be applied. Defaults to 1.
     ///   - alignSelf: The alignment of this component within a flex container. Defaults to nil.
-    /// - Returns: A `Flexible` component that wraps the current component with the specified layout properties.
-    public func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> Flexible<Self> {
-        Flexible(flexGrow: flex, flexShrink: flex, alignSelf: alignSelf, content: self)
+    /// - Returns: A `ContextOverrideComponent` that wraps the current component with the specified layout properties.
+    public func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> ContextOverrideComponent<Self> {
+        var overrideContext = [RenderNodeContextKey: Any]()
+        overrideContext[.flexGrow] = flex
+        return ContextOverrideComponent(overrideContext: overrideContext, content: self)
     }
 
     /// Applies flexible layout properties to the component with specified grow and shrink factors.
@@ -352,9 +354,46 @@ extension Component {
     ///   - flexGrow: The flex grow factor.
     ///   - flexShrink: The flex shrink factor.
     ///   - alignSelf: The alignment of this component within a flex container. Defaults to nil.
-    /// - Returns: A `Flexible` component that wraps the current component with the specified layout properties.
-    public func flex(flexGrow: CGFloat, flexShrink: CGFloat, alignSelf: CrossAxisAlignment? = nil) -> Flexible<Self> {
-        Flexible(flexGrow: flexGrow, flexShrink: flexShrink, alignSelf: alignSelf, content: self)
+    /// - Returns: A `ContextOverrideComponent` that wraps the current component with the specified layout properties.
+    public func flex(flexGrow: CGFloat, flexShrink: CGFloat, alignSelf: CrossAxisAlignment? = nil) -> ContextOverrideComponent<Self> {
+        var overrideContext = [RenderNodeContextKey: Any]()
+        overrideContext[.flexGrow] = flexGrow
+        overrideContext[.flexShrink] = flexShrink
+        overrideContext[.alignSelf] = alignSelf
+        return ContextOverrideComponent(overrideContext: overrideContext, content: self)
+    }
+
+    /// Applies flexible layout properties to the component with specified grow factors.
+    /// This is used in conjunction with a flex container (FlexRow, FlexColumn, HStack, VStack).
+    /// - Parameters:
+    ///  - flexGrow: The flex grow factor.
+    /// - Returns: A `ContextOverrideComponent` that wraps the current component with the specified layout properties.
+    public func flexGrow(_ flexGrow: CGFloat) -> ContextOverrideComponent<Self> {
+        var overrideContext = [RenderNodeContextKey: Any]()
+        overrideContext[.flexGrow] = flexGrow
+        return ContextOverrideComponent(overrideContext: overrideContext, content: self)
+    }
+
+    /// Applies flexible layout properties to the component with specified shrink factors.
+    /// This is used in conjunction with a flex container (FlexRow, FlexColumn, HStack, VStack).
+    /// - Parameters:
+    ///  - flexShrink: The flex shrink factor.
+    ///  - Returns: A `ContextOverrideComponent` that wraps the current component with the specified layout properties.
+    public func flexShrink(_ flexShrink: CGFloat) -> ContextOverrideComponent<Self> {
+        var overrideContext = [RenderNodeContextKey: Any]()
+        overrideContext[.flexShrink] = flexShrink
+        return ContextOverrideComponent(overrideContext: overrideContext, content: self)
+    }
+
+    /// Applies flexible layout properties to the component with specified alignment.
+    /// This is used in conjunction with a flex container (FlexRow, FlexColumn, HStack, VStack).
+    /// - Parameters:
+    ///  - alignSelf: The alignment of this component within a flex container.
+    ///  - Returns: A `ContextOverrideComponent` that wraps the current component with the specified layout properties.
+    public func alignSelf(_ alignSelf: CrossAxisAlignment) -> ContextOverrideComponent<Self> {
+        var overrideContext = [RenderNodeContextKey: Any]()
+        overrideContext[.alignSelf] = alignSelf
+        return ContextOverrideComponent(overrideContext: overrideContext, content: self)
     }
 
     // MARK: - Inset modifiers

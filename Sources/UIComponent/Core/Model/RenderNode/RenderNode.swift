@@ -2,6 +2,13 @@
 
 import UIKit
 
+public struct RenderNodeContextKey: Equatable, Hashable, Codable {
+    public let rawValue: String
+    public init(_ rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
+
 /// Render nodes are responsible for storing the layout information, generating UIView for rendering, and updating UIView upon reload.
 @dynamicMemberLookup
 public protocol RenderNode<View> {
@@ -19,6 +26,9 @@ public protocol RenderNode<View> {
 
     /// The strategy to use when reusing views.
     var reuseStrategy: ReuseStrategy { get }
+
+    /// The context of the render node, which can be used to store additional information.
+    var context: [RenderNodeContextKey: Any] { get }
 
     /// The default reuse key for the render node. This key will be used when reuseStrategy is set to .automatic.
     /// This will also be used as fallbackId for structured identity when id is not set.
@@ -107,6 +117,7 @@ extension RenderNode {
     public var reuseStrategy: ReuseStrategy { .automatic }
     public var defaultReuseKey: String { "\(type(of: self))" }
     public var shouldRenderView: Bool { children.isEmpty }
+    public var context: [RenderNodeContextKey: Any] { [:] }
 
     public func makeView() -> View {
         View()

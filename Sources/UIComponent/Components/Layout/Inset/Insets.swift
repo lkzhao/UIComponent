@@ -51,6 +51,10 @@ struct InsetsRenderNode: RenderNode {
     let content: any RenderNode
     let insets: UIEdgeInsets
 
+    var context: [RenderNodeContextKey : Any] {
+        content.context
+    }
+
     /// The size of the render node, adjusted for the insets.
     var size: CGSize {
         content.size.inset(by: -insets)

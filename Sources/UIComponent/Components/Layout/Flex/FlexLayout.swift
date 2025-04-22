@@ -3,6 +3,12 @@
 
 import UIKit
 
+public extension RenderNodeContextKey {
+    static let flexGrow = RenderNodeContextKey("flexGrow")
+    static let flexShrink = RenderNodeContextKey("flexShrink")
+    static let alignSelf = RenderNodeContextKey("alignSelf")
+}
+
 /// A protocol that defines the layout properties for flex layout.
 /// Used by ``FlexRow`` (``Flow``) & ``FlexColumn``
 public protocol FlexLayout: BaseLayoutProtocol {
@@ -177,18 +183,21 @@ extension FlexLayout {
             let range = lineStartIndex..<(lineStartIndex + count)
             
             // Calculate the total flex grow values for items in the current line.
-            let flexCount = children[range].reduce(0) { result, next in
-                result + ((next as? AnyFlexible)?.flexGrow ?? 0)
+            let flexCount = renderNodes[range].reduce(0) { result, next in
+                result + (next.context[.flexGrow] as? CGFloat ?? 0)
             }
             
             // If there are flexible items and the cross max size is not infinite, adjust their sizes.
             if flexCount > 0, crossMax != .infinity {
                 let crossPerFlex = max(0, crossMax - cross(lineSize)) / flexCount
                 for index in range {
-                    let child = children[index]
-                    if let flexChild = child as? AnyFlexible {
-                        let alignChild = flexChild.alignSelf ?? alignItems
-                        let crossReserved = crossPerFlex * flexChild.flexGrow + cross(renderNodes[index].size)
+                    let childNode = renderNodes[index]
+                    let flexGrow = childNode.context[.flexGrow] as? CGFloat ?? 0
+                    let alignSelf = childNode.context[.alignSelf] as? CrossAxisAlignment
+                    if flexGrow > 0 || alignSelf != nil  {
+                        let child = children[index]
+                        let alignChild = alignSelf ?? alignItems
+                        let crossReserved = crossPerFlex * flexGrow + cross(renderNodes[index].size)
                         let constraint = Constraint(
                             minSize: size(main: (alignChild == .stretch) ? main(lineSize) : 0, cross: crossReserved),
                             maxSize: size(main: .infinity, cross: crossReserved)
@@ -223,7 +232,7 @@ extension FlexLayout {
                 }
                 // Calculate the alignment value based on the alignSelf property or the default alignItems.
                 var alignValue: CGFloat = 0
-                let alignChild = (childComponent as? AnyFlexible)?.alignSelf ?? alignItems
+                let alignChild = child.context[.alignSelf] as? CrossAxisAlignment ?? alignItems
                 switch alignChild {
                 case .start, .stretch:
                     alignValue = 0
