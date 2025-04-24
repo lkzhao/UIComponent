@@ -51,14 +51,6 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
     /// A generator closure that can create a `UIView` instance when needed.
     public let generator: (() -> View)?
 
-    public var context: [RenderNodeContextKey : Any] {
-        if let view {
-            [.id: "view-at-\(ObjectIdentifier(view))", .reuseStrategy: ReuseStrategy.noReuse]
-        } else {
-            [:]
-        }
-    }
-
     /// Initializes a `ViewRenderNode` with a specified size, optional view, and optional generator.
     /// - Parameters:
     ///   - size: The size of the view.
@@ -107,6 +99,16 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
     /// Updates the provided view with new data or state.
     /// - Parameter view: The `UIView` instance to update.
     public func updateView(_ view: View) {}
+
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        guard let view else { return nil }
+        if key == .id {
+            return "view-at-\(ObjectIdentifier(view))"
+        } else if key == .reuseStrategy {
+            return ReuseStrategy.noReuse
+        }
+        return nil
+    }
 }
 
 /// Extension to make `UIView` conform to `Component`, allowing it to be used within the component hierarchy.

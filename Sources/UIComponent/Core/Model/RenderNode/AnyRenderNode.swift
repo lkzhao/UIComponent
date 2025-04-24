@@ -16,9 +16,6 @@ public struct AnyRenderNode: RenderNode {
 
     // MARK: - RenderNode methods
 
-    public var context: [RenderNodeContextKey : Any] {
-        erasing.context
-    }
     public var defaultReuseKey: String {
         "AnyRenderNode<\(erasing.defaultReuseKey)>"
     }
@@ -46,6 +43,9 @@ public struct AnyRenderNode: RenderNode {
     public func makeView() -> UIView {
         erasing.makeView()
     }
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        erasing.contextValue(key)
+    }
 }
 
 /// A type-erased wrapper for any `RenderNode` specialized for a specific `UIView` subclass.
@@ -62,9 +62,6 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
 
     // MARK: - RenderNode methods
 
-    public var context: [RenderNodeContextKey : Any] {
-        erasing.context
-    }
     public var defaultReuseKey: String {
         "AnyRenderNodeOfView<\(erasing.defaultReuseKey)>"
     }
@@ -91,5 +88,8 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
     }
     public func makeView() -> View {
         erasing.makeView() as! View
+    }
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        erasing.contextValue(key)
     }
 }

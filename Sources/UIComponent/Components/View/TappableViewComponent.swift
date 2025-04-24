@@ -54,17 +54,16 @@ public struct TappableViewRenderNode: RenderNode {
     /// The configuration for the tappable view.
     public let config: TappableViewConfig?
 
-    /// The context for the render node
-    public var context: [RenderNodeContextKey : Any] {
-        content.context
-    }
-
     /// Updates the given `TappableView` with the current configuration and tap handler.
     /// - Parameter view: The `TappableView` to update.
     public func updateView(_ view: TappableView) {
         view.config = config
         view.onTap = onTap
         view.componentEngine.reloadWithExisting(component: component, renderNode: content)
+    }
+
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        content.contextValue(key)
     }
 }
 

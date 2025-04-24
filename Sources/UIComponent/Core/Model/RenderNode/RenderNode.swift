@@ -24,9 +24,6 @@ public protocol RenderNode<View> {
     /// A Boolean value indicating whether the render node should render its own view.
     var shouldRenderView: Bool { get }
 
-    /// The context of the render node, which can be used to store additional information.
-    var context: [RenderNodeContextKey: Any] { get }
-
     /// The default reuse key for the render node. This key will be used when reuseStrategy is set to .automatic.
     /// This will also be used as fallbackId for structured identity when id is not set.
     var defaultReuseKey: String { get }
@@ -59,6 +56,8 @@ public protocol RenderNode<View> {
     ///
     /// - Parameter view: The view to update.
     func updateView(_ view: View)
+
+    func contextValue(_ key: RenderNodeContextKey) -> Any?
 }
 
 // MARK: - Helper methods
@@ -110,17 +109,16 @@ extension RenderNode {
 
 extension RenderNode {
     public var id: String? {
-        context[.id] as? String
+        contextValue(.id) as? String
     }
     public var animator: Animator? {
-        context[.animator] as? Animator
+        contextValue(.animator) as? Animator
     }
     public var reuseStrategy: ReuseStrategy {
-        context[.reuseStrategy] as? ReuseStrategy ?? .automatic
+        (contextValue(.reuseStrategy) as? ReuseStrategy) ?? .automatic
     }
     public var defaultReuseKey: String { "\(type(of: self))" }
     public var shouldRenderView: Bool { children.isEmpty }
-    public var context: [RenderNodeContextKey: Any] { [:] }
 
     public func makeView() -> View {
         View()
@@ -140,6 +138,10 @@ extension RenderNode {
 
     public func adjustVisibleFrame(frame: CGRect) -> CGRect {
         frame
+    }
+
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        nil
     }
 }
 

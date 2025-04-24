@@ -57,13 +57,16 @@ private struct CardComponent: Component {
 private struct CardRenderNode: RenderNode {
     let data: CardData
     let onTap: () -> Void
-    var context: [RenderNodeContextKey : Any] {
-        [.id: data.id]
-    }
     let size: CGSize
     func updateView(_ view: CardView) {
         view.data = data
         view.onTap = onTap
+    }
+    func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        if key == .id {
+            return data.id
+        }
+        return nil
     }
 }
 

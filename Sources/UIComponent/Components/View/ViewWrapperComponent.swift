@@ -24,11 +24,11 @@ public struct ViewWrapperRenderNode<View: UIView>: RenderNode {
     public let component: any Component
     public let content: any RenderNode
 
-    /// The context for the render node
-    public var context: [RenderNodeContextKey : Any] {
-        content.context
-    }
     public func updateView(_ view: View) {
         view.componentEngine.reloadWithExisting(component: component, renderNode: content)
+    }
+
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        content.contextValue(key)
     }
 }

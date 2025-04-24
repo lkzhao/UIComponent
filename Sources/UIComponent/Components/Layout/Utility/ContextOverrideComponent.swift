@@ -34,7 +34,11 @@ public struct ContextOverrideRenderNode<Content: RenderNode>: RenderNodeWrapper 
         self.content = content
     }
 
-    public var context: [RenderNodeContextKey : Any] {
-        content.context.merging(overrideContext, uniquingKeysWith: { $1 })
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        if let value = overrideContext[key] {
+            return value
+        } else {
+            return content.contextValue(key)
+        }
     }
 }

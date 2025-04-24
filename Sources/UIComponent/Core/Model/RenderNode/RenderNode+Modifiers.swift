@@ -7,17 +7,6 @@ public struct UpdateRenderNode<Content: RenderNode>: RenderNodeWrapper {
     public let content: Content
     public let update: (Content.View) -> Void
 
-    public var context: [RenderNodeContextKey : Any] {
-        if content.reuseStrategy == .automatic {
-            // we don't know what the update block did, so we disable
-            // reuse so that we don't get inconsistent state
-            var context = content.context
-            context[.reuseStrategy] = ReuseStrategy.noReuse
-            return context
-        }
-        return content.context
-    }
-
     public var shouldRenderView: Bool {
         true // UIView has custom property. So we should render it.
     }
@@ -25,6 +14,15 @@ public struct UpdateRenderNode<Content: RenderNode>: RenderNodeWrapper {
     public func updateView(_ view: Content.View) {
         content.updateView(view)
         update(view)
+    }
+
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        if key == .reuseStrategy, content.reuseStrategy == .automatic {
+            // we don't know what the update block did, so we disable
+            // reuse so that we don't get inconsistent state
+            return ReuseStrategy.noReuse
+        }
+        return content.contextValue(key)
     }
 }
 
@@ -98,16 +96,17 @@ public struct AnimatorWrapperRenderNode<Content: RenderNode>: RenderNodeWrapper 
     var updateBlock: ((UIView, UIView, CGRect) -> Void)?
     var deleteBlock: ((UIView, UIView, @escaping () -> Void) -> Void)?
 
-    public var context: [RenderNodeContextKey : Any] {
-        var wrapper = WrapperAnimator()
-        wrapper.content = content.animator
-        wrapper.passthroughUpdate = passthroughUpdate
-        wrapper.insertBlock = insertBlock
-        wrapper.deleteBlock = deleteBlock
-        wrapper.updateBlock = updateBlock
-        var context = content.context
-        context[.animator] = wrapper
-        return context
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        if key == .animator {
+            var wrapper = WrapperAnimator()
+            wrapper.content = content.animator
+            wrapper.passthroughUpdate = passthroughUpdate
+            wrapper.insertBlock = insertBlock
+            wrapper.deleteBlock = deleteBlock
+            wrapper.updateBlock = updateBlock
+            return wrapper
+        }
+        return nil
     }
 }
 

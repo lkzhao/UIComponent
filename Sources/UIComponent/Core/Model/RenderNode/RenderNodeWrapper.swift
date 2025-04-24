@@ -15,9 +15,6 @@ public protocol RenderNodeWrapper<Content>: RenderNode {
 }
 
 extension RenderNodeWrapper {
-    public var context: [RenderNodeContextKey : Any] {
-        content.context
-    }
     public var shouldRenderView: Bool {
         content.shouldRenderView
     }
@@ -41,5 +38,8 @@ extension RenderNodeWrapper {
     }
     public func makeView() -> Content.View {
         content.makeView()
+    }
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        content.contextValue(key)
     }
 }

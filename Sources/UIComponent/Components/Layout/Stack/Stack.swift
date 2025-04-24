@@ -48,7 +48,7 @@ extension Stack {
         var positions: [CGPoint] = []
         for child in renderNodes {
             var crossValue: CGFloat = 0
-            let alignChild = child.context[.alignSelf] as? CrossAxisAlignment ?? alignItems
+            let alignChild = child.contextValue(.alignSelf) as? CrossAxisAlignment ?? alignItems
             switch alignChild {
             case .start:
                 crossValue = 0
@@ -86,8 +86,8 @@ extension Stack {
         )
         for child in children {
             let childRenderNode = child.layout(childConstraint)
-            flexGrow += childRenderNode.context[.flexGrow] as? CGFloat ?? 0
-            flexShrink += childRenderNode.context[.flexShrink] as? CGFloat ?? 0
+            flexGrow += childRenderNode.contextValue(.flexGrow) as? CGFloat ?? 0
+            flexShrink += childRenderNode.contextValue(.flexShrink) as? CGFloat ?? 0
             let mainIntrinsic = main(childRenderNode.size)
             mainFreezed += mainIntrinsic.isFinite ? mainIntrinsic : 0
             renderNodes.append(childRenderNode)
@@ -97,8 +97,8 @@ extension Stack {
         if flexGrow > 0, mainFreezed < mainMax {
             let mainPerFlex = mainMax == .infinity ? 0 : max(0, mainMax - mainFreezed) / flexGrow
             for (index, child) in children.enumerated() {
-                let flexGrow = renderNodes[index].context[.flexGrow] as? CGFloat ?? 0
-                let alignSelf = renderNodes[index].context[.alignSelf] as? CrossAxisAlignment
+                let flexGrow = renderNodes[index].contextValue(.flexGrow) as? CGFloat ?? 0
+                let alignSelf = renderNodes[index].contextValue(.alignSelf) as? CrossAxisAlignment
                 if flexGrow > 0 || alignSelf != nil {
                     let alignChild = alignSelf ?? alignItems
                     let childCrossMinConstraint = alignChild == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0
@@ -116,8 +116,8 @@ extension Stack {
         } else if flexShrink > 0, mainFreezed > mainMax {
             let mainPerFlex = mainMax == .infinity ? 0 : min(0, mainMax - mainFreezed) / flexShrink
             for (index, child) in children.enumerated() {
-                let flexShrink = renderNodes[index].context[.flexShrink] as? CGFloat ?? 0
-                let alignSelf = renderNodes[index].context[.alignSelf] as? CrossAxisAlignment
+                let flexShrink = renderNodes[index].contextValue(.flexShrink) as? CGFloat ?? 0
+                let alignSelf = renderNodes[index].contextValue(.alignSelf) as? CrossAxisAlignment
                 if flexShrink > 0 || alignSelf != nil {
                     let alignChild = alignSelf ?? alignItems
                     let childCrossMinConstraint = alignChild == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0

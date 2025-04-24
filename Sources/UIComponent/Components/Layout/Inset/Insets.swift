@@ -51,10 +51,6 @@ struct InsetsRenderNode: RenderNode {
     let content: any RenderNode
     let insets: UIEdgeInsets
 
-    var context: [RenderNodeContextKey : Any] {
-        content.context
-    }
-
     /// The size of the render node, adjusted for the insets.
     var size: CGSize {
         content.size.inset(by: -insets)
@@ -68,5 +64,9 @@ struct InsetsRenderNode: RenderNode {
     /// The positions of the content render nodes within this render node.
     var positions: [CGPoint] {
         [CGPoint(x: insets.left, y: insets.top)]
+    }
+
+    func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        content.contextValue(key)
     }
 }
