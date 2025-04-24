@@ -216,6 +216,24 @@ extension Component {
         size(width: .fill, height: .fill)
     }
 
+    /// Overrides the context of the component with a new value.
+    /// - Parameters:
+    ///  - keyPath: A key path to a specific context key.
+    ///  - value: The value to set for the context key specified by keyPath.
+    /// - Returns: A `ContextOverrideComponent` that represents the modified component with the overridden context.
+    public func context<V>(_ keyPath: KeyPath<ComponentContextKeys, ComponentContextKey<V>>, value: V) -> ContextOverrideComponent<Self> {
+        context(ComponentContextKeys.shared[keyPath: keyPath], value: value)
+    }
+
+    /// Overrides the context of the component with a new value.
+    /// - Parameters:
+    ///  - key: A `ComponentContextKey` that represents the context key.
+    ///  - value: The value to set for the context key.
+    /// - Returns: A `ContextOverrideComponent` that represents the modified component with the overridden context.
+    public func context<V>(_ key: ComponentContextKey<V>, value: V) -> ContextOverrideComponent<Self> {
+        ContextOverrideComponent(content: self, overrideContext: [key.rawValue: value])
+    }
+
     /// Centers the component within the parent's boundary
     /// - Returns: A `ZStack` component containing the centered component with `.fill` size strategy applied.
     public func centered() -> some Component {
