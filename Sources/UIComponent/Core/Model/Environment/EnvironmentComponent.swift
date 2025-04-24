@@ -15,9 +15,9 @@ import Foundation
 ///   - keyPath: A key path to a specific writable value within the environment values.
 ///   - value: The value to inject into the environment.
 ///   - content: The content component that will receive the environment value.
-public struct EnvironmentComponent<Value, Content: Component>: Component {
-    let values: EnvironmentValues
-    let content: Content
+public struct EnvironmentComponent<Value, Content: Component>: ComponentWrapper {
+    public let values: EnvironmentValues
+    public let content: Content
 
     /// Initializes a new component with the specified key path, value, and content.
     /// - Parameters:

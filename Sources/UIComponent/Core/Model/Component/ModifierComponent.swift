@@ -13,7 +13,7 @@ import Foundation
 /// - Parameters:
 ///   - Content: The type of the original component that is being modified.
 ///   - Result: The type of the result after the modification.
-public struct ModifierComponent<Content: Component, Result: RenderNode>: Component where Content.R.View == Result.View {
+public struct ModifierComponent<Content: Component, Result: RenderNode>: ComponentWrapper where Content.R.View == Result.View {
     /// The original content component.
     public let content: Content
     

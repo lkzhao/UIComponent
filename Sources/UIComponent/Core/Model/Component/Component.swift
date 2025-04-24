@@ -16,4 +16,16 @@ public protocol Component<R> {
     /// - Parameter constraint: The constraints within which the component must lay itself out.
     /// - Returns: A `RenderNode` representing the laid out component.
     func layout(_ constraint: Constraint) -> R
+
+    func contextValue<V>(for key: ComponentContextKey<V>) -> V?
+}
+
+public extension Component {
+    func contextValue<V>(for key: ComponentContextKey<V>) -> V? {
+        nil
+    }
+
+    func contextValue<V>(for keyPath: KeyPath<ComponentContextKeys, ComponentContextKey<V>>) -> V? {
+        contextValue(for: ComponentContextKeys.shared[keyPath: keyPath])
+    }
 }

@@ -134,7 +134,7 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
 
 /// A component that overrides the constraints of its content component.
 /// It uses a `ConstraintTransformer` to calculate the final constraints that will be applied to the content.
-public struct ConstraintOverrideComponent<Content: Component>: Component {
+public struct ConstraintOverrideComponent<Content: Component>: ComponentWrapper {
     /// The content component that will be affected by the `ConstraintTransformer`.
     public let content: Content
     /// The transformer used to calculate and apply constraints to the `content` component.
@@ -151,7 +151,7 @@ public struct ConstraintOverrideComponent<Content: Component>: Component {
 
     public func layout(_ constraint: Constraint) -> AnyRenderNodeOfView<Content.R.View> {
         let finalConstraint = transformer.calculate(constraint)
-        if finalConstraint.isTight {
+        if finalConstraint.isTight, content.contextValue(for: \.supportLazyLayout) ?? true {
             return LazyRenderNode(component: content, environmentValues: EnvironmentValues.current, size: finalConstraint.minSize).eraseToAnyRenderNodeOfView()
         } else {
             let renderNode = content.layout(finalConstraint)
