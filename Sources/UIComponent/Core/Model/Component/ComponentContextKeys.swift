@@ -16,5 +16,5 @@ public struct ComponentContextKeys {
     public var supportLazyLayout: ComponentContextKey<Bool> { .init(rawValue: "supportLazyLayout") }
     public var flexGrow: ComponentContextKey<CGFloat> { .init(rawValue: "flexGrow") }
     public var flexShrink: ComponentContextKey<CGFloat> { .init(rawValue: "flexShrink") }
-    public var alignSelf: ComponentContextKey<CGFloat> { .init(rawValue: "alignSelf") }
+    public var alignSelf: ComponentContextKey<CrossAxisAlignment> { .init(rawValue: "alignSelf") }
 }

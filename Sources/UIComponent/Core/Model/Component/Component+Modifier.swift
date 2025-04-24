@@ -360,8 +360,11 @@ extension Component {
     ///   - flex: The flex factor to be applied. Defaults to 1.
     ///   - alignSelf: The alignment of this component within a flex container. Defaults to nil.
     /// - Returns: A `Flexible` component that wraps the current component with the specified layout properties.
-    public func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> Flexible<Self> {
-        Flexible(flexGrow: flex, flexShrink: flex, alignSelf: alignSelf, content: self)
+    public func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> ContextOverrideComponent<Self> {
+        var data: [String: Any] = [:]
+        data["flexGrow"] = flex
+        data["alignSelf"] = alignSelf
+        return ContextOverrideComponent(content: self, overrideContext: data)
     }
 
     /// Applies flexible layout properties to the component with specified grow and shrink factors.
@@ -371,8 +374,12 @@ extension Component {
     ///   - flexShrink: The flex shrink factor.
     ///   - alignSelf: The alignment of this component within a flex container. Defaults to nil.
     /// - Returns: A `Flexible` component that wraps the current component with the specified layout properties.
-    public func flex(flexGrow: CGFloat, flexShrink: CGFloat, alignSelf: CrossAxisAlignment? = nil) -> Flexible<Self> {
-        Flexible(flexGrow: flexGrow, flexShrink: flexShrink, alignSelf: alignSelf, content: self)
+    public func flex(flexGrow: CGFloat, flexShrink: CGFloat, alignSelf: CrossAxisAlignment? = nil) -> ContextOverrideComponent<Self> {
+        var data: [String: Any] = [:]
+        data["flexGrow"] = flexGrow
+        data["flexShrink"] = flexShrink
+        data["alignSelf"] = alignSelf
+        return ContextOverrideComponent(content: self, overrideContext: data)
     }
 
     // MARK: - Inset modifiers

@@ -178,7 +178,7 @@ extension FlexLayout {
             
             // Calculate the total flex grow values for items in the current line.
             let flexCount = children[range].reduce(0) { result, next in
-                result + ((next as? AnyFlexible)?.flexGrow ?? 0)
+                result + (next.contextValue(for: \.flexGrow) ?? 0)
             }
             
             // If there are flexible items and the cross max size is not infinite, adjust their sizes.
@@ -186,15 +186,14 @@ extension FlexLayout {
                 let crossPerFlex = max(0, crossMax - cross(lineSize)) / flexCount
                 for index in range {
                     let child = children[index]
-                    if let flexChild = child as? AnyFlexible {
-                        let alignChild = flexChild.alignSelf ?? alignItems
-                        let crossReserved = crossPerFlex * flexChild.flexGrow + cross(renderNodes[index].size)
-                        let constraint = Constraint(
-                            minSize: size(main: (alignChild == .stretch) ? main(lineSize) : 0, cross: crossReserved),
-                            maxSize: size(main: .infinity, cross: crossReserved)
-                        )
-                        renderNodes[index] = child.layout(constraint)
-                    }
+                    let flexGrow = child.contextValue(for: \.flexGrow) ?? 0
+                    let alignChild = child.contextValue(for: \.alignSelf) ?? alignItems
+                    let crossReserved = crossPerFlex * flexGrow + cross(renderNodes[index].size)
+                    let constraint = Constraint(
+                        minSize: size(main: (alignChild == .stretch) ? main(lineSize) : 0, cross: crossReserved),
+                        maxSize: size(main: .infinity, cross: crossReserved)
+                    )
+                    renderNodes[index] = child.layout(constraint)
                 }
                 lineSize = size(main: main(lineSize), cross: crossMax)
             }
@@ -223,7 +222,7 @@ extension FlexLayout {
                 }
                 // Calculate the alignment value based on the alignSelf property or the default alignItems.
                 var alignValue: CGFloat = 0
-                let alignChild = (childComponent as? AnyFlexible)?.alignSelf ?? alignItems
+                let alignChild = childComponent.contextValue(for: \.alignSelf) ?? alignItems
                 switch alignChild {
                 case .start, .stretch:
                     alignValue = 0
