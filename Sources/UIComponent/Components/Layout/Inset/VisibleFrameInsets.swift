@@ -8,7 +8,7 @@ import UIKit
 /// If the insets is positive, the child component might not appear since it might think it is outside of the visible frame.
 ///
 /// One use case is to assign a negative visible inset, to preload views on screen.
-public struct VisibleFrameInsets<Content: Component>: Component {
+public struct VisibleFrameInsets<Content: Component>: ComponentWrapper {
     /// The content component that will be adjusted based on the fixed insets.
     public let content: Content
 
@@ -36,7 +36,7 @@ public struct VisibleFrameInsets<Content: Component>: Component {
 /// If the insets is positive, the child component might not appear since it might think it is outside of the visible frame.
 ///
 /// One use case is to assign a negative visible inset, to preload views on screen.
-public struct DynamicVisibleFrameInset<Content: Component>: Component {
+public struct DynamicVisibleFrameInset<Content: Component>: ComponentWrapper {
     /// The content component that will be adjusted based on the dynamic insets.
     public let content: Content
 

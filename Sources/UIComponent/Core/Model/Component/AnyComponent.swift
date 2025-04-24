@@ -33,6 +33,10 @@ public struct AnyComponent: Component {
     public func layout(_ constraint: Constraint) -> AnyRenderNode {
         content.layout(constraint).eraseToAnyRenderNode()
     }
+
+    public func contextValue<V>(for key: ComponentContextKey<V>) -> V? {
+        content.contextValue(for: key)
+    }
 }
 
 /// A type-erased `Component` that is specialized for a specific `UIView` subclass.
@@ -56,5 +60,9 @@ public struct AnyComponentOfView<View: UIView>: Component {
     /// - Returns: A type-erased `AnyRenderNodeOfView` representing the layout of the content component.
     public func layout(_ constraint: Constraint) -> AnyRenderNodeOfView<View> {
         AnyRenderNodeOfView(content.layout(constraint))
+    }
+
+    public func contextValue<V>(for key: ComponentContextKey<V>) -> V? {
+        content.contextValue(for: key)
     }
 }

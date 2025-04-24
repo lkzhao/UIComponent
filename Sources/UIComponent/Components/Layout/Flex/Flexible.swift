@@ -19,7 +19,7 @@ public protocol AnyFlexible {
 /// Instead of using it directly, you can use `.flex()` modifier on any component to mark it as flexible.
 ///
 /// Checkout the `FlexLayoutViewController.swift` for more examples.
-public struct Flexible<Content: Component>: Component, AnyFlexible {
+public struct Flexible<Content: Component>: ComponentWrapper, AnyFlexible {
     /// The factor that determines how much this component will grow relative to its siblings.
     public let flexGrow: CGFloat
     /// The factor that determines how much this component will shrink relative to its siblings.

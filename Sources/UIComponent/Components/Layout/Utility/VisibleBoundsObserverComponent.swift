@@ -3,7 +3,7 @@
 import UIKit
 
 /// A component that observes the visible bounds of its content.
-public struct VisibleBoundsObserverComponent<Content: Component>: Component {
+public struct VisibleBoundsObserverComponent<Content: Component>: ComponentWrapper {
     /// The child component that it will observe.
     public let content: Content
     /// The closure that gets called when the visible bounds of the content component changes.
