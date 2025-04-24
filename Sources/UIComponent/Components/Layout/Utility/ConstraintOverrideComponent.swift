@@ -151,12 +151,12 @@ public struct ConstraintOverrideComponent<Content: Component>: Component {
 
     public func layout(_ constraint: Constraint) -> AnyRenderNodeOfView<Content.R.View> {
         let finalConstraint = transformer.calculate(constraint)
-        if finalConstraint.isTight {
-            return LazyRenderNode(component: content, environmentValues: EnvironmentValues.current, size: finalConstraint.minSize).eraseToAnyRenderNodeOfView()
-        } else {
+//        if finalConstraint.isTight {
+//            return LazyRenderNode(component: content, environmentValues: EnvironmentValues.current, size: finalConstraint.minSize).eraseToAnyRenderNodeOfView()
+//        } else {
             let renderNode = content.layout(finalConstraint)
             return SizeOverrideRenderNode(content: renderNode, size: transformer.bound(size: renderNode.size, to: finalConstraint)).eraseToAnyRenderNodeOfView()
-        }
+//        }
     }
 }
 
