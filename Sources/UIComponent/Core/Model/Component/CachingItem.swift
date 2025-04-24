@@ -62,15 +62,6 @@ public struct CachingItem<T, C: Component>: Component {
         return componentBuilder(data).layout(constraint)
     }
 
-    /// Component protocol method
-    public func contextValue<V>(for key: ComponentContextKey<V>) -> V? {
-        if key.rawValue == ComponentContextKeys.shared.supportLazyLayout.rawValue, scope == .component {
-            return (false as? V)
-        } else {
-            return nil
-        }
-    }
-
     // MARK: - Static methods
 
     /// Clears the global cache for all items.

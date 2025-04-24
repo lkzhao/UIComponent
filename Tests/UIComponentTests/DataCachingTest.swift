@@ -268,7 +268,7 @@ struct DataCachingTest {
         }
         view.componentEngine.reloadData()
         #expect(view.subviews.count == 0)
-        #expect(callCount == 0)
+        #expect(callCount == 1)
 
         view.componentEngine.component = CachingItem(key: "1", scope: .hostingView, itemGenerator: {
             callCount += 1
