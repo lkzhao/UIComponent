@@ -221,8 +221,8 @@ extension Component {
     ///  - keyPath: A key path to a specific context key.
     ///  - value: The value to set for the context key specified by keyPath.
     /// - Returns: A `ContextOverrideComponent` that represents the modified component with the overridden context.
-    public func context<V>(_ keyPath: KeyPath<ComponentContextKeys, ComponentContextKey<V>>, value: V) -> ContextOverrideComponent<Self> {
-        context(ComponentContextKeys.shared[keyPath: keyPath], value: value)
+    public func withContext<V>(_ keyPath: KeyPath<ComponentContextKeys, ComponentContextKey<V>>, value: V) -> ContextOverrideComponent<Self> {
+        withContext(ComponentContextKeys.shared[keyPath: keyPath], value: value)
     }
 
     /// Overrides the context of the component with a new value.
@@ -230,7 +230,7 @@ extension Component {
     ///  - key: A `ComponentContextKey` that represents the context key.
     ///  - value: The value to set for the context key.
     /// - Returns: A `ContextOverrideComponent` that represents the modified component with the overridden context.
-    public func context<V>(_ key: ComponentContextKey<V>, value: V) -> ContextOverrideComponent<Self> {
+    public func withContext<V>(_ key: ComponentContextKey<V>, value: V) -> ContextOverrideComponent<Self> {
         ContextOverrideComponent(content: self, overrideContext: [key.rawValue: value])
     }
 
