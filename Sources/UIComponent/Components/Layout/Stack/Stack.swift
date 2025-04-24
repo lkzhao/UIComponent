@@ -84,10 +84,28 @@ extension Stack {
             minSize: size(main: -.infinity, cross: crossMinConstraint),
             maxSize: size(main: .infinity, cross: crossMaxConstraint)
         )
+
+        var stretchedItems: Set<Int> = []
+        var flexGrowPerItem: [Int: CGFloat] = [:]
+        var flexShrinkPerItem: [Int: CGFloat] = [:]
+        var updatedConstraint: [Int: Constraint] = [:]
         for child in children {
             let childRenderNode = child.layout(childConstraint)
-            flexGrow += childRenderNode.contextValue(.flexGrow) as? CGFloat ?? 0
-            flexShrink += childRenderNode.contextValue(.flexShrink) as? CGFloat ?? 0
+            let childGrow = childRenderNode.contextValue(.flexGrow) as? CGFloat ?? 0
+            let childShrink = childRenderNode.contextValue(.flexShrink) as? CGFloat ?? 0
+
+            flexGrow += childGrow
+            flexShrink += childShrink
+            if childGrow > 0 {
+                flexGrowPerItem[renderNodes.count] = childGrow
+            }
+            if childShrink > 0 {
+                flexShrinkPerItem[renderNodes.count] = childShrink
+            }
+            if alignItems != .stretch, childRenderNode.contextValue(.alignSelf) as? CrossAxisAlignment == .stretch {
+                stretchedItems.insert(renderNodes.count)
+            }
+
             let mainIntrinsic = main(childRenderNode.size)
             mainFreezed += mainIntrinsic.isFinite ? mainIntrinsic : 0
             renderNodes.append(childRenderNode)
@@ -96,40 +114,45 @@ extension Stack {
         let mainMax = main(constraint.maxSize)
         if flexGrow > 0, mainFreezed < mainMax {
             let mainPerFlex = mainMax == .infinity ? 0 : max(0, mainMax - mainFreezed) / flexGrow
-            for (index, child) in children.enumerated() {
-                let flexGrow = renderNodes[index].contextValue(.flexGrow) as? CGFloat ?? 0
-                let alignSelf = renderNodes[index].contextValue(.alignSelf) as? CrossAxisAlignment
-                if flexGrow > 0 || alignSelf != nil {
-                    let alignChild = alignSelf ?? alignItems
-                    let childCrossMinConstraint = alignChild == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0
-                    let addition = mainPerFlex * flexGrow
-                    let mainIntrinsic = main(renderNodes[index].size)
-                    let mainReserved = addition + (mainIntrinsic.isFinite ? mainIntrinsic : 0)
-                    let constraint = Constraint(
-                        minSize: size(main: mainReserved, cross: childCrossMinConstraint),
-                        maxSize: size(main: mainReserved, cross: crossMaxConstraint)
-                    )
-                    renderNodes[index] = child.layout(constraint)
-                    mainFreezed += addition
-                }
+            for (index, grow) in flexGrowPerItem {
+                let childCrossMinConstraint = stretchedItems.contains(index) && crossMaxConstraint != .infinity ? crossMaxConstraint : crossMinConstraint
+                let addition = mainPerFlex * grow
+                let mainIntrinsic = main(renderNodes[index].size)
+                let mainReserved = addition + (mainIntrinsic.isFinite ? mainIntrinsic : 0)
+                let constraint = Constraint(
+                    minSize: size(main: mainReserved, cross: childCrossMinConstraint),
+                    maxSize: size(main: mainReserved, cross: crossMaxConstraint)
+                )
+                updatedConstraint[index] = constraint
+                stretchedItems.remove(index)
             }
-        } else if flexShrink > 0, mainFreezed > mainMax {
+        }
+        if flexShrink > 0, mainFreezed > mainMax {
             let mainPerFlex = mainMax == .infinity ? 0 : min(0, mainMax - mainFreezed) / flexShrink
-            for (index, child) in children.enumerated() {
-                let flexShrink = renderNodes[index].contextValue(.flexShrink) as? CGFloat ?? 0
-                let alignSelf = renderNodes[index].contextValue(.alignSelf) as? CrossAxisAlignment
-                if flexShrink > 0 || alignSelf != nil {
-                    let alignChild = alignSelf ?? alignItems
-                    let childCrossMinConstraint = alignChild == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0
-                    let mainReserved = mainPerFlex * flexShrink + main(renderNodes[index].size)
-                    let constraint = Constraint(
-                        minSize: size(main: mainReserved, cross: childCrossMinConstraint),
-                        maxSize: size(main: mainReserved, cross: crossMaxConstraint)
-                    )
-                    renderNodes[index] = child.layout(constraint)
-                    mainFreezed += mainReserved
-                }
+            for (index, shrink) in flexShrinkPerItem {
+                let childCrossMinConstraint = stretchedItems.contains(index) && crossMaxConstraint != .infinity ? crossMaxConstraint : crossMinConstraint
+                let mainReserved = mainPerFlex * shrink + main(renderNodes[index].size)
+                let constraint = Constraint(
+                    minSize: size(main: mainReserved, cross: childCrossMinConstraint),
+                    maxSize: size(main: mainReserved, cross: crossMaxConstraint)
+                )
+                updatedConstraint[index] = constraint
+                stretchedItems.remove(index)
             }
+        }
+        if !stretchedItems.isEmpty {
+            let stretchedConstraint = Constraint(
+                minSize: size(main: -.infinity, cross: crossMaxConstraint != .infinity ? crossMaxConstraint : 0),
+                maxSize: size(main: .infinity, cross: crossMaxConstraint)
+            )
+            for index in stretchedItems {
+                updatedConstraint[index] = stretchedConstraint
+            }
+        }
+
+        for (index, constraint) in updatedConstraint {
+            let childRenderNode = children[index].layout(constraint)
+            renderNodes[index] = childRenderNode
         }
 
         return renderNodes
