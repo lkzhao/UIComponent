@@ -122,7 +122,7 @@ extension Component {
     public func size(_ size: CGSize) -> ConstraintOverrideComponent<Self> {
         ConstraintOverrideComponent(content: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(size.width), height: .absolute(size.height)))
     }
-    
+
     /// Sets an absolute size for the component based on the constraint.
     /// - Parameter sizeProvider: A closure that takes a `Constraint` and returns a size.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden size.
@@ -132,7 +132,7 @@ extension Component {
             return Constraint(tightSize: size)
         }))
     }
-    
+
     /// Sets an absolute size for the component based on the max size constraint.
     /// - Parameter sizeProvider: A closure that takes a max size and returns a modified size.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden size.
@@ -336,7 +336,7 @@ extension Component {
 
     // MARK: - Flex modifiers
 
-    /// Applies flexible layout properties to the component. 
+    /// Applies flexible layout properties to the component.
     /// This is used in conjunction with a flex container (FlexRow, FlexColumn, HStack, VStack).
     /// - Parameters:
     ///   - flex: The flex factor to be applied. Defaults to 1.
@@ -345,6 +345,8 @@ extension Component {
     public func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> ContextOverrideComponent<Self> {
         var overrideContext = [RenderNodeContextKey: Any]()
         overrideContext[.flexGrow] = flex
+        overrideContext[.flexShrink] = flex
+        overrideContext[.alignSelf] = alignSelf
         return ContextOverrideComponent(content: self, overrideContext: overrideContext)
     }
 
