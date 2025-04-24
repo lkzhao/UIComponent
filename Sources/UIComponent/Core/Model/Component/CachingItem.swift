@@ -62,19 +62,25 @@ public struct CachingItem<T, C: Component>: Component {
         return componentBuilder(data).layout(constraint)
     }
 
-    public static func clearGlobalCache() {
-        CacheEngine.clearGlobalCache()
-    }
-
-    public static func clearGlobalCacheData(forKey key: String) {
-        CacheEngine.clearGlobalCacheData(for: key)
-    }
-
+    /// Component protocol method
     public func contextValue<V>(for key: ComponentContextKey<V>) -> V? {
         if key.rawValue == ComponentContextKeys.shared.supportLazyLayout.rawValue, scope == .component {
             return (false as? V)
         } else {
             return nil
         }
+    }
+
+    // MARK: - Static methods
+
+    /// Clears the global cache for all items.
+    public static func clearGlobalCache() {
+        CacheEngine.clearGlobalCache()
+    }
+
+    /// Clears the global cache data for the specified key.
+    /// - Parameter key: The key of the item to clear from the global cache.
+    public static func clearGlobalCacheData(forKey key: String) {
+        CacheEngine.clearGlobalCacheData(for: key)
     }
 }
