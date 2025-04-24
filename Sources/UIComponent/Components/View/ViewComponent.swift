@@ -50,16 +50,13 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
     public let view: View?
     /// A generator closure that can create a `UIView` instance when needed.
     public let generator: (() -> View)?
-    /// An optional identifier for the view, useful for debugging or tracking view instances.
-    public var id: String? {
+
+    public var context: [RenderNodeContextKey : Any] {
         if let view {
-            return "view-at-\(Unmanaged.passUnretained(view).toOpaque())"
+            [.id: "view-at-\(ObjectIdentifier(view))", .reuseStrategy: ReuseStrategy.noReuse]
+        } else {
+            [:]
         }
-        return nil
-    }
-    /// The reuse strategy for the view, determining whether it should be reused or automatically managed.
-    public var reuseStrategy: ReuseStrategy {
-        view == nil ? .automatic : .noReuse
     }
 
     /// Initializes a `ViewRenderNode` with a specified size, optional view, and optional generator.

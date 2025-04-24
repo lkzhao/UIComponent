@@ -63,9 +63,9 @@ public struct PrimaryMenuRenderNode: RenderNode {
     /// The configuration for the tappable view.
     public let config: PrimaryMenuConfig?
 
-    /// The identifier for the render node, if it has one.
-    public var id: String? {
-        content.id
+    /// The context for the render node
+    public var context: [RenderNodeContextKey : Any] {
+        content.context
     }
 
     /// Updates the given `PrimaryMenu` with the current configuration and tap handler.

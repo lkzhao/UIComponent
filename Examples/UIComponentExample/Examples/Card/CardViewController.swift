@@ -57,8 +57,8 @@ private struct CardComponent: Component {
 private struct CardRenderNode: RenderNode {
     let data: CardData
     let onTap: () -> Void
-    var id: String? {
-        data.id
+    var context: [RenderNodeContextKey : Any] {
+        [.id: data.id]
     }
     let size: CGSize
     func updateView(_ view: CardView) {

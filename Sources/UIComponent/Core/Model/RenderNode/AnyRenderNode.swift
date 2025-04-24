@@ -16,14 +16,8 @@ public struct AnyRenderNode: RenderNode {
 
     // MARK: - RenderNode methods
 
-    public var id: String? {
-        erasing.id
-    }
-    public var animator: Animator? {
-        erasing.animator
-    }
-    public var reuseStrategy: ReuseStrategy {
-        erasing.reuseStrategy
+    public var context: [RenderNodeContextKey : Any] {
+        erasing.context
     }
     public var defaultReuseKey: String {
         "AnyRenderNode<\(erasing.defaultReuseKey)>"
@@ -68,14 +62,8 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
 
     // MARK: - RenderNode methods
 
-    public var id: String? {
-        erasing.id
-    }
-    public var animator: Animator? {
-        erasing.animator
-    }
-    public var reuseStrategy: ReuseStrategy {
-        erasing.reuseStrategy
+    public var context: [RenderNodeContextKey : Any] {
+        erasing.context
     }
     public var defaultReuseKey: String {
         "AnyRenderNodeOfView<\(erasing.defaultReuseKey)>"

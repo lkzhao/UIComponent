@@ -9,16 +9,16 @@ public typealias UpdateComponent<Content: Component> = ModifierComponent<Content
 public typealias KeyPathUpdateComponent<Content: Component, Value> = ModifierComponent<Content, KeyPathUpdateRenderNode<Value, Content.R>>
 
 /// A component produced by the ``Component/id(_:)`` modifier
-public typealias IDComponent<Content: Component> = ModifierComponent<Content, IDRenderNode<Content.R>>
+public typealias IDComponent<Content: Component> = ModifierComponent<Content, ContextOverrideRenderNode<Content.R>>
 
 /// A component produced by the ``Component/animator(_:)`` modifier
-public typealias AnimatorComponent<Content: Component> = ModifierComponent<Content, AnimatorRenderNode<Content.R>>
+public typealias AnimatorComponent<Content: Component> = ModifierComponent<Content, ContextOverrideRenderNode<Content.R>>
 
 /// A component produced by ``Component/animateInsert(_:)``, ``Component/animateUpdate(passthrough:_:)``, & ``Component/animateUpdate(passthrough:_:)``  modifiers
 public typealias AnimatorWrapperComponent<Content: Component> = ModifierComponent<Content, AnimatorWrapperRenderNode<Content.R>>
 
 /// A component produced by the ``Component/reuseStrategy(_:)`` modifier
-public typealias ReuseStrategyComponent<Content: Component> = ModifierComponent<Content, ReuseStrategyRenderNode<Content.R>>
+public typealias ReuseStrategyComponent<Content: Component> = ModifierComponent<Content, ContextOverrideRenderNode<Content.R>>
 
 extension Component {
     /// Provides a closure that acts as a modifier that can be used to modify a view property. This is used to support @dynamicMemberLookup, it should not be used directly.
@@ -345,7 +345,7 @@ extension Component {
     public func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> ContextOverrideComponent<Self> {
         var overrideContext = [RenderNodeContextKey: Any]()
         overrideContext[.flexGrow] = flex
-        return ContextOverrideComponent(overrideContext: overrideContext, content: self)
+        return ContextOverrideComponent(content: self, overrideContext: overrideContext)
     }
 
     /// Applies flexible layout properties to the component with specified grow and shrink factors.
@@ -360,7 +360,7 @@ extension Component {
         overrideContext[.flexGrow] = flexGrow
         overrideContext[.flexShrink] = flexShrink
         overrideContext[.alignSelf] = alignSelf
-        return ContextOverrideComponent(overrideContext: overrideContext, content: self)
+        return ContextOverrideComponent(content: self, overrideContext: overrideContext)
     }
 
     /// Applies flexible layout properties to the component with specified grow factors.
@@ -371,7 +371,7 @@ extension Component {
     public func flexGrow(_ flexGrow: CGFloat) -> ContextOverrideComponent<Self> {
         var overrideContext = [RenderNodeContextKey: Any]()
         overrideContext[.flexGrow] = flexGrow
-        return ContextOverrideComponent(overrideContext: overrideContext, content: self)
+        return ContextOverrideComponent(content: self, overrideContext: overrideContext)
     }
 
     /// Applies flexible layout properties to the component with specified shrink factors.
@@ -382,7 +382,7 @@ extension Component {
     public func flexShrink(_ flexShrink: CGFloat) -> ContextOverrideComponent<Self> {
         var overrideContext = [RenderNodeContextKey: Any]()
         overrideContext[.flexShrink] = flexShrink
-        return ContextOverrideComponent(overrideContext: overrideContext, content: self)
+        return ContextOverrideComponent(content: self, overrideContext: overrideContext)
     }
 
     /// Applies flexible layout properties to the component with specified alignment.
@@ -393,7 +393,7 @@ extension Component {
     public func alignSelf(_ alignSelf: CrossAxisAlignment) -> ContextOverrideComponent<Self> {
         var overrideContext = [RenderNodeContextKey: Any]()
         overrideContext[.alignSelf] = alignSelf
-        return ContextOverrideComponent(overrideContext: overrideContext, content: self)
+        return ContextOverrideComponent(content: self, overrideContext: overrideContext)
     }
 
     // MARK: - Inset modifiers

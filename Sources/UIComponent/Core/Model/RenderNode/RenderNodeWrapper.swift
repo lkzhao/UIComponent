@@ -15,15 +15,6 @@ public protocol RenderNodeWrapper<Content>: RenderNode {
 }
 
 extension RenderNodeWrapper {
-    public var id: String? {
-        content.id
-    }
-    public var animator: Animator? {
-        content.animator
-    }
-    public var reuseStrategy: ReuseStrategy {
-        content.reuseStrategy
-    }
     public var context: [RenderNodeContextKey : Any] {
         content.context
     }

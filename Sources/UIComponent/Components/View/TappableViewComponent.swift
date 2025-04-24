@@ -54,11 +54,11 @@ public struct TappableViewRenderNode: RenderNode {
     /// The configuration for the tappable view.
     public let config: TappableViewConfig?
 
-    /// The identifier for the render node, if it has one.
-    public var id: String? {
-        content.id
+    /// The context for the render node
+    public var context: [RenderNodeContextKey : Any] {
+        content.context
     }
-    
+
     /// Updates the given `TappableView` with the current configuration and tap handler.
     /// - Parameter view: The `TappableView` to update.
     public func updateView(_ view: TappableView) {

@@ -9,6 +9,12 @@ public struct RenderNodeContextKey: Equatable, Hashable, Codable {
     }
 }
 
+public extension RenderNodeContextKey {
+    static let id = RenderNodeContextKey("id")
+    static let animator = RenderNodeContextKey("animator")
+    static let reuseStrategy = RenderNodeContextKey("reuseStrategy")
+}
+
 /// Render nodes are responsible for storing the layout information, generating UIView for rendering, and updating UIView upon reload.
 @dynamicMemberLookup
 public protocol RenderNode<View> {
@@ -17,15 +23,6 @@ public protocol RenderNode<View> {
 
     /// A Boolean value indicating whether the render node should render its own view.
     var shouldRenderView: Bool { get }
-
-    /// A unique identifier for the render node.
-    var id: String? { get }
-
-    /// An animator responsible for animating view changes.
-    var animator: Animator? { get }
-
-    /// The strategy to use when reusing views.
-    var reuseStrategy: ReuseStrategy { get }
 
     /// The context of the render node, which can be used to store additional information.
     var context: [RenderNodeContextKey: Any] { get }
@@ -112,9 +109,15 @@ extension RenderNode {
 // MARK: - Default implementation
 
 extension RenderNode {
-    public var id: String? { nil }
-    public var animator: Animator? { nil }
-    public var reuseStrategy: ReuseStrategy { .automatic }
+    public var id: String? {
+        context[.id] as? String
+    }
+    public var animator: Animator? {
+        context[.animator] as? Animator
+    }
+    public var reuseStrategy: ReuseStrategy {
+        context[.reuseStrategy] as? ReuseStrategy ?? .automatic
+    }
     public var defaultReuseKey: String { "\(type(of: self))" }
     public var shouldRenderView: Bool { children.isEmpty }
     public var context: [RenderNodeContextKey: Any] { [:] }
