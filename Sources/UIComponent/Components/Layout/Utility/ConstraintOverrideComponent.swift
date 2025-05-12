@@ -144,19 +144,15 @@ public struct ConstraintOverrideComponent<Content: Component>: Component {
     /// - Parameters:
     ///   - content: The content component that will be affected by the constraint transformations.
     ///   - transformer: The `ConstraintTransformer` that will be used to calculate and apply constraints to the content component.
-    init(content: Content, transformer: ConstraintTransformer) {
+    public init(content: Content, transformer: ConstraintTransformer) {
         self.content = content
         self.transformer = transformer
     }
 
-    public func layout(_ constraint: Constraint) -> AnyRenderNodeOfView<Content.R.View> {
+    public func layout(_ constraint: Constraint) -> SizeOverrideRenderNode<Content.R> {
         let finalConstraint = transformer.calculate(constraint)
-//        if finalConstraint.isTight {
-//            return LazyRenderNode(component: content, environmentValues: EnvironmentValues.current, size: finalConstraint.minSize).eraseToAnyRenderNodeOfView()
-//        } else {
-            let renderNode = content.layout(finalConstraint)
-            return SizeOverrideRenderNode(content: renderNode, size: transformer.bound(size: renderNode.size, to: finalConstraint)).eraseToAnyRenderNodeOfView()
-//        }
+        let renderNode = content.layout(finalConstraint)
+        return SizeOverrideRenderNode(content: renderNode, size: transformer.bound(size: renderNode.size, to: finalConstraint))
     }
 }
 
@@ -172,30 +168,6 @@ public struct SizeOverrideRenderNode<Content: RenderNode>: RenderNodeWrapper {
     ///   - size: The new size to apply to the content render node.
     public init(content: Content, size: CGSize) {
         self.content = content
-        self.size = size
-    }
-}
-
-public class LazyRenderNode<Content: Component>: RenderNodeWrapper {
-    public let component: Content
-    private var _content: Content.R?
-    public var content: Content.R {
-        if _content == nil {
-            EnvironmentValues.saveCurrentValues()
-            EnvironmentValues.current = environmentValues
-            _content = component.layout(.init(tightSize: size))
-            EnvironmentValues.restoreCurrentValues()
-        }
-        return _content!
-    }
-    public var didLayout: Bool {
-        _content != nil
-    }
-    public let size: CGSize
-    let environmentValues: EnvironmentValues
-    init(component: Content, environmentValues: EnvironmentValues, size: CGSize) {
-        self.component = component
-        self.environmentValues = environmentValues
         self.size = size
     }
 }
