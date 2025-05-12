@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: sersoft-gmbh/xcodebuild-action@v3
         with:
-          project: UIComponent.xcodeproj
+          spm-package: './'
           scheme: UIComponent
           destination: platform=iOS
           action: test
