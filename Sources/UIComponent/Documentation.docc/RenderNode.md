@@ -20,9 +20,6 @@ To create a custom ``RenderNode``, you need to write a struct that conforms to `
 
 @Links(visualStyle: list) {
     - ``RenderNode/View``
-    - ``RenderNode/id-5ppqt``
-    - ``RenderNode/animator-5om4u``
-    - ``RenderNode/reuseStrategy-11fwd``
     - ``RenderNode/size``
     - ``RenderNode/positions-6f59e``
     - ``RenderNode/children-42h1l``
@@ -30,5 +27,6 @@ To create a custom ``RenderNode``, you need to write a struct that conforms to `
     - ``RenderNode/shouldRenderView(in:)-yvrd``
     - ``RenderNode/makeView()-8w5z2``
     - ``RenderNode/updateView(_:)-2xjz4``
+    - ``RenderNode/contextValue(_:)-1bc1l``
 }
 

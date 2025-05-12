@@ -104,8 +104,6 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
         guard let view else { return nil }
         if key == .id {
             return "view-at-\(ObjectIdentifier(view))"
-        } else if key == .reuseStrategy {
-            return ReuseStrategy.noReuse
         }
         return nil
     }

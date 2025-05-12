@@ -17,8 +17,8 @@ public typealias AnimatorComponent<Content: Component> = ModifierComponent<Conte
 /// A component produced by ``Component/animateInsert(_:)``, ``Component/animateUpdate(passthrough:_:)``, & ``Component/animateUpdate(passthrough:_:)``  modifiers
 public typealias AnimatorWrapperComponent<Content: Component> = ModifierComponent<Content, AnimatorWrapperRenderNode<Content.R>>
 
-/// A component produced by the ``Component/reuseStrategy(_:)`` modifier
-public typealias ReuseStrategyComponent<Content: Component> = ModifierComponent<Content, ContextOverrideRenderNode<Content.R>>
+/// A component produced by the ``Component/reuseKey(_:)`` modifier
+public typealias ReuseKeyComponent<Content: Component> = ModifierComponent<Content, ContextOverrideRenderNode<Content.R>>
 
 extension Component {
     /// Provides a closure that acts as a modifier that can be used to modify a view property. This is used to support @dynamicMemberLookup, it should not be used directly.
@@ -69,12 +69,12 @@ extension Component {
         }
     }
 
-    /// Sets the reuse strategy for the component.
-    /// - Parameter reuseStrategy: A `ReuseStrategy` value that determines how the component should handle reuse.
-    /// - Returns: A `ReuseStrategyComponent` that represents the modified component with a specified reuse strategy.
-    public func reuseStrategy(_ reuseStrategy: ReuseStrategy) -> ReuseStrategyComponent<Self> {
+    /// Sets the reuse key for the component.
+    /// - Parameter reuseKey: A String key value for reusing the view for the component.
+    /// - Returns: A `ReuseKeyComponent` that represents the modified component with a specified reuse strategy.
+    public func reuseKey(_ reuseKey: String) -> ReuseKeyComponent<Self> {
         ModifierComponent(content: self) {
-            $0.reuseStrategy(reuseStrategy)
+            $0.reuseKey(reuseKey)
         }
     }
 

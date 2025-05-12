@@ -16,8 +16,8 @@ public struct AnyRenderNode: RenderNode {
 
     // MARK: - RenderNode methods
 
-    public var defaultReuseKey: String {
-        "AnyRenderNode<\(erasing.defaultReuseKey)>"
+    public var structureTypeId: String {
+        "AnyRenderNode<\(erasing.structureTypeId)>"
     }
     public var size: CGSize {
         erasing.size
@@ -62,8 +62,8 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
 
     // MARK: - RenderNode methods
 
-    public var defaultReuseKey: String {
-        "AnyRenderNodeOfView<\(erasing.defaultReuseKey)>"
+    public var structureTypeId: String {
+        "AnyRenderNodeOfView<\(erasing.structureTypeId)>"
     }
     public var size: CGSize {
         erasing.size

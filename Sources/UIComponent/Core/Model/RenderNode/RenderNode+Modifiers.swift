@@ -15,15 +15,6 @@ public struct UpdateRenderNode<Content: RenderNode>: RenderNodeWrapper {
         content.updateView(view)
         update(view)
     }
-
-    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
-        if key == .reuseStrategy, content.reuseStrategy == .automatic {
-            // we don't know what the update block did, so we disable
-            // reuse so that we don't get inconsistent state
-            return ReuseStrategy.noReuse
-        }
-        return content.contextValue(key)
-    }
 }
 
 /// A render node that applies a value to a specific key path of the view.
@@ -73,11 +64,11 @@ extension RenderNode {
         ContextOverrideRenderNode(content: self, overrideContext: [.animator: animator as Any])
     }
     
-    /// Creates a render node that overrides the reuse strategy of the content.
-    /// - Parameter reuseStrategy: The reuse strategy to be set for the content.
+    /// Creates a render node that overrides the reuse key of the content.
+    /// - Parameter reuseKey: The String key to be set for the content.
     /// - Returns: A `ContextOverrideRenderNode` with the overridden reuse strategy.
-    public func reuseStrategy(_ reuseStrategy: ReuseStrategy) -> ContextOverrideRenderNode<Self> {
-        ContextOverrideRenderNode(content: self, overrideContext: [.reuseStrategy: reuseStrategy])
+    public func reuseKey(_ reuseKey: String?) -> ContextOverrideRenderNode<Self> {
+        ContextOverrideRenderNode(content: self, overrideContext: [.reuseKey: reuseKey as Any])
     }
     
     /// Creates a render node that applies a custom update to the view.

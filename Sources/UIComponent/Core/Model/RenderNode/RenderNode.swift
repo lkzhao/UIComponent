@@ -12,7 +12,7 @@ public struct RenderNodeContextKey: Equatable, Hashable, Codable {
 public extension RenderNodeContextKey {
     static let id = RenderNodeContextKey("id")
     static let animator = RenderNodeContextKey("animator")
-    static let reuseStrategy = RenderNodeContextKey("reuseStrategy")
+    static let reuseKey = RenderNodeContextKey("reuseKey")
 }
 
 /// Render nodes are responsible for storing the layout information, generating UIView for rendering, and updating UIView upon reload.
@@ -24,9 +24,8 @@ public protocol RenderNode<View> {
     /// A Boolean value indicating whether the render node should render its own view.
     var shouldRenderView: Bool { get }
 
-    /// The default reuse key for the render node. This key will be used when reuseStrategy is set to .automatic.
-    /// This will also be used as fallbackId for structured identity when id is not set.
-    var defaultReuseKey: String { get }
+    /// Structure type id of this render node. This will be used as fallbackId for structured identity when id is not set.
+    var structureTypeId: String { get }
 
     /// The size of the render node.
     var size: CGSize { get }
@@ -57,6 +56,10 @@ public protocol RenderNode<View> {
     /// - Parameter view: The view to update.
     func updateView(_ view: View)
 
+    /// Returns the value of the context key.
+    ///
+    /// - Parameter key: The key of the context value.
+    /// - Returns: The value of the context key.
     func contextValue(_ key: RenderNodeContextKey) -> Any?
 }
 
@@ -114,10 +117,10 @@ extension RenderNode {
     public var animator: Animator? {
         contextValue(.animator) as? Animator
     }
-    public var reuseStrategy: ReuseStrategy {
-        (contextValue(.reuseStrategy) as? ReuseStrategy) ?? .automatic
+    public var reuseKey: String? {
+        contextValue(.reuseKey) as? String
     }
-    public var defaultReuseKey: String { "\(type(of: self))" }
+    public var structureTypeId: String { "\(type(of: self))" }
     public var shouldRenderView: Bool { children.isEmpty }
 
     public func makeView() -> View {
@@ -149,13 +152,10 @@ extension RenderNode {
 
 extension RenderNode {
     internal func _makeView() -> UIView {
-        switch reuseStrategy {
-        case .automatic:
-            return ReuseManager.shared.dequeue(identifier: defaultReuseKey, makeView())
-        case .noReuse:
-            return makeView()
-        case .key(let key):
-            return ReuseManager.shared.dequeue(identifier: key, makeView())
+        if let reuseKey {
+            ReuseManager.shared.dequeue(identifier: reuseKey, makeView())
+        } else {
+            makeView()
         }
     }
 
@@ -167,7 +167,7 @@ extension RenderNode {
     internal func _visibleRenderables(in frame: CGRect) -> [Renderable] {
         var result = [Renderable]()
         if shouldRenderView {
-            result.append(Renderable(id: id ?? defaultReuseKey, frame: CGRect(origin: .zero, size: size), renderNode: self))
+            result.append(Renderable(id: id ?? structureTypeId, frame: CGRect(origin: .zero, size: size), renderNode: self))
         }
         let frame = adjustVisibleFrame(frame: frame)
         let children = visibleChildren(in: frame)

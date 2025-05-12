@@ -78,7 +78,7 @@ VStack {
 Version 5.0 introduces a new context value system for RenderNode. This system provides a unified way to access various properties and behaviors of render nodes, including:
 - id
 - animator
-- reuseStrategy
+- reuseKey
 - flexGrow
 - flexShrink
 - alignSelf
