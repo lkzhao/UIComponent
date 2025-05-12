@@ -48,7 +48,7 @@ extension Stack {
         var positions: [CGPoint] = []
         for child in renderNodes {
             var crossValue: CGFloat = 0
-            let alignChild = child.contextValue(.alignSelf) as? CrossAxisAlignment ?? alignItems
+            let alignChild = child.alignSelf ?? alignItems
             switch alignChild {
             case .start:
                 crossValue = 0
@@ -91,8 +91,8 @@ extension Stack {
         var updatedConstraint: [Int: Constraint] = [:]
         for child in children {
             let childRenderNode = child.layout(childConstraint)
-            let childGrow = childRenderNode.contextValue(.flexGrow) as? CGFloat ?? 0
-            let childShrink = childRenderNode.contextValue(.flexShrink) as? CGFloat ?? 0
+            let childGrow = childRenderNode.flexGrow
+            let childShrink = childRenderNode.flexShrink
 
             flexGrow += childGrow
             flexShrink += childShrink
@@ -102,7 +102,7 @@ extension Stack {
             if childShrink > 0 {
                 flexShrinkPerItem[renderNodes.count] = childShrink
             }
-            if alignItems != .stretch, childRenderNode.contextValue(.alignSelf) as? CrossAxisAlignment == .stretch {
+            if alignItems != .stretch, childRenderNode.alignSelf == .stretch {
                 stretchedItems.insert(renderNodes.count)
             }
 

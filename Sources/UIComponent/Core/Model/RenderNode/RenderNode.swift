@@ -111,15 +111,6 @@ extension RenderNode {
 // MARK: - Default implementation
 
 extension RenderNode {
-    public var id: String? {
-        contextValue(.id) as? String
-    }
-    public var animator: Animator? {
-        contextValue(.animator) as? Animator
-    }
-    public var reuseKey: String? {
-        contextValue(.reuseKey) as? String
-    }
     public var structureTypeId: String { "\(type(of: self))" }
     public var shouldRenderView: Bool { children.isEmpty }
 
@@ -151,6 +142,16 @@ extension RenderNode {
 // MARK: - Internal methods
 
 extension RenderNode {
+    internal var id: String? {
+        contextValue(.id) as? String
+    }
+    internal var animator: Animator? {
+        contextValue(.animator) as? Animator
+    }
+    internal var reuseKey: String? {
+        contextValue(.reuseKey) as? String
+    }
+
     internal func _makeView() -> UIView {
         if let reuseKey {
             ReuseManager.shared.dequeue(identifier: reuseKey, makeView())
