@@ -16,7 +16,7 @@ public enum CacheScope {
 
     /// The item will be cached until the application is terminated. Or by manually
     /// calling `CachingItem.clearGlobalCacheData(for:)` or `CachingItem.clearGlobalCache()`.
-    case application
+    case global
 }
 
 /// A Component that caches data item.

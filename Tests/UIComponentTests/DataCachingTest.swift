@@ -116,7 +116,7 @@ struct DataCachingTest {
         var view: UIView! = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 500))
         var callCount = 0
         weak var holder: DataHolder<String>?
-        view.componentEngine.component = CachingItem(key: "1", scope: .application, itemGenerator: {
+        view.componentEngine.component = CachingItem(key: "1", scope: .global, itemGenerator: {
             callCount += 1
             let h = DataHolder(data: "1")
             holder = h
@@ -131,7 +131,7 @@ struct DataCachingTest {
         #expect(existingLabel?.text == "1")
         #expect(holder != nil)
 
-        view.componentEngine.component = CachingItem(key: "1", scope: .application, itemGenerator: {
+        view.componentEngine.component = CachingItem(key: "1", scope: .global, itemGenerator: {
             callCount += 1
             let h = DataHolder(data: "1")
             holder = h

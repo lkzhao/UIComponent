@@ -7,6 +7,7 @@ Version 5.0 introduces several significant changes to improve the API design of 
 The main changes in version 5.0 include:
 - [Simplified flex layout modifiers](#flex-layout-changes)
 - [Simplified view reuse system](#view-reuse-changes)
+- [CachingItem scope](#cachingitem-scope)
 - [Explicit lazy layout](#lazy-layout-changes)
 - [New context value system for RenderNode](#rendernode-context-value-system)
 
@@ -68,6 +69,27 @@ VStack {
 - if you previously used `.reuseStrategy(.key("somekey"))`, you need to change it to `.reuseKey("somekey")`
 - if you previously used `.reuseStrategy(.automatic)` or if you still wants cell reuse, consider adding a `.reuseKey` modifier with a custom key to maintain the cell reuse functionality.
 
+## CachingItem Scope
+
+Version 5.0 introduces a new `CacheScope` enum to provide more control over the lifetime of cached items. This allows you to specify how long an item should remain in the cache. Previously CachingItem had no `CacheScope` parameter and the `.hostingView` scope was used.
+
+```swift
+CachingItem(key: "myItem", scope: .component) { // Explicitly specify cache scope
+    // item generation
+} componentBuilder: { item in
+    // component building
+}
+```
+
+The available cache scopes are:
+- `.component`: The item will be cached until this component is no longer in the hosting view's component tree
+- `.hostingView`: The item will be cached until the hosting view is released
+- `.global`: The item will be cached until the application is terminated, or until manually cleared using `CachingItem.clearGlobalCache()` or `CachingItem.clearGlobalCacheData(for:)`
+
+### Changes Required
+- If you were previously using `CachingItem`, you should review your caching needs and choose the appropriate scope. Previouly the scope is `.hostingView`, now the default is `.component`.
+- For items that need to persist even when the component is no long in the component hierarchy, consider using `.hostingView` or `.global` scope.
+
 ## Lazy Layout Changes
 
 In version 5.0, fixed-sized items no longer automatically get lazy layout. Instead, you need to explicitly use the new `.lazy` modifier when you want to defer layout and rendering.
@@ -104,7 +126,7 @@ VStack {
 
 ### LazyComponent and Context Values
 
-Note that `LazyComponent` does not support passing context values. If you need to provide context values, you should do it outside of the `LazyComponent`:
+Note that `LazyComponent` does not support passing context values (id, animator, reuseKey, flex, etc...). If you need to provide context values, you should do it outside of the `LazyComponent`:
 
 ```swift
 // `id` modifier is not effective since the child is lazily initiated.
@@ -154,11 +176,5 @@ extension RenderNodeContextKey {
 let value = renderNode.contextValue(.myCustomKey) as? MyType
 ```
 
-## Additional Notes
-
-- The context value system provides better type safety and extensibility
-- Lazy layout is now more explicit, making it clearer when components are being deferred
-- Flex layout is more intuitive with automatic application to direct children
-- Consider using the new `.lazy` modifier for performance optimization in lists and complex layouts
-
-For more information about performance optimization with lazy layout, see the [Performance Optimization](PerformanceOptimization.md) guide.
+### Changes Required
+- If you have implemented custom RenderNode, and overriden `id`, `animator`, You will need to now provide it inside the `contextValue(_:)` method.

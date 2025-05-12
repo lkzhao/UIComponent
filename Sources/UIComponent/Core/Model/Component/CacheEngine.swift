@@ -14,7 +14,7 @@ struct CacheEngine {
             return loadTransientCachingData(id: id, generator: generator)
         case .hostingView:
             return loadCachingData(id: id, generator: generator)
-        case .application:
+        case .global:
             return loadGlobalCachingData(id: id, generator: generator)
         }
     }
