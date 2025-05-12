@@ -1,17 +1,18 @@
-# UIComponent Version 5.0 Migration Guide
+# UIComponent Version 5.0 Changes
 
-Version 5.0 introduces several significant changes to improve the API design and performance of UIComponent. This guide will help you migrate your existing code to version 5.0.
+Version 5.0 introduces several significant changes to improve the API design of UIComponent. Making it simpler and more predictable. This guide will help you migrate your existing code to version 5.0.
 
 ## Overview
 
 The main changes in version 5.0 include:
-- Simplified flex layout modifiers
-- Explicit lazy layout support
-- New context value system for RenderNode
+- [Simplified flex layout modifiers](#flex-layout-changes)
+- [Simplified view reuse system](#view-reuse-changes)
+- [Explicit lazy layout](#lazy-layout-changes)
+- [New context value system for RenderNode](#rendernode-context-value-system)
 
 ## Flex Layout Changes
 
-In version 5.0, the `.flex()` modifier no longer needs to be the outermost modifier. You can now apply other modifiers after `.flex()`, making the API more flexible and intuitive. Additionally, `.flex()` can now be used inside components that conform to the `ComponentBuilder` protocol, which wasn't possible before.
+In version 5.0, the `.flex()` modifier no longer needs to be the outermost modifier. You can now apply other modifiers after `.flex()`, making the API more flexible and intuitive. Additionally, `.flex()` can now be used inside `ComponentBuilder`, which wasn't possible before, and will fail silently.
 
 ```swift
 // Before version 5.0
@@ -38,6 +39,34 @@ VStack {
     MyComponent().flex()
 }
 ```
+
+## View Reuse Changes
+
+In version 5.0, the view reuse system has been simplified and made more explicit. Previously, UIComponent would automatically reuse views based on their types, with the ability to customize behavior using the `.reuseStrategy` modifier. Now, view reuse is controlled entirely through the `.reuseKey` modifier, making the behavior more predictable and deterministic.
+
+> The reason for this change is because modern iOS have optimized the UIView creation cost, and newer iPhones are plenty fast. Reusing cells are not gaining much performance back, but requires careful logic to manage the cell state when the cell is reused, making it easy to introduce settle bugs that are hard to reproduce.
+
+```swift
+// Before version 5.0
+VStack {
+    for item in items {
+        ItemComponent(item: item) // Maybe automatically reused based on type
+    }
+}
+
+// After version 5.0
+VStack {
+    for item in items {
+        ItemComponent(item: item)
+            .reuseKey("item-cell") // Explicitly specify reuse key
+    }
+}
+```
+
+### Changes required
+- if you previously used `.reuseStrategy(.noReuse)`, you can delete it as it is now the default behavior
+- if you previously used `.reuseStrategy(.key("somekey"))`, you need to change it to `.reuseKey("somekey")`
+- if you previously used `.reuseStrategy(.automatic)` or if you still wants cell reuse, consider adding a `.reuseKey` modifier with a custom key to maintain the cell reuse functionality.
 
 ## Lazy Layout Changes
 
@@ -71,6 +100,20 @@ VStack {
             }
     }
 }
+```
+
+### LazyComponent and Context Values
+
+Note that `LazyComponent` does not support passing context values. If you need to provide context values, you should do it outside of the `LazyComponent`:
+
+```swift
+// `id` modifier is not effective since the child is lazily initiated.
+MyComponent().id("myId").lazy(width: 50, height: 50)
+
+// Do this instead:
+MyComponent()
+    .lazy(width: 50, height: 50)
+    .id("myId")
 ```
 
 ## RenderNode Context Value System
@@ -109,20 +152,6 @@ extension RenderNodeContextKey {
 
 // Using the custom context value
 let value = renderNode.contextValue(.myCustomKey) as? MyType
-```
-
-### LazyComponent and Context Values
-
-Note that `LazyComponent` does not support passing context values. If you need to provide context values, you should do it outside of the `LazyComponent`:
-
-```swift
-// `id` modifier is not effective since the child is lazily initiated.
-MyComponent().id("myId").lazy(width: 50, height: 50)
-
-// Do this instead:
-MyComponent()
-    .lazy(width: 50, height: 50)
-    .id("myId")
 ```
 
 ## Additional Notes
