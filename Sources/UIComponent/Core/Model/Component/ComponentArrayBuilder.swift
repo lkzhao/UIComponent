@@ -1,6 +1,7 @@
 //  Created by Luke Zhao on 8/22/20.
 
 import Foundation
+import SwiftUI
 
 /// A result builder that constructs an array of components.
 /// This builder is used to support the UIComponent USL.
@@ -8,6 +9,9 @@ import Foundation
 public struct ComponentArrayBuilder {
     public static func buildExpression(_ expression: ComponentArrayContainer) -> [any Component] {
         expression.components
+    }
+    public static func buildExpression<T: SwiftUI.View>(_ expression: T) -> [any Component] {
+        [SwiftUIComponent(expression)]
     }
     public static func buildExpression(_ expression: any Component) -> [any Component] {
         [expression]
