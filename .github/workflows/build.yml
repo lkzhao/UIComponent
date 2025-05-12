@@ -17,5 +17,5 @@ jobs:
         with:
           spm-package: './'
           scheme: UIComponent
-          destination: platform=iOS
+          destination: platform=iOS Simulator
           action: test
