@@ -42,6 +42,7 @@ class SwiftUIHostingView: UIView {
                     hostingController.rootView = swiftUIView
                 } else {
                     hostingController = UIHostingController(rootView: swiftUIView)
+                    hostingController?.view.backgroundColor = .clear
                     addHostingVCToViewIfPossible()
                 }
             } else {
