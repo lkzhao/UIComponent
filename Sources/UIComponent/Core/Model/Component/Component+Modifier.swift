@@ -9,16 +9,16 @@ public typealias UpdateComponent<Content: Component> = ModifierComponent<Content
 public typealias KeyPathUpdateComponent<Content: Component, Value> = ModifierComponent<Content, KeyPathUpdateRenderNode<Value, Content.R>>
 
 /// A component produced by the ``Component/id(_:)`` modifier
-public typealias IDComponent<Content: Component> = ModifierComponent<Content, IDRenderNode<Content.R>>
+public typealias IDComponent<Content: Component> = ModifierComponent<Content, ContextOverrideRenderNode<Content.R>>
 
 /// A component produced by the ``Component/animator(_:)`` modifier
-public typealias AnimatorComponent<Content: Component> = ModifierComponent<Content, AnimatorRenderNode<Content.R>>
+public typealias AnimatorComponent<Content: Component> = ModifierComponent<Content, ContextOverrideRenderNode<Content.R>>
 
 /// A component produced by ``Component/animateInsert(_:)``, ``Component/animateUpdate(passthrough:_:)``, & ``Component/animateUpdate(passthrough:_:)``  modifiers
 public typealias AnimatorWrapperComponent<Content: Component> = ModifierComponent<Content, AnimatorWrapperRenderNode<Content.R>>
 
-/// A component produced by the ``Component/reuseStrategy(_:)`` modifier
-public typealias ReuseStrategyComponent<Content: Component> = ModifierComponent<Content, ReuseStrategyRenderNode<Content.R>>
+/// A component produced by the ``Component/reuseKey(_:)`` modifier
+public typealias ReuseKeyComponent<Content: Component> = ModifierComponent<Content, ContextOverrideRenderNode<Content.R>>
 
 extension Component {
     /// Provides a closure that acts as a modifier that can be used to modify a view property. This is used to support @dynamicMemberLookup, it should not be used directly.
@@ -69,12 +69,12 @@ extension Component {
         }
     }
 
-    /// Sets the reuse strategy for the component.
-    /// - Parameter reuseStrategy: A `ReuseStrategy` value that determines how the component should handle reuse.
-    /// - Returns: A `ReuseStrategyComponent` that represents the modified component with a specified reuse strategy.
-    public func reuseStrategy(_ reuseStrategy: ReuseStrategy) -> ReuseStrategyComponent<Self> {
+    /// Sets the reuse key for the component.
+    /// - Parameter reuseKey: A String key value for reusing the view for the component.
+    /// - Returns: A `ReuseKeyComponent` that represents the modified component with a specified reuse strategy.
+    public func reuseKey(_ reuseKey: String) -> ReuseKeyComponent<Self> {
         ModifierComponent(content: self) {
-            $0.reuseStrategy(reuseStrategy)
+            $0.reuseKey(reuseKey)
         }
     }
 
@@ -122,7 +122,7 @@ extension Component {
     public func size(_ size: CGSize) -> ConstraintOverrideComponent<Self> {
         ConstraintOverrideComponent(content: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(size.width), height: .absolute(size.height)))
     }
-    
+
     /// Sets an absolute size for the component based on the constraint.
     /// - Parameter sizeProvider: A closure that takes a `Constraint` and returns a size.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden size.
@@ -132,7 +132,7 @@ extension Component {
             return Constraint(tightSize: size)
         }))
     }
-    
+
     /// Sets an absolute size for the component based on the max size constraint.
     /// - Parameter sizeProvider: A closure that takes a max size and returns a modified size.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden size.
@@ -214,6 +214,29 @@ extension Component {
     /// - Returns: A `ConstraintOverrideComponent` that represents the component with `.fill` size strategy applied.
     public func fill() -> ConstraintOverrideComponent<Self> {
         size(width: .fill, height: .fill)
+    }
+
+    /// Makes the component lazy with a fixed size, deferring its internal layout and rendering until needed.
+    /// - Parameter size: The fixed size to use for the lazy component.
+    /// - Returns: A `LazyComponent` that wraps the current component with the specified fixed size.
+    public func lazy(size: CGSize) -> LazyComponent<Self> {
+        LazyComponent(component: self, size: size)
+    }
+
+    /// Makes the component lazy with specified dimensions, deferring its internal layout and rendering until needed.
+    /// - Parameters:
+    ///   - width: The width to use for the lazy component.
+    ///   - height: The height to use for the lazy component.
+    /// - Returns: A `LazyComponent` that wraps the current component with the specified dimensions.
+    public func lazy(width: CGFloat, height: CGFloat) -> LazyComponent<Self> {
+        lazy(size: CGSize(width: width, height: height))
+    }
+
+    /// Makes the component lazy with a custom size provider, deferring its internal layout and rendering until needed.
+    /// - Parameter sizeProvider: A closure that determines the size based on the given constraint.
+    /// - Returns: A `LazyComponent` that wraps the current component using the provided size calculation.
+    public func lazy(sizeProvider: @escaping (Constraint) -> CGSize) -> LazyComponent<Self> {
+        LazyComponent(component: self, sizeProvider: sizeProvider)
     }
 
     /// Centers the component within the parent's boundary
@@ -336,14 +359,18 @@ extension Component {
 
     // MARK: - Flex modifiers
 
-    /// Applies flexible layout properties to the component. 
+    /// Applies flexible layout properties to the component.
     /// This is used in conjunction with a flex container (FlexRow, FlexColumn, HStack, VStack).
     /// - Parameters:
     ///   - flex: The flex factor to be applied. Defaults to 1.
     ///   - alignSelf: The alignment of this component within a flex container. Defaults to nil.
-    /// - Returns: A `Flexible` component that wraps the current component with the specified layout properties.
-    public func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> Flexible<Self> {
-        Flexible(flexGrow: flex, flexShrink: flex, alignSelf: alignSelf, content: self)
+    /// - Returns: A `ContextOverrideComponent` that wraps the current component with the specified layout properties.
+    public func flex(_ flex: CGFloat = 1, alignSelf: CrossAxisAlignment? = nil) -> ContextOverrideComponent<Self> {
+        var overrideContext = [RenderNodeContextKey: Any]()
+        overrideContext[.flexGrow] = flex
+        overrideContext[.flexShrink] = flex
+        overrideContext[.alignSelf] = alignSelf
+        return ContextOverrideComponent(content: self, overrideContext: overrideContext)
     }
 
     /// Applies flexible layout properties to the component with specified grow and shrink factors.
@@ -352,9 +379,46 @@ extension Component {
     ///   - flexGrow: The flex grow factor.
     ///   - flexShrink: The flex shrink factor.
     ///   - alignSelf: The alignment of this component within a flex container. Defaults to nil.
-    /// - Returns: A `Flexible` component that wraps the current component with the specified layout properties.
-    public func flex(flexGrow: CGFloat, flexShrink: CGFloat, alignSelf: CrossAxisAlignment? = nil) -> Flexible<Self> {
-        Flexible(flexGrow: flexGrow, flexShrink: flexShrink, alignSelf: alignSelf, content: self)
+    /// - Returns: A `ContextOverrideComponent` that wraps the current component with the specified layout properties.
+    public func flex(flexGrow: CGFloat, flexShrink: CGFloat, alignSelf: CrossAxisAlignment? = nil) -> ContextOverrideComponent<Self> {
+        var overrideContext = [RenderNodeContextKey: Any]()
+        overrideContext[.flexGrow] = flexGrow
+        overrideContext[.flexShrink] = flexShrink
+        overrideContext[.alignSelf] = alignSelf
+        return ContextOverrideComponent(content: self, overrideContext: overrideContext)
+    }
+
+    /// Applies flexible layout properties to the component with specified grow factors.
+    /// This is used in conjunction with a flex container (FlexRow, FlexColumn, HStack, VStack).
+    /// - Parameters:
+    ///  - flexGrow: The flex grow factor.
+    /// - Returns: A `ContextOverrideComponent` that wraps the current component with the specified layout properties.
+    public func flexGrow(_ flexGrow: CGFloat) -> ContextOverrideComponent<Self> {
+        var overrideContext = [RenderNodeContextKey: Any]()
+        overrideContext[.flexGrow] = flexGrow
+        return ContextOverrideComponent(content: self, overrideContext: overrideContext)
+    }
+
+    /// Applies flexible layout properties to the component with specified shrink factors.
+    /// This is used in conjunction with a flex container (FlexRow, FlexColumn, HStack, VStack).
+    /// - Parameters:
+    ///  - flexShrink: The flex shrink factor.
+    ///  - Returns: A `ContextOverrideComponent` that wraps the current component with the specified layout properties.
+    public func flexShrink(_ flexShrink: CGFloat) -> ContextOverrideComponent<Self> {
+        var overrideContext = [RenderNodeContextKey: Any]()
+        overrideContext[.flexShrink] = flexShrink
+        return ContextOverrideComponent(content: self, overrideContext: overrideContext)
+    }
+
+    /// Applies flexible layout properties to the component with specified alignment.
+    /// This is used in conjunction with a flex container (FlexRow, FlexColumn, HStack, VStack).
+    /// - Parameters:
+    ///  - alignSelf: The alignment of this component within a flex container.
+    ///  - Returns: A `ContextOverrideComponent` that wraps the current component with the specified layout properties.
+    public func alignSelf(_ alignSelf: CrossAxisAlignment) -> ContextOverrideComponent<Self> {
+        var overrideContext = [RenderNodeContextKey: Any]()
+        overrideContext[.alignSelf] = alignSelf
+        return ContextOverrideComponent(content: self, overrideContext: overrideContext)
     }
 
     // MARK: - Inset modifiers

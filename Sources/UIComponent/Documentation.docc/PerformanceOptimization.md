@@ -10,24 +10,15 @@ UIComponent provides great performance out of the box, especially when rendering
 ### Layout
 One of the biggest performance bottlenecks is layout. If you have a complex layout, it can take a long time to calculate before the Component renders. Here are some tips to improve the layout performance.
 
-#### Use fixed size whenever possible
+#### Use Lazy Layout for Deferred Rendering
 
-When rendering large amount of cells, try to assign a fixed size to each cell. This way UIComponent doesn't need to run layout calculation for each cell while laying out the entire list.
+In version 5.0, UIComponent introduces explicit lazy layout support through the `.lazy` modifier. This allows you to defer the layout and rendering of components until they are actually needed, which can significantly improve performance for complex layouts.
 
-The following example is slow because UIComponent will need to run layout for all of the child components in order to get a size for each before it can display any cell.
-```swift
-VStack {
-    for item in items {
-        VStack {
-            Image(item.image)
-            Text(item.title)
-            Text(item.subtitle)
-        }
-    }
-}
-```
+To use lazy layout, you need to:
+1. Know the size of your component in advance
+2. Apply the `.lazy` modifier with the appropriate size
 
-A more performant way is to assign a fixed size to each child. This allows UIComponent to skip layout of the content until the content is scrolled on screen.
+Here's how to use it:
 
 ```swift
 VStack {
@@ -36,27 +27,26 @@ VStack {
             Image(item.image)
             Text(item.title)
             Text(item.subtitle)
-        }.size(width: .fill, height: 50) // fixed height. 
+        }.lazy(width: .fill, height: 50) // Defer layout until needed
     }
 }
 ```
 
-> Except for the ``SizeStrategy/fit``, all other size strategy including ``SizeStrategy/fill``, ``SizeStrategy/absolute(_:)``, ``SizeStrategy/percentage(_:)``, ``SizeStrategy/aspectPercentage(_:)`` all supports this lazy layout optimization.
-
-#### Manually calculate the size
-You can also provide a simple size block to calculate the size of each cell instead of relying on UIComponent to calculate for you. Keep in mind that the calculation should be kept simple, otherwise there is no benefit on doing manual size calculation.
+You can also provide a custom size provider if the size needs to be calculated dynamically:
 
 ```swift
 VStack {
     for item in items {
         VStack {
-            // Some complex content
-        }.size { constraint in
+            // Some content
+        }.lazy(sizeProvider: { constraint in
             CGSize(width: constraint.maxWidth, height: 50 + item.isTall ? 50 : 0)
-        }
+        })
     }
 }
 ```
+
+> Note: The `.lazy` modifier is particularly useful for components with complex layouts that are not immediately visible on screen. It defers both the layout calculation and view creation until the component is about to become visible.
 
 > Tip: One other way to optimize a complex layout for each cell is to write a size cache. So each cell's size is only calculated once. Therefore making reload much faster.
 **Specific implementation is not provided.**

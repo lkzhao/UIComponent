@@ -46,27 +46,6 @@ private class CardView: UIView {
     }
 }
 
-private struct CardComponent: Component {
-    let data: CardData
-    let onTap: () -> Void
-    func layout(_ constraint: Constraint) -> CardRenderNode {
-        CardRenderNode(data: data, onTap: onTap, size: CGSize(width: constraint.maxSize.width, height: 80))
-    }
-}
-
-private struct CardRenderNode: RenderNode {
-    let data: CardData
-    let onTap: () -> Void
-    var id: String? {
-        data.id
-    }
-    let size: CGSize
-    func updateView(_ view: CardView) {
-        view.data = data
-        view.onTap = onTap
-    }
-}
-
 class CardViewController: ComponentViewController {
     var newCardIndex = CardData.testCards.count + 1
     var cards: [CardData] = CardData.testCards {
@@ -82,9 +61,9 @@ class CardViewController: ComponentViewController {
 
     override var component: any Component {
         VStack(spacing: 8) {
-            for (index, card) in cards.enumerated() {
-                CardComponent(data: card) { [unowned self] in
-                    print("Tapped \(card.title)")
+            for (index, cardData) in cards.enumerated() {
+                ViewComponent<CardView>().data(cardData).size(width: .fill, height: 80).tappableView { [unowned self] in
+                    print("Tapped \(cardData.title)")
                     self.cards.remove(at: index)
                 }
             }

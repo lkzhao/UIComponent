@@ -16,17 +16,8 @@ public struct AnyRenderNode: RenderNode {
 
     // MARK: - RenderNode methods
 
-    public var id: String? {
-        erasing.id
-    }
-    public var animator: Animator? {
-        erasing.animator
-    }
-    public var reuseStrategy: ReuseStrategy {
-        erasing.reuseStrategy
-    }
-    public var defaultReuseKey: String {
-        "AnyRenderNode<\(erasing.defaultReuseKey)>"
+    public var structureTypeId: String {
+        "AnyRenderNode<\(erasing.structureTypeId)>"
     }
     public var size: CGSize {
         erasing.size
@@ -52,6 +43,9 @@ public struct AnyRenderNode: RenderNode {
     public func makeView() -> UIView {
         erasing.makeView()
     }
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        erasing.contextValue(key)
+    }
 }
 
 /// A type-erased wrapper for any `RenderNode` specialized for a specific `UIView` subclass.
@@ -68,17 +62,8 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
 
     // MARK: - RenderNode methods
 
-    public var id: String? {
-        erasing.id
-    }
-    public var animator: Animator? {
-        erasing.animator
-    }
-    public var reuseStrategy: ReuseStrategy {
-        erasing.reuseStrategy
-    }
-    public var defaultReuseKey: String {
-        "AnyRenderNodeOfView<\(erasing.defaultReuseKey)>"
+    public var structureTypeId: String {
+        "AnyRenderNodeOfView<\(erasing.structureTypeId)>"
     }
     public var size: CGSize {
         erasing.size
@@ -103,5 +88,8 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
     }
     public func makeView() -> View {
         erasing.makeView() as! View
+    }
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        erasing.contextValue(key)
     }
 }

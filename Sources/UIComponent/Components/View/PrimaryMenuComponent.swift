@@ -63,17 +63,16 @@ public struct PrimaryMenuRenderNode: RenderNode {
     /// The configuration for the tappable view.
     public let config: PrimaryMenuConfig?
 
-    /// The identifier for the render node, if it has one.
-    public var id: String? {
-        content.id
-    }
-
     /// Updates the given `PrimaryMenu` with the current configuration and tap handler.
     /// - Parameter view: The `PrimaryMenu` to update.
     public func updateView(_ view: PrimaryMenu) {
         view.config = config
         view.menuBuilder = menuBuilder
         view.componentEngine.reloadWithExisting(component: component, renderNode: content)
+    }
+
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        content.contextValue(key)
     }
 }
 

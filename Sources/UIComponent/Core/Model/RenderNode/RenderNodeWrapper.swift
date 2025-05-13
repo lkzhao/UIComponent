@@ -15,14 +15,8 @@ public protocol RenderNodeWrapper<Content>: RenderNode {
 }
 
 extension RenderNodeWrapper {
-    public var id: String? {
-        content.id
-    }
-    public var animator: Animator? {
-        content.animator
-    }
-    public var reuseStrategy: ReuseStrategy {
-        content.reuseStrategy
+    public var shouldRenderView: Bool {
+        content.shouldRenderView
     }
     public var size: CGSize {
         content.size
@@ -32,9 +26,6 @@ extension RenderNodeWrapper {
     }
     public var children: [any RenderNode] {
         content.children
-    }
-    public var shouldRenderView: Bool {
-        content.shouldRenderView
     }
     public func visibleChildren(in frame: CGRect) -> [RenderNodeChild] {
         content.visibleChildren(in: frame)
@@ -47,5 +38,8 @@ extension RenderNodeWrapper {
     }
     public func makeView() -> Content.View {
         content.makeView()
+    }
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        content.contextValue(key)
     }
 }

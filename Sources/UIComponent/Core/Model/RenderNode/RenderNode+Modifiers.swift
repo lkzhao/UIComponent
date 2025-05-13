@@ -7,12 +7,6 @@ public struct UpdateRenderNode<Content: RenderNode>: RenderNodeWrapper {
     public let content: Content
     public let update: (Content.View) -> Void
 
-    public var reuseStrategy: ReuseStrategy {
-        // we don't know what the update block did, so we disable
-        // reuse so that we don't get inconsistent state
-        content.reuseStrategy == .automatic ? .noReuse : content.reuseStrategy
-    }
-
     public var shouldRenderView: Bool {
         true // UIView has custom property. So we should render it.
     }
@@ -39,24 +33,6 @@ public struct KeyPathUpdateRenderNode<Value, Content: RenderNode>: RenderNodeWra
     }
 }
 
-/// A render node that overrides an identifier to the content.
-public struct IDRenderNode<Content: RenderNode>: RenderNodeWrapper {
-    public let content: Content
-    public let id: String?
-}
-
-/// A render node that overrides the animator of the content.
-public struct AnimatorRenderNode<Content: RenderNode>: RenderNodeWrapper {
-    public let content: Content
-    public let animator: Animator?
-}
-
-/// A render node that overrides the reuse strategy of the content.
-public struct ReuseStrategyRenderNode<Content: RenderNode>: RenderNodeWrapper {
-    public let content: Content
-    public let reuseStrategy: ReuseStrategy
-}
-
 extension RenderNode {
     /// Accesses a dynamic member using a key path to the view's properties.
     /// - Parameter keyPath: A key path to a specific property of the view.
@@ -76,23 +52,23 @@ extension RenderNode {
     
     /// Creates a render node that overrides the identifier of the content.
     /// - Parameter id: An optional identifier to be set for the content.
-    /// - Returns: An `IDRenderNode` with the overridden identifier.
-    public func id(_ id: String?) -> IDRenderNode<Self> {
-        IDRenderNode(content: self, id: id)
+    /// - Returns: An `ContextOverrideRenderNode` with the overridden identifier.
+    public func id(_ id: String?) -> ContextOverrideRenderNode<Self> {
+        ContextOverrideRenderNode(content: self, overrideContext: [.id: id as Any])
     }
     
     /// Creates a render node that overrides the animator of the content.
     /// - Parameter animator: An optional animator to be set for the content.
-    /// - Returns: An `AnimatorRenderNode` with the overridden animator.
-    public func animator(_ animator: Animator?) -> AnimatorRenderNode<Self> {
-        AnimatorRenderNode(content: self, animator: animator)
+    /// - Returns: An `ContextOverrideRenderNode` with the overridden animator.
+    public func animator(_ animator: Animator?) -> ContextOverrideRenderNode<Self> {
+        ContextOverrideRenderNode(content: self, overrideContext: [.animator: animator as Any])
     }
     
-    /// Creates a render node that overrides the reuse strategy of the content.
-    /// - Parameter reuseStrategy: The reuse strategy to be set for the content.
-    /// - Returns: A `ReuseStrategyRenderNode` with the overridden reuse strategy.
-    public func reuseStrategy(_ reuseStrategy: ReuseStrategy) -> ReuseStrategyRenderNode<Self> {
-        ReuseStrategyRenderNode(content: self, reuseStrategy: reuseStrategy)
+    /// Creates a render node that overrides the reuse key of the content.
+    /// - Parameter reuseKey: The String key to be set for the content.
+    /// - Returns: A `ContextOverrideRenderNode` with the overridden reuse strategy.
+    public func reuseKey(_ reuseKey: String?) -> ContextOverrideRenderNode<Self> {
+        ContextOverrideRenderNode(content: self, overrideContext: [.reuseKey: reuseKey as Any])
     }
     
     /// Creates a render node that applies a custom update to the view.
@@ -110,14 +86,18 @@ public struct AnimatorWrapperRenderNode<Content: RenderNode>: RenderNodeWrapper 
     var insertBlock: ((UIView, UIView, CGRect) -> Void)?
     var updateBlock: ((UIView, UIView, CGRect) -> Void)?
     var deleteBlock: ((UIView, UIView, @escaping () -> Void) -> Void)?
-    public var animator: Animator? {
-        var wrapper = WrapperAnimator()
-        wrapper.content = content.animator
-        wrapper.passthroughUpdate = passthroughUpdate
-        wrapper.insertBlock = insertBlock
-        wrapper.deleteBlock = deleteBlock
-        wrapper.updateBlock = updateBlock
-        return wrapper
+
+    public func contextValue(_ key: RenderNodeContextKey) -> Any? {
+        if key == .animator {
+            var wrapper = WrapperAnimator()
+            wrapper.content = content.animator
+            wrapper.passthroughUpdate = passthroughUpdate
+            wrapper.insertBlock = insertBlock
+            wrapper.deleteBlock = deleteBlock
+            wrapper.updateBlock = updateBlock
+            return wrapper
+        }
+        return nil
     }
 }
 

@@ -46,9 +46,9 @@ extension Stack {
 
         var primaryOffset = offset
         var positions: [CGPoint] = []
-        for (index, child) in renderNodes.enumerated() {
+        for child in renderNodes {
             var crossValue: CGFloat = 0
-            let alignChild = (children[index] as? AnyFlexible)?.alignSelf ?? alignItems
+            let alignChild = child.alignSelf ?? alignItems
             switch alignChild {
             case .start:
                 crossValue = 0
@@ -84,12 +84,28 @@ extension Stack {
             minSize: size(main: -.infinity, cross: crossMinConstraint),
             maxSize: size(main: .infinity, cross: crossMaxConstraint)
         )
+
+        var stretchedItems: Set<Int> = []
+        var flexGrowPerItem: [Int: CGFloat] = [:]
+        var flexShrinkPerItem: [Int: CGFloat] = [:]
+        var updatedConstraint: [Int: Constraint] = [:]
         for child in children {
-            if let flexChild = child as? AnyFlexible {
-                flexGrow += flexChild.flexGrow
-                flexShrink += flexChild.flexShrink
-            }
             let childRenderNode = child.layout(childConstraint)
+            let childGrow = childRenderNode.flexGrow
+            let childShrink = childRenderNode.flexShrink
+
+            flexGrow += childGrow
+            flexShrink += childShrink
+            if childGrow > 0 {
+                flexGrowPerItem[renderNodes.count] = childGrow
+            }
+            if childShrink > 0 {
+                flexShrinkPerItem[renderNodes.count] = childShrink
+            }
+            if alignItems != .stretch, childRenderNode.alignSelf == .stretch {
+                stretchedItems.insert(renderNodes.count)
+            }
+
             let mainIntrinsic = main(childRenderNode.size)
             mainFreezed += mainIntrinsic.isFinite ? mainIntrinsic : 0
             renderNodes.append(childRenderNode)
@@ -98,36 +114,45 @@ extension Stack {
         let mainMax = main(constraint.maxSize)
         if flexGrow > 0, mainFreezed < mainMax {
             let mainPerFlex = mainMax == .infinity ? 0 : max(0, mainMax - mainFreezed) / flexGrow
-            for (index, child) in children.enumerated() {
-                if let flexChild = child as? AnyFlexible, flexChild.flexGrow > 0 {
-                    let alignChild = flexChild.alignSelf ?? alignItems
-                    let childCrossMinConstraint = alignChild == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0
-                    let addition = mainPerFlex * flexChild.flexGrow
-                    let mainIntrinsic = main(renderNodes[index].size)
-                    let mainReserved = addition + (mainIntrinsic.isFinite ? mainIntrinsic : 0)
-                    let constraint = Constraint(
-                        minSize: size(main: mainReserved, cross: childCrossMinConstraint),
-                        maxSize: size(main: mainReserved, cross: crossMaxConstraint)
-                    )
-                    renderNodes[index] = child.layout(constraint)
-                    mainFreezed += addition
-                }
+            for (index, grow) in flexGrowPerItem {
+                let childCrossMinConstraint = stretchedItems.contains(index) && crossMaxConstraint != .infinity ? crossMaxConstraint : crossMinConstraint
+                let addition = mainPerFlex * grow
+                let mainIntrinsic = main(renderNodes[index].size)
+                let mainReserved = addition + (mainIntrinsic.isFinite ? mainIntrinsic : 0)
+                let constraint = Constraint(
+                    minSize: size(main: mainReserved, cross: childCrossMinConstraint),
+                    maxSize: size(main: mainReserved, cross: crossMaxConstraint)
+                )
+                updatedConstraint[index] = constraint
+                stretchedItems.remove(index)
             }
-        } else if flexShrink > 0, mainFreezed > mainMax {
+        }
+        if flexShrink > 0, mainFreezed > mainMax {
             let mainPerFlex = mainMax == .infinity ? 0 : min(0, mainMax - mainFreezed) / flexShrink
-            for (index, child) in children.enumerated() {
-                if let flexChild = child as? AnyFlexible, flexChild.flexShrink > 0 {
-                    let alignChild = flexChild.alignSelf ?? alignItems
-                    let childCrossMinConstraint = alignChild == .stretch && crossMaxConstraint != .infinity ? crossMaxConstraint : 0
-                    let mainReserved = mainPerFlex * flexChild.flexShrink + main(renderNodes[index].size)
-                    let constraint = Constraint(
-                        minSize: size(main: mainReserved, cross: childCrossMinConstraint),
-                        maxSize: size(main: mainReserved, cross: crossMaxConstraint)
-                    )
-                    renderNodes[index] = child.layout(constraint)
-                    mainFreezed += mainReserved
-                }
+            for (index, shrink) in flexShrinkPerItem {
+                let childCrossMinConstraint = stretchedItems.contains(index) && crossMaxConstraint != .infinity ? crossMaxConstraint : crossMinConstraint
+                let mainReserved = mainPerFlex * shrink + main(renderNodes[index].size)
+                let constraint = Constraint(
+                    minSize: size(main: mainReserved, cross: childCrossMinConstraint),
+                    maxSize: size(main: mainReserved, cross: crossMaxConstraint)
+                )
+                updatedConstraint[index] = constraint
+                stretchedItems.remove(index)
             }
+        }
+        if !stretchedItems.isEmpty {
+            let stretchedConstraint = Constraint(
+                minSize: size(main: -.infinity, cross: crossMaxConstraint != .infinity ? crossMaxConstraint : 0),
+                maxSize: size(main: .infinity, cross: crossMaxConstraint)
+            )
+            for index in stretchedItems {
+                updatedConstraint[index] = stretchedConstraint
+            }
+        }
+
+        for (index, constraint) in updatedConstraint {
+            let childRenderNode = children[index].layout(constraint)
+            renderNodes[index] = childRenderNode
         }
 
         return renderNodes

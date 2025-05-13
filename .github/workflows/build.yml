@@ -11,13 +11,11 @@ jobs:
     runs-on: macos-15
 
     steps:
-      - name: List Xcode installations
-        run: sudo ls -1 /Applications | grep "Xcode"
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Build and Test
-        run: |
-          device=`xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}' | sed -e "s/ Simulator$//"`
-          xcodebuild test -scheme UIComponent -destination "platform=iOS Simulator,name=$device"
+      - uses: sersoft-gmbh/xcodebuild-action@v3
+        with:
+          spm-package: .
+          scheme: UIComponent
+          destination: 'platform=iOS Simulator,name=iPhone 16'
+          action: test
