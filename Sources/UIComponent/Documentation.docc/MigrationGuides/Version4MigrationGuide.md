@@ -1,4 +1,4 @@
-# UIComponent Version 4.0 Migration Guide
+# UIComponent Version 4.0 Changes
 
 With version 4.0, UIComponent supports displaying `Component` on any `UIView`, not just `ComponentView` and `ComponentScrollView`.
 

@@ -1,4 +1,4 @@
-# UIComponent Version 2.0 Migration Guide
+# UIComponent Version 2.0 Changes
 
 With version 2.0, UIComponent doesn't distinquish between V1's `ViewComponent` and `Component` anymore.
 All Component can now render a view.

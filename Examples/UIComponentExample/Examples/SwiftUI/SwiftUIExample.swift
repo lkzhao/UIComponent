@@ -38,6 +38,6 @@ struct MyGradient: View {
             .red, .purple, .indigo,
             .orange, .white, .blue,
             .yellow, .green, .mint
-        ])
+        ]).clipShape(RoundedRectangle(cornerRadius: 12)).blur(radius: 20)
     }
 }
