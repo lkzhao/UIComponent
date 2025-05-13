@@ -5,11 +5,83 @@ Version 5.0 introduces several significant changes to improve the API design of 
 ## Overview
 
 The main changes in version 5.0 include:
+- [SwiftUI support](#swiftui-support)
 - [Simplified flex layout modifiers](#flex-layout-changes)
 - [Simplified view reuse system](#view-reuse-changes)
 - [CachingItem scope](#cachingitem-scope)
 - [Explicit lazy layout](#lazy-layout-changes)
 - [New context value system for RenderNode](#rendernode-context-value-system)
+
+## SwiftUI Support
+
+Version 5.0 introduces first-class support for SwiftUI views through the new `SwiftUIComponent`. This allows you to seamlessly integrate SwiftUI views into your UIComponent hierarchy.
+
+### Using SwiftUI Views
+
+You can wrap any SwiftUI view using `SwiftUIComponent`:
+
+```swift
+// Create SwiftUIComponent using a SwiftUI View
+SwiftUIComponent(Text("Hello World!"))
+
+// You can also create SwiftUIComponent using the ViewBuilder syntax
+SwiftUIComponent {
+    SwiftUI.Text("Hello World!")
+}
+
+// Using a custom SwiftUI view
+SwiftUIComponent(MyCustomView())
+
+// Using SwiftUI modifiers
+SwiftUIComponent {
+    SwiftUI.Text("Hello")
+        .font(.title)
+        .foregroundColor(.blue)
+}
+
+// Using UIComponent modifiers
+SwiftUIComponent {
+    SwiftUI.Text("Hello")
+}.backgroundColor(.black)
+```
+
+### Size Control
+
+You can control the size of SwiftUI components using the standard UIComponent size modifiers:
+
+```swift
+SwiftUIComponent(MyGradient())
+    .size(width: .fill, height: 200)
+```
+
+### Integration with UIComponent
+
+SwiftUI Views can be used directly as a component inside UIComponent hierarchy similar to UIViews. It can be mixed with other components.
+
+```swift
+// UIComponent VStack
+VStack {
+    // UIComponent Text
+    Text("SwiftUI", font: .boldSystemFont(ofSize: 20))
+    
+    // SwiftUI Text
+    SwiftUI.Text("Hello World!").foregroundColor(.red)
+    
+    // Regular UIComponent views
+    Image("icon")
+
+    // SwiftUI VStack
+    SwiftUI.VStack {
+        Text("Hello")
+        Text("World")
+    }
+
+    // To apply a UIComponent modifier, you will have to wrap it inside a SwiftUIComponent
+    SwiftUIComponent {
+        Text("Hello")
+    }.backgroundColor(.black)
+}
+```
 
 ## Flex Layout Changes
 
