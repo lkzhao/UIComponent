@@ -113,6 +113,13 @@ class FlexLayoutViewController: ComponentViewController {
                     Box(3)
                 }
                 .inset(10).styleColor(.systemGroupedBackground)
+                Text("single flex with spacing").size(width: .fill)
+                Flow(spacing: 20) {
+                    Box(1)
+                    Box(2).flex()
+                    Box(3)
+                }
+                .inset(10).styleColor(.systemGroupedBackground)
                 Text("2 flex").size(width: .fill)
                 Flow {
                     Box(1)
