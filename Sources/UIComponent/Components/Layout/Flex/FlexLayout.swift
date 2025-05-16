@@ -111,12 +111,16 @@ extension FlexLayout {
         let mainMax = main(constraint.maxSize)
         let crossMax = cross(constraint.maxSize)
 
-        // Create a new constraint for children with infinite main size and maximum cross size.
-        let childConstraint = Constraint(maxSize: size(main: .infinity, cross: crossMax))
+        let childBaseConstraint = Constraint()
+        let childConstraintWithMaxCross = Constraint(maxSize: size(main: .infinity, cross: crossMax))
 
         // Layout all children with the new constraint and collect their render nodes.
         var renderNodes: [any RenderNode] = children.map {
-            $0.layout(childConstraint)
+            let node = $0.layout(childBaseConstraint)
+            if cross(node.size) > crossMax {
+                return $0.layout(childConstraintWithMaxCross)
+            }
+            return node
         }
 
         // Initialize an array to store the position of each child.
