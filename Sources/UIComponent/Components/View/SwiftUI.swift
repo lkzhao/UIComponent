@@ -62,7 +62,7 @@ class SwiftUIHostingView: UIView {
         hostingController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         parentViewController.addChild(hostingController)
         addSubview(hostingController.view)
-        hostingController.didMove(toParent: nil)
+        hostingController.didMove(toParent: parentViewController)
     }
 
     override func layoutSubviews() {
