@@ -34,4 +34,11 @@ struct SizingTest {
         #expect(base.size(width: .fill).layout(Constraint(maxSize: CGSize(width: 200.0, height: .infinity))).size == CGSize(width: 200, height: 200))
         #expect(base.size(width: .fill).layout(Constraint(maxSize: CGSize(width: 50.0, height: .infinity))).size == CGSize(width: 50, height: 50))
     }
+
+    @Test func testFlexShrinkSizing() throws {
+        let component = HStack {
+            Text("This is a long text that test flex shrink sizing").flexShrink(1)
+        }
+        #expect(component.layout(Constraint(maxSize: CGSize(width: 100.0, height: .infinity))).size.width < 100)
+    }
 }

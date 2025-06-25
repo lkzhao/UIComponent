@@ -42,6 +42,9 @@ class SwiftUIHostingView: UIView {
                     hostingController.rootView = swiftUIView
                 } else {
                     hostingController = UIHostingController(rootView: swiftUIView)
+                    if #available(iOS 16.0, *) {
+                        hostingController?.sizingOptions = .intrinsicContentSize
+                    }
                     hostingController?.view.backgroundColor = .clear
                     addHostingVCToViewIfPossible()
                 }
@@ -59,7 +62,8 @@ class SwiftUIHostingView: UIView {
     func addHostingVCToViewIfPossible() {
         guard let parentViewController, let hostingController, hostingController.parent != parentViewController else { return }
         hostingController.view.frame = bounds
-        hostingController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        hostingController.view.autoresizingMask = []
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
         parentViewController.addChild(hostingController)
         addSubview(hostingController.view)
         hostingController.didMove(toParent: parentViewController)

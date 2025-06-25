@@ -133,7 +133,7 @@ extension Stack {
                 let childCrossMinConstraint = stretchedItems.contains(index) && crossMaxConstraint != .infinity ? crossMaxConstraint : crossMinConstraint
                 let mainReserved = mainPerFlex * shrink + main(renderNodes[index].size)
                 let constraint = Constraint(
-                    minSize: size(main: mainReserved, cross: childCrossMinConstraint),
+                    minSize: size(main: 0, cross: childCrossMinConstraint),
                     maxSize: size(main: mainReserved, cross: crossMaxConstraint)
                 )
                 updatedConstraint[index] = constraint
