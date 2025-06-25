@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -85,6 +85,10 @@
 		F8E3DD1726A7BE300062E58F /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		F8E3DD1926A7BEB60062E58F /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		6A6204B92E0BD68400B01E4D /* Environment Example */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Environment Example"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A304892121C347010026EDA7 /* Frameworks */ = {
@@ -192,6 +196,7 @@
 		B1CC3F6C267800B9005BCE8C /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				6A6204B92E0BD68400B01E4D /* Environment Example */,
 				B11955B62DD297A80074305F /* SwiftUI */,
 				B1CC3F6A2678009C005BCE8C /* AsyncImage */,
 				B1CC3F692678008F005BCE8C /* Card */,
@@ -265,6 +270,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				6A6204B92E0BD68400B01E4D /* Environment Example */,
 			);
 			name = UIComponentExample;
 			packageProductDependencies = (
