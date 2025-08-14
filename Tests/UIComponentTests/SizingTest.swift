@@ -41,4 +41,14 @@ struct SizingTest {
         }
         #expect(component.layout(Constraint(maxSize: CGSize(width: 100.0, height: .infinity))).size.width < 100)
     }
+    
+    @Test func testFlexShrinkInFlowSizing() throws {
+        let component = Flow {
+            HStack {
+                Text("This is a short text")
+            }.size(width: .fill)
+        }
+        #expect(component.layout(Constraint(maxSize: CGSize(width: 1000.0, height: .infinity))).size.width == 1000)
+        #expect(component.layout(Constraint(maxSize: CGSize(width: 1000.0, height: .infinity))).children.first!.size.width == 1000)
+    }
 }
