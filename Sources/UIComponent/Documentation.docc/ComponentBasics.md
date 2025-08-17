@@ -25,12 +25,12 @@ VStack(spacing: 8, alignItems: .center) {
 To render the ``Component`` on a view, assign the component to the ``UIView.componentEngine.component`` property. The view will automatically reload and display the UI.
 
 ```swift
+// Basic rendering
 view.componentEngine.component = VStack(spacing: 8, alignItems: .center) {
     Image("logo")
     Text("Hello World!")
 }
 ```
-
 
 ### Conditional & List Rendering
 
@@ -43,15 +43,78 @@ VStack {
             Image(image)
         }
         switch item.type {
-            case .fruit:
-               Text("Fruit")
-            case .vegetable:
-               Text("Vegetable")
-            }
+        case .fruit:
+            Text("Fruit")
+        case .vegetable:
+            Text("Vegetable")
         }
     }
 }
 ```
+
+### SwiftUI Integration (v5.0+)
+
+UIComponent can seamlessly integrate SwiftUI views alongside UIKit components. UIComponent's result builder is configured to automatically wrap native SwiftUI views, making integration seamless without requiring explicit wrappers for simple cases:
+
+```swift
+VStack(spacing: 16) {
+    // UIComponent Text
+    Text("Mixed UI Example")
+        .font(.boldSystemFont(ofSize: 20))
+        .textColor(.label)
+    
+    // SwiftUI Text directly (automatically wrapped by result builder)
+    SwiftUI.Text("Hello from SwiftUI!")
+        .foregroundColor(.blue)
+    
+    // Complex SwiftUI content wrapped in SwiftUIComponent
+    SwiftUIComponent {
+        SwiftUI.HStack {
+            SwiftUI.Image(systemName: "star.fill")
+                .foregroundColor(.yellow)
+            SwiftUI.Text("Rating: 5.0")
+                .font(.caption)
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(8)
+    }
+    
+    // Custom SwiftUI View
+    SwiftUIComponent(CustomGradientView())
+        .size(width: .fill, height: 100)
+    
+    // UIComponent modifiers work on SwiftUI content
+    SwiftUIComponent {
+        SwiftUI.Text("Styled SwiftUI")
+            .font(.headline)
+    }
+    .backgroundColor(.systemBlue)
+    .with(\.layer.cornerRadius, 8)
+    .inset(12)
+}
+
+struct CustomGradientView: View {
+    var body: some View {
+        LinearGradient(
+            colors: [.blue, .purple],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+        .overlay(
+            Text("SwiftUI Gradient")
+                .foregroundColor(.white)
+                .font(.headline)
+        )
+    }
+}
+```
+
+This demonstrates:
+- **Direct SwiftUI usage** without wrapping
+- **SwiftUIComponent wrapper** for complex content
+- **UIComponent modifiers** applied to SwiftUI views
+- **Custom SwiftUI views** with size control
 
 ### Modifiers
 

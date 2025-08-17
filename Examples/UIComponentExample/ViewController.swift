@@ -18,6 +18,7 @@ class ViewController: ComponentViewController {
                 ExampleItem(name: "Custom Layout Example", viewController: GalleryViewController())
                 ExampleItem(name: "Size Example", viewController: SizeExampleViewController())
                 ExampleItem(name: "SwiftUI Example", viewController: SwiftUIExampleViewController())
+                ExampleItem(name: "Theme System Example", viewController: ThemeSystemViewController())
             } separator: {
                 Separator()
             }

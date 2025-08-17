@@ -40,7 +40,7 @@ class MyViewController: UIViewController {
 ### Performance
 You might be thinking that recreating the entire Component tree every time is inefficient. Especially when there are thousands of views. But you might be surprised to know how fast they really are.
 
-There are a few reasons to why this is quick to do.
+There are a few reasons why this is quick to do.
 * Components are swift value types, which are super cheap to construct because they are statically created on the stack rather than on the heap.
 * Although the Component tree is recreated, UIComponent can smartly compare the old Component tree with the new one, and only applies the changes to the UIView hierarchy. This is similar to how [React's Virtual DOM](https://legacy.reactjs.org/docs/faq-internals.html) works.
 * Expensive UIViews are not created unless they become visible.
@@ -50,7 +50,7 @@ If you are worried about performance, there are are few optimization tricks that
 
 ### Handling Local State
 
-For complex UI, sometimes you don't want to propergate every action to the top level. If this is the case, we recommend creating a custom View that manages the local state.
+For complex UI, sometimes you don't want to propagate every action to the top level. If this is the case, we recommend creating a custom View that manages the local state.
 
 ```swift
 class ProfileCell: UIView {
@@ -65,7 +65,7 @@ class ProfileCell: UIView {
     // internal state
     private var profileImage: UIImage? {
         didSet {
-            guard image != oldValue else { return }
+            guard profileImage != oldValue else { return }
             reloadComponent()
         }
     }
@@ -75,8 +75,9 @@ class ProfileCell: UIView {
             HStack {
                 Image(profileImage ?? UIImage(named: "placeholder")!)
                     .size(width: 50, height: 50)
-                    .roundedCorner()
-                Text(profile.name).flex()
+                    .with(\.layer.cornerRadius, 25)
+                    .clipsToBounds(true)
+                Text(profile?.name ?? "").flex()
             }
         }
     }
@@ -104,6 +105,6 @@ VStack {
 
 ### Architecture recommendation
 
-Because UIComponent doesn't have its own state management solution, it should work well with most exist application architecture solutions. 
+Because UIComponent doesn't have its own state management solution, it should work well with most existing application architecture solutions. 
 
 We do recommend using a redux-like uni-directional application architecture to manage the state of your application. This gives your application a centralized state management system. Checkout the [swift-composable-architecture](https://github.com/pointfreeco/swift-composable-architecture) if you are interested in this topic.
