@@ -21,6 +21,8 @@ public enum TextContent {
 public struct Text: Component {
     /// Environment-injected font used when rendering plain strings.
     @Environment(\.font) var font
+    /// Environment-injected text color used when rendering plain strings.
+    @Environment(\.textColor) var textColor
     /// The content of the text, which can be a plain string or an attributed string.
     public let content: TextContent
     /// The maximum number of lines to display the text. 0 means no limit.
@@ -104,7 +106,7 @@ public struct Text: Component {
         let attributedString: NSAttributedString
         switch content {
         case .string(let string):
-            attributedString = NSAttributedString(string: string, attributes: [.font: font])
+            attributedString = NSAttributedString(string: string, attributes: [.font: font, .foregroundColor: textColor])
         case .attributedString(let string):
             attributedString = string
         }
