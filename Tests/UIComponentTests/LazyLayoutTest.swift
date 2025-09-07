@@ -97,6 +97,45 @@ struct LazyLayoutTests {
         #expect(fixedSizeLayoutTime * 2 < rawLayoutTime)
     }
 
+    @Test func testPerfImprovment() throws {
+        Text.useSharedLabelForSizing = false
+        let oldLayoutTime = measureTime {
+            VStack {
+                for _ in 0..<10000 {
+                    Text(text1)
+                }
+            }
+        }
+        let oldLayoutTimeWithNumberOfLines = measureTime {
+            VStack {
+                for _ in 0..<10000 {
+                    Text(text1, numberOfLines: 1)
+                }
+            }
+        }
+        Text.useSharedLabelForSizing = true
+        let newLayoutTime = measureTime {
+            VStack {
+                for _ in 0..<10000 {
+                    Text(text1)
+                }
+            }
+        }
+        let newLayoutTimeWithNumberOfLines = measureTime {
+            VStack {
+                for _ in 0..<10000 {
+                    Text(text1, numberOfLines: 1)
+                }
+            }
+        }
+        print("Layout 10000 text with old method used \(oldLayoutTime)s.")
+        print("Layout 10000 text with new method used \(newLayoutTime)s.")
+        print("Layout 10000 text with old method used \(oldLayoutTimeWithNumberOfLines)s with number of lines.")
+        print("Layout 10000 text with new method used \(newLayoutTimeWithNumberOfLines)s with number of lines.")
+        #expect(newLayoutTime < oldLayoutTime)
+        #expect(newLayoutTimeWithNumberOfLines < oldLayoutTimeWithNumberOfLines)
+    }
+
     func measureTime(_ component: () -> any Component) -> TimeInterval {
         let view = UIView()
         let startTime = CACurrentMediaTime()

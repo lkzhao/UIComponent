@@ -15,10 +15,16 @@ public enum TextContent {
     case attributedString(NSAttributedString)
 }
 
+/// A shared UILabel instance used for sizing text when `useSharedLabelForSizing` is true.
+private let layoutLabel = UILabel()
+
 /// A `Text` component represents a piece of text with styling and layout information.
 /// It can be initialized with either a plain `String` or an `NSAttributedString`.
 /// It also supports the new swift `AttributedString` from iOS 15 for more complex styling.
 public struct Text: Component {
+    /// A flag to determine if a shared UILabel should be used for sizing.
+    static var useSharedLabelForSizing = true
+
     /// Environment-injected font used when rendering plain strings.
     @Environment(\.font) var font
     /// Environment-injected text color used when rendering plain strings.
@@ -109,6 +115,25 @@ public struct Text: Component {
             attributedString = NSAttributedString(string: string, attributes: [.font: font, .foregroundColor: textColor])
         case .attributedString(let string):
             attributedString = string
+        }
+        if Self.useSharedLabelForSizing, Thread.isMainThread {
+            layoutLabel.numberOfLines = numberOfLines
+            layoutLabel.lineBreakMode = lineBreakMode
+            switch content {
+            case .string(let string):
+                layoutLabel.font = font
+                layoutLabel.text = string
+            case .attributedString(let string):
+                layoutLabel.font = nil
+                layoutLabel.attributedText = string
+            }
+            let size = layoutLabel.sizeThatFits(constraint.maxSize)
+            return TextRenderNode(
+                attributedString: attributedString,
+                numberOfLines: numberOfLines,
+                lineBreakMode: lineBreakMode,
+                size: size.bound(to: constraint)
+            )
         }
         if numberOfLines != 0 || isSwiftAttributedString {
             // Slower route

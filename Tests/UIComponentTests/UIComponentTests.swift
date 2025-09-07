@@ -4,7 +4,7 @@ import XCTest
 
 @testable import UIComponent
 
-let text1 = "This is a test of layout methods"
+let text1 = "This is a test of layout methods, performance, and correctness."
 let text2 = "This is a test of layout"
 let font = UIFont.systemFont(ofSize: 16)
 let maxSize = CGSize(width: 100, height: CGFloat.infinity)
