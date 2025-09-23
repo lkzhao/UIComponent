@@ -11,8 +11,21 @@ extension UIFont {
 /// An enumeration that represents the content of a `Text` component.
 /// It can either be a plain `String` or an `NSAttributedString` for more complex styling.
 public enum TextContent {
-    case string(String)
+    case string(String, UIFont)
     case attributedString(NSAttributedString)
+
+    func apply(to label: UILabel) {
+        switch self {
+        case .string(let string, let font):
+            label.attributedText = nil
+            label.font = font
+            label.text = string
+        case .attributedString(let string):
+            label.font = nil
+            label.text = nil
+            label.attributedText = string
+        }
+    }
 }
 
 /// A shared UILabel instance used for sizing text when `useSharedLabelForSizing` is true.
@@ -48,7 +61,7 @@ public struct Text: Component {
         numberOfLines: Int = 0,
         lineBreakMode: NSLineBreakMode = .byWordWrapping
     ) {
-        self.content = .string(text)
+        self.content = .string(text, UIFont.systemFont(ofSize: UIFont.systemFontSize))
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
         self.isSwiftAttributedString = false
@@ -109,32 +122,32 @@ public struct Text: Component {
     /// - Parameter constraint: The constraints to use for laying out the text.
     /// - Returns: A `TextRenderNode` that represents the laid out text.
     public func layout(_ constraint: Constraint) -> TextRenderNode {
-        let attributedString: NSAttributedString
-        switch content {
-        case .string(let string):
-            attributedString = NSAttributedString(string: string, attributes: [.font: font, .foregroundColor: textColor])
-        case .attributedString(let string):
-            attributedString = string
-        }
         if Self.useSharedLabelForSizing, Thread.isMainThread {
+            // Fastest route, but not thread safe.
             layoutLabel.numberOfLines = numberOfLines
             layoutLabel.lineBreakMode = lineBreakMode
-            switch content {
-            case .string(let string):
-                layoutLabel.font = font
-                layoutLabel.text = string
-            case .attributedString(let string):
-                layoutLabel.font = nil
-                layoutLabel.attributedText = string
-            }
+            content.apply(to: layoutLabel)
             let size = layoutLabel.sizeThatFits(constraint.maxSize)
             return TextRenderNode(
-                attributedString: attributedString,
+                content: content,
                 numberOfLines: numberOfLines,
                 lineBreakMode: lineBreakMode,
                 size: size.bound(to: constraint)
             )
         }
+
+        let attributedString: NSAttributedString
+        switch content {
+        case .string(let string, let font):
+            var attributes: [NSAttributedString.Key: Any] = [.font: self.font ?? font]
+            if let color = textColor {
+                attributes[.foregroundColor] = color
+            }
+            attributedString = NSAttributedString(string: string, attributes: attributes)
+        case .attributedString(let string):
+            attributedString = string
+        }
+
         if numberOfLines != 0 || isSwiftAttributedString {
             // Slower route
             //
@@ -154,7 +167,7 @@ public struct Text: Component {
             layoutManager.ensureLayout(for: textContainer)
             let rect = layoutManager.usedRect(for: textContainer)
             return TextRenderNode(
-                attributedString: attributedString,
+                content: content,
                 numberOfLines: numberOfLines,
                 lineBreakMode: lineBreakMode,
                 size: rect.size.bound(to: constraint)
@@ -165,7 +178,7 @@ public struct Text: Component {
                                                      options: [.usesLineFragmentOrigin],
                                                      context: nil).size
             return TextRenderNode(
-                attributedString: attributedString,
+                content: content,
                 numberOfLines: numberOfLines,
                 lineBreakMode: lineBreakMode,
                 size: size.bound(to: constraint)
@@ -177,7 +190,7 @@ public struct Text: Component {
 /// A `TextRenderNode` represents a renderable text node with styling and layout information.
 public struct TextRenderNode: RenderNode {
     /// The styled text to be rendered.
-    public let attributedString: NSAttributedString
+    public let content: TextContent
     /// The maximum number of lines to use for rendering. 0 means no limit.
     public let numberOfLines: Int
     /// The technique to use for wrapping and truncating the text.
@@ -187,12 +200,12 @@ public struct TextRenderNode: RenderNode {
 
     /// Initializes a new `TextRenderNode` with the given parameters.
     /// - Parameters:
-    ///   - attributedString: The styled text to be rendered.
+    ///   - content: The styled text to be rendered.
     ///   - numberOfLines: The maximum number of lines to use for rendering.
     ///   - lineBreakMode: The technique to use for wrapping and truncating the text.
     ///   - size: The calculated size of the rendered text.
-    public init(attributedString: NSAttributedString, numberOfLines: Int, lineBreakMode: NSLineBreakMode, size: CGSize) {
-        self.attributedString = attributedString
+    public init(content: TextContent, numberOfLines: Int, lineBreakMode: NSLineBreakMode, size: CGSize) {
+        self.content = content
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
         self.size = size
@@ -201,7 +214,7 @@ public struct TextRenderNode: RenderNode {
     /// Updates the provided `UILabel` with the render node's properties.
     /// - Parameter label: The `UILabel` to update with the text rendering information.
     public func updateView(_ label: UILabel) {
-        label.attributedText = attributedString
+        content.apply(to: label)
         label.numberOfLines = numberOfLines
         label.lineBreakMode = lineBreakMode
     }
