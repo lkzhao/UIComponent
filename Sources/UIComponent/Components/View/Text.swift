@@ -36,7 +36,7 @@ private let layoutLabel = UILabel()
 /// It also supports the new swift `AttributedString` from iOS 15 for more complex styling.
 public struct Text: Component {
     /// A flag to determine if a shared UILabel should be used for sizing.
-    static var useSharedLabelForSizing = true
+    public static var useSharedLabelForSizing = true
 
     /// Environment-injected font used when rendering plain strings.
     @Environment(\.font) var font
