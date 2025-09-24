@@ -51,6 +51,23 @@ final class UIComponentTests: XCTestCase {
         view.layoutIfNeeded()
         XCTAssertEqual(view.componentEngine.visibleRenderables.count, 0)
     }
+    func testTextColor() {
+        let view = UIView(frame: .init(origin: .zero, size: CGSize(width: 200, height: 200)))
+        view.componentEngine.component = Text("Test").textColor(.red)
+        view.layoutIfNeeded()
+        XCTAssertEqual((view.subviews.first as! UILabel).textColor, .red)
+        view.componentEngine.component = Text("Test").with(\.textColor, .green)
+        view.layoutIfNeeded()
+        XCTAssertEqual((view.subviews.first as! UILabel).textColor, .green)
+        view.componentEngine.component = Text("Test").environment(\.textColor, value: .yellow)
+        view.layoutIfNeeded()
+        XCTAssertEqual((view.subviews.first as! UILabel).textColor, .yellow)
+        view.componentEngine.component = HStack {
+            Text("Test")
+        }.textColor(.blue)
+        view.layoutIfNeeded()
+        XCTAssertEqual((view.subviews.first as! UILabel).textColor, .blue)
+    }
     func testPerfTextLayout() {
         measure {
             for _ in 0..<1000 {

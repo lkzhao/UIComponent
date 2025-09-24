@@ -130,6 +130,7 @@ public struct Text: Component {
             let size = layoutLabel.sizeThatFits(constraint.maxSize)
             return TextRenderNode(
                 content: content,
+                textColor: textColor,
                 numberOfLines: numberOfLines,
                 lineBreakMode: lineBreakMode,
                 size: size.bound(to: constraint)
@@ -168,6 +169,7 @@ public struct Text: Component {
             let rect = layoutManager.usedRect(for: textContainer)
             return TextRenderNode(
                 content: content,
+                textColor: textColor,
                 numberOfLines: numberOfLines,
                 lineBreakMode: lineBreakMode,
                 size: rect.size.bound(to: constraint)
@@ -179,6 +181,7 @@ public struct Text: Component {
                                                      context: nil).size
             return TextRenderNode(
                 content: content,
+                textColor: textColor,
                 numberOfLines: numberOfLines,
                 lineBreakMode: lineBreakMode,
                 size: size.bound(to: constraint)
@@ -191,6 +194,8 @@ public struct Text: Component {
 public struct TextRenderNode: RenderNode {
     /// The styled text to be rendered.
     public let content: TextContent
+    /// The color of the text.
+    public let textColor: UIColor?
     /// The maximum number of lines to use for rendering. 0 means no limit.
     public let numberOfLines: Int
     /// The technique to use for wrapping and truncating the text.
@@ -204,8 +209,9 @@ public struct TextRenderNode: RenderNode {
     ///   - numberOfLines: The maximum number of lines to use for rendering.
     ///   - lineBreakMode: The technique to use for wrapping and truncating the text.
     ///   - size: The calculated size of the rendered text.
-    public init(content: TextContent, numberOfLines: Int, lineBreakMode: NSLineBreakMode, size: CGSize) {
+    public init(content: TextContent, textColor: UIColor?, numberOfLines: Int, lineBreakMode: NSLineBreakMode, size: CGSize) {
         self.content = content
+        self.textColor = textColor
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
         self.size = size
@@ -215,6 +221,7 @@ public struct TextRenderNode: RenderNode {
     /// - Parameter label: The `UILabel` to update with the text rendering information.
     public func updateView(_ label: UILabel) {
         content.apply(to: label)
+        label.textColor = textColor
         label.numberOfLines = numberOfLines
         label.lineBreakMode = lineBreakMode
     }
