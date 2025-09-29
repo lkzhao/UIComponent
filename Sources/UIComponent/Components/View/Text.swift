@@ -217,6 +217,11 @@ public struct TextRenderNode: RenderNode {
         self.size = size
     }
 
+    /// Convenience initializer for creating a `TextRenderNode` with a plain string.
+    public init(attributedString: NSAttributedString, numberOfLines: Int, lineBreakMode: NSLineBreakMode, size: CGSize) {
+        self.init(content: .attributedString(attributedString), numberOfLines: numberOfLines, lineBreakMode: lineBreakMode, size: size)
+    }
+
     /// Updates the provided `UILabel` with the render node's properties.
     /// - Parameter label: The `UILabel` to update with the text rendering information.
     public func updateView(_ label: UILabel) {
