@@ -209,7 +209,7 @@ public struct TextRenderNode: RenderNode {
     ///   - numberOfLines: The maximum number of lines to use for rendering.
     ///   - lineBreakMode: The technique to use for wrapping and truncating the text.
     ///   - size: The calculated size of the rendered text.
-    public init(content: TextContent, textColor: UIColor?, numberOfLines: Int, lineBreakMode: NSLineBreakMode, size: CGSize) {
+    public init(content: TextContent, textColor: UIColor? = nil, numberOfLines: Int, lineBreakMode: NSLineBreakMode, size: CGSize) {
         self.content = content
         self.textColor = textColor
         self.numberOfLines = numberOfLines
