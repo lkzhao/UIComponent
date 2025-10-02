@@ -14,6 +14,8 @@ public struct TransformAnimator: Animator {
     public var duration: TimeInterval
     /// A Boolean value that determines whether the animation should be applied in a cascading manner.
     public var cascade: Bool
+    /// A Boolean value that determines whether to show the initial insertion animation when the view is first loaded.
+    public var showInitialInsertionAnimation: Bool = false
 
     /// Initializes a new animator with the specified transform, duration, and cascade options.
     /// - Parameters:
@@ -23,15 +25,18 @@ public struct TransformAnimator: Animator {
     public init(
         transform: CATransform3D = CATransform3DIdentity,
         duration: TimeInterval = 0.5,
-        cascade: Bool = false
+        cascade: Bool = false,
+        showInitialInsertionAnimation: Bool = false
     ) {
         self.transform = transform
         self.duration = duration
         self.cascade = cascade
+        self.showInitialInsertionAnimation = showInitialInsertionAnimation
     }
 
     public func delete(hostingView: UIView, view: UIView, completion: @escaping () -> Void) {
         if hostingView.componentEngine.isReloading, hostingView.bounds.intersects(view.frame) {
+            let baseTransform = view.layer.transform
             UIView.animate(
                 withDuration: duration,
                 delay: 0,
@@ -44,7 +49,7 @@ public struct TransformAnimator: Animator {
                 },
                 completion: { _ in
                     if !hostingView.componentEngine.visibleViews.contains(view) {
-                        view.transform = CGAffineTransform.identity
+                        view.layer.transform = baseTransform
                         view.alpha = 1
                     }
                     completion()
@@ -58,7 +63,8 @@ public struct TransformAnimator: Animator {
     public func insert(hostingView: UIView, view: UIView, frame: CGRect) {
         view.bounds.size = frame.size
         view.center = frame.center
-        if hostingView.componentEngine.isReloading, hostingView.componentEngine.hasReloaded, hostingView.bounds.intersects(frame) {
+        let baseTransform = view.layer.transform
+        if hostingView.componentEngine.isReloading, showInitialInsertionAnimation || hostingView.componentEngine.hasReloaded, hostingView.bounds.intersects(frame) {
             let offsetTime: TimeInterval = cascade ? TimeInterval(frame.origin.distance(hostingView.bounds.origin) / 3000) : 0
             UIView.performWithoutAnimation {
                 view.layer.transform = transform
@@ -71,7 +77,7 @@ public struct TransformAnimator: Animator {
                 initialSpringVelocity: 0,
                 options: [.allowUserInteraction],
                 animations: {
-                    view.transform = .identity
+                    view.layer.transform = baseTransform
                     view.alpha = 1
                 }
             )
@@ -105,7 +111,7 @@ public struct TransformAnimator: Animator {
                 completion: nil
             )
         }
-        if view.alpha != 1 || view.transform != .identity {
+        if view.alpha != 1 {
             UIView.animate(
                 withDuration: duration,
                 delay: 0,
@@ -113,7 +119,6 @@ public struct TransformAnimator: Animator {
                 initialSpringVelocity: 0,
                 options: [.allowUserInteraction],
                 animations: {
-                    view.transform = .identity
                     view.alpha = 1
                 },
                 completion: nil
