@@ -16,6 +16,8 @@ public struct TransformAnimator: Animator {
     public var cascade: Bool
     /// A Boolean value that determines whether to show the initial insertion animation when the view is first loaded.
     public var showInitialInsertionAnimation: Bool = false
+    /// A Boolean value that determines whether to show insertion animations for items that are out of the bounds of the hosting view.
+    public var showInsertionAnimationOnOutOfBoundsItems: Bool = false
 
     /// Initializes a new animator with the specified transform, duration, and cascade options.
     /// - Parameters:
@@ -26,12 +28,14 @@ public struct TransformAnimator: Animator {
         transform: CATransform3D = CATransform3DIdentity,
         duration: TimeInterval = 0.5,
         cascade: Bool = false,
-        showInitialInsertionAnimation: Bool = false
+        showInitialInsertionAnimation: Bool = false,
+        showInsertionAnimationOnOutOfBoundsItems: Bool = false,
     ) {
         self.transform = transform
         self.duration = duration
         self.cascade = cascade
         self.showInitialInsertionAnimation = showInitialInsertionAnimation
+        self.showInsertionAnimationOnOutOfBoundsItems = showInsertionAnimationOnOutOfBoundsItems
     }
 
     public func delete(hostingView: UIView, view: UIView, completion: @escaping () -> Void) {
@@ -64,7 +68,7 @@ public struct TransformAnimator: Animator {
         view.bounds.size = frame.size
         view.center = frame.center
         let baseTransform = view.layer.transform
-        if hostingView.componentEngine.isReloading, showInitialInsertionAnimation || hostingView.componentEngine.hasReloaded, hostingView.bounds.intersects(frame) {
+        if hostingView.componentEngine.isReloading, showInitialInsertionAnimation || hostingView.componentEngine.hasReloaded, showInsertionAnimationOnOutOfBoundsItems || hostingView.bounds.intersects(frame) {
             let offsetTime: TimeInterval = cascade ? TimeInterval(frame.origin.distance(hostingView.bounds.origin) / 3000) : 0
             UIView.performWithoutAnimation {
                 view.layer.transform = transform

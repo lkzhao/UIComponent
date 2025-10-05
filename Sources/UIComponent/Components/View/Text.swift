@@ -122,6 +122,10 @@ public struct Text: Component {
     /// - Parameter constraint: The constraints to use for laying out the text.
     /// - Returns: A `TextRenderNode` that represents the laid out text.
     public func layout(_ constraint: Constraint) -> TextRenderNode {
+        var content = content
+        if case .string(let string, _) = content, let envFont = font {
+            content = .string(string, envFont)
+        }
         if Self.useSharedLabelForSizing, Thread.isMainThread {
             // Fastest route, but not thread safe.
             layoutLabel.numberOfLines = numberOfLines
