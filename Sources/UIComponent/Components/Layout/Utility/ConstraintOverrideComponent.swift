@@ -65,9 +65,8 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
         case .fit:
             break
         case .absolute(let value):
-            assert(value >= 0, "absolute value should be greater than 0")
-            maxSize.width = value
-            minSize.width = value
+            maxSize.width = max(0, value)
+            minSize.width = max(0, value)
         case .percentage(let value):
             let maxWidth = maxSize.width
             if maxWidth != .infinity {
@@ -91,9 +90,8 @@ struct SizeStrategyConstraintTransformer: ConstraintTransformer {
         case .fit:
             break
         case .absolute(let value):
-            assert(value >= 0, "absolute value should be greater than 0")
-            maxSize.height = value
-            minSize.height = value
+            maxSize.height = max(0, value)
+            minSize.height = max(0, value)
         case .percentage(let value):
             let maxHeight = maxSize.height
             if maxHeight != .infinity {
