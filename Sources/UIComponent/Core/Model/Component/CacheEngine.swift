@@ -13,7 +13,7 @@ struct CacheEngine {
         case .component:
             return loadTransientCachingData(id: id, generator: generator)
         case .hostingView:
-            return loadCachingData(id: id, generator: generator)
+            return loadHostingViewCachingData(id: id, generator: generator)
         case .global:
             return loadGlobalCachingData(id: id, generator: generator)
         }
@@ -36,7 +36,7 @@ struct CacheEngine {
         globalCachingData[key] = nil
     }
 
-    private mutating func loadCachingData<T>(id: String, generator: () -> T) -> T {
+    private mutating func loadHostingViewCachingData<T>(id: String, generator: () -> T) -> T {
         let data = (cachingData[id] as? T) ?? generator()
         cachingData[id] = data
         return data

@@ -40,7 +40,7 @@ extension Stack {
             justifyContent: justifyContent,
             maxPrimary: primaryBound,
             totalPrimary: mainTotal,
-            minimunSpacing: spacing,
+            minimumSpacing: spacing,
             numberOfItems: renderNodes.count
         )
 
