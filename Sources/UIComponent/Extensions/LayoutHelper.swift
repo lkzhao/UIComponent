@@ -93,23 +93,23 @@ struct LayoutHelper {
         justifyContent: MainAxisAlignment,
         maxPrimary: CGFloat,
         totalPrimary: CGFloat,
-        minimunSpacing: CGFloat,
+        minimumSpacing: CGFloat,
         numberOfItems: Int
     ) -> (offset: CGFloat, spacing: CGFloat) {
         var offset: CGFloat = 0
-        var spacing = minimunSpacing
+        var spacing = minimumSpacing
         guard numberOfItems > 0 else { return (offset, spacing) }
         if maxPrimary != .infinity,
-            totalPrimary + CGFloat(numberOfItems - 1) * minimunSpacing < maxPrimary
+            totalPrimary + CGFloat(numberOfItems - 1) * minimumSpacing < maxPrimary
         {
             let leftOverPrimary = maxPrimary - totalPrimary
             switch justifyContent {
             case .start:
                 break
             case .center:
-                offset += (leftOverPrimary - minimunSpacing * CGFloat(numberOfItems - 1)) / 2
+                offset += (leftOverPrimary - minimumSpacing * CGFloat(numberOfItems - 1)) / 2
             case .end:
-                offset += (leftOverPrimary - minimunSpacing * CGFloat(numberOfItems - 1))
+                offset += (leftOverPrimary - minimumSpacing * CGFloat(numberOfItems - 1))
             case .spaceBetween:
                 guard numberOfItems > 1 else { break }
                 spacing = leftOverPrimary / CGFloat(numberOfItems - 1)
