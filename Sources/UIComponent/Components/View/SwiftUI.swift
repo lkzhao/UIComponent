@@ -42,6 +42,7 @@ class SwiftUIHostingView: UIView {
                     hostingController.rootView = swiftUIView
                 } else {
                     hostingController = UIHostingController(rootView: swiftUIView)
+                    hostingController?._disableSafeArea = true
                     if #available(iOS 16.0, *) {
                         hostingController?.sizingOptions = .intrinsicContentSize
                     }
