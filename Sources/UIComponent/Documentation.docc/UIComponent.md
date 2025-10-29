@@ -31,4 +31,5 @@ In version 5.0, UIComponent can also easily render SwiftUI View alongside UIView
 - <doc:PerformanceOptimization>
 - <doc:Component>
 - <doc:Environment>
+- <doc:ObservableSupport>
 }

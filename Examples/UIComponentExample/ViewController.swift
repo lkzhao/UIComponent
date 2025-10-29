@@ -19,6 +19,9 @@ class ViewController: ComponentViewController {
                 ExampleItem(name: "Size Example", viewController: SizeExampleViewController())
                 ExampleItem(name: "SwiftUI Example", viewController: SwiftUIExampleViewController())
                 ExampleItem(name: "Theme System Example", viewController: ThemeSystemViewController())
+                if #available(iOS 26.0, *) {
+                    ExampleItem(name: "Observable Example", viewController: ObservableViewController())
+                }
             } separator: {
                 Separator()
             }
