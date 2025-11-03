@@ -8,11 +8,11 @@ import UIComponent
 @available(iOS 26.0, *)
 class ObservableViewController: UIViewController {
     @Observable
-    private class ViewModel {
+    class ViewModel {
         var count: Int = 0
     }
 
-    private let viewModel = ViewModel()
+    let viewModel = ViewModel()
 
     override func updateProperties() {
         super.updateProperties()
@@ -31,11 +31,11 @@ class ObservableViewController: UIViewController {
 /// Here is an example UIView that uses @Observable to update its component.
 @available(iOS 26.0, *)
 class CountExampleView: ComponentView {
-    @Observable private class ViewModel {
+    @Observable class ViewModel {
         var count: Int = 0
     }
 
-    private let viewModel = ViewModel()
+    let viewModel = ViewModel()
 
     override func updateProperties() {
         super.updateProperties()
