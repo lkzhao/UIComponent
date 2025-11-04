@@ -229,9 +229,9 @@ public struct TextRenderNode: RenderNode {
     /// Updates the provided `UILabel` with the render node's properties.
     /// - Parameter label: The `UILabel` to update with the text rendering information.
     public func updateView(_ label: UILabel) {
-        content.apply(to: label)
         label.textColor = textColor
         label.numberOfLines = numberOfLines
         label.lineBreakMode = lineBreakMode
+        content.apply(to: label)
     }
 }
