@@ -94,6 +94,24 @@ extension Component {
         }
     }
 
+    /// Removes the constraint on the component's width.
+    /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with a unconstrainted width.
+    public func ignoreWidthConstraint() -> ConstraintOverrideComponent<Self> {
+        constraint { c in
+            Constraint(minSize: CGSize(width: -.infinity, height: c.minSize.height),
+                       maxSize: CGSize(width: .infinity, height: c.maxSize.height))
+        }
+    }
+
+    /// Removes the constraint on the component's height.
+    /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with a unconstrainted height.
+    public func ignoreHeightConstraint() -> ConstraintOverrideComponent<Self> {
+        constraint { c in
+            Constraint(minSize: CGSize(width: c.minSize.width, height: -.infinity),
+                       maxSize: CGSize(width: c.maxSize.width, height: .infinity))
+        }
+    }
+
     /// Sets the maximum size for the component.
     /// - Parameters:
     ///   - width: A `CGFloat` value that sets the maximum width. Defaults to `.infinity`.
