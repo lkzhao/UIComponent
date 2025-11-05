@@ -14,7 +14,7 @@ class PlacementExamplesView: UIView {
             Text("Placement Modifiers", font: .title)
             
             // Inset Examples
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Inset modifiers", font: .subtitle)
                 Text("Inset adds padding around a component. It's the fundamental spacing modifier.", font: .body).textColor(.secondaryLabel)
                 
@@ -43,7 +43,7 @@ class PlacementExamplesView: UIView {
             }
             
             // Offset Examples
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Offset modifiers", font: .subtitle)
                 Text("Offset moves a component from its original position without affecting layout.", font: .body).textColor(.secondaryLabel)
 
@@ -57,7 +57,7 @@ class PlacementExamplesView: UIView {
             }
             
             // Overlay Examples
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Overlay modifiers", font: .subtitle)
                 Text("Overlay places content on top of another component. Simpler than using ZStack. The size of the overlay will match the background component.", font: .body).textColor(.secondaryLabel)
 
@@ -93,7 +93,7 @@ class PlacementExamplesView: UIView {
             }
             
             // Background Examples
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Background modifiers", font: .subtitle)
                 Text("Background places content behind another component. Simpler than using ZStack. The size of the background will match the foreground component.", font: .body).textColor(.secondaryLabel)
 
@@ -121,7 +121,7 @@ class PlacementExamplesView: UIView {
             }
             
             // Badge Examples
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Badge modifiers", font: .subtitle)
                 Text("Badge positions a small overlay relative to content. ", font: .body).textColor(.secondaryLabel)
                 
@@ -182,7 +182,7 @@ class PlacementExamplesView: UIView {
             }
             
             // Centered Examples
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Centered modifier", font: .subtitle)
                 Text("Centers content within available space. Uses ZStack with .fill() internally.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(

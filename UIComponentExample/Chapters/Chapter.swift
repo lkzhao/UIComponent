@@ -49,8 +49,8 @@ struct Chapter: Equatable {
             view: PlacementExamplesView.self
         ),
         Chapter(
-            title: "Custom View",
-            view: CustomViewExamplesView.self
+            title: "ViewComponent",
+            view: ViewComponentExamplesView.self
         ),
     ]
 }

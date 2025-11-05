@@ -15,7 +15,7 @@ struct Code: ComponentBuilder {
     }
     func build() -> some Component {
         CodeComponent(code).inset(h: 16, v: 10)
-            .backgroundColor(.secondarySystemBackground)
+            .backgroundColor(.systemGray.withAlphaComponent(0.1))
             .cornerRadius(10.0)
             .cornerCurve(.continuous)
             .borderWidth(0.5)

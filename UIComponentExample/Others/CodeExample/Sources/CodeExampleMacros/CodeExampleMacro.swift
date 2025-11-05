@@ -14,7 +14,10 @@ public struct CodeExampleMacro: ExpressionMacro {
 
         return """
             {
-                let (component, code) = (\(argument), \(literal: argument.description.trimLeadingWhitespacesBasedOnFirstLine()))
+                let (component, code) = (
+                    \(argument), 
+                    \(literal: argument.description.trimLeadingWhitespacesBasedOnFirstLine())
+                )
                 return CodeExampleComponent(content: component, code: code)
             }()
             """

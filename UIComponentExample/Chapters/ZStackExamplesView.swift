@@ -13,7 +13,7 @@ class ZStackExamplesView: UIView {
         componentEngine.component = VStack(spacing: 40) {
             Text("ZStack Examples", font: .title)
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("ZStack basics", font: .subtitle)
                 Text("ZStack layers its children on top of each other, with the first child at the bottom and the last at the top. Size is determined by the largest child.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -25,7 +25,7 @@ class ZStackExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Vertical alignment", font: .subtitle)
                 Text("Controls how children align vertically within the ZStack.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
@@ -63,7 +63,7 @@ class ZStackExamplesView: UIView {
                 }
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Horizontal alignment", font: .subtitle)
                 Text("Controls how children align horizontally within the ZStack.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
@@ -101,7 +101,7 @@ class ZStackExamplesView: UIView {
                 }
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Combined alignments", font: .subtitle)
                 Text("You can combine vertical and horizontal alignments to position items in different corners.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -112,7 +112,7 @@ class ZStackExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Practical examples", font: .subtitle)
                 Text("Common use cases for ZStack.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {

@@ -21,7 +21,7 @@ public struct CodeExampleComponent: Component {
 
     public func layout(_ constraint: Constraint) -> some RenderNode {
         VStack(spacing: 4) {
-            content.codeBlockStyle(backgroundColor: .tertiarySystemBackground)
+            content.codeBlockStyle()
             CodeComponent(code).inset(h: 16, v: 10).codeBlockStyle()
         }
         .layout(constraint)
@@ -29,7 +29,7 @@ public struct CodeExampleComponent: Component {
 }
 
 public extension Component {
-    func codeBlockStyle(backgroundColor: UIColor = .secondarySystemBackground) -> any Component {
+    func codeBlockStyle(backgroundColor: UIColor = .systemGray.withAlphaComponent(0.1)) -> any Component {
         self.view().backgroundColor(backgroundColor)
             .cornerRadius(10.0)
             .cornerCurve(.continuous)

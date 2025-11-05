@@ -24,7 +24,7 @@ class FlowExamplesView: UIView {
         componentEngine.component = VStack(spacing: 40) {
             Text("Flow Examples", font: .title)
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Flow basics", font: .subtitle)
                 Text("Flow (FlexRow) creates a horizontal wrapping layout similar to UICollectionViewFlowLayout. Items flow from left to right, wrapping to the next line when space runs out.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -39,7 +39,7 @@ class FlowExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Line and interitem spacing", font: .subtitle)
                 Text("Control spacing between lines (vertical) and between items within a line (horizontal) independently.", font: .body).textColor(.secondaryLabel)
                 HStack(spacing: 8, alignItems: .center) {
@@ -66,7 +66,7 @@ class FlowExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Justify content (horizontal alignment)", font: .subtitle)
                 Text("Controls how items are distributed horizontally within each line.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
@@ -144,7 +144,7 @@ class FlowExamplesView: UIView {
                 }
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Align items (vertical alignment within each line)", font: .subtitle)
                 Text("Controls how items align vertically within each line when items have different heights.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
@@ -190,7 +190,7 @@ class FlowExamplesView: UIView {
                 }
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Align content (multi-line alignment)", font: .subtitle)
                 Text("Controls how multiple lines are distributed vertically when there's extra space in the container. Only visible when the container has a fixed height.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
@@ -280,7 +280,7 @@ class FlowExamplesView: UIView {
                 }
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Align self", font: .subtitle)
                 Text("Individual items can override the parent's alignItems using the alignSelf modifier.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -311,7 +311,7 @@ class FlowExamplesView: UIView {
                 )
             }
 
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("FlexColumn", font: .subtitle)
                 Text("FlexColumn works similarly but arranges items vertically and wraps to new columns.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -329,7 +329,7 @@ class FlowExamplesView: UIView {
                 )
             }
 
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Practical example: Tag cloud", font: .subtitle)
                 Text("Flow is perfect for tag clouds, where tags have varying widths and should wrap naturally.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -350,7 +350,7 @@ class FlowExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Practical example: Filter chips", font: .subtitle)
                 Text("Flow works great for filter chips with selection states.", font: .body).textColor(.secondaryLabel)
                 ViewComponent<FilterChipsExampleView>()
@@ -358,7 +358,7 @@ class FlowExamplesView: UIView {
                 Code(FilterChipsExampleView.codeRepresentation)
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Practical example: Color palette", font: .subtitle)
                 Text("Display a palette of colors with equal-sized swatches that wrap.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(

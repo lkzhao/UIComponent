@@ -23,7 +23,7 @@ class WaterfallExamplesView: UIView {
         componentEngine.component = VStack(spacing: 40) {
             Text("Waterfall Examples", font: .title)
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Waterfall basics", font: .subtitle)
                 Text("Waterfall creates a masonry-style layout with multiple columns. Items are placed in the shortest column, creating a balanced layout for items with varying heights.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -39,7 +39,7 @@ class WaterfallExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Number of columns", font: .subtitle)
                 Text("Control how many columns appear in the layout. Default: 2 columns", font: .body).textColor(.secondaryLabel)
                 HStack(spacing: 8, alignItems: .center) {
@@ -61,7 +61,7 @@ class WaterfallExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Spacing control", font: .subtitle)
                 Text("Adjust the spacing between items in the waterfall.", font: .body).textColor(.secondaryLabel)
                 HStack(spacing: 8, alignItems: .center) {
@@ -82,11 +82,11 @@ class WaterfallExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Dynamic content", font: .subtitle)
                 Text("Waterfall automatically balances items with different heights.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
-                    Waterfall(columns: 2, spacing: 12) {
+                    Waterfall(columns: 2, spacing: 10) {
                         Text("Short", font: .body)
                             .inset(15)
                             .backgroundColor(.systemRed)
@@ -128,7 +128,7 @@ class WaterfallExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Practical example: Photo gallery", font: .subtitle)
                 Text("Waterfall is perfect for image galleries with varying aspect ratios.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -167,7 +167,7 @@ class WaterfallExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("HorizontalWaterfall", font: .subtitle)
                 Text("HorizontalWaterfall works the same way but arranges items in horizontal rows.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -185,11 +185,11 @@ class WaterfallExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Complex items", font: .subtitle)
                 Text("Waterfall works with any component, including complex nested layouts.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
-                    Waterfall(columns: 2, spacing: 12) {
+                    Waterfall(columns: 2, spacing: 10) {
                         for i in 1...6 {
                             VStack(spacing: 8, alignItems: .start) {
                                 HStack(spacing: 8, alignItems: .center) {
@@ -233,7 +233,7 @@ class WaterfallExamplesView: UIView {
 class ImageDetailView: UIView {
     var imageData: ImageData? {
         didSet {
-            updateProperties()
+            setNeedsUpdateProperties()
         }
     }
 

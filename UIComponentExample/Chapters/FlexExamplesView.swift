@@ -13,7 +13,7 @@ class FlexExamplesView: UIView {
         componentEngine.component = VStack(spacing: 40) {
             Text("Flex Modifiers", font: .title)
 
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Flex modifiers control how components grow and shrink to adapt to available space. \nThey work with HStack, VStack, and Flow layouts.", font: .body)
                 VStack(spacing: 8) {
                     HStack(spacing: 8, alignItems: .center) {
@@ -34,7 +34,7 @@ class FlexExamplesView: UIView {
                 }.inset(16).backgroundColor(.systemGray6).cornerRadius(12)
             }
 
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Flex grow basics", font: .subtitle)
                 Text("flexGrow makes items expand to fill available space. Higher values claim more space proportionally.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
@@ -108,7 +108,7 @@ class FlexExamplesView: UIView {
                 }
             }
 
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Flex grow ratios", font: .subtitle)
                 Text("Different flexGrow values create proportional size relationships.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
@@ -154,7 +154,7 @@ class FlexExamplesView: UIView {
                 }
             }
 
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Flex shrink basics", font: .subtitle)
                 Text("flexShrink makes items compress when space is limited. Higher values shrink more.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
@@ -191,7 +191,7 @@ class FlexExamplesView: UIView {
                 }
             }
 
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Flex shrink ratios", font: .subtitle)
                 Text("Different flexShrink values control which items compress more.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
@@ -247,7 +247,7 @@ class FlexExamplesView: UIView {
                 }
             }
 
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("The .flex() modifier", font: .subtitle)
                 Text("The .flex() modifier combines both flexGrow and flexShrink, making items truly flexible. They expand when there's extra space and compress when space is limited.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
@@ -301,13 +301,13 @@ class FlexExamplesView: UIView {
                 }
             }
 
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Practical Examples", font: .subtitle)
                 VStack(spacing: 20) {
-                    VStack(spacing: 12) {
+                    VStack(spacing: 10) {
                         Text("Profile card with flex", font: .caption)
                         #CodeExample(
-                            HStack(spacing: 12, alignItems: .center) {
+                            HStack(spacing: 10, alignItems: .center) {
                                 Image(systemName: "person.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40))
                                     .tintColor(.systemBlue)
 
@@ -324,10 +324,10 @@ class FlexExamplesView: UIView {
                         )
                     }
 
-                    VStack(spacing: 12) {
+                    VStack(spacing: 10) {
                         Text("Toolbar with flexible spacer", font: .caption)
                         #CodeExample(
-                            HStack(spacing: 12, alignItems: .center) {
+                            HStack(spacing: 10, alignItems: .center) {
                                 Image(systemName: "line.3.horizontal")
                                     .tintColor(.label)
 
@@ -345,11 +345,11 @@ class FlexExamplesView: UIView {
                         )
                     }
 
-                    VStack(spacing: 12) {
+                    VStack(spacing: 10) {
                         Text("Form field with label", font: .caption)
                         #CodeExample(
                             VStack(spacing: 16) {
-                                HStack(spacing: 12, alignItems: .center) {
+                                HStack(spacing: 10, alignItems: .center) {
                                     Text("Name:", font: .body)
                                         .size(width: 64)
 
@@ -360,7 +360,7 @@ class FlexExamplesView: UIView {
                                         .flex()
                                 }
 
-                                HStack(spacing: 12, alignItems: .center) {
+                                HStack(spacing: 10, alignItems: .center) {
                                     Text("Email:", font: .body)
                                         .size(width: 64)
 
@@ -374,7 +374,7 @@ class FlexExamplesView: UIView {
                         )
                     }
 
-                    VStack(spacing: 12) {
+                    VStack(spacing: 10) {
                         Text("Use flex to archive same width buttons", font: .body).textColor(.secondaryLabel)
                         Text("Wide container:", font: .caption)
                         #CodeExample(
@@ -397,7 +397,7 @@ class FlexExamplesView: UIView {
                         )
                     }
 
-                    VStack(spacing: 12) {
+                    VStack(spacing: 10) {
                         Text("Narrow container:", font: .caption)
                         #CodeExample(
                             HStack(spacing: 10) {

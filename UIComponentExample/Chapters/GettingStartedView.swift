@@ -13,12 +13,12 @@ class GettingStartedView: UIView {
         componentEngine.component = VStack(spacing: 40) {
             Text("Getting Started", font: .title)
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("Welcome to UIComponent example!", font: .subtitle)
                 Text("This example app demonstrates how to use UIComponent, a declarative UI framework for building native iOS apps with Swift.", font: .body).textColor(.secondaryLabel)
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Text("How to use this app", font: .subtitle)
                 VStack(spacing: 10) {
                     Text("• Use the sidebar on the left to navigate between different chapters", font: .body).textColor(.secondaryLabel)

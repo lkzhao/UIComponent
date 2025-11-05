@@ -15,7 +15,7 @@ struct InlineCode: ComponentBuilder {
     }
     func build() -> some Component {
         CodeComponent(code).inset(h: 6, v: 4)
-            .backgroundColor(.secondarySystemBackground)
+            .backgroundColor(.systemGray.withAlphaComponent(0.1))
             .cornerRadius(10.0)
             .cornerCurve(.continuous)
             .borderWidth(0.5)
