@@ -2,7 +2,7 @@
 //  StackExamplesView.swift
 //  UIComponentExample
 //
-//  Created by Assistant on 11/5/25.
+//  Created by Luke Zhao on 11/5/25.
 //
 
 import UIComponent
