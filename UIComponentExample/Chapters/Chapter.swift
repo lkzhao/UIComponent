@@ -53,6 +53,10 @@ struct Chapter: Equatable {
             view: SizingAndConstraintExamplesView.self
         ),
         Chapter(
+            title: "ConstraintReader",
+            view: ConstraintReaderExamplesView.self
+        ),
+        Chapter(
             title: "TappableView",
             view: TappableViewExamplesView.self
         ),
