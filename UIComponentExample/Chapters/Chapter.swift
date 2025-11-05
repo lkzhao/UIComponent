@@ -33,8 +33,12 @@ struct Chapter: Equatable {
             view: ZStackExamplesView.self
         ),
         Chapter(
-            title: "Placement",
+            title: "Placement Modifiers",
             view: PlacementExamplesView.self
+        ),
+        Chapter(
+            title: "Waterfall",
+            view: WaterfallExamplesView.self
         ),
         Chapter(
             title: "Custom View",

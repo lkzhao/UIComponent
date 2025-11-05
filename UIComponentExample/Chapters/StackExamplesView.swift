@@ -11,7 +11,7 @@ class StackExamplesView: UIView {
     override func updateProperties() {
         super.updateProperties()
         componentEngine.component = VStack(spacing: 40) {
-            Text("Stack Examples", font: .title)
+            Text("VStack and HStack Examples", font: .title)
             
             VStack(spacing: 12) {
                 Text("VStack basics", font: .subtitle)

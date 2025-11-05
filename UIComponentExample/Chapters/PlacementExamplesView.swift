@@ -11,7 +11,7 @@ class PlacementExamplesView: UIView {
     override func updateProperties() {
         super.updateProperties()
         componentEngine.component = VStack(spacing: 40) {
-            Text("Placement Examples", font: .title)
+            Text("Placement Modifiers", font: .title)
             
             // Inset Examples
             VStack(spacing: 12) {
