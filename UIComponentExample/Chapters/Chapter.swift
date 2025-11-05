@@ -41,6 +41,10 @@ struct Chapter: Equatable {
             view: WaterfallExamplesView.self
         ),
         Chapter(
+            title: "Flex Modifiers",
+            view: FlexExamplesView.self
+        ),
+        Chapter(
             title: "Placement Modifiers",
             view: PlacementExamplesView.self
         ),

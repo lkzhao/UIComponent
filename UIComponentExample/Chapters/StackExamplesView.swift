@@ -18,9 +18,9 @@ class StackExamplesView: UIView {
                 Text("VStack arranges components vertically. You can control spacing between items.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
                     VStack(spacing: 10) {
-                        Text("Item 1", font: .body)
-                        Text("Item 2", font: .body)
-                        Text("Item 3", font: .body)
+                        Text("Item 1")
+                        Text("Item 2")
+                        Text("Item 3")
                     }.inset(10)
                 )
             }
@@ -30,9 +30,9 @@ class StackExamplesView: UIView {
                 Text("HStack arranges components horizontally. Works similar to VStack but in horizontal direction.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
                     HStack(spacing: 10) {
-                        Text("Item 1", font: .body)
-                        Text("Item 2", font: .body) 
-                        Text("Item 3", font: .body)
+                        Text("Item 1")
+                        Text("Item 2")
+                        Text("Item 3")
                     }.inset(10)
                 )
             }
@@ -44,54 +44,54 @@ class StackExamplesView: UIView {
                     Text("justifyContent: .start (default)", font: .caption)
                     #CodeExample(
                         HStack(justifyContent: .start) {
-                            Text("A", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("B", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("C", font: .body).inset(8).backgroundColor(.systemBlue)
+                            Text("A").inset(8).backgroundColor(.systemBlue)
+                            Text("B").inset(8).backgroundColor(.systemBlue)
+                            Text("C").inset(8).backgroundColor(.systemBlue)
                         }.inset(10).size(width: .fill)
                     )
                     
                     Text("justifyContent: .end", font: .caption)
                     #CodeExample(
                         HStack(justifyContent: .end) {
-                            Text("A", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("B", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("C", font: .body).inset(8).backgroundColor(.systemBlue)
+                            Text("A").inset(8).backgroundColor(.systemBlue)
+                            Text("B").inset(8).backgroundColor(.systemBlue)
+                            Text("C").inset(8).backgroundColor(.systemBlue)
                         }.inset(10).size(width: .fill)
                     )
                     
                     Text("justifyContent: .center", font: .caption)
                     #CodeExample(
                         HStack(justifyContent: .center) {
-                            Text("A", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("B", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("C", font: .body).inset(8).backgroundColor(.systemBlue)
+                            Text("A").inset(8).backgroundColor(.systemBlue)
+                            Text("B").inset(8).backgroundColor(.systemBlue)
+                            Text("C").inset(8).backgroundColor(.systemBlue)
                         }.inset(10).size(width: .fill)
                     )
                     
                     Text("justifyContent: .spaceBetween", font: .caption)
                     #CodeExample(
                         HStack(justifyContent: .spaceBetween) {
-                            Text("A", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("B", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("C", font: .body).inset(8).backgroundColor(.systemBlue)
+                            Text("A").inset(8).backgroundColor(.systemBlue)
+                            Text("B").inset(8).backgroundColor(.systemBlue)
+                            Text("C").inset(8).backgroundColor(.systemBlue)
                         }.inset(10).size(width: .fill)
                     )
                     
                     Text("justifyContent: .spaceAround", font: .caption)
                     #CodeExample(
                         HStack(justifyContent: .spaceAround) {
-                            Text("A", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("B", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("C", font: .body).inset(8).backgroundColor(.systemBlue)
+                            Text("A").inset(8).backgroundColor(.systemBlue)
+                            Text("B").inset(8).backgroundColor(.systemBlue)
+                            Text("C").inset(8).backgroundColor(.systemBlue)
                         }.inset(10).size(width: .fill)
                     )
                     
                     Text("justifyContent: .spaceEvenly", font: .caption)
                     #CodeExample(
                         HStack(justifyContent: .spaceEvenly) {
-                            Text("A", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("B", font: .body).inset(8).backgroundColor(.systemBlue)
-                            Text("C", font: .body).inset(8).backgroundColor(.systemBlue)
+                            Text("A").inset(8).backgroundColor(.systemBlue)
+                            Text("B").inset(8).backgroundColor(.systemBlue)
+                            Text("C").inset(8).backgroundColor(.systemBlue)
                         }.inset(10).size(width: .fill)
                     )
                 }
@@ -140,6 +140,60 @@ class StackExamplesView: UIView {
             }
             
             VStack(spacing: 12) {
+                Text("Align self", font: .subtitle)
+                Text("Individual items can override the parent's alignItems alignment using the alignSelf modifier.", font: .body).textColor(.secondaryLabel)
+                VStack(spacing: 10) {
+                    Text("HStack with alignSelf", font: .caption)
+                    #CodeExample(
+                        HStack(spacing: 10, alignItems: .start) {
+                            Text("Default")
+                                .inset(8)
+                                .backgroundColor(.systemBlue)
+                            
+                            Text("Center")
+                                .inset(8)
+                                .backgroundColor(.systemGreen)
+                                .alignSelf(.center)
+                            
+                            Text("End")
+                                .inset(8)
+                                .backgroundColor(.systemOrange)
+                                .alignSelf(.end)
+                            
+                            Text("Stretch")
+                                .inset(8)
+                                .backgroundColor(.systemPurple)
+                                .alignSelf(.stretch)
+                        }.inset(10).size(height: 100)
+                    )
+                    
+                    Text("VStack with alignSelf", font: .caption)
+                    #CodeExample(
+                        VStack(spacing: 10, alignItems: .start) {
+                            Text("Default (start)")
+                                .inset(8)
+                                .backgroundColor(.systemBlue)
+                            
+                            Text("Center")
+                                .inset(8)
+                                .backgroundColor(.systemGreen)
+                                .alignSelf(.center)
+                            
+                            Text("End")
+                                .inset(8)
+                                .backgroundColor(.systemOrange)
+                                .alignSelf(.end)
+                            
+                            Text("Stretch")
+                                .inset(8)
+                                .backgroundColor(.systemPurple)
+                                .alignSelf(.stretch)
+                        }.inset(10).size(width: 200)
+                    )
+                }
+            }
+            
+            VStack(spacing: 12) {
                 Text("Using loops", font: .subtitle)
                 Text("You can use standard Swift for-in loops to generate components dynamically.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -147,7 +201,7 @@ class StackExamplesView: UIView {
                         for i in 1...5 {
                             HStack(spacing: 4) {
                                 Image(systemName: "\(i).circle").tintColor(.systemBlue)
-                                Text("Item \(i)", font: .body)
+                                Text("Item \(i)")
                             }
                         }
                     }.inset(10)
@@ -161,7 +215,7 @@ class StackExamplesView: UIView {
                     VStack {
                         Join {
                             for item in ["Apple", "Orange", "Banana"] {
-                                Text(item, font: .body).inset(h: 16, v: 10)
+                                Text(item).inset(h: 16, v: 10)
                             }
                         } separator: {
                             Separator().inset(h: 16)
@@ -172,7 +226,7 @@ class StackExamplesView: UIView {
             
             VStack(spacing: 12) {
                 Text("Nested stacks", font: .subtitle)
-                Text("Combine VStack and HStack to create complex layouts.", font: .body).textColor(.secondaryLabel)
+                Text("Combine VStack and HStack to create complex layouts. The .flex() modifier makes the middle VStack grow to fill available space (see Flex Modifiers chapter for details).", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
                     HStack(spacing: 10, alignItems: .center) {
                         Image(systemName: "person.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)).tintColor(.systemBlue)

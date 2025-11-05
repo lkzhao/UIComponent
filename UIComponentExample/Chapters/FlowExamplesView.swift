@@ -279,85 +279,56 @@ class FlowExamplesView: UIView {
                     )
                 }
             }
-
+            
             VStack(spacing: 12) {
                 Text("Align self", font: .subtitle)
                 Text("Individual items can override the parent's alignItems using the alignSelf modifier.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
-                    Flow(spacing: 8) {
-                        Text("A tall item", font: .body)
-                            .inset(6)
-                            .backgroundColor(.systemYellow)
-                            .cornerRadius(4)
-                            .size(height: 200)
-
-                        Text("Default (start)", font: .body)
+                    Flow(spacing: 8, alignItems: .start) {
+                        Text("Default")
                             .inset(8)
                             .backgroundColor(.systemBlue)
                             .cornerRadius(4)
 
-                        Text("Center", font: .body)
+                        Text("Center")
                             .inset(12)
                             .backgroundColor(.systemGreen)
                             .cornerRadius(4)
                             .alignSelf(.center)
 
-                        Text("Default (start)", font: .body)
-                            .inset(8)
-                            .backgroundColor(.systemBlue)
-                            .cornerRadius(4)
-
-                        Text("End", font: .body)
+                        Text("End")
                             .inset(10)
                             .backgroundColor(.systemOrange)
                             .cornerRadius(4)
                             .alignSelf(.end)
 
-                        Text("Stretch", font: .body)
+                        Text("Stretch")
                             .inset(6)
                             .backgroundColor(.systemPurple)
                             .cornerRadius(4)
                             .alignSelf(.stretch)
-                    }.inset(10)
+                    }.inset(10).size(width: 300, height: 80)
                 )
             }
 
             VStack(spacing: 12) {
-                Text("Flex grow", font: .subtitle)
-                Text("Use the flex() modifier on children to make them grow and fill available horizontal space within their line.", font: .body).textColor(.secondaryLabel)
+                Text("FlexColumn", font: .subtitle)
+                Text("FlexColumn works similarly but arranges items vertically and wraps to new columns.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
-                    Flow(spacing: 8) {
-                        Text("Fixed", font: .body)
-                            .inset(h: 12, v: 8)
-                            .backgroundColor(.systemBlue)
-                            .cornerRadius(6)
-                        
-                        Text("Grows", font: .body)
-                            .inset(h: 12, v: 8)
-                            .backgroundColor(.systemGreen)
-                            .cornerRadius(6)
-                            .flex()
-                        
-                        Text("Fixed", font: .body)
-                            .inset(h: 12, v: 8)
-                            .backgroundColor(.systemBlue)
-                            .cornerRadius(6)
-                        
-                        Text("Grows 2x", font: .body)
-                            .inset(h: 12, v: 8)
-                            .backgroundColor(.systemOrange)
-                            .cornerRadius(6)
-                            .flexGrow(2)
-
-                        Text("Grows", font: .body)
-                            .inset(h: 12, v: 8)
-                            .backgroundColor(.systemGreen)
-                            .cornerRadius(6)
-                            .flex()
-                    }.inset(10).size(width: 300)
+                    FlexColumn(spacing: 8) {
+                        for i in 1...12 {
+                            Text("Item \(i)", font: .body)
+                                .inset(h: CGFloat(12 + i * 5), v: 8)
+                                .backgroundColor(.systemCyan)
+                                .cornerRadius(6)
+                        }
+                    }
+                    .inset(10)
+                    .scrollView()
+                    .size(width: 300, height: 100)
                 )
             }
-            
+
             VStack(spacing: 12) {
                 Text("Practical example: Tag cloud", font: .subtitle)
                 Text("Flow is perfect for tag clouds, where tags have varying widths and should wrap naturally.", font: .body).textColor(.secondaryLabel)
@@ -382,9 +353,9 @@ class FlowExamplesView: UIView {
             VStack(spacing: 12) {
                 Text("Practical example: Filter chips", font: .subtitle)
                 Text("Flow works great for filter chips with selection states.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
-                    FilterChipsExample()
-                )
+                ViewComponent<FilterChipsExampleView>()
+                    .size(width: 360, height: 130)
+                Code(FilterChipsExampleView.codeRepresentation)
             }
             
             VStack(spacing: 12) {
@@ -401,72 +372,34 @@ class FlowExamplesView: UIView {
                 )
             }
             
-            VStack(spacing: 12) {
-                Text("FlexColumn", font: .subtitle)
-                Text("FlexColumn works similarly but arranges items vertically and wraps to new columns.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
-                    FlexColumn(spacing: 8) {
-                        for i in 1...12 {
-                            Text("Item \(i)", font: .body)
-                                .inset(h: CGFloat(12 + i * 5), v: 8)
-                                .backgroundColor(.systemCyan)
-                                .cornerRadius(6)
-                        }
-                    }
-                    .inset(10)
-                    .scrollView()
-                    .size(width: 200, height: 100)
-                )
-            }
-            
-            VStack(spacing: 12) {
-                Text("Mixed content sizes", font: .subtitle)
-                Text("Flow handles varying content sizes gracefully.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
-                    Flow(spacing: 8) {
-                        for (index, text) in ["A", "This is longer", "B", "Medium text", "C", "D", "Another long one here", "E", "F", "Short", "G", "Very very long text content"].enumerated() {
-                            Text(text, font: .body)
-                                .inset(h: 12, v: 8)
-                                .backgroundColor([.systemRed, .systemOrange, .systemGreen, .systemBlue, .systemPurple][index % 5])
-                                .cornerRadius(6)
-                        }
-                    }
-                )
-            }
-            
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
 
-@Observable
-class FilterChipsViewModel {
-    var selectedFilters: Set<String> = []
-}
+@GenerateCode
+class FilterChipsExampleView: UIView {
+    @Observable
+    class FilterChipsViewModel {
+        var selectedFilters: Set<String> = []
+    }
 
-class FilterChipsExample: UIView {
     let viewModel = FilterChipsViewModel()
     
     override func updateProperties() {
         super.updateProperties()
         let viewModel = viewModel
         let filters = ["All", "Photos", "Videos", "Documents", "Music", "Recent", "Favorites", "Shared"]
-        
         componentEngine.component = Flow(spacing: 10) {
             for filter in filters {
                 let isSelected = viewModel.selectedFilters.contains(filter)
                 HStack(spacing: 6, alignItems: .center) {
                     if isSelected {
                         Image(systemName: "checkmark")
-                            .contentMode(.scaleAspectFit)
-                            .size(width: 12, height: 12)
                             .tintColor(.white)
                     }
-                    Text(filter, font: .body)
-                        .textColor(isSelected ? .white : .label)
+                    Text(filter, font: .body).textColor(isSelected ? .white : .label)
                 }
                 .inset(h: 14, v: 8)
-                .backgroundColor(isSelected ? .systemBlue : .systemGray5)
-                .cornerRadius(18)
                 .tappableView {
                     if viewModel.selectedFilters.contains(filter) {
                         viewModel.selectedFilters.remove(filter)
@@ -474,6 +407,8 @@ class FilterChipsExample: UIView {
                         viewModel.selectedFilters.insert(filter)
                     }
                 }
+                .backgroundColor(isSelected ? .systemBlue : .systemGray5)
+                .cornerRadius(18)
             }
         }
     }
