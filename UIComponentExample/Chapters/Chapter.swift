@@ -49,6 +49,10 @@ struct Chapter: Equatable {
             view: PlacementExamplesView.self
         ),
         Chapter(
+            title: "Sizing & Constraints",
+            view: SizingAndConstraintExamplesView.self
+        ),
+        Chapter(
             title: "TappableView",
             view: TappableViewExamplesView.self
         ),
