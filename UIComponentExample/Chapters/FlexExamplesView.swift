@@ -19,16 +19,22 @@ class FlexExamplesView: UIView {
                     HStack(spacing: 8, alignItems: .center) {
                         Image(systemName: "arrow.up.left.and.arrow.down.right")
                             .tintColor(.systemBlue)
+                            .contentMode(.center)
+                            .size(width: 24, height: 24)
                         Text("flexGrow - expand to fill extra space", font: .body)
                     }
                     HStack(spacing: 8, alignItems: .center) {
                         Image(systemName: "arrow.down.right.and.arrow.up.left")
                             .tintColor(.systemOrange)
+                            .contentMode(.center)
+                            .size(width: 24, height: 24)
                         Text("flexShrink - compress when space is limited", font: .body)
                     }
                     HStack(spacing: 8, alignItems: .center) {
                         Image(systemName: "arrow.left.and.right")
                             .tintColor(.systemGreen)
+                            .contentMode(.center)
+                            .size(width: 24, height: 24)
                         Text("flex - combines both grow and shrink", font: .body)
                     }
                 }.inset(16).backgroundColor(.systemGray6).cornerRadius(12)

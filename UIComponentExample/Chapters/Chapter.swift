@@ -49,6 +49,10 @@ struct Chapter: Equatable {
             view: PlacementExamplesView.self
         ),
         Chapter(
+            title: "TappableView",
+            view: TappableViewExamplesView.self
+        ),
+        Chapter(
             title: "ViewComponent",
             view: ViewComponentExamplesView.self
         ),
