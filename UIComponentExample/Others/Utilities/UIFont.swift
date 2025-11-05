@@ -10,6 +10,7 @@ extension UIFont {
     static let subtitle = UIFont.boldSystemFont(ofSize: 20)
     static let bodyBold = UIFont.boldSystemFont(ofSize: 16)
     static let body = UIFont.systemFont(ofSize: 16)
+    static let caption = UIFont.systemFont(ofSize: 14)
 }
 
 extension UIColor {

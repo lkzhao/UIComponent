@@ -26,7 +26,7 @@ class SimpleExamplesView: UIView {
                     VStack {
                         Image(systemName: "square.stack")
                         Text("Hello World")
-                    }
+                    }.inset(10)
                 )
             }
             VStack(spacing: 10) {
@@ -37,7 +37,7 @@ class SimpleExamplesView: UIView {
                     view.componentEngine.component = VStack {
                         Image(systemName: "square.stack")
                         Text("Hello World")
-                    }
+                    }.inset(10)
                     """
                 }
             }

@@ -30,7 +30,7 @@ class HomeView: UIView {
         let viewType = viewModel.selected.view
         componentEngine.component = HStack {
             sidebarView.size(width: 200, height: .fill)
-            Separator()
+            Separator(color: .label.withAlphaComponent(0.2))
             ViewComponent(generator: viewType.init()).id("\(viewType)").fill().flex()
         }.fill()
     }
