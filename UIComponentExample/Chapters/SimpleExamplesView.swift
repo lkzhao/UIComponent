@@ -1,12 +1,12 @@
 //
-//  IntroView.swift
+//  SimpleExamplesView.swift
 //  UIComponentExample
 //
 //  Created by Luke Zhao on 11/4/25.
 //
 
 
-class IntroView: UIView {
+class SimpleExamplesView: UIView {
     @Observable
     class IntroViewModel {
         var isSelected: Bool = false

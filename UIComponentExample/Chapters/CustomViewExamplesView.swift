@@ -1,5 +1,5 @@
 //
-//  CustomView.swift
+//  CustomViewExamplesView.swift
 //  UIComponentExample
 //
 //  Created by Luke Zhao on 11/4/25.
@@ -10,7 +10,7 @@ class MyCustomView: UIView {
     var name: String = ""
 }
 
-class CustomView: UIView {
+class CustomViewExamplesView: UIView {
     override func updateProperties() {
         super.updateProperties()
         componentEngine.component = VStack {

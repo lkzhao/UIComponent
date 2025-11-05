@@ -25,7 +25,7 @@ class SidebarView: UIView {
             for chapter in Chapter.all {
                 let isSelected = viewModel.selected == chapter
                 VStack {
-                    Text(chapter.title, font: isSelected ? .subtitle : .body)
+                    Text(chapter.title, font: isSelected ? .bodyBold : .body)
                 }.inset(h: 12, v: 10).size(width: .fill).tappableView {
                     viewModel.selected = chapter
                 }.backgroundColor(

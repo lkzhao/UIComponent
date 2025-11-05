@@ -18,11 +18,15 @@ struct Chapter: Equatable {
     static let all: [Chapter] = [
         Chapter(
             title: "Getting Started",
-            view: IntroView.self
+            view: GettingStartedView.self
+        ),
+        Chapter(
+            title: "Simple Examples",
+            view: SimpleExamplesView.self
         ),
         Chapter(
             title: "Custom View",
-            view: CustomView.self
+            view: CustomViewExamplesView.self
         ),
     ]
 }
