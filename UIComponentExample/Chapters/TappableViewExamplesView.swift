@@ -238,6 +238,29 @@ class TappableViewExamplesView: UIView {
             }
             
             VStack(spacing: 10) {
+                Text("Global TappableView configuration", font: .subtitle)
+                Text("Set TappableViewConfig.default to apply a configuration to all TappableView instances in your app that don't have a specific configuration. This is useful for consistent highlight behavior across your entire UI.", font: .body).textColor(.secondaryLabel)
+                
+                VStack(spacing: 10) {
+                    Text("Example: Global scale animation", font: .caption)
+                    Code {
+                        """
+                        // Set this in your AppDelegate
+                        TappableViewConfig.default = TappableViewConfig(
+                            onHighlightChanged: { view, isHighlighted in
+                                UIView.animate(withDuration: 0.2) {
+                                    view.transform = isHighlighted 
+                                        ? CGAffineTransform(scaleX: 0.95, y: 0.95) 
+                                        : .identity
+                                }
+                            }
+                        )
+                        """
+                    }
+                }
+            }
+            
+            VStack(spacing: 10) {
                 Text("Practical example: Selectable list", font: .subtitle)
                 Text("Combine tappableView with state management to create interactive lists with selection.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -332,7 +355,7 @@ class TappableViewExamplesView: UIView {
                                 Text(label, font: .caption)
                             }
                             .inset(20)
-                            .backgroundColor(.label.withAlphaComponent(0.1))
+                            .backgroundColor(.systemBlue.withAlphaComponent(0.1))
                             .cornerRadius(12)
                             .size(width: 120, height: 100)
                             .tappableView {
