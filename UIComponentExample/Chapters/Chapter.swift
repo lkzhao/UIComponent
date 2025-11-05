@@ -29,6 +29,10 @@ struct Chapter: Equatable {
             view: StackExamplesView.self
         ),
         Chapter(
+            title: "ZStack",
+            view: ZStackExamplesView.self
+        ),
+        Chapter(
             title: "Custom View",
             view: CustomViewExamplesView.self
         ),

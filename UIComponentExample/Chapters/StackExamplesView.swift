@@ -175,7 +175,7 @@ class StackExamplesView: UIView {
                 Text("Combine VStack and HStack to create complex layouts.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
                     HStack(spacing: 10, alignItems: .center) {
-                        Image(systemName: "person.circle.fill").tintColor(.systemBlue)
+                        Image(systemName: "person.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)).tintColor(.systemBlue)
                         VStack(spacing: 4, alignItems: .start) {
                             Text("John Doe", font: .bodyBold)
                             Text("john.doe@example.com", font: .body).textColor(.secondaryLabel)
