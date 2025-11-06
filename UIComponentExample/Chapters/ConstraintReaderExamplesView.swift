@@ -515,6 +515,152 @@ class ConstraintReaderExamplesView: UIView {
                 }
             }
             
+            // MARK: - Memory Management
+            
+            VStack(spacing: 10) {
+                Text("⚠️ Memory Management Warning", font: .subtitle)
+                Text("ConstraintReader captures an escaping closure that's called later at layout time. Be careful not to create retain cycles when capturing self.", font: .body).textColor(.secondaryLabel)
+                
+                VStack(spacing: 10) {
+                    Text("❌ Bad: Strong reference cycle", font: .caption)
+                    Text("Capturing self strongly creates a retain cycle because the view holds the component, and the component's closure holds the view.", font: .caption).textColor(.secondaryLabel)
+                    Code {
+                        """
+                        ConstraintReader { constraint in
+                            // ❌ BAD: Strong capture of self
+                            let data = self.loadData()
+                            return Text(data)
+                        }
+                        """
+                    }
+                    
+                    VStack(spacing: 8) {
+                        HStack(spacing: 8, alignItems: .start) {
+                            Text("1.", font: .body).textColor(.systemRed)
+                            Text("View holds the component hierarchy", font: .body)
+                        }
+                        HStack(spacing: 8, alignItems: .start) {
+                            Text("2.", font: .body).textColor(.systemRed)
+                            Text("Component contains ConstraintReader", font: .body)
+                        }
+                        HStack(spacing: 8, alignItems: .start) {
+                            Text("3.", font: .body).textColor(.systemRed)
+                            Text("ConstraintReader's closure strongly captures self", font: .body)
+                        }
+                        HStack(spacing: 8, alignItems: .start) {
+                            Text("→", font: .body).textColor(.systemRed)
+                            Text("Retain cycle! View never deallocates", font: .bodyBold).textColor(.systemRed)
+                        }
+                    }.inset(16).backgroundColor(.systemRed.withAlphaComponent(0.1)).cornerRadius(12)
+                    
+                    Text("✅ Good: Weak capture", font: .caption)
+                    Text("Use [weak self] to break the retain cycle.", font: .caption).textColor(.secondaryLabel)
+                    Code {
+                        """
+                        ConstraintReader { [weak self] constraint in
+                            // ✅ GOOD: Weak capture
+                            guard let self else {
+                                return Space()
+                            }
+                            let data = self.loadData()
+                            return Text(data)
+                        }
+                        """
+                    }
+                    
+                    Text("✅ Alternative: Use local variables", font: .caption)
+                    Text("Capture only what you need by copying to local variables.", font: .caption).textColor(.secondaryLabel)
+                    Code {
+                        """
+                        let viewModel = self.viewModel // Capture before closure
+                        
+                        ConstraintReader { constraint in
+                            // ✅ GOOD: Only captures viewModel, not self
+                            return Text(viewModel.title)
+                        }
+                        """
+                    }
+                    
+                    Text("✅ Best: Capture only values", font: .caption)
+                    Text("When possible, extract values before creating the closure.", font: .caption).textColor(.secondaryLabel)
+                    Code {
+                        """
+                        let percentage = self.widthPercentage // Copy value
+                        
+                        ConstraintReader { constraint in
+                            // ✅ BEST: Only captures a value type
+                            let width = constraint.maxSize.width * percentage
+                            return Space(width: width, height: 50)
+                        }
+                        """
+                    }
+                }
+                
+                VStack(spacing: 10) {
+                    Text("Real example from this chapter", font: .caption)
+                    Text("Notice how we used a local variable to avoid capturing self.", font: .caption).textColor(.secondaryLabel)
+                    Code {
+                        """
+                        override func updateProperties() {
+                            super.updateProperties()
+                            let viewModel = viewModel // ✅ Local variable
+                            
+                            componentEngine.component = VStack {
+                                ConstraintReader { constraint in
+                                    // Safe: captures local viewModel, not self
+                                    let width = constraint.maxSize.width * viewModel.widthPercentage
+                                    return Text("Width: \\(width)")
+                                }
+                            }
+                        }
+                        """
+                    }
+                }
+                
+                VStack(spacing: 10) {
+                    Text("Key Rules", font: .subtitle)
+                    VStack(spacing: 12, alignItems: .start) {
+                        HStack(spacing: 10, alignItems: .start) {
+                            Text("1.", font: .bodyBold).textColor(.systemBlue)
+                            VStack(spacing: 4, alignItems: .start) {
+                                Text("ConstraintReader's closure is escaping", font: .body)
+                                Text("It's stored and called later during layout", font: .caption).textColor(.secondaryLabel)
+                            }
+                        }
+                        
+                        HStack(spacing: 10, alignItems: .start) {
+                            Text("2.", font: .bodyBold).textColor(.systemBlue)
+                            VStack(spacing: 4, alignItems: .start) {
+                                Text("Use [weak self] when accessing self", font: .body)
+                                Text("Prevents retain cycles between view and component", font: .caption).textColor(.secondaryLabel)
+                            }
+                        }
+                        
+                        HStack(spacing: 10, alignItems: .start) {
+                            Text("3.", font: .bodyBold).textColor(.systemBlue)
+                            VStack(spacing: 4, alignItems: .start) {
+                                Text("Prefer capturing local variables", font: .body)
+                                Text("Copy values/objects to local vars in updateProperties()", font: .caption).textColor(.secondaryLabel)
+                            }
+                        }
+                        
+                        HStack(spacing: 10, alignItems: .start) {
+                            Text("4.", font: .bodyBold).textColor(.systemBlue)
+                            VStack(spacing: 4, alignItems: .start) {
+                                Text("Extract values when possible", font: .body)
+                                Text("Value types (Int, Double, CGFloat) are safe to capture", font: .caption).textColor(.secondaryLabel)
+                            }
+                        }
+                    }.inset(16).backgroundColor(.systemBlue.withAlphaComponent(0.1)).cornerRadius(12)
+                }
+                
+                Text("💡 This applies to all escaping closures in UIComponent, not just ConstraintReader!", font: .body)
+                    .textColor(.secondaryLabel)
+                    .inset(16)
+                    .backgroundColor(.systemOrange.withAlphaComponent(0.1))
+                    .cornerRadius(12)
+            }
+            
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }

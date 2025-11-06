@@ -191,6 +191,104 @@ class TappableViewExamplesView: UIView {
             }
             
             VStack(spacing: 10) {
+                Text("⚠️ Avoiding retain cycles", font: .subtitle)
+                Text("When capturing self in TappableView closures, use weak or unowned references to prevent retain cycles and memory leaks.", font: .body).textColor(.secondaryLabel)
+                
+                VStack(spacing: 10) {
+                    VStack(spacing: 6) {
+                        Text("❌ Bad: Strong reference", font: .bodyBold).textColor(.systemRed)
+                        Text("This creates a retain cycle because the view retains the component, which retains the closure, which retains self, which retains the view.", font: .body).textColor(.systemRed)
+                        Code {
+                            """
+                            class MyView: UIView {
+                                var count = 0 {
+                                    didSet {
+                                        setNeedsUpdateProperties()
+                                    }
+                                }
+                                
+                                override func updateProperties() {
+                                    super.updateProperties()
+                                    componentEngine.component = Text("Tap Me")
+                                        .tappableView {
+                                            // BAD: Strong capture of self
+                                            self.count += 1
+                                        }
+                                }
+                            }
+                            """
+                        }
+                    }.inset(16).backgroundColor(.systemRed.withAlphaComponent(0.1)).cornerRadius(12)
+                    
+                    VStack(spacing: 6) {
+                        Text("✅ Good: Weak reference", font: .bodyBold).textColor(.systemGreen)
+                        Text("Use [weak self] to break the retain cycle. Check if self is still alive before using it.", font: .body).textColor(.systemGreen)
+                        Code {
+                            """
+                            class MyView: UIView {
+                                var count = 0 {
+                                    didSet {
+                                        setNeedsUpdateProperties()
+                                    }
+                                }
+                                
+                                override func updateProperties() {
+                                    super.updateProperties()
+                                    componentEngine.component = Text("Tap Me")
+                                        .tappableView { [weak self] in
+                                            guard let self else { return }
+                                            self.count += 1
+                                        }
+                                }
+                            }
+                            """
+                        }
+                    }.inset(16).backgroundColor(.systemGreen.withAlphaComponent(0.1)).cornerRadius(12)
+                    
+                    VStack(spacing: 6) {
+                        Text("Alternative: Unowned reference", font: .bodyBold)
+                        Text("Use [unowned self] if you're certain self will outlive the closure. This is common when the component is rebuilt on every update.", font: .body).textColor(.secondaryLabel)
+                        Code {
+                            """
+                            override func updateProperties() {
+                                super.updateProperties()
+                                componentEngine.component = Text("Tap Me")
+                                    .tappableView { [unowned self] in
+                                        self.count += 1
+                                    }
+                            }
+                            """
+                        }
+                    }.inset(16).backgroundColor(.systemBlue.withAlphaComponent(0.1)).cornerRadius(12)
+                    
+                    VStack(spacing: 6) {
+                        Text("💡 Pro Tip: Use local variables", font: .bodyBold).textColor(.systemIndigo)
+                        Text("When working with Observable view models, capture them as local variables to avoid needing [weak self] or [unowned self].", font: .body).textColor(.secondaryLabel)
+                        Code {
+                            """
+                            @Observable
+                            class ViewModel {
+                                var count = 0
+                            }
+                            
+                            let viewModel = ViewModel()
+                            
+                            override func updateProperties() {
+                                super.updateProperties()
+                                let viewModel = viewModel  // Local copy
+                                componentEngine.component = Text("Tap Me")
+                                    .tappableView {
+                                        // No [weak self] needed!
+                                        viewModel.count += 1
+                                    }
+                            }
+                            """
+                        }
+                    }.inset(16).backgroundColor(.systemIndigo.withAlphaComponent(0.1)).cornerRadius(12)
+                }
+            }
+            
+            VStack(spacing: 10) {
                 Text("Custom highlight animation", font: .subtitle)
                 Text("Use TappableViewConfig to customize how views respond to touches. The onHighlightChanged callback lets you add custom animations or visual feedback.", font: .body).textColor(.secondaryLabel)
                 Text("Highlighted: \(viewModel.isHighlighted ? "Yes" : "No")", font: .body).textColor(.secondaryLabel)

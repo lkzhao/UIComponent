@@ -404,7 +404,7 @@ class AnimationExamplesView: UIView {
                     }
                 }
                 .inset(16)
-                .backgroundColor(.systemBlue.withAlphaComponent(0.1))
+                .backgroundColor(.systemOrange.withAlphaComponent(0.1))
                 .cornerRadius(12)
             }
 
@@ -588,4 +588,5 @@ class AnimatedListExample: UIView {
         .borderColor(.systemGray4)
     }
 }
+
 

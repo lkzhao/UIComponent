@@ -194,82 +194,6 @@ class EnvironmentExamplesView: UIView {
                 }
             }
             
-            // MARK: - Hosting View Environment
-            
-            VStack(spacing: 10) {
-                Text("Hosting view environment", font: .subtitle)
-                Text("The hostingView environment provides access to the UIView that contains your components. This is useful for accessing trait collections, safe areas, or other view properties.", font: .body).textColor(.secondaryLabel)
-                
-                VStack(spacing: 10) {
-                    Text("Access hosting view properties", font: .caption)
-                    #CodeExample(
-                        ThemeAwareComponent()
-                            .inset(16)
-                            .backgroundColor(.systemGray6)
-                            .cornerRadius(8)
-                    )
-                    
-                    Text("Note: The hostingView environment is automatically set by UIComponent when rendering. You don't need to set it manually.", font: .caption).textColor(.secondaryLabel)
-                }
-            }
-            
-            // MARK: - TappableView Configuration
-            
-            VStack(spacing: 10) {
-                Text("TappableView configuration environment", font: .subtitle)
-                Text("Set default behavior for all tappable components in a hierarchy. This is useful for consistent highlight animations across your UI.", font: .body).textColor(.secondaryLabel)
-                
-                VStack(spacing: 10) {
-                    Text("Default behavior (no highlight)", font: .caption)
-                    #CodeExample(
-                        VStack(spacing: 8) {
-                            Text("Tap Me 1", font: .body)
-                                .inset(h: 20, v: 12)
-                                .backgroundColor(.systemBlue)
-                                .textColor(.white)
-                                .cornerRadius(8)
-                                .tappableView { print("Tapped 1") }
-                            
-                            Text("Tap Me 2", font: .body)
-                                .inset(h: 20, v: 12)
-                                .backgroundColor(.systemGreen)
-                                .textColor(.white)
-                                .cornerRadius(8)
-                                .tappableView { print("Tapped 2") }
-                        }.inset(16)
-                    )
-                    
-                    Text("With environment config (scale animation)", font: .caption)
-                    #CodeExample(
-                        VStack(spacing: 8) {
-                            Text("Tap Me 1", font: .body)
-                                .inset(h: 20, v: 12)
-                                .backgroundColor(.systemBlue)
-                                .textColor(.white)
-                                .cornerRadius(8)
-                                .tappableView { print("Tapped 1") }
-                            
-                            Text("Tap Me 2", font: .body)
-                                .inset(h: 20, v: 12)
-                                .backgroundColor(.systemGreen)
-                                .textColor(.white)
-                                .cornerRadius(8)
-                                .tappableView { print("Tapped 2") }
-                        }
-                        .tappableViewConfig(TappableViewConfig(
-                            onHighlightChanged: { view, isHighlighted in
-                                UIView.animate(withDuration: 0.2) {
-                                    view.transform = isHighlighted
-                                        ? CGAffineTransform(scaleX: 0.95, y: 0.95)
-                                        : .identity
-                                }
-                            }
-                        ))
-                        .inset(16)
-                    )
-                }
-            }
-            
             // MARK: - Custom Environment Values
             
             VStack(spacing: 10) {
@@ -354,10 +278,10 @@ class EnvironmentExamplesView: UIView {
                         Text("Themed section", font: .caption)
                         Text("Apply consistent styling to a section of your UI.", font: .caption).textColor(.secondaryLabel)
                         #CodeExample(
-                            VStack(spacing: 16) {
+                            VStack(spacing: 8) {
                                 Text("Error Section", font: .title)
                                 
-                                VStack(spacing: 12, alignItems: .start) {
+                                VStack(spacing: 6, alignItems: .start) {
                                     HStack(spacing: 8, alignItems: .center) {
                                         Image(systemName: "exclamationmark.circle.fill")
                                         Text("Invalid credentials", font: .bodyBold)
@@ -366,13 +290,16 @@ class EnvironmentExamplesView: UIView {
                                 }
                                 
                                 Text("Try Again", font: .bodyBold)
-                                    .inset(h: 20, v: 10)
+                                    .inset(h: 16, v: 10)
+                                    .textColor(.white)
                                     .backgroundColor(.systemRed)
                                     .cornerRadius(8)
                                     .tappableView { print("Retry") }
                             }
                             .textColor(.systemRed)
-                            .inset(20)
+                            .inset(10)
+                            .view()
+                            .tintColor(.systemRed)
                             .backgroundColor(.systemRed.withAlphaComponent(0.1))
                             .cornerRadius(12)
                         )
@@ -412,85 +339,6 @@ class EnvironmentExamplesView: UIView {
                     }
                     
                     VStack(spacing: 10) {
-                        Text("Form with consistent styling", font: .caption)
-                        Text("Apply font and color to an entire form.", font: .caption).textColor(.secondaryLabel)
-                        #CodeExample(
-                            VStack(spacing: 20, alignItems: .stretch) {
-                                Text("Contact Form", font: .title)
-                                    .textColor(.label)
-                                
-                                VStack(spacing: 12, alignItems: .stretch) {
-                                    VStack(spacing: 6, alignItems: .start) {
-                                        Text("Name")
-                                        Text("John Doe")
-                                            .inset(h: 12, v: 10)
-                                            .backgroundColor(.systemBackground)
-                                            .cornerRadius(8)
-                                            .textColor(.label)
-                                    }
-                                    
-                                    VStack(spacing: 6, alignItems: .start) {
-                                        Text("Email")
-                                        Text("john@example.com")
-                                            .inset(h: 12, v: 10)
-                                            .backgroundColor(.systemBackground)
-                                            .cornerRadius(8)
-                                            .textColor(.label)
-                                    }
-                                    
-                                    VStack(spacing: 6, alignItems: .start) {
-                                        Text("Message")
-                                        Text("Hello! I'd like to learn more...")
-                                            .inset(h: 12, v: 10)
-                                            .backgroundColor(.systemBackground)
-                                            .cornerRadius(8)
-                                            .textColor(.label)
-                                    }
-                                }
-                                
-                                Text("Submit", font: .bodyBold)
-                                    .textAlignment(.center)
-                                    .inset(v: 12)
-                                    .backgroundColor(.systemBlue)
-                                    .textColor(.white)
-                                    .cornerRadius(8)
-                                    .tappableView { print("Submit") }
-                            }
-                            .font(.systemFont(ofSize: 14))
-                            .textColor(.secondaryLabel)
-                            .inset(20)
-                            .backgroundColor(.systemGray6)
-                            .cornerRadius(12)
-                        )
-                    }
-                    
-                    VStack(spacing: 10) {
-                        // TODO: 
-//                        Text("Dynamic theme switching", font: .caption)
-//                        Text("Change environment values and see components update automatically.", font: .caption).textColor(.secondaryLabel)
-//                        
-//                        // Theme color picker
-//                        HStack(spacing: 8) {
-//                            Text("Theme color:", font: .body)
-//                            ForEach([UIColor.systemBlue, UIColor.systemGreen, UIColor.systemOrange, UIColor.systemPurple, UIColor.systemPink]) { color in
-//                                Space(width: 40, height: 40)
-//                                    .backgroundColor(color)
-//                                    .cornerRadius(8)
-//                                    .overlay {
-//                                        if viewModel.themeColor == color {
-//                                            Image(systemName: "checkmark")
-//                                                .tintColor(.white)
-//                                        }
-//                                    }
-//                                    .tappableView {
-//                                        viewModel.themeColor = color
-//                                    }
-//                            }
-//                        }
-//                        .inset(h: 16, v: 12)
-//                        .backgroundColor(.systemGray6)
-//                        .cornerRadius(12)
-                        
                         // Font size slider
                         HStack(spacing: 12, alignItems: .center) {
                             Text("Font size:", font: .body)
@@ -670,29 +518,6 @@ struct UserProfileComponent: Component {
                     .tappableView { print("Sign in tapped") }
             }.layout(constraint)
         }
-    }
-}
-
-struct ThemeAwareComponent: Component {
-    @Environment(\.hostingView) var hostingView: UIView?
-    
-    func layout(_ constraint: Constraint) -> some RenderNode {
-        let isDarkMode = hostingView?.traitCollection.userInterfaceStyle == .dark
-        
-        return VStack(spacing: 12, alignItems: .center) {
-            Image(systemName: isDarkMode ? "moon.fill" : "sun.max.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
-                .tintColor(isDarkMode ? .systemIndigo : .systemYellow)
-            
-            VStack(spacing: 4) {
-                Text("Current theme:", font: .caption)
-                    .textColor(.secondaryLabel)
-                Text(isDarkMode ? "Dark Mode" : "Light Mode", font: .bodyBold)
-            }
-            
-            Text("This component reads the hosting view's trait collection to determine the current appearance.", font: .caption)
-                .textAlignment(.center)
-                .textColor(.secondaryLabel)
-        }.layout(constraint)
     }
 }
 
