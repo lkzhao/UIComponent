@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         window?.rootViewController = ViewController(rootView: HomeView())
         window?.makeKeyAndVisible()
-        window?.windowScene?.titlebar?.titleVisibility = .hidden
+//        window?.windowScene?.titlebar?.titleVisibility = .hidden
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
