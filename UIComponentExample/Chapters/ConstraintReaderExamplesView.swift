@@ -66,6 +66,7 @@ class ConstraintReaderExamplesView: UIView {
                                 .size(width: .percentage(0.5))
                             
                             Text("← Left item has unexpected width")
+                                .size(height: 30)
                                 .backgroundColor(.systemGray5)
                         }
                     )
@@ -82,6 +83,7 @@ class ConstraintReaderExamplesView: UIView {
                                 .size(width: .fill)
 
                             Text("Fixed")
+                                .size(height: 30)
                                 .backgroundColor(.systemOrange)
                         }
                     )
@@ -106,6 +108,7 @@ class ConstraintReaderExamplesView: UIView {
                                     .constraint(constraint)
                                 
                                 Text("← Left item is 50% width")
+                                    .size(height: 30)
                                     .backgroundColor(.systemGray5)
                             }
                         }
@@ -126,6 +129,7 @@ class ConstraintReaderExamplesView: UIView {
                                     .constraint(constraint)
                                 
                                 Text("Fixed")
+                                    .size(height: 30)
                                     .backgroundColor(.systemOrange)
                             }
                         }.scrollView()
@@ -136,68 +140,36 @@ class ConstraintReaderExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("✅ Multiple percentage items", font: .subtitle)
                 Text("Each item reads parent constraint to calculate its percentage width.", font: .body).textColor(.secondaryLabel)
-                
-                VStack(spacing: 10) {
-                    Text("Equal thirds (33% each)", font: .caption)
-                    #CodeExample(
-                        ConstraintReader { constraint in
-                            HStack {
-                                Space(height: 60)
-                                    .backgroundColor(.systemBlue)
-                                    .size(width: .percentage(0.3))
-                                    .constraint(constraint)
-                                    .overlay {
-                                        Text("30%").textAlignment(.center).textColor(.white)
-                                    }
-                                
-                                Space(height: 60)
-                                    .backgroundColor(.systemGreen)
-                                    .size(width: .percentage(0.3))
-                                    .constraint(constraint)
-                                    .overlay {
-                                        Text("30%").textAlignment(.center).textColor(.white)
-                                    }
-                                
-                                Space(height: 60)
-                                    .backgroundColor(.systemOrange)
-                                    .size(width: .percentage(0.3))
-                                    .constraint(constraint)
-                                    .overlay {
-                                        Text("30%").textAlignment(.center).textColor(.white)
-                                    }
-                            }
-                        }                    )
-                    
-                    Text("Different ratios (50%, 30%, 20%)", font: .caption)
-                    #CodeExample(
-                        ConstraintReader { constraint in
-                            HStack {
-                                Space(height: 60)
-                                    .backgroundColor(.systemPurple)
-                                    .size(width: .percentage(0.5))
-                                    .constraint(constraint)
-                                    .overlay {
-                                        Text("50%").textAlignment(.center).textColor(.white)
-                                    }
-                                
-                                Space(height: 60)
-                                    .backgroundColor(.systemIndigo)
-                                    .size(width: .percentage(0.3))
-                                    .constraint(constraint)
-                                    .overlay {
-                                        Text("30%").textAlignment(.center).textColor(.white)
-                                    }
-                                
-                                Space(height: 60)
-                                    .backgroundColor(.systemTeal)
-                                    .size(width: .percentage(0.2))
-                                    .constraint(constraint)
-                                    .overlay {
-                                        Text("20%").textAlignment(.center).textColor(.white)
-                                    }
-                            }
-                        }                    )
-                }
+
+                #CodeExample(
+                    ConstraintReader { constraint in
+                        HStack {
+                            Space(height: 60)
+                                .backgroundColor(.systemPurple)
+                                .size(width: .percentage(0.5))
+                                .constraint(constraint)
+                                .overlay {
+                                    Text("50%").textAlignment(.center).textColor(.white)
+                                }
+
+                            Space(height: 60)
+                                .backgroundColor(.systemIndigo)
+                                .size(width: .percentage(0.3))
+                                .constraint(constraint)
+                                .overlay {
+                                    Text("30%").textAlignment(.center).textColor(.white)
+                                }
+
+                            Space(height: 60)
+                                .backgroundColor(.systemTeal)
+                                .size(width: .percentage(0.2))
+                                .constraint(constraint)
+                                .overlay {
+                                    Text("20%").textAlignment(.center).textColor(.white)
+                                }
+                        }
+                    }
+                )
             }
             
             // MARK: - Dynamic Layout Properties

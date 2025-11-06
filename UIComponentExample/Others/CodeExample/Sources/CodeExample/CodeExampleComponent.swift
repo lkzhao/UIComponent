@@ -11,29 +11,45 @@ import UIKit
 let sizingTextView = CodeTextView()
 
 public struct CodeExampleComponent: Component {
+    public enum Style {
+        case `default`
+        case noInset
+        case noWrap
+    }
     let content: any Component
     let code: String
-    let addInset: Bool
+    let style: Style
 
-    public init(content: any Component, code: String, addInset: Bool = false) {
+    public init(content: any Component, code: String, style: Style = .default) {
         self.content = content
         self.code = code
-        self.addInset = addInset
+        self.style = style
     }
 
     public func layout(_ constraint: Constraint) -> some RenderNode {
-        let wrappedContent: any Component = addInset ? content.inset(16) : content
-        return VStack(spacing: 4) {
-            wrappedContent.codeBlockStyle()
-            CodeComponent(code).inset(h: 16, v: 10).codeBlockStyle()
+        switch style {
+        case .default:
+            VStack(spacing: 4) {
+                content.inset(16).view().codeBlockStyle()
+                CodeComponent(code).inset(h: 16, v: 10).view().codeBlockStyle()
+            }.layout(constraint)
+        case .noInset:
+            VStack(spacing: 4) {
+                content.view().codeBlockStyle()
+                CodeComponent(code).inset(h: 16, v: 10).view().codeBlockStyle()
+            }.layout(constraint)
+        case .noWrap:
+            VStack(spacing: 4) {
+                content.codeBlockStyle()
+                CodeComponent(code).inset(h: 16, v: 10).view().codeBlockStyle()
+            }.layout(constraint)
         }
-        .layout(constraint)
     }
 }
 
 public extension Component {
     func codeBlockStyle(backgroundColor: UIColor = .systemGray.withAlphaComponent(0.1)) -> any Component {
-        self.view().backgroundColor(backgroundColor)
+        self.backgroundColor(backgroundColor)
             .cornerRadius(10.0)
             .cornerCurve(.continuous)
             .borderWidth(0.5)

@@ -8,9 +8,18 @@
 import UIComponent
 
 class ViewHierarchyExamplesView: UIView {
+    @Observable
+    class ViewModel {
+        var showItem: Bool = true
+        var toggleSize: Bool = false
+    }
+    let viewModel = ViewModel()
+
     override func updateProperties() {
         super.updateProperties()
-        
+
+        let viewModel = viewModel
+
         componentEngine.component = VStack(spacing: 40) {
             Text("Understanding View Hierarchy", font: .title)
             
@@ -145,46 +154,6 @@ class ViewHierarchyExamplesView: UIView {
             }
             
             VStack(spacing: 10) {
-                Text("Multi-layered nesting", font: .subtitle)
-                Text("You can use .view() multiple times to create multi-layered nested views. This is particularly useful for effects like shadows with clipping.", font: .body).textColor(.secondaryLabel)
-                
-                VStack(spacing: 15) {
-                    VStack(spacing: 6) {
-                        Text("Example: Card with shadow and clipping", font: .bodyBold)
-                        Text("Shadows require clipsToBounds to be false, while rounded corners need it to be true. The solution is to use multiple view layers.", font: .body).textColor(.secondaryLabel)
-                        
-                        #CodeExample(
-                            VStack(spacing: 10) {
-                                Text("Card Title", font: .bodyBold)
-                                Text("This card has both rounded corners and a shadow, which requires two separate view layers.", font: .body)
-                                    .textColor(.secondaryLabel)
-                            }
-                            .inset(20)
-                            .view()                  // Inner view for clipping
-                            .backgroundColor(.systemBackground)
-                            .cornerRadius(16)
-                            .clipsToBounds(true)
-                            .view()                  // Outer view for shadow
-                            .with(\.layer.shadowColor, UIColor.black.cgColor)
-                            .with(\.layer.shadowOpacity, 0.15)
-                            .with(\.layer.shadowOffset, CGSize(width: 0, height: 4))
-                            .with(\.layer.shadowRadius, 12)
-                        )
-                        
-                        Code {
-                            """
-                            // View Hierarchy:
-                            // ↳ UIView(shadow properties)
-                            //   ↳ UIView(background, cornerRadius, clipsToBounds)
-                            //     ↳ UILabel(text: "Card Title")
-                            //     ↳ UILabel(text: "Content...")
-                            """
-                        }
-                    }
-                }
-            }
-            
-            VStack(spacing: 10) {
                 Text("Other view wrapper modifiers", font: .subtitle)
                 Text("Several modifiers create view wrappers similar to .view(). These include .scrollView() and .tappableView(). They all create parent-child relationships.", font: .body).textColor(.secondaryLabel)
                 
@@ -299,7 +268,51 @@ class ViewHierarchyExamplesView: UIView {
                     }
                 }
             }
-            
+
+            VStack(spacing: 10) {
+                Text("Multi-layered nesting", font: .subtitle)
+                Text("You can use .view() multiple times to create multi-layered nested views. This is particularly useful for effects like shadows with clipping.", font: .body).textColor(.secondaryLabel)
+
+                VStack(spacing: 15) {
+                    VStack(spacing: 6) {
+                        Text("Example: Card with shadow and clipping", font: .bodyBold)
+                        Text("Shadows require clipsToBounds to be false, while rounded corners need it to be true. The solution is to use multiple view layers.", font: .body).textColor(.secondaryLabel)
+
+                        #CodeExample(
+                            VStack {
+                                Text("Card Title", font: .bodyBold)
+                                    .inset(16)
+                                    .size(width: .fill)
+                                    .backgroundColor(.systemBlue.withAlphaComponent(0.1))
+                                Text("This card has both rounded corners and a shadow, which requires two separate view layers.", font: .body)
+                                    .textColor(.secondaryLabel)
+                                    .inset(16)
+                            }
+                            .view()                  // Inner view for clipping
+                            .backgroundColor(.systemBackground)
+                            .cornerRadius(16)
+                            .clipsToBounds(true)
+                            .view()                  // Outer view for shadow
+                            .with(\.layer.shadowColor, UIColor.black.cgColor)
+                            .with(\.layer.shadowOpacity, 0.15)
+                            .with(\.layer.shadowOffset, CGSize(width: 0, height: 4))
+                            .with(\.layer.shadowRadius, 12)
+                        )
+
+                        Code {
+                            """
+                            // View Hierarchy:
+                            // ↳ UIView(shadow properties)
+                            //   ↳ UIView(background, cornerRadius, clipsToBounds)
+                            //     ↳ UIView(background: .systemBlue.withAlphaComponent(0.1))
+                            //     ↳ UILabel(text: "Card Title")
+                            //     ↳ UILabel(text: "Content...")
+                            """
+                        }
+                    }
+                }
+            }
+
             VStack(spacing: 10) {
                 Text("⚠️ Gotcha: clipsToBounds with sibling views", font: .subtitle)
                 Text("A common mistake is expecting clipsToBounds to work on layout components without .view(). Since the background view is a sibling, it can't clip the children.", font: .body).textColor(.systemRed)
@@ -310,21 +323,15 @@ class ViewHierarchyExamplesView: UIView {
                         Text("The overflow view extends beyond the rounded corners because the background is a sibling, not a parent.", font: .body).textColor(.systemRed)
                         
                         #CodeExample(
-                            HStack(justifyContent: .start) {
+                            HStack {
                                 Space(width: 100, height: 50)
                                     .backgroundColor(.systemBlue)
-                                    .overlay {
-                                        Text("Overflows").textColor(.white).textAlignment(.center)
-                                    }
-                                // This deliberately overflows to show the issue
-                                Space(width: 40, height: 50)
-                                    .backgroundColor(.systemRed)
-                                    .offset(x: -20)
+                                    .alpha(0.5)
                             }
-                            .backgroundColor(.systemGray5)
+                            .backgroundColor(.systemGreen)
                             .clipsToBounds(true)
                             .cornerRadius(16)
-                            .size(width: 150, height: 50)
+                            .size(width: 80)
                         )
                         
                         Code {
@@ -343,33 +350,20 @@ class ViewHierarchyExamplesView: UIView {
                         Text("Using .view() creates a parent container that can properly clip its children.", font: .body).textColor(.systemGreen)
                         
                         #CodeExample(
-                            HStack(justifyContent: .start) {
+                            HStack {
                                 Space(width: 100, height: 50)
                                     .backgroundColor(.systemBlue)
-                                    .overlay {
-                                        Text("Clipped").textColor(.white).textAlignment(.center)
-                                    }
-                                Space(width: 40, height: 50)
-                                    .backgroundColor(.systemRed)
-                                    .offset(x: -20)
+                                    .alpha(0.5)
                             }
                             .view()
-                            .backgroundColor(.systemGray5)
+                            .backgroundColor(.systemGreen)
                             .clipsToBounds(true)
                             .cornerRadius(16)
-                            .size(width: 150, height: 50)
+                            .size(width: 80)
                         )
                         
                         Code {
                             """
-                            HStack {
-                                Space(width: 100, height: 50)
-                                    .backgroundColor(.systemBlue)
-                            }
-                            .view()
-                            .clipsToBounds(true)
-                            .cornerRadius(16)
-                            
                             // Fixed: Children are properly clipped
                             // ↳ UIView(cornerRadius, clipsToBounds) - parent
                             //   ↳ UIView(blue) - child, gets clipped
@@ -381,93 +375,16 @@ class ViewHierarchyExamplesView: UIView {
                 .backgroundColor(.systemRed.withAlphaComponent(0.1))
                 .cornerRadius(12)
             }
-            
-            VStack(spacing: 10) {
-                Text("⚠️ Gotcha: Animators and view boundaries", font: .subtitle)
-                Text("Animators have two common issues related to view hierarchy: they may only apply to the background view instead of the entire component, and they don't cross view boundaries.", font: .body).textColor(.systemOrange)
-                
-                VStack(spacing: 15) {
-                    VStack(spacing: 6) {
-                        Text("Issue 1: Animator only affects background", font: .bodyBold).textColor(.systemOrange)
-                        Text("When you apply an animator to a layout component without .view(), only the background view animates, not the children.", font: .body).textColor(.secondaryLabel)
-                        
-                        Code {
-                            """
-                            // ❌ Problem: Only background animates
-                            HStack {
-                                Text("Hello")
-                            }
-                            .backgroundColor(.systemBlue)
-                            .animator(TransformAnimator(...))
-                            
-                            // The text doesn't animate with the background because
-                            // the animator is only applied to the background view(sibling)
-                            
-                            // ✅ Solution: Use .view() to wrap everything
-                            HStack {
-                                Text("Hello")
-                            }
-                            .view()
-                            .backgroundColor(.systemBlue)
-                            .animator(TransformAnimator(...))
-                            
-                            // Now the entire view container animates together,
-                            // including the text as its child
-                            """
-                        }
-                    }
-                    
-                    Separator()
-                    
-                    VStack(spacing: 6) {
-                        Text("Issue 2: Animators don't cross view boundaries", font: .bodyBold).textColor(.systemOrange)
-                        Text("When you use view wrapper modifiers like .view(), .scrollView(), or .tappableView(), they create a new view boundary. The parent's componentEngine animator doesn't apply to children inside these wrapped views.", font: .body).textColor(.secondaryLabel)
-                        
-                        Code {
-                            """
-                            // ❌ Problem: Animator on parent doesn't apply to wrapped child
-                            VStack {
-                                Text("I won't animate")
-                                    .view()
-                                    .backgroundColor(.systemBlue)
-                            }
-                            .with(\\.componentEngine.animator, TransformAnimator(...))
-                            
-                            // The .view() creates a boundary, so the text won't animate
-                            
-                            // ✅ Solution: Apply animator to the wrapped view directly
-                            VStack {
-                                Text("I will animate")
-                                    .view()
-                                    .backgroundColor(.systemBlue)
-                                    .animator(TransformAnimator(...))
-                            }
-                            
-                            // Or use .with(\\.componentEngine.animator) on the child
-                            VStack {
-                                Text("I will also animate")
-                                    .view()
-                                    .backgroundColor(.systemBlue)
-                                    .with(\\.componentEngine.animator, TransformAnimator(...))
-                            }
-                            """
-                        }
-                    }
-                }
-                .inset(16)
-                .backgroundColor(.systemOrange.withAlphaComponent(0.1))
-                .cornerRadius(12)
-            }
-            
+
             VStack(spacing: 10) {
                 Text("⚠️ Gotcha: View ID across boundaries", font: .subtitle)
                 Text("View IDs don't work across view boundaries. When you wrap a component with .view() or other view wrappers, the ID of inner components is no longer accessible to the outer componentEngine.", font: .body).textColor(.systemPurple)
-                
+
                 VStack(spacing: 15) {
                     VStack(spacing: 6) {
                         Text("Problem: Can't access inner view ID", font: .bodyBold).textColor(.systemPurple)
                         Text("Methods like visibleView(id:) and frame(id:) won't find IDs inside wrapped views.", font: .body).textColor(.secondaryLabel)
-                        
+
                         Code {
                             """
                             // ❌ Problem: Can't find "innerView" from parent
@@ -485,48 +402,164 @@ class ViewHierarchyExamplesView: UIView {
                             // ✅ Solution: Apply ID to the outer view wrapper
                             VStack {
                                 Text("Hello")
+                                    .id("innerView")  // ID on wrapper
                                     .view()
                                     .backgroundColor(.systemBlue)
                                     .id("outerView")  // ID on wrapper
                             }
                             
                             // Now this works:
-                            let view = componentEngine.visibleView(id: "outerView")
                             // Returns the UIView wrapper
-                            """
-                        }
-                    }
-                    
-                    Separator()
-                    
-                    VStack(spacing: 6) {
-                        Text("Best practice", font: .bodyBold)
-                        Text("Always apply .id() to the outermost view wrapper, not to inner components that are already wrapped.", font: .body).textColor(.secondaryLabel)
-                        
-                        Code {
-                            """
-                            // ✅ Good: ID on outermost wrapper
-                            VStack {
-                                Text("Content")
-                            }
-                            .scrollView()
-                            .id("myScrollView")  // ID here
+                            let view = componentEngine.visibleView(id: "outerView")
                             
-                            // ✅ Good: ID on tappable wrapper
-                            Text("Tap me")
-                                .tappableView { }
-                                .id("myButton")  // ID here
+                            // Returns the inner label
+                            let textLabel = view.componentEngine.visibleView(id: "innerView")
                             
-                            // ❌ Bad: ID hidden inside wrapper
-                            Text("Can't find me")
-                                .id("hidden")  // This ID won't be accessible
-                                .tappableView { }
+                            // Returns the inner label's frame
+                            let textLabelFrame = view.componentEngine.frame(id: "innerView")
                             """
                         }
                     }
                 }
                 .inset(16)
                 .backgroundColor(.systemPurple.withAlphaComponent(0.1))
+                .cornerRadius(12)
+            }
+
+            VStack(spacing: 10) {
+                Text("⚠️ Gotcha: Animators and view boundaries", font: .subtitle)
+                Text("Animators have two common issues related to view hierarchy: they may only apply to the background view instead of the entire component, and they don't cross view boundaries.", font: .body).textColor(.systemOrange)
+                
+                VStack(spacing: 15) {
+                    VStack(spacing: 6) {
+                        Text("Issue 1: Animator modifier only affects the view it is assigned too", font: .bodyBold).textColor(.systemOrange)
+                        Text("When you apply an animator to a layout component without .view(), only the background view animates, not the children. Since the animator modifier is only applied to the inset view.", font: .body).textColor(.secondaryLabel)
+
+                        Text("Toggle Item", font: .body)
+                            .inset(h: 20, v: 10)
+                            .backgroundColor(.systemBlue)
+                            .textColor(.white)
+                            .cornerRadius(8)
+                            .tappableView {
+                                viewModel.showItem.toggle()
+                            }
+
+                        #CodeExampleNoInsets(
+                            ZStack {
+                                if viewModel.showItem {
+                                    Text("I'm NOT animated", font: .body) // text isn't animated
+                                        .inset(h: 20, v: 10) // because of this inset
+                                        .backgroundColor(.systemGreen)
+                                        .cornerRadius(8)
+                                        .animator(TransformAnimator(transform: CATransform3DMakeTranslation(100, 0, 0)))
+                                }
+                            }.size(width: 240, height: 100)
+                        )
+
+                        Text("We can fix it by wrapping the component with .view(), so the animator applies to the wrapping container view", font: .body).textColor(.secondaryLabel)
+                        #CodeExampleNoInsets(
+                            ZStack {
+                                if viewModel.showItem {
+                                    Text("I'm animated!", font: .body) // text isn't animated
+                                        .inset(h: 20, v: 10)
+                                        .view() // wrapping the background and the text together
+                                        .backgroundColor(.systemGreen)
+                                        .cornerRadius(8)
+                                        .animator(TransformAnimator(transform: CATransform3DMakeTranslation(100, 0, 0)))
+                                }
+                            }.size(width: 240, height: 100)
+                        )
+                    }
+
+                    VStack(spacing: 6) {
+                        Text("However, wrapping the view also might cause some other issues. Like when animating the frame of the child view inside the wrapper.", font: .body).textColor(.secondaryLabel)
+                        Text("Toggle Size", font: .body)
+                            .inset(h: 20, v: 10)
+                            .backgroundColor(.systemBlue)
+                            .textColor(.white)
+                            .cornerRadius(8)
+                            .tappableView {
+                                viewModel.toggleSize.toggle()
+                            }
+
+                        #CodeExampleNoInsets(
+                            ZStack {
+                                Space(size: viewModel.toggleSize ? CGSize(width: 200, height: 80) : CGSize(width: 100, height: 50))
+                                    .backgroundColor(.systemRed.withAlphaComponent(0.5))
+                                    .view()
+                                    .backgroundColor(.systemBlue)
+                                    .animator(TransformAnimator())
+                            }.size(width: 240, height: 100)
+                        )
+
+                        #CodeExampleNoInsets(
+                            ZStack {
+                                Space(size: viewModel.toggleSize ? CGSize(width: 200, height: 80) : CGSize(width: 100, height: 50))
+                                    .backgroundColor(.systemRed.withAlphaComponent(0.5))
+                                    .animator(TransformAnimator()) // applying animator to the child view too
+                                    .view()
+                                    .backgroundColor(.systemBlue)
+                                    .animator(TransformAnimator())
+                            }.size(width: 240, height: 100)
+                        )
+                    }
+                    
+                    Separator()
+
+                    VStack(spacing: 6) {
+                        Text("Issue 2: ComponentEngine's default animator doesn't apply to child view inside view wrappers", font: .bodyBold).textColor(.systemOrange)
+                        Text("When you use view wrapper modifiers like .view(), .scrollView(), or .tappableView(), they create a new view boundary. The parent's componentEngine animator doesn't apply to children inside these wrapped views. Causing inner view's frame to not be animated.", font: .body).textColor(.secondaryLabel)
+
+                        Text("Toggle Size", font: .body)
+                            .inset(h: 20, v: 10)
+                            .backgroundColor(.systemBlue)
+                            .textColor(.white)
+                            .cornerRadius(8)
+                            .tappableView {
+                                viewModel.toggleSize.toggle()
+                            }
+
+                        Code {
+                            "componentEngine.animator = TransformAnimator() // animator set on the parent componentEngine"
+                        }
+
+                        #CodeExampleNoWrap(
+                            ZStack {
+                                Space(size: viewModel.toggleSize ? CGSize(width: 200, height: 80) : CGSize(width: 100, height: 50))
+                                    .backgroundColor(.systemRed.withAlphaComponent(0.5))
+                                    .view()
+                                    .backgroundColor(.systemBlue)
+                            }
+                            .size(width: 240, height: 100)
+                        )
+
+                        Text("Fix 1: individually apply animator modifier to the child view", font: .body).textColor(.secondaryLabel)
+                        #CodeExampleNoWrap(
+                            ZStack {
+                                Space(size: viewModel.toggleSize ? CGSize(width: 200, height: 80) : CGSize(width: 100, height: 50))
+                                    .backgroundColor(.systemRed.withAlphaComponent(0.5))
+                                    .animator(TransformAnimator())
+                                    .view()
+                                    .backgroundColor(.systemBlue)
+                            }
+                            .size(width: 240, height: 100)
+                        )
+
+                        Text("Fix 2: assign an animator to the view wrapper's componentEngine", font: .body).textColor(.secondaryLabel)
+                        #CodeExampleNoWrap(
+                            ZStack {
+                                Space(size: viewModel.toggleSize ? CGSize(width: 200, height: 80) : CGSize(width: 100, height: 50))
+                                    .backgroundColor(.systemRed.withAlphaComponent(0.5))
+                                    .view()
+                                    .backgroundColor(.systemBlue)
+                                    .with(\.componentEngine.animator, TransformAnimator())
+                            }
+                            .size(width: 240, height: 100)
+                        )
+                    }.view().with(\.componentEngine.animator, TransformAnimator())
+                }
+                .inset(16)
+                .backgroundColor(.systemOrange.withAlphaComponent(0.1))
                 .cornerRadius(12)
             }
             

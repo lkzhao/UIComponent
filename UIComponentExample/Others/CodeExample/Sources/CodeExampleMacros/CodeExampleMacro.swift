@@ -18,7 +18,7 @@ public struct CodeExampleMacro: ExpressionMacro {
                     \(argument), 
                     \(literal: argument.description.trimLeadingWhitespacesBasedOnFirstLine())
                 )
-                return CodeExampleComponent(content: component, code: code, addInset: true)
+                return CodeExampleComponent(content: component, code: code)
             }()
             """
     }
@@ -39,7 +39,28 @@ public struct CodeExampleNoInsetsMacro: ExpressionMacro {
                     \(argument), 
                     \(literal: argument.description.trimLeadingWhitespacesBasedOnFirstLine())
                 )
-                return CodeExampleComponent(content: component, code: code, addInset: false)
+                return CodeExampleComponent(content: component, code: code, style: .noInset)
+            }()
+            """
+    }
+}
+
+public struct CodeExampleNoWrapMacro: ExpressionMacro {
+    public static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+    ) -> ExprSyntax {
+        guard let argument = node.arguments.first?.expression else {
+            fatalError("compiler bug: the macro does not have any arguments")
+        }
+
+        return """
+            {
+                let (component, code) = (
+                    \(argument), 
+                    \(literal: argument.description.trimLeadingWhitespacesBasedOnFirstLine())
+                )
+                return CodeExampleComponent(content: component, code: code, style: .noWrap)
             }()
             """
     }
@@ -62,6 +83,7 @@ struct CodeExamplePlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
         CodeExampleMacro.self,
         CodeExampleNoInsetsMacro.self,
+        CodeExampleNoWrapMacro.self,
         GenerateCodeMacro.self
     ]
 }
