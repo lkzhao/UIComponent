@@ -32,7 +32,14 @@ public struct ViewComponent<View: UIView>: Component {
     public init(generator: @autoclosure @escaping () -> View) {
         self.init(view: nil, generator: generator)
     }
-    
+
+    /// Public initializer that takes a generator closure and wraps it with an `@autoclosure` to delay its execution.
+    /// The generator is marked as `@escaping` because it will be stored and used later.
+    /// - Parameter generator: A closure that generates a `UIView` instance.
+    public init(generator: @escaping () -> View) {
+        self.init(view: nil, generator: generator)
+    }
+
     /// Creates a `ViewRenderNode` using the component's view or generator.
     /// It uses the `sizeThatFits` method of the view to determine the appropriate size within the given constraints.
     /// - Parameter constraint: A `Constraint` instance that provides the maximum size that the view can take.
