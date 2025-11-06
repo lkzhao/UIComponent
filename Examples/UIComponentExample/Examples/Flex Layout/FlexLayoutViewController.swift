@@ -83,8 +83,17 @@ class FlexLayoutViewController: ComponentViewController {
                 for alignItems in CrossAxisAlignment.allCases {
                     Text("\(alignItems)").size(width: .fill)
                     Flow(alignItems: alignItems) {
-                        for index in 0..<10 {
-                            Box(index, height: 50 + CGFloat(index % 4) * 10)
+                        switch alignItems {
+                        case .baselineFirst, .baselineLast:
+                            Space().styleColor(.systemBlue).size(height: 1).flexGrow(1)
+                            Text("Hello", font: UIFont.systemFont(ofSize: 30))
+                            Space().styleColor(.systemBlue).size(height: 1).flexGrow(1)
+                            Text("Hello\nWorld")
+                            Space().styleColor(.systemBlue).size(height: 1).flexGrow(1)
+                        default:
+                            for index in 0..<10 {
+                                Box(index, height: 50 + CGFloat(index % 4) * 10)
+                            }
                         }
                     }
                     .inset(10).styleColor(.systemGroupedBackground)
@@ -151,16 +160,26 @@ class FlexLayoutViewController: ComponentViewController {
                 Text("Flex align-self").font(.boldSystemFont(ofSize: 20))
 
                 for align in CrossAxisAlignment.allCases {
-                    Text("number 1 align-self \(align)").size(width: .fill)
-                    Flow {
-                        Box(1).flex(alignSelf: align)
-                        Box(2, height: 60)
-                        Box(3, height: 70)
-                        Box(4, height: 80)
+                    switch align {
+                    case .baselineFirst, .baselineLast:
+                        Text("first line and text align-self \(align)").size(width: .fill)
+                        Flow {
+                            Space().styleColor(.systemBlue).size(height: 1).flexGrow(1).alignSelf(align)
+                            Text("Hello\nWorld").alignSelf(align)
+                            Space().styleColor(.systemBlue).size(height: 1).flexGrow(1)
+                        }
+                        .size(width: 190).inset(10).styleColor(.systemGroupedBackground)
+                    default:
+                        Text("number 1 align-self \(align)").size(width: .fill)
+                        Flow {
+                            Box(1).flex(alignSelf: align)
+                            Box(2, height: 60)
+                            Box(3, height: 70)
+                            Box(4, height: 80)
+                        }
+                        .size(width: 190).inset(10).styleColor(.systemGroupedBackground)
                     }
-                    .size(width: 190).inset(10).styleColor(.systemGroupedBackground)
                 }
-
             }
 
         }

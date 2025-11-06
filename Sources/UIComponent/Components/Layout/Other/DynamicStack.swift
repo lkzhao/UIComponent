@@ -129,14 +129,12 @@ extension DynamicStackRenderNode {
             let child = content(i).layout(childConstraint)
             var crossValue: CGFloat = 0
             switch alignItems {
-            case .start:
+            case .start, .stretch, .baselineFirst:
                 crossValue = 0
-            case .end:
+            case .end, .baselineLast:
                 crossValue = crossSize - cross(child.size)
             case .center:
                 crossValue = (crossSize - cross(child.size)) / 2
-            case .stretch:
-                crossValue = 0
             }
             let position = point(main: CGFloat(i) * mainSize, cross: crossValue)
             return RenderNodeChild(renderNode: child, position: position, index: i)

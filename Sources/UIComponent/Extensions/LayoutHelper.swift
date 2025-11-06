@@ -9,7 +9,7 @@ public enum MainAxisAlignment: CaseIterable {
 
 /// An enumeration to define the cross axis alignment of a layout.
 public enum CrossAxisAlignment: CaseIterable {
-    case start, end, center, stretch
+    case start, end, center, stretch, baselineFirst, baselineLast
 }
 
 /// Protocol defining the base layout behavior.

@@ -34,14 +34,12 @@ extension Pager {
         for (index, child) in renderNodes.enumerated() {
             var crossValue: CGFloat = 0
             switch alignItems {
-            case .start:
+            case .start, .stretch, .baselineFirst:
                 crossValue = 0
-            case .end:
+            case .end, .baselineLast:
                 crossValue = crossMax - cross(child.size)
             case .center:
                 crossValue = (crossMax - cross(child.size)) / 2
-            case .stretch:
-                crossValue = 0
             }
             positions.append(point(main: CGFloat(index) * pageMain, cross: crossValue))
         }
