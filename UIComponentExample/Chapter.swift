@@ -65,16 +65,16 @@ struct Chapter: Equatable {
             view: ViewComponentExamplesView.self
         ),
         Chapter(
+            title: "Custom Components",
+            view: CustomComponentExamplesView.self
+        ),
+        Chapter(
             title: "Animation",
             view: AnimationExamplesView.self
         ),
         Chapter(
             title: "Environment",
             view: EnvironmentExamplesView.self
-        ),
-        Chapter(
-            title: "Custom Components",
-            view: CustomComponentExamplesView.self
         ),
         Chapter(
             title: "Performance Optimization",

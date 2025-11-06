@@ -88,7 +88,7 @@ class CustomComponentExamplesView: UIView {
                         Text("Add parameters to make your components configurable.", font: .body).textColor(.secondaryLabel)
                         
                         #CodeExample(
-                            VStack(spacing: 10) {
+                            VStack(spacing: 4) {
                                 PrimaryButton(title: "Save") {
                                     print("Save tapped")
                                 }
@@ -249,7 +249,7 @@ class CustomComponentExamplesView: UIView {
                                     .backgroundColor(.systemBackground)
                                     .cornerRadius(8)
                                 }
-                            }.inset(10).backgroundColor(.systemGray6)
+                            }.inset(10)
                         )
                         
                         Text("How it works:", font: .caption).textColor(.secondaryLabel)
@@ -476,7 +476,7 @@ class CustomComponentExamplesView: UIView {
                                         .textColor(.white)
                                         .cornerRadius(8)
                                 }
-                            }.inset(20).backgroundColor(.systemGray6).size(height: 300)
+                            }.inset(10)
                         )
                         
                         Code(DiagonalStack.codeRepresentation)
@@ -616,18 +616,11 @@ struct Card: ComponentBuilder {
 // Button component
 @GenerateCode
 struct PrimaryButton: ComponentBuilder {
-    let title: String
-    let color: UIColor
-    let isEnabled: Bool
-    let onTap: () -> Void
-    
-    init(title: String, color: UIColor = .systemBlue, isEnabled: Bool = true, onTap: @escaping () -> Void) {
-        self.title = title
-        self.color = color
-        self.isEnabled = isEnabled
-        self.onTap = onTap
-    }
-    
+    var title: String
+    var color: UIColor = .systemBlue
+    var isEnabled: Bool = true
+    var onTap: () -> Void
+
     func build() -> some Component {
         Text(title, font: .boldSystemFont(ofSize: 16))
             .textColor(isEnabled ? .white : .systemGray)
@@ -689,16 +682,10 @@ struct UserCard: ComponentBuilder {
 // Avatar component
 @GenerateCode
 struct Avatar: ComponentBuilder {
-    let systemImage: String
-    let size: CGFloat
-    let backgroundColor: UIColor
-    
-    init(systemImage: String, size: CGFloat, backgroundColor: UIColor = .systemBlue) {
-        self.systemImage = systemImage
-        self.size = size
-        self.backgroundColor = backgroundColor
-    }
-    
+    var systemImage: String
+    var size: CGFloat
+    var backgroundColor: UIColor = .systemBlue
+
     func build() -> some Component {
         Image(systemName: systemImage, withConfiguration: UIImage.SymbolConfiguration(pointSize: size * 0.5))
             .tintColor(.white)
@@ -712,14 +699,9 @@ struct Avatar: ComponentBuilder {
 // Badge component
 @GenerateCode
 struct Badge: ComponentBuilder {
-    let text: String
-    let color: UIColor
-    
-    init(text: String, color: UIColor = .systemBlue) {
-        self.text = text
-        self.color = color
-    }
-    
+    var text: String
+    var color: UIColor = .systemBlue
+
     func build() -> some Component {
         Text(text, font: .boldSystemFont(ofSize: 12))
             .textColor(.white)
@@ -732,18 +714,11 @@ struct Badge: ComponentBuilder {
 // List row component
 @GenerateCode
 struct ListRow: ComponentBuilder {
-    let icon: String
-    let title: String
-    let subtitle: String
-    let iconColor: UIColor
-    
-    init(icon: String, title: String, subtitle: String, iconColor: UIColor = .systemBlue) {
-        self.icon = icon
-        self.title = title
-        self.subtitle = subtitle
-        self.iconColor = iconColor
-    }
-    
+    var icon: String
+    var title: String
+    var subtitle: String
+    var iconColor: UIColor = .systemBlue
+
     func build() -> some Component {
         HStack(spacing: 12, alignItems: .center) {
             Image(systemName: icon)
@@ -851,9 +826,9 @@ struct ResponsiveCard: Component {
 // Custom VStack implementation
 @GenerateCode
 struct MyVStack: Component {
-    let spacing: CGFloat
-    let children: [any Component]
-    
+    var spacing: CGFloat
+    var children: [any Component]
+
     init(spacing: CGFloat = 0, @ComponentArrayBuilder children: () -> [any Component]) {
         self.spacing = spacing
         self.children = children()
