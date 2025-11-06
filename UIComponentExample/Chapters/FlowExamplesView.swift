@@ -204,7 +204,6 @@ class FlowExamplesView: UIView {
                                     .cornerRadius(6)
                             }
                         }
-                        .inset(10)
                         .size(width: 300, height: 200)
                     )
                     
@@ -218,7 +217,6 @@ class FlowExamplesView: UIView {
                                     .cornerRadius(6)
                             }
                         }
-                        .inset(10)
                         .size(width: 300, height: 200)
                     )
                     
@@ -232,7 +230,6 @@ class FlowExamplesView: UIView {
                                     .cornerRadius(6)
                             }
                         }
-                        .inset(10)
                         .size(width: 300, height: 200)
                     )
                     
@@ -246,7 +243,6 @@ class FlowExamplesView: UIView {
                                     .cornerRadius(6)
                             }
                         }
-                        .inset(10)
                         .size(width: 300, height: 200)
                     )
                     
@@ -260,7 +256,6 @@ class FlowExamplesView: UIView {
                                     .cornerRadius(6)
                             }
                         }
-                        .inset(10)
                         .size(width: 300, height: 200)
                     )
                     
@@ -274,7 +269,6 @@ class FlowExamplesView: UIView {
                                     .cornerRadius(6)
                             }
                         }
-                        .inset(10)
                         .size(width: 300, height: 200)
                     )
                 }
@@ -307,14 +301,14 @@ class FlowExamplesView: UIView {
                             .backgroundColor(.systemPurple)
                             .cornerRadius(4)
                             .alignSelf(.stretch)
-                    }.inset(10)
+                    }
                 )
             }
 
             VStack(spacing: 10) {
                 Text("FlexColumn", font: .subtitle)
                 Text("FlexColumn works similarly but arranges items vertically and wraps to new columns.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     FlexColumn(spacing: 8) {
                         for i in 1...12 {
                             Text("Item \(i)", font: .body)
@@ -360,7 +354,7 @@ class FlowExamplesView: UIView {
                             .backgroundColor(.systemBlue.withAlphaComponent(0.1))
                             .cornerRadius(16)
                         }
-                    }.inset(10)
+                    }
                 )
             }
             
