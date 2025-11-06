@@ -20,21 +20,21 @@ class PlacementExamplesView: UIView {
                 
                 VStack(spacing: 10) {
                     Text("Uniform inset", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         Text("Uniform padding", font: .body)
                             .backgroundColor(.systemBlue)
                             .inset(20)
                     )
                     
                     Text("Horizontal and vertical inset", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         Text("H: 30, V: 10", font: .body)
                             .backgroundColor(.systemGreen)
                             .inset(h: 30, v: 10)
                     )
                     
                     Text("Individual edge inset", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         Text("Top: 20, Rest: 8", font: .body)
                             .backgroundColor(.systemOrange)
                             .inset(top: 30, rest: 8)
@@ -52,7 +52,7 @@ class PlacementExamplesView: UIView {
                         Space(width: 20, height: 20).backgroundColor(.systemGray5)
                         Space(width: 20, height: 20).backgroundColor(.systemBlue)
                             .offset(x: 10, y: -10)
-                    }.inset(20)
+                    }
                 )
             }
             
@@ -63,7 +63,7 @@ class PlacementExamplesView: UIView {
 
                 VStack(spacing: 10) {
                     Text("Simple overlay", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         Text("Base content", font: .title)
                             .inset(40)
                             .backgroundColor(.systemGray5)
@@ -75,7 +75,7 @@ class PlacementExamplesView: UIView {
                     )
                     
                     Text("Loading overlay (from ZStack example)", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         VStack(spacing: 10) {
                             Text("Content", font: .title)
                             Text("This content is loading", font: .body)
@@ -99,7 +99,7 @@ class PlacementExamplesView: UIView {
 
                 VStack(spacing: 10) {
                     Text("Simple background", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         Text("Foreground", font: .body)
                             .inset(20)
                             .background {
@@ -108,7 +108,7 @@ class PlacementExamplesView: UIView {
                     )
                     
                     Text("Gradient background", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         Text("Gradient Text", font: .title)
                             .textColor(.white)
                             .inset(30)
@@ -137,7 +137,6 @@ class PlacementExamplesView: UIView {
                                     .backgroundColor(.systemRed)
                                     .cornerRadius(8)
                             }
-                            .inset(10)
                     )
                     
                     Text("Badge positions", font: .caption)
@@ -163,7 +162,7 @@ class PlacementExamplesView: UIView {
                                 .badge(horizontalAlignment: .start) {
                                     Circle(size: 12).backgroundColor(.systemRed)
                                 }
-                        }.inset(10)
+                        }
                     )
                     
                     Text("Badge with offset", font: .caption)
@@ -176,7 +175,6 @@ class PlacementExamplesView: UIView {
                                 Image(systemName: "checkmark.circle.fill")
                                     .tintColor(.systemGreen)
                             }
-                            .inset(10)
                     )
                 }
             }
@@ -185,7 +183,7 @@ class PlacementExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Centered modifier", font: .subtitle)
                 Text("Centers content within available space. Uses ZStack with .fill() internally.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     Text("Centered", font: .body)
                         .backgroundColor(.systemBlue)
                         .inset(20)

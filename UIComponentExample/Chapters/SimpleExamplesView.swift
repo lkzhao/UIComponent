@@ -26,7 +26,7 @@ class SimpleExamplesView: UIView {
                     VStack {
                         Image(systemName: "square.stack")
                         Text("Hello World")
-                    }.inset(10)
+                    }
                 )
             }
             VStack(spacing: 10) {
@@ -37,7 +37,7 @@ class SimpleExamplesView: UIView {
                     view.componentEngine.component = VStack {
                         Image(systemName: "square.stack")
                         Text("Hello World")
-                    }.inset(10)
+                    }
                     """
                 }
             }
@@ -50,13 +50,13 @@ class SimpleExamplesView: UIView {
                         Image(systemName: "square.stack", withConfiguration: config)
                             .tintColor(.label)
                         Text("Hello World", font: .boldSystemFont(ofSize: 16))
-                    }.inset(h: 16, v: 10)
+                    }
                 )
             }
             VStack(spacing: 10) {
                 Text("Conditional rendering and tap handling", font: .subtitle)
                 Text("You can use standard Swift control flow to conditionally render components. You can also handle tap events using tappableView modifier.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     HStack(spacing: 8, alignItems: .center) {
                         if viewModel.isSelected {
                             Image(systemName: "checkmark.square").tintColor(.white)
@@ -73,7 +73,7 @@ class SimpleExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("List Rendering", font: .subtitle)
                 Text("You can render lists using standard Swift for loops. Here is an example rendering 200 items inside a scroll view.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     VStack {
                         for i in 0...200 {
                             Text("Item \(i)", font: .body).inset(10)

@@ -71,8 +71,7 @@ class SizingAndConstraintExamplesView: UIView {
                                 .textAlignment(.center)
                                 .backgroundColor(.systemOrange)
                                 .size(width: 120, height: 40)
-                        }.inset(10)
-                    )
+                        }                    )
                     
                     Text("Using CGSize", font: .caption)
                     #CodeExample(
@@ -80,7 +79,6 @@ class SizingAndConstraintExamplesView: UIView {
                             .textAlignment(.center)
                             .backgroundColor(.systemPurple)
                             .size(CGSize(width: 100, height: 100))
-                            .inset(10)
                     )
                     
                     Text("Fixed width only", font: .caption)
@@ -88,12 +86,10 @@ class SizingAndConstraintExamplesView: UIView {
                         VStack(spacing: 8) {
                             Text("Fixed width (120), height fits content")
                                 .backgroundColor(.systemIndigo)
-                                .inset(10)
                                 .size(width: 120)
                             
                             Text("Another example with more text that wraps around")
                                 .backgroundColor(.systemTeal)
-                                .inset(10)
                                 .size(width: 120)
                         }
                     )
@@ -102,12 +98,10 @@ class SizingAndConstraintExamplesView: UIView {
                     #CodeExample(
                         HStack(spacing: 8) {
                             Text("Height 60")
-                                .inset(10)
                                 .backgroundColor(.systemPink)
                                 .size(height: 60)
                             
                             Text("Also 60")
-                                .inset(10)
                                 .backgroundColor(.systemMint)
                                 .size(height: 60)
                         }
@@ -126,15 +120,13 @@ class SizingAndConstraintExamplesView: UIView {
                     #CodeExample(
                         HStack(spacing: 10) {
                             Text("Fit")
-                                .inset(10)
                                 .backgroundColor(.systemBlue)
                                 .size(width: .fit, height: .fit)
                             
                             Text("Fit")
-                                .inset(10)
                                 .backgroundColor(.systemBlue)
                                 .size(width: .fit, height: .fit)
-                        }.inset(10).backgroundColor(.systemGray6)
+                        }.backgroundColor(.systemGray6)
                     )
                     
                     Text(".fill", font: .caption)
@@ -143,15 +135,13 @@ class SizingAndConstraintExamplesView: UIView {
                         VStack(spacing: 10) {
                             Text("Fills width")
                                 .textAlignment(.center)
-                                .inset(10)
                                 .backgroundColor(.systemGreen)
                                 .size(width: .fill)
                             
                             Text("Fits width")
-                                .inset(10)
                                 .backgroundColor(.systemOrange)
                                 .size(width: .fit) // can be ignored since fit is default
-                        }.inset(10).backgroundColor(.systemGray6)
+                        }.backgroundColor(.systemGray6)
                     )
                     
                     Text(".fit() and .fill() shortcuts", font: .caption)
@@ -159,22 +149,19 @@ class SizingAndConstraintExamplesView: UIView {
                         VStack(spacing: 10) {
                             Text("Using .fill()")
                                 .textAlignment(.center)
-                                .inset(10)
                                 .backgroundColor(.systemBlue)
                                 .fill()
                             
                             HStack(spacing: 10) {
                                 Text("Using .fit()")
-                                    .inset(10)
                                     .backgroundColor(.systemGreen)
                                     .fit() // can be ignored since fit is default
 
                                 Text("Also .fit()")
-                                    .inset(10)
                                     .backgroundColor(.systemOrange)
                                     .fit() // can be ignored since fit is default
                             }
-                        }.inset(10).backgroundColor(.systemGray6)
+                        }.backgroundColor(.systemGray6)
                     )
                 }
             }
@@ -205,7 +192,7 @@ class SizingAndConstraintExamplesView: UIView {
                                 .inset(8)
                                 .backgroundColor(.systemOrange)
                                 .size(width: .percentage(1.0))
-                        }.inset(10).backgroundColor(.systemGray6)
+                        }.backgroundColor(.systemGray6)
                     )
                     
                     Text("Combining percentage and absolute", font: .caption)
@@ -216,7 +203,7 @@ class SizingAndConstraintExamplesView: UIView {
                                 .inset(8)
                                 .backgroundColor(.systemPurple)
                                 .size(width: .percentage(0.33), height: 60)
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                 }
             }
@@ -254,7 +241,6 @@ class SizingAndConstraintExamplesView: UIView {
                             .overlay {
                                 Text("16:9 Video").textAlignment(.center).textColor(.white)
                             }
-                            .inset(10)
                     )
                     
                     Text("4:3 aspect ratio", font: .caption)
@@ -265,7 +251,6 @@ class SizingAndConstraintExamplesView: UIView {
                             .overlay {
                                 Text("4:3 Photo").textAlignment(.center).textColor(.white)
                             }
-                            .inset(10)
                     )
                 }
             }
@@ -279,14 +264,12 @@ class SizingAndConstraintExamplesView: UIView {
                     Text("Without maxSize", font: .caption)
                     #CodeExample(
                         Text("This is a very long text that will take up as much width as available in the container without any size restrictions")
-                            .inset(10)
                             .backgroundColor(.systemBlue)
                     )
                     
                     Text("With maxSize width", font: .caption)
                     #CodeExample(
                         Text("This is a very long text that will wrap because it has a maximum width constraint applied")
-                            .inset(10)
                             .backgroundColor(.systemGreen)
                             .maxSize(width: 200)
                     )
@@ -300,7 +283,6 @@ class SizingAndConstraintExamplesView: UIView {
                         }
                         .backgroundColor(.systemBlue)
                         .maxSize(width: 150, height: 120)
-                        .inset(10)
                     )
                 }
             }
@@ -321,8 +303,7 @@ class SizingAndConstraintExamplesView: UIView {
                             Text("Longer")
                                 .inset(8)
                                 .backgroundColor(.systemRed)
-                        }.inset(10)
-                    )
+                        }                    )
                     
                     Text("With minSize width", font: .caption)
                     #CodeExample(
@@ -336,8 +317,7 @@ class SizingAndConstraintExamplesView: UIView {
                                 .inset(8)
                                 .backgroundColor(.systemGreen)
                                 .minSize(width: 80)
-                        }.inset(10)
-                    )
+                        }                    )
                     
                     Text("Minimum button sizes", font: .caption)
                     #CodeExample(
@@ -355,8 +335,7 @@ class SizingAndConstraintExamplesView: UIView {
                                 .backgroundColor(.systemGray5)
                                 .cornerRadius(8)
                                 .minSize(width: 80, height: 44)
-                        }.inset(10)
-                    )
+                        }                    )
                     
                     Text("Touch target minimum", font: .caption)
                     Text("Ensure interactive elements are at least 44x44 points for accessibility.", font: .caption).textColor(.secondaryLabel)
@@ -379,8 +358,7 @@ class SizingAndConstraintExamplesView: UIView {
                                 .contentMode(.scaleAspectFit)
                                 .minSize(width: 44, height: 44)
                                 .backgroundColor(.systemGray6)
-                        }.inset(10)
-                    )
+                        }                    )
                 }
             }
             
@@ -443,7 +421,6 @@ class SizingAndConstraintExamplesView: UIView {
                             .overlay {
                                 Text("Width:Height = 2:1").textAlignment(.center).textColor(.white)
                             }
-                            .inset(10)
                     )
                     
                     Text("Closure-based sizing", font: .caption)
@@ -457,7 +434,6 @@ class SizingAndConstraintExamplesView: UIView {
                             .overlay {
                                 Text("60% width").textAlignment(.center).textColor(.white)
                             }
-                            .inset(10)
                     )
                     
                     Text("Fixed constraint", font: .caption)
@@ -469,7 +445,6 @@ class SizingAndConstraintExamplesView: UIView {
                             .overlay {
                                 Text("Tight 150x75").textAlignment(.center).textColor(.white)
                             }
-                            .inset(10)
                     )
                 }
             }
@@ -535,8 +510,7 @@ class SizingAndConstraintExamplesView: UIView {
                                         .backgroundColor(.systemIndigo)
                                         .size(width: 60, height: 60)
                                 }
-                            }.inset(10)
-                        )
+                            }                        )
                     }
                     
                     VStack(spacing: 10) {

@@ -68,7 +68,7 @@ class AnimationExamplesView: UIView {
                         .tappableView {
                             viewModel.showItem.toggle()
                         }
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ZStack {
                             if viewModel.showItem {
                                 Text("I'm animated!", font: .body)
@@ -125,7 +125,7 @@ class AnimationExamplesView: UIView {
                                     .cornerRadius(6)
                                     .animator(TransformAnimator(transform: CATransform3DMakeScale(0.3, 0.3, 1)))
                             }
-                        }.inset(10)
+                        }
                     )
                 }
             }
@@ -168,7 +168,7 @@ class AnimationExamplesView: UIView {
                                     .cornerRadius(6)
                                     .animator(TransformAnimator(transform: CATransform3DMakeTranslation(100, 0, 0)))
                             }
-                        }.inset(10)
+                        }
                     )
                 }
             }
@@ -207,7 +207,7 @@ class AnimationExamplesView: UIView {
                                         cascade: viewModel.enableCascade
                                     ))
                             }
-                        }.inset(10)
+                        }
                     )
                 }
             }
@@ -323,7 +323,7 @@ class AnimationExamplesView: UIView {
                                         }
                                     }
                             }
-                        }.inset(10)
+                        }
                     )
                 }
             }
@@ -332,7 +332,7 @@ class AnimationExamplesView: UIView {
                 Text("Update animations", font: .subtitle)
                 Text("TransformAnimator automatically animates frame changes when components update. Use animateUpdate() for custom frame transition animations or create your own animator", font: .body).textColor(.secondaryLabel)
 
-                #CodeExample(
+                #CodeExampleNoInsets(
                     ZStack {
                         Text("Tap to resize the blue box", font: .caption)
                             .textColor(.secondaryLabel)

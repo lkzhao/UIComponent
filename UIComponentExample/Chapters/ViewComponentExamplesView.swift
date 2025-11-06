@@ -64,7 +64,7 @@ class ViewComponentExamplesView: UIView {
                     Text("Default initialization", font: .bodyBold)
                     Text("Use ViewComponent<ViewType>() to display ViewType inside a UIComponent view hierarchy.", font: .body).textColor(.secondaryLabel)
                     #CodeExample(
-                        ViewComponent<UISwitch>().size(width: 62, height: 30).inset(16)
+                        ViewComponent<UISwitch>().size(width: 62, height: 30)
                     )
                 }
                 Separator()
@@ -73,13 +73,13 @@ class ViewComponentExamplesView: UIView {
                     Text("You can also pass in a custom generator function to create the view instance when UIComponent is ready to display it.", font: .body).textColor(.secondaryLabel)
                     #CodeExample(
                         // Exact same behavior as the previous example
-                        ViewComponent(generator: UISwitch()).size(width: 62, height: 30).inset(16)
+                        ViewComponent(generator: UISwitch()).size(width: 62, height: 30)
                     )
                     Text("The generator approach is useful when your view requires custom initialization parameters.", font: .body).textColor(.secondaryLabel).inset(top: 8)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ViewComponent(generator: MyView(color: .red)).size(width: 50, height: 50)
                     )
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         // You can also use the trailing closure syntax
                         ViewComponent {
                             let button = UIButton(type: .system)
@@ -92,7 +92,7 @@ class ViewComponentExamplesView: UIView {
                     }.inset(16).backgroundColor(.systemBlue.withAlphaComponent(0.1)).cornerRadius(16)
                     VStack(spacing: 4) {
                         Text("Because views are initialized at render time, their size won't be available at layout time. Therefore, you should always provide a size for the ViewComponent when using the generator type initializers. Otherwise it will have zero size and won't be visible. For example, the following code doesn't display at all.", font: .body).textColor(.systemRed)
-                        #CodeExample(
+                        #CodeExampleNoInsets(
                             ViewComponent<UISwitch>()
                         )
                     }.inset(16).backgroundColor(.systemRed.withAlphaComponent(0.1)).cornerRadius(16)
@@ -104,7 +104,7 @@ class ViewComponentExamplesView: UIView {
                     Text("Initialize with existing view", font: .bodyBold)
                     Text("You can also pass in an existing view instance to ViewComponent. This is useful when you have pre-configured views.", font: .body).textColor(.secondaryLabel)
                     #CodeExample(
-                        ViewComponent(view: existingSwitch).inset(16)
+                        ViewComponent(view: existingSwitch)
                     )
                 }
 
@@ -114,7 +114,7 @@ class ViewComponentExamplesView: UIView {
                     Text("Using existing view directly", font: .bodyBold)
                     Text("In fact, an easier way would be to use any UIView directly as a Component. UIView conforms to the Component protocol directly and will automatically be wrapped in a ViewComponent internally.", font: .body).textColor(.secondaryLabel)
                     #CodeExample(
-                        existingSwitch2.inset(16)
+                        existingSwitch2
                     )
                 }
                 VStack(spacing: 6) {
@@ -134,7 +134,6 @@ class ViewComponentExamplesView: UIView {
                                 uiSwitch.onTintColor = .systemGreen
                             }
                             .size(width: 62, height: 30)
-                            .inset(16)
                     )
                 }
                 Separator()
@@ -146,15 +145,15 @@ class ViewComponentExamplesView: UIView {
                             .isOn(true)
                             .onTintColor(.systemRed)
                             .size(width: 62, height: 30)
-                            .inset(16)
                     )
 
                     Text("Built in components are also using this mechanism under the hood. For example, the Image component uses UIImageView internally, so you can use UIImageView's property setter modifiers directly on Image component.", font: .body).textColor(.secondaryLabel)
                     #CodeExample(
                         Image(systemName: "sparkles") // -> an UIImageView type Component
-                            .tintColor(.systemYellow) // -> uses UIImageView's tintColor property setter modifier
-                            .contentMode(.center) // -> uses UIImageView's contentMode property setter modifier
-                            .inset(16)
+                            // -> uses UIImageView's tintColor property setter modifier
+                            .tintColor(.systemYellow)
+                            // -> uses UIImageView's contentMode property setter modifier
+                            .contentMode(.center)
                     )
                 }
                 Separator()
@@ -166,7 +165,6 @@ class ViewComponentExamplesView: UIView {
                             .with(\.layer.cornerRadius, 10) // set view.layer.cornerRadius to 10
                             .with(\.backgroundColor, .systemPurple) // same as .backgroundColor(.systemPurple)
                             .size(width: 60, height: 60)
-                            .inset(16)
                     )
                 }
             }
@@ -186,7 +184,7 @@ class ViewComponentExamplesView: UIView {
                                 }
                                 .size(width: 62, height: 30)
                             Text(isEnabled ? "Enabled" : "Disabled", font: .body)
-                        }.inset(16)
+                        }
                     )
                 }.inset(16).backgroundColor(.systemRed.withAlphaComponent(0.1)).cornerRadius(16)
                 VStack(spacing: 6) {
@@ -201,7 +199,7 @@ class ViewComponentExamplesView: UIView {
                                 }
                                 .size(width: 62, height: 30)
                             Text(isEnabled ? "Enabled" : "Disabled", font: .body)
-                        }.inset(16)
+                        }
                     )
                     Code(MySwitch.codeRepresentation)
                 }.inset(16).backgroundColor(.systemGreen.withAlphaComponent(0.1)).cornerRadius(16)

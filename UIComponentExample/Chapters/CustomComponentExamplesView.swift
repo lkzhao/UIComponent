@@ -75,7 +75,7 @@ class CustomComponentExamplesView: UIView {
                                     Text("This is a reusable card component", font: .body)
                                         .textColor(.secondaryLabel)
                                 }
-                            }.inset(10)
+                            }
                         )
                         
                         Code(Card.codeRepresentation)
@@ -100,7 +100,7 @@ class CustomComponentExamplesView: UIView {
                                 PrimaryButton(title: "Disabled", isEnabled: false) {
                                     print("This won't print")
                                 }
-                            }.inset(10)
+                            }
                         )
                         
                         Code(PrimaryButton.codeRepresentation)
@@ -115,7 +115,7 @@ class CustomComponentExamplesView: UIView {
                         #CodeExample(
                             Section(title: "User Profile") {
                                 UserCard(name: "John Doe", email: "john@example.com")
-                            }.inset(10)
+                            }
                         )
                         
                         Code(Section.codeRepresentation)
@@ -138,7 +138,7 @@ class CustomComponentExamplesView: UIView {
                                 Avatar(systemImage: "person.fill", size: 40)
                                 Avatar(systemImage: "star.fill", size: 50, backgroundColor: .systemYellow)
                                 Avatar(systemImage: "heart.fill", size: 60, backgroundColor: .systemPink)
-                            }.inset(10)
+                            }
                         )
                         Code(Avatar.codeRepresentation)
                     }
@@ -151,14 +151,14 @@ class CustomComponentExamplesView: UIView {
                                 Badge(text: "Popular", color: .systemPurple)
                                 Badge(text: "Sale", color: .systemRed)
                                 Badge(text: "Premium", color: .systemOrange)
-                            }.inset(10)
+                            }
                         )
                         Code(Badge.codeRepresentation)
                     }
                     
                     VStack(spacing: 6, alignItems: .start) {
                         Text("List row component", font: .bodyBold)
-                        #CodeExample(
+                        #CodeExampleNoInsets(
                             VStack(spacing: 0) {
                                 ListRow(
                                     icon: "folder.fill",
@@ -210,7 +210,7 @@ class CustomComponentExamplesView: UIView {
                                             .cornerRadius(8)
                                             .size(width: 100, height: 80)
                                     }
-                                }.inset(10).backgroundColor(.systemGray6)
+                                }.backgroundColor(.systemGray6)
                             )
                         }
                     }
@@ -249,7 +249,7 @@ class CustomComponentExamplesView: UIView {
                                     .backgroundColor(.systemBackground)
                                     .cornerRadius(8)
                                 }
-                            }.inset(10)
+                            }
                         )
                         
                         Text("How it works:", font: .caption).textColor(.secondaryLabel)
@@ -272,7 +272,7 @@ class CustomComponentExamplesView: UIView {
                             Text("Toggle card style", font: .body)
                         }
                         
-                        #CodeExample(
+                        #CodeExampleNoInsets(
                             ResponsiveCard(
                                 title: "Responsive Card",
                                 description: "This card changes layout based on available width. Try toggling to see different container sizes!",
@@ -455,7 +455,7 @@ class CustomComponentExamplesView: UIView {
                                     .inset(h: 12, v: 6)
                                     .backgroundColor(.systemOrange)
                                     .cornerRadius(8)
-                            }.inset(16).backgroundColor(.systemGray6)
+                            }
                         )
                         
                         Code(MyVStack.codeRepresentation)
@@ -476,7 +476,7 @@ class CustomComponentExamplesView: UIView {
                                         .textColor(.white)
                                         .cornerRadius(8)
                                 }
-                            }.inset(10)
+                            }
                         )
                         
                         Code(DiagonalStack.codeRepresentation)

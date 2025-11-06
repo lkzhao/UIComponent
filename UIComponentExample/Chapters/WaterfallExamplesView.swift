@@ -26,7 +26,7 @@ class WaterfallExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Waterfall basics", font: .subtitle)
                 Text("Waterfall creates a masonry-style layout with multiple columns. Items are placed in the shortest column, creating a balanced layout for items with varying heights.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     Waterfall(columns: 2, spacing: 10) {
                         for i in 1...6 {
                             Text("Item \(i)", font: .body)
@@ -48,7 +48,7 @@ class WaterfallExamplesView: UIView {
                     }.size(width: 200, height: 30)
                     Text("Columns: \(Int(viewModel.columns))", font: .caption)
                 }
-                #CodeExample(
+                #CodeExampleNoInsets(
                     Waterfall(columns: viewModel.columns, spacing: 6) {
                         for i in 1...16 {
                             Text("\(i)", font: .caption)
@@ -70,7 +70,7 @@ class WaterfallExamplesView: UIView {
                     }.size(width: 200, height: 30)
                     Text(viewModel.spacing < 1 ? "No spacing" : "Spacing: \(Int(viewModel.spacing))pt", font: .caption)
                 }
-                #CodeExample(
+                #CodeExampleNoInsets(
                     Waterfall(columns: 3, spacing: viewModel.spacing) {
                         for i in 1...9 {
                             Text("\(i)", font: .body)
@@ -85,7 +85,7 @@ class WaterfallExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Dynamic content", font: .subtitle)
                 Text("Waterfall automatically balances items with different heights.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     Waterfall(columns: 2, spacing: 10) {
                         Text("Short", font: .body)
                             .inset(15)
@@ -131,7 +131,7 @@ class WaterfallExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Practical example: Photo gallery", font: .subtitle)
                 Text("Waterfall is perfect for image galleries with varying aspect ratios.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     Waterfall(columns: 3, spacing: 8) {
                         for (index, imageData) in viewModel.imageDatas.enumerated() {
                             AsyncImage(url: imageData.url)
@@ -170,7 +170,7 @@ class WaterfallExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("HorizontalWaterfall", font: .subtitle)
                 Text("HorizontalWaterfall works the same way but arranges items in horizontal rows.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     HorizontalWaterfall(columns: 2, spacing: 10) {
                         for i in 1...8 {
                             Text("Item \(i)", font: .body)
@@ -188,7 +188,7 @@ class WaterfallExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Complex items", font: .subtitle)
                 Text("Waterfall works with any component, including complex nested layouts.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     Waterfall(columns: 2, spacing: 10) {
                         for i in 1...6 {
                             VStack(spacing: 8, alignItems: .start) {

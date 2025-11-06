@@ -35,7 +35,7 @@ class FlowExamplesView: UIView {
                                 .backgroundColor(.systemBlue)
                                 .cornerRadius(6)
                         }
-                    }.inset(10).size(width: 250)
+                    }.size(width: 250)
                 )
             }
             
@@ -62,7 +62,7 @@ class FlowExamplesView: UIView {
                                 .backgroundColor(.systemPurple)
                                 .cornerRadius(4)
                         }
-                    }.inset(10).size(width: 250)
+                    }.size(width: 250)
                 )
             }
             
@@ -79,7 +79,7 @@ class FlowExamplesView: UIView {
                                     .backgroundColor(.systemBlue)
                                     .cornerRadius(6)
                             }
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                     
                     Text("justifyContent: .center", font: .caption)
@@ -91,7 +91,7 @@ class FlowExamplesView: UIView {
                                     .backgroundColor(.systemGreen)
                                     .cornerRadius(6)
                             }
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                     
                     Text("justifyContent: .end", font: .caption)
@@ -103,7 +103,7 @@ class FlowExamplesView: UIView {
                                     .backgroundColor(.systemOrange)
                                     .cornerRadius(6)
                             }
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                     
                     Text("justifyContent: .spaceBetween", font: .caption)
@@ -115,7 +115,7 @@ class FlowExamplesView: UIView {
                                     .backgroundColor(.systemRed)
                                     .cornerRadius(6)
                             }
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                     
                     Text("justifyContent: .spaceAround", font: .caption)
@@ -127,7 +127,7 @@ class FlowExamplesView: UIView {
                                     .backgroundColor(.systemPurple)
                                     .cornerRadius(6)
                             }
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                     
                     Text("justifyContent: .spaceEvenly", font: .caption)
@@ -139,7 +139,7 @@ class FlowExamplesView: UIView {
                                     .backgroundColor(.systemTeal)
                                     .cornerRadius(6)
                             }
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                 }
             }
@@ -155,7 +155,7 @@ class FlowExamplesView: UIView {
                             Text("Large", font: .title).inset(12).backgroundColor(.systemBlue).cornerRadius(4)
                             Text("Medium", font: .subtitle).inset(10).backgroundColor(.systemBlue).cornerRadius(4)
                             Text("Tiny", font: .caption).inset(6).backgroundColor(.systemBlue).cornerRadius(4)
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                     
                     Text("alignItems: .center", font: .caption)
@@ -165,7 +165,7 @@ class FlowExamplesView: UIView {
                             Text("Large", font: .title).inset(12).backgroundColor(.systemGreen).cornerRadius(4)
                             Text("Medium", font: .subtitle).inset(10).backgroundColor(.systemGreen).cornerRadius(4)
                             Text("Tiny", font: .caption).inset(6).backgroundColor(.systemGreen).cornerRadius(4)
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                     
                     Text("alignItems: .end", font: .caption)
@@ -175,7 +175,7 @@ class FlowExamplesView: UIView {
                             Text("Large", font: .title).inset(12).backgroundColor(.systemOrange).cornerRadius(4)
                             Text("Medium", font: .subtitle).inset(10).backgroundColor(.systemOrange).cornerRadius(4)
                             Text("Tiny", font: .caption).inset(6).backgroundColor(.systemOrange).cornerRadius(4)
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                     
                     Text("alignItems: .stretch", font: .caption)
@@ -185,7 +185,7 @@ class FlowExamplesView: UIView {
                             Text("Large", font: .title).inset(12).backgroundColor(.systemPurple).cornerRadius(4)
                             Text("Medium", font: .subtitle).inset(10).backgroundColor(.systemPurple).cornerRadius(4)
                             Text("Tiny", font: .caption).inset(6).backgroundColor(.systemPurple).cornerRadius(4)
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                 }
             }
@@ -339,7 +339,7 @@ class FlowExamplesView: UIView {
                                 .backgroundColor(color)
                                 .cornerRadius(10)
                         }
-                    }.size(width: 300).inset(10)
+                    }.size(width: 300)
                 )
             }
 

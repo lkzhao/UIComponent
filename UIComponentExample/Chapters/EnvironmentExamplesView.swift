@@ -73,7 +73,7 @@ class EnvironmentExamplesView: UIView {
                             Text("This uses default system font")
                             Text("So does this")
                             Text("And this")
-                        }.inset(16).backgroundColor(.systemGray6).cornerRadius(8)
+                        }
                     )
                     
                     Text("With font environment", font: .caption)
@@ -84,9 +84,6 @@ class EnvironmentExamplesView: UIView {
                             Text("And this")
                         }
                         .font(.boldSystemFont(ofSize: 18))
-                        .inset(16)
-                        .backgroundColor(.systemGray6)
-                        .cornerRadius(8)
                     )
                     
                     Text("Override environment font", font: .caption)
@@ -97,9 +94,6 @@ class EnvironmentExamplesView: UIView {
                             Text("I override with italic 14pt", font: .italicSystemFont(ofSize: 14))
                         }
                         .font(.boldSystemFont(ofSize: 18))
-                        .inset(16)
-                        .backgroundColor(.systemGray6)
-                        .cornerRadius(8)
                     )
                 }
             }
@@ -119,9 +113,6 @@ class EnvironmentExamplesView: UIView {
                             Text("And this one too")
                         }
                         .textColor(.systemBlue)
-                        .inset(16)
-                        .backgroundColor(.systemGray6)
-                        .cornerRadius(8)
                     )
                     
                     Text("Combine font and text color", font: .caption)
@@ -134,9 +125,6 @@ class EnvironmentExamplesView: UIView {
                         }
                         .font(.boldSystemFont(ofSize: 20))
                         .textColor(.systemRed)
-                        .inset(16)
-                        .backgroundColor(.systemGray6)
-                        .cornerRadius(8)
                     )
                 }
             }
@@ -165,9 +153,6 @@ class EnvironmentExamplesView: UIView {
                             Text("Back to outer environment (20pt)")
                         }
                         .font(.systemFont(ofSize: 20))
-                        .inset(16)
-                        .backgroundColor(.systemGray6)
-                        .cornerRadius(8)
                     )
                     
                     Text("Nested color environments", font: .caption)
@@ -187,9 +172,6 @@ class EnvironmentExamplesView: UIView {
                             Text("Blue text again")
                         }
                         .textColor(.systemBlue)
-                        .inset(16)
-                        .backgroundColor(.systemGray6)
-                        .cornerRadius(8)
                     )
                 }
             }
@@ -219,7 +201,6 @@ class EnvironmentExamplesView: UIView {
                     #CodeExample(
                         UserProfileComponent()
                             .currentUser(viewModel.isUserLoggedIn ? viewModel.currentUser : nil)
-                            .inset(16)
                             .backgroundColor(.systemGray6)
                             .cornerRadius(12)
                     )
@@ -295,7 +276,6 @@ class EnvironmentExamplesView: UIView {
                                     .tappableView { print("Retry") }
                             }
                             .textColor(.systemRed)
-                            .inset(10)
                             .view()
                             .tintColor(.systemRed)
                             .backgroundColor(.systemRed.withAlphaComponent(0.1))
@@ -330,7 +310,6 @@ class EnvironmentExamplesView: UIView {
                                     .textColor(.systemBlue)
                             }
                             .font(.systemFont(ofSize: 18))
-                            .inset(20)
                             .backgroundColor(.systemGray6)
                             .cornerRadius(12)
                         )
@@ -385,7 +364,6 @@ class EnvironmentExamplesView: UIView {
                             }
                             .font(.systemFont(ofSize: viewModel.fontSize))
                             .textColor(viewModel.themeColor)
-                            .inset(20)
                             .backgroundColor(.systemGray6)
                             .cornerRadius(12)
                         )

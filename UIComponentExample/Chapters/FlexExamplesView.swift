@@ -59,7 +59,7 @@ class FlexExamplesView: UIView {
                             Text("Fixed")
                                 .inset(8)
                                 .backgroundColor(.systemBlue)
-                        }.inset(10).size(width: .fill)
+                        }.size(width: .fill)
                     )
 
                     Text("VStack with flexGrow", font: .caption)
@@ -77,7 +77,7 @@ class FlexExamplesView: UIView {
                             Text("Fixed")
                                 .inset(8)
                                 .backgroundColor(.systemBlue)
-                        }.inset(10).size(height: 200)
+                        }.size(height: 200)
                     )
 
                     Text("Flow Layout with flexGrow", font: .caption)
@@ -109,7 +109,7 @@ class FlexExamplesView: UIView {
                             Text("Fixed")
                                 .inset(h: 12, v: 8)
                                 .backgroundColor(.systemBlue)
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                 }
             }
@@ -135,7 +135,7 @@ class FlexExamplesView: UIView {
                                 .inset(8)
                                 .backgroundColor(.systemGreen)
                                 .flexGrow(1)
-                        }.inset(10).size(width: .fill)
+                        }.size(width: .fill)
                     )
 
                     Text("Different ratios (1:3:2)", font: .caption)
@@ -155,7 +155,7 @@ class FlexExamplesView: UIView {
                                 .inset(8)
                                 .backgroundColor(.systemOrange)
                                 .flexGrow(2)
-                        }.inset(10).size(width: .fill)
+                        }.size(width: .fill)
                     )
                 }
             }
@@ -175,7 +175,7 @@ class FlexExamplesView: UIView {
 
                             Space(width: 130, height: 50)
                                 .backgroundColor(.systemBlue)
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
 
                     Text("With flexShrink (fits)", font: .caption)
@@ -192,7 +192,7 @@ class FlexExamplesView: UIView {
                             Space(width: 130, height: 50)
                                 .backgroundColor(.systemGreen)
                                 .flexShrink(1)
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                 }
             }
@@ -223,7 +223,7 @@ class FlexExamplesView: UIView {
                                     Text("Shrink 1x").textAlignment(.center)
                                 }
                                 .flexShrink(1)
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
 
                     Text("Different shrink ratios (1:2:0)", font: .caption)
@@ -248,7 +248,7 @@ class FlexExamplesView: UIView {
                                 .overlay {
                                     Text("0x").textAlignment(.center)
                                 }
-                        }.inset(10).size(width: 300)
+                        }.size(width: 300)
                     )
                 }
             }
@@ -278,7 +278,7 @@ class FlexExamplesView: UIView {
                                 .overlay {
                                     Text("Fixed").textAlignment(.center)
                                 }
-                        }.inset(10).size(width: .fill)
+                        }.size(width: .fill)
                     )
 
                     Text("Shrinks when constrained", font: .caption)
@@ -302,7 +302,7 @@ class FlexExamplesView: UIView {
                                 .overlay {
                                     Text("Fixed").textAlignment(.center)
                                 }
-                        }.inset(10).size(width: 250)
+                        }.size(width: 250)
                     )
                 }
             }

@@ -66,10 +66,8 @@ class ConstraintReaderExamplesView: UIView {
                                 .size(width: .percentage(0.5))
                             
                             Text("← Left item has unexpected width")
-                                .inset(10)
                                 .backgroundColor(.systemGray5)
-                        }.inset(10)
-                    )
+                        }                    )
                 }
 
                 VStack(spacing: 10) {
@@ -83,10 +81,8 @@ class ConstraintReaderExamplesView: UIView {
                                 .size(width: .fill)
 
                             Text("Fixed")
-                                .inset(10)
                                 .backgroundColor(.systemOrange)
-                        }.inset(10)
-                    )
+                        }                    )
                 }
             }
             
@@ -108,11 +104,9 @@ class ConstraintReaderExamplesView: UIView {
                                     .constraint(constraint)
                                 
                                 Text("← Left item is 50% width")
-                                    .inset(10)
                                     .backgroundColor(.systemGray5)
                             }
-                        }.inset(10)
-                    )
+                        }                    )
                 }
             }
             
@@ -129,10 +123,9 @@ class ConstraintReaderExamplesView: UIView {
                                     .constraint(constraint)
                                 
                                 Text("Fixed")
-                                    .inset(10)
                                     .backgroundColor(.systemOrange)
                             }
-                        }.inset(10).scrollView()
+                        }.scrollView()
                     )
                 }
             }
@@ -170,8 +163,7 @@ class ConstraintReaderExamplesView: UIView {
                                         Text("30%").textAlignment(.center).textColor(.white)
                                     }
                             }
-                        }.inset(10)
-                    )
+                        }                    )
                     
                     Text("Different ratios (50%, 30%, 20%)", font: .caption)
                     #CodeExample(
@@ -201,8 +193,7 @@ class ConstraintReaderExamplesView: UIView {
                                         Text("20%").textAlignment(.center).textColor(.white)
                                     }
                             }
-                        }.inset(10)
-                    )
+                        }                    )
                 }
             }
             
@@ -339,7 +330,6 @@ class ConstraintReaderExamplesView: UIView {
                                             .textColor(.white.withAlphaComponent(0.8))
                                     }
                                 }
-                                .inset(10)
                         }.backgroundColor(.systemGray5)
                     )
                     
@@ -371,7 +361,6 @@ class ConstraintReaderExamplesView: UIView {
                                             .textColor(.white.withAlphaComponent(0.8))
                                     }
                                 }
-                                .inset(10)
                         }.backgroundColor(.systemGray5).size(height: 200)
                     )
                 }
@@ -508,8 +497,7 @@ class ConstraintReaderExamplesView: UIView {
                                             .size(width: columnWidth)
                                         }
                                     }
-                                }.inset(10)
-                            }.backgroundColor(.systemGray5)
+                                }                            }.backgroundColor(.systemGray5)
                         )
                     }
                 }

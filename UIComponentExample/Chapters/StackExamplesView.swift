@@ -21,7 +21,7 @@ class StackExamplesView: UIView {
                         Text("Item 1")
                         Text("Item 2")
                         Text("Item 3")
-                    }.inset(10)
+                    }
                 )
             }
             
@@ -33,7 +33,7 @@ class StackExamplesView: UIView {
                         Text("Item 1")
                         Text("Item 2")
                         Text("Item 3")
-                    }.inset(10)
+                    }
                 )
             }
             
@@ -47,7 +47,7 @@ class StackExamplesView: UIView {
                             Text("A").inset(8).backgroundColor(.systemBlue)
                             Text("B").inset(8).backgroundColor(.systemBlue)
                             Text("C").inset(8).backgroundColor(.systemBlue)
-                        }.inset(10).size(width: .fill)
+                        }.size(width: .fill)
                     )
                     
                     Text("justifyContent: .end", font: .caption)
@@ -56,7 +56,7 @@ class StackExamplesView: UIView {
                             Text("A").inset(8).backgroundColor(.systemBlue)
                             Text("B").inset(8).backgroundColor(.systemBlue)
                             Text("C").inset(8).backgroundColor(.systemBlue)
-                        }.inset(10).size(width: .fill)
+                        }.size(width: .fill)
                     )
                     
                     Text("justifyContent: .center", font: .caption)
@@ -65,7 +65,7 @@ class StackExamplesView: UIView {
                             Text("A").inset(8).backgroundColor(.systemBlue)
                             Text("B").inset(8).backgroundColor(.systemBlue)
                             Text("C").inset(8).backgroundColor(.systemBlue)
-                        }.inset(10).size(width: .fill)
+                        }.size(width: .fill)
                     )
                     
                     Text("justifyContent: .spaceBetween", font: .caption)
@@ -74,7 +74,7 @@ class StackExamplesView: UIView {
                             Text("A").inset(8).backgroundColor(.systemBlue)
                             Text("B").inset(8).backgroundColor(.systemBlue)
                             Text("C").inset(8).backgroundColor(.systemBlue)
-                        }.inset(10).size(width: .fill)
+                        }.size(width: .fill)
                     )
                     
                     Text("justifyContent: .spaceAround", font: .caption)
@@ -83,7 +83,7 @@ class StackExamplesView: UIView {
                             Text("A").inset(8).backgroundColor(.systemBlue)
                             Text("B").inset(8).backgroundColor(.systemBlue)
                             Text("C").inset(8).backgroundColor(.systemBlue)
-                        }.inset(10).size(width: .fill)
+                        }.size(width: .fill)
                     )
                     
                     Text("justifyContent: .spaceEvenly", font: .caption)
@@ -92,7 +92,7 @@ class StackExamplesView: UIView {
                             Text("A").inset(8).backgroundColor(.systemBlue)
                             Text("B").inset(8).backgroundColor(.systemBlue)
                             Text("C").inset(8).backgroundColor(.systemBlue)
-                        }.inset(10).size(width: .fill)
+                        }.size(width: .fill)
                     )
                 }
             }
@@ -107,7 +107,7 @@ class StackExamplesView: UIView {
                             Text("Small", font: .body).inset(8).backgroundColor(.systemBlue)
                             Text("Big", font: .title).inset(8).backgroundColor(.systemBlue)
                             Text("Medium", font: .subtitle).inset(8).backgroundColor(.systemBlue)
-                        }.inset(10).size(height: 80)
+                        }.size(height: 80)
                     )
                     
                     Text("alignItems: .end", font: .caption)
@@ -116,7 +116,7 @@ class StackExamplesView: UIView {
                             Text("Small", font: .body).inset(8).backgroundColor(.systemBlue)
                             Text("Big", font: .title).inset(8).backgroundColor(.systemBlue)
                             Text("Medium", font: .subtitle).inset(8).backgroundColor(.systemBlue)
-                        }.inset(10).size(height: 80)
+                        }.size(height: 80)
                     )
                     
                     Text("alignItems: .center", font: .caption)
@@ -125,7 +125,7 @@ class StackExamplesView: UIView {
                             Text("Small", font: .body).inset(8).backgroundColor(.systemBlue)
                             Text("Big", font: .title).inset(8).backgroundColor(.systemBlue)
                             Text("Medium", font: .subtitle).inset(8).backgroundColor(.systemBlue)
-                        }.inset(10).size(height: 80)
+                        }.size(height: 80)
                     )
                     
                     Text("alignItems: .stretch", font: .caption)
@@ -134,7 +134,7 @@ class StackExamplesView: UIView {
                             Text("Small", font: .body).inset(8).backgroundColor(.systemBlue)
                             Text("Big", font: .title).inset(8).backgroundColor(.systemBlue)
                             Text("Medium", font: .subtitle).inset(8).backgroundColor(.systemBlue)
-                        }.inset(10).size(height: 80)
+                        }.size(height: 80)
                     )
                 }
             }
@@ -164,7 +164,7 @@ class StackExamplesView: UIView {
                                 .inset(8)
                                 .backgroundColor(.systemPurple)
                                 .alignSelf(.stretch)
-                        }.inset(10).size(height: 100)
+                        }.size(height: 100)
                     )
                     
                     Text("VStack with alignSelf", font: .caption)
@@ -188,7 +188,7 @@ class StackExamplesView: UIView {
                                 .inset(8)
                                 .backgroundColor(.systemPurple)
                                 .alignSelf(.stretch)
-                        }.inset(10).size(width: 200)
+                        }.size(width: 200)
                     )
                 }
             }
@@ -204,14 +204,14 @@ class StackExamplesView: UIView {
                                 Text("Item \(i)")
                             }
                         }
-                    }.inset(10)
+                    }
                 )
             }
             
             VStack(spacing: 10) {
                 Text("Using Join", font: .subtitle)
                 Text("Join allows you to insert separators between components. Perfect for lists with dividers.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     VStack {
                         Join {
                             for item in ["Apple", "Orange", "Banana"] {
@@ -235,7 +235,7 @@ class StackExamplesView: UIView {
                             Text("john.doe@example.com", font: .body).textColor(.secondaryLabel)
                         }.flex()
                         Image(systemName: "chevron.right").tintColor(.tertiaryLabel)
-                    }.inset(16)
+                    }
                 )
             }
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()

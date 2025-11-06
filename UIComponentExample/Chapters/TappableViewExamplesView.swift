@@ -60,7 +60,7 @@ class TappableViewExamplesView: UIView {
                 VStack(spacing: 10) {
                     Text("Simple tap handler", font: .caption)
                     Text("Taps: \(viewModel.tapCount)", font: .body).textColor(.secondaryLabel)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         Text("Tap Me!", font: .body)
                             .inset(h: 20, v: 12)
                             .backgroundColor(.systemBlue)
@@ -73,7 +73,7 @@ class TappableViewExamplesView: UIView {
                     
                     Text("Tap handler with view parameter", font: .caption)
                     Text("Last tap location: \(viewModel.lastTapLocation)", font: .body).textColor(.secondaryLabel)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         Text("Tap for Location", font: .body)
                             .inset(h: 20, v: 12)
                             .backgroundColor(.systemGreen)
@@ -91,7 +91,7 @@ class TappableViewExamplesView: UIView {
                 Text("Double tap", font: .subtitle)
                 Text("Use .onDoubleTap modifier to handle double tap gestures. Chain it after .tappableView to add the gesture handler.", font: .body).textColor(.secondaryLabel)
                 Text("Double taps: \(viewModel.doubleTapCount)", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     Text("Double Tap Me!", font: .body)
                         .inset(h: 20, v: 12)
                         .backgroundColor(.systemPurple)
@@ -108,7 +108,7 @@ class TappableViewExamplesView: UIView {
                 Text("Long press", font: .subtitle)
                 Text("Use .onLongPress modifier to handle long press gestures. The closure receives both the view and the gesture recognizer, allowing you to track gesture states.", font: .body).textColor(.secondaryLabel)
                 Text("Long presses: \(viewModel.longPressCount)", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     Text("Long Press Me!", font: .body)
                         .inset(h: 20, v: 12)
                         .backgroundColor(.systemOrange)
@@ -126,7 +126,7 @@ class TappableViewExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Context menu", font: .subtitle)
                 Text("Display context menus on long press using .contextMenuProvider modifier. Return a UIMenu with your desired actions.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     Text("Long Press for Menu", font: .body)
                         .inset(h: 20, v: 12)
                         .backgroundColor(.systemIndigo)
@@ -152,7 +152,7 @@ class TappableViewExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Context menu with preview", font: .subtitle)
                 Text("Add a preview that appears when the user long presses using .previewProvider modifier. This creates a peek and pop experience.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     HStack(spacing: 10, alignItems: .center) {
                         Image(systemName: "photo", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
                             .tintColor(.systemBlue)
@@ -295,7 +295,7 @@ class TappableViewExamplesView: UIView {
                 
                 VStack(spacing: 10) {
                     Text("Scale animation", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         Text("Press and Hold", font: .body)
                             .inset(h: 20, v: 12)
                             .backgroundColor(.systemPink)
@@ -315,7 +315,7 @@ class TappableViewExamplesView: UIView {
                     )
                     
                     Text("Opacity animation", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         Text("Fade on Touch", font: .body)
                             .inset(h: 20, v: 12)
                             .backgroundColor(.systemTeal)
@@ -361,7 +361,7 @@ class TappableViewExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Practical example: Selectable list", font: .subtitle)
                 Text("Combine tappableView with state management to create interactive lists with selection.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     VStack(alignItems: .stretch) {
                         for item in ["Swift", "UIKit", "SwiftUI", "Combine", "Core Data"] {
                             let isSelected = viewModel.selectedItem == item
@@ -384,7 +384,7 @@ class TappableViewExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Practical example: Interactive card", font: .subtitle)
                 Text("Create cards with multiple actions using both tap and context menu.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     VStack(spacing: 12, alignItems: .start) {
                         HStack(spacing: 10, alignItems: .center) {
                             Image(systemName: "doc.text.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
@@ -437,7 +437,7 @@ class TappableViewExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Practical example: Button grid", font: .subtitle)
                 Text("Create a grid of tappable buttons with different actions.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     Flow(spacing: 10) {
                         for (icon, label) in [
                             ("photo", "Photos"),

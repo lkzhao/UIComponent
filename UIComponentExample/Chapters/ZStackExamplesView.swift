@@ -16,7 +16,7 @@ class ZStackExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("ZStack basics", font: .subtitle)
                 Text("ZStack layers its children on top of each other, with the first child at the bottom and the last at the top. Size is determined by the largest child.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     ZStack {
                         Text("Bottom", font: .body).inset(25).backgroundColor(.systemRed)
                         Text("Middle", font: .body).inset(15).backgroundColor(.systemGreen)
@@ -30,7 +30,7 @@ class ZStackExamplesView: UIView {
                 Text("Controls how children align vertically within the ZStack.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
                     Text("verticalAlignment: .start", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ZStack(verticalAlignment: .start) {
                             Text("Large Background", font: .title).inset(20).backgroundColor(.systemGray5)
                             Text("Small Top", font: .body).inset(10).backgroundColor(.systemBlue)
@@ -38,7 +38,7 @@ class ZStackExamplesView: UIView {
                     )
                     
                     Text("verticalAlignment: .center (default)", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ZStack(verticalAlignment: .center) {
                             Text("Large Background", font: .title).inset(20).backgroundColor(.systemGray5)
                             Text("Small Center", font: .body).inset(10).backgroundColor(.systemBlue)
@@ -46,7 +46,7 @@ class ZStackExamplesView: UIView {
                     )
                     
                     Text("verticalAlignment: .end", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ZStack(verticalAlignment: .end) {
                             Text("Large Background", font: .title).inset(20).backgroundColor(.systemGray5)
                             Text("Small Bottom", font: .body).inset(10).backgroundColor(.systemBlue)
@@ -54,7 +54,7 @@ class ZStackExamplesView: UIView {
                     )
                     
                     Text("verticalAlignment: .stretch", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ZStack(verticalAlignment: .stretch) {
                             Text("Large Background", font: .title).inset(20).backgroundColor(.systemGray5)
                             Text("Small Stretched", font: .body).inset(10).backgroundColor(.systemBlue)
@@ -68,7 +68,7 @@ class ZStackExamplesView: UIView {
                 Text("Controls how children align horizontally within the ZStack.", font: .body).textColor(.secondaryLabel)
                 VStack(spacing: 10) {
                     Text("horizontalAlignment: .start", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ZStack(horizontalAlignment: .start) {
                             Text("Large Background", font: .title).inset(20).backgroundColor(.systemGray5)
                             Text("Start", font: .body).inset(10).backgroundColor(.systemBlue)
@@ -76,7 +76,7 @@ class ZStackExamplesView: UIView {
                     )
                     
                     Text("horizontalAlignment: .center (default)", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ZStack(horizontalAlignment: .center) {
                             Text("Large Background", font: .title).inset(20).backgroundColor(.systemGray5)
                             Text("Center", font: .body).inset(10).backgroundColor(.systemBlue)
@@ -84,7 +84,7 @@ class ZStackExamplesView: UIView {
                     )
                     
                     Text("horizontalAlignment: .end", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ZStack(horizontalAlignment: .end) {
                             Text("Large Background", font: .title).inset(20).backgroundColor(.systemGray5)
                             Text("End", font: .body).inset(10).backgroundColor(.systemBlue)
@@ -92,7 +92,7 @@ class ZStackExamplesView: UIView {
                     )
                     
                     Text("horizontalAlignment: .stretch", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ZStack(horizontalAlignment: .stretch) {
                             Text("Large Background", font: .title).inset(20).backgroundColor(.systemGray5)
                             Text("Stretched", font: .body).inset(10).backgroundColor(.systemBlue)
@@ -104,7 +104,7 @@ class ZStackExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Combined alignments", font: .subtitle)
                 Text("You can combine vertical and horizontal alignments to position items in different corners.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
+                #CodeExampleNoInsets(
                     ZStack(verticalAlignment: .start, horizontalAlignment: .end) {
                         Text("Background", font: .body).inset(40).backgroundColor(.systemGray5)
                         Text("Top Right", font: .caption).inset(8).backgroundColor(.systemRed)
@@ -121,11 +121,11 @@ class ZStackExamplesView: UIView {
                         ZStack(verticalAlignment: .start, horizontalAlignment: .end) {
                             Image(systemName: "bell.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40)).tintColor(.label)
                             Text("3", font: .caption).textColor(.white).inset(h: 6, v: 2).backgroundColor(.systemRed).cornerRadius(8)
-                        }.inset(10)
+                        }
                     )
                     
                     Text("Loading overlay", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ZStack {
                             VStack(spacing: 10) {
                                 Text("Content", font: .title)
@@ -140,7 +140,7 @@ class ZStackExamplesView: UIView {
                     )
                     
                     Text("Background decoration", font: .caption)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ZStack {
                             Image(systemName: "sparkles", withConfiguration: UIImage.SymbolConfiguration(pointSize: 80)).tintColor(.systemYellow).offset(x: -30, y: -20)
                             Text("Featured", font: .title).inset(20)

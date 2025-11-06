@@ -13,15 +13,18 @@ let sizingTextView = CodeTextView()
 public struct CodeExampleComponent: Component {
     let content: any Component
     let code: String
+    let addInset: Bool
 
-    public init(content: any Component, code: String) {
+    public init(content: any Component, code: String, addInset: Bool = false) {
         self.content = content
         self.code = code
+        self.addInset = addInset
     }
 
     public func layout(_ constraint: Constraint) -> some RenderNode {
-        VStack(spacing: 4) {
-            content.codeBlockStyle()
+        let wrappedContent: any Component = addInset ? content.inset(16) : content
+        return VStack(spacing: 4) {
+            wrappedContent.codeBlockStyle()
             CodeComponent(code).inset(h: 16, v: 10).codeBlockStyle()
         }
         .layout(constraint)
