@@ -334,7 +334,7 @@ class AnimationExamplesView: UIView {
 
                 #CodeExampleNoInsets(
                     ZStack {
-                        Text("Tap to resize the blue box", font: .caption)
+                        Text("Tap to move and resize the blue box", font: .caption)
                             .textColor(.secondaryLabel)
                             .offset(y: -130)
                         Space(size: viewModel.updateAnimationFrame.size)
@@ -349,10 +349,11 @@ class AnimationExamplesView: UIView {
                     }
                     .size(width: 400, height: 300)
                     .tappableView {
+                        let tapLocation = $0.tapGestureRecognizer.location(in: $0)
                         let newWidth = CGFloat.random(in: 80...200)
                         let newHeight = CGFloat.random(in: 30...100)
-                        let newOffsetX = CGFloat.random(in: -100...100)
-                        let newOffsetY = CGFloat.random(in: -50...50)
+                        let newOffsetX = tapLocation.x - $0.bounds.midX
+                        let newOffsetY = tapLocation.y - $0.bounds.midY
                         viewModel.updateAnimationFrame = CGRect(
                             x: newOffsetX,
                             y: newOffsetY,
