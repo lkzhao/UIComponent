@@ -204,12 +204,10 @@ class EnvironmentExamplesView: UIView {
                     // Toggle for user login state
                     HStack(spacing: 12, alignItems: .center) {
                         Text("User logged in:", font: .body)
-                        ViewComponent<UISwitch>()
+                        ViewComponent<MySwitch>()
                             .isOn(viewModel.isUserLoggedIn)
-                            .update { [weak self] uiSwitch in
-                                uiSwitch.addAction(UIAction { _ in
-                                    self?.viewModel.isUserLoggedIn = uiSwitch.isOn
-                                }, for: .valueChanged)
+                            .onToggle { [weak self] isOn in
+                                self?.viewModel.isUserLoggedIn = isOn
                             }
                             .size(width: 62, height: 30)
                     }
@@ -342,14 +340,12 @@ class EnvironmentExamplesView: UIView {
                         // Font size slider
                         HStack(spacing: 12, alignItems: .center) {
                             Text("Font size:", font: .body)
-                            ViewComponent<UISlider>()
+                            ViewComponent<Slider>()
                                 .minimumValue(12)
                                 .maximumValue(24)
-                                .value(Float(viewModel.fontSize))
-                                .update { [weak self] slider in
-                                    slider.addAction(UIAction { _ in
-                                        self?.viewModel.fontSize = CGFloat(slider.value)
-                                    }, for: .valueChanged)
+                                .value(viewModel.fontSize)
+                                .onValueChanged { [weak self] value in
+                                    self?.viewModel.fontSize = value
                                 }
                                 .size(width: 150, height: 30)
                                 .flex()
