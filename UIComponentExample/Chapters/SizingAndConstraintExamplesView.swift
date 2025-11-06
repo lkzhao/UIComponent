@@ -280,7 +280,7 @@ class SizingAndConstraintExamplesView: UIView {
                     #CodeExample(
                         Text("This is a very long text that will take up as much width as available in the container without any size restrictions")
                             .inset(10)
-                            .backgroundColor(.systemRed)
+                            .backgroundColor(.systemBlue)
                     )
                     
                     Text("With maxSize width", font: .caption)

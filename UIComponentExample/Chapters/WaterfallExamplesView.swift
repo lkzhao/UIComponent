@@ -249,7 +249,7 @@ class ImageDetailView: UIView {
                 Text("Image URL: \(imageData.url.absoluteString)", font: .body)
                 Text("Image Size: \(Int(imageData.size.width)) x \(Int(imageData.size.height))", font: .body)
             }.inset(20)
-        }
+        }.ignoreHeightConstraint().scrollView().fill()
     }
 }
 

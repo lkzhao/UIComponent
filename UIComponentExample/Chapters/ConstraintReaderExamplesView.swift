@@ -46,7 +46,7 @@ class ConstraintReaderExamplesView: UIView {
                             .size(width: 24, height: 24)
                         Text("Calculate dynamic layouts", font: .body)
                     }
-                }.inset(16).backgroundColor(.systemGray6).cornerRadius(12)
+                }.inset(16).backgroundColor(.systemGray5).cornerRadius(12)
             }
             
             // MARK: - The Problem: Infinite Constraints
@@ -67,7 +67,7 @@ class ConstraintReaderExamplesView: UIView {
                             
                             Text("← Left item has unexpected width")
                                 .inset(10)
-                                .backgroundColor(.systemBackground)
+                                .backgroundColor(.systemGray5)
                         }.inset(10)
                     )
                 }
@@ -109,7 +109,7 @@ class ConstraintReaderExamplesView: UIView {
                                 
                                 Text("← Left item is 50% width")
                                     .inset(10)
-                                    .backgroundColor(.systemGray6)
+                                    .backgroundColor(.systemGray5)
                             }
                         }.inset(10)
                     )
@@ -236,7 +236,7 @@ class ConstraintReaderExamplesView: UIView {
                             .textAlignment(.right)
                     }
                     .inset(h: 16, v: 12)
-                    .backgroundColor(.systemGray6)
+                    .backgroundColor(.systemGray5)
                     .cornerRadius(12)
                     
                     Text("Responsive font size", font: .caption)
@@ -255,7 +255,7 @@ class ConstraintReaderExamplesView: UIView {
                                 Text("Responsive Text", font: .systemFont(ofSize: fontSize, weight: .bold))
                                 Text("Font size: \(Int(fontSize))pt", font: .caption)
                                     .textColor(.secondaryLabel)
-                            }.inset(16).backgroundColor(.systemGray6).cornerRadius(12)
+                            }.inset(16).backgroundColor(.systemGray5).cornerRadius(12)
                         }.size(width: .percentage(viewModel.widthPercentage))
                     )
                     
@@ -489,7 +489,7 @@ class ConstraintReaderExamplesView: UIView {
                                                 Text("Col \(i)", font: .caption)
                                             }
                                             .inset(v: 12)
-                                            .backgroundColor(.systemGray6)
+                                            .backgroundColor(.systemGray5)
                                             .cornerRadius(8)
                                             .size(width: columnWidth)
                                         }
@@ -503,7 +503,7 @@ class ConstraintReaderExamplesView: UIView {
                                                 Text("Col \(i)", font: .caption)
                                             }
                                             .inset(v: 12)
-                                            .backgroundColor(.systemGray6)
+                                            .backgroundColor(.systemGray5)
                                             .cornerRadius(8)
                                             .size(width: columnWidth)
                                         }

@@ -285,29 +285,29 @@ class FlowExamplesView: UIView {
                 Text("Individual items can override the parent's alignItems using the alignSelf modifier.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
                     Flow(spacing: 8, alignItems: .start) {
-                        Text("Default")
-                            .inset(8)
+                        Text("Default", font: .body)
+                            .inset(12)
                             .backgroundColor(.systemBlue)
                             .cornerRadius(4)
 
-                        Text("Center")
+                        Text("Center", font: .body)
                             .inset(12)
                             .backgroundColor(.systemGreen)
                             .cornerRadius(4)
                             .alignSelf(.center)
 
-                        Text("End")
-                            .inset(10)
+                        Text("End", font: .body)
+                            .inset(12)
                             .backgroundColor(.systemOrange)
                             .cornerRadius(4)
                             .alignSelf(.end)
 
-                        Text("Stretch")
-                            .inset(6)
+                        Text("Stretch", font: .title)
+                            .inset(20)
                             .backgroundColor(.systemPurple)
                             .cornerRadius(4)
                             .alignSelf(.stretch)
-                    }.inset(10).size(width: 300, height: 80)
+                    }.inset(10)
                 )
             }
 
@@ -330,6 +330,20 @@ class FlowExamplesView: UIView {
             }
 
             VStack(spacing: 10) {
+                Text("Practical example: Color palette", font: .subtitle)
+                Text("Display a palette of colors with equal-sized swatches that wrap.", font: .body).textColor(.secondaryLabel)
+                #CodeExample(
+                    Flow(spacing: 10) {
+                        for color in [UIColor.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemMint, .systemTeal, .systemCyan, .systemBlue, .systemIndigo, .systemPurple, .systemPink, .systemBrown] {
+                            Space(width: 50, height: 50)
+                                .backgroundColor(color)
+                                .cornerRadius(10)
+                        }
+                    }.size(width: 300).inset(10)
+                )
+            }
+
+            VStack(spacing: 10) {
                 Text("Practical example: Tag cloud", font: .subtitle)
                 Text("Flow is perfect for tag clouds, where tags have varying widths and should wrap naturally.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
@@ -346,7 +360,7 @@ class FlowExamplesView: UIView {
                             .backgroundColor(.systemBlue.withAlphaComponent(0.1))
                             .cornerRadius(16)
                         }
-                    }
+                    }.inset(10)
                 )
             }
             
@@ -356,20 +370,6 @@ class FlowExamplesView: UIView {
                 ViewComponent<FilterChipsExampleView>()
                     .size(width: 360, height: 130)
                 Code(FilterChipsExampleView.codeRepresentation)
-            }
-            
-            VStack(spacing: 10) {
-                Text("Practical example: Color palette", font: .subtitle)
-                Text("Display a palette of colors with equal-sized swatches that wrap.", font: .body).textColor(.secondaryLabel)
-                #CodeExample(
-                    Flow(spacing: 10) {
-                        for color in [UIColor.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemMint, .systemTeal, .systemCyan, .systemBlue, .systemIndigo, .systemPurple, .systemPink, .systemBrown] {
-                            Space(width: 50, height: 50)
-                                .backgroundColor(color)
-                                .cornerRadius(10)
-                        }
-                    }.size(width: 300).inset(10)
-                )
             }
             
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()

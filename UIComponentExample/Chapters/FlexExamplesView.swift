@@ -361,7 +361,7 @@ class FlexExamplesView: UIView {
 
                                     Text("John Doe", font: .body)
                                         .inset(h: 12, v: 8)
-                                        .backgroundColor(.systemGray6)
+                                        .backgroundColor(.systemGray5)
                                         .cornerRadius(8)
                                         .flex()
                                 }
@@ -372,7 +372,7 @@ class FlexExamplesView: UIView {
 
                                     Text("john@example.com", font: .body)
                                         .inset(h: 12, v: 8)
-                                        .backgroundColor(.systemGray6)
+                                        .backgroundColor(.systemGray5)
                                         .cornerRadius(8)
                                         .flex()
                                 }

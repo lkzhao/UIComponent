@@ -64,5 +64,17 @@ struct Chapter: Equatable {
             title: "ViewComponent",
             view: ViewComponentExamplesView.self
         ),
+        Chapter(
+            title: "Animation",
+            view: AnimationExamplesView.self
+        ),
+        Chapter(
+            title: "Environment",
+            view: EnvironmentExamplesView.self
+        ),
+        Chapter(
+            title: "Performance Optimization",
+            view: PerformanceOptimizationExamplesView.self
+        ),
     ]
 }
