@@ -46,7 +46,7 @@ class ConstraintReaderExamplesView: UIView {
                             .size(width: 24, height: 24)
                         Text("Calculate dynamic layouts", font: .body)
                     }
-                }.inset(16).backgroundColor(.systemGray5).cornerRadius(12)
+                }.inset(16).backgroundColor(.systemGray6).cornerRadius(12)
             }
             
             // MARK: - The Problem: Infinite Constraints
@@ -67,7 +67,8 @@ class ConstraintReaderExamplesView: UIView {
                             
                             Text("← Left item has unexpected width")
                                 .backgroundColor(.systemGray5)
-                        }                    )
+                        }
+                    )
                 }
 
                 VStack(spacing: 10) {
@@ -82,7 +83,8 @@ class ConstraintReaderExamplesView: UIView {
 
                             Text("Fixed")
                                 .backgroundColor(.systemOrange)
-                        }                    )
+                        }
+                    )
                 }
             }
             
@@ -106,7 +108,8 @@ class ConstraintReaderExamplesView: UIView {
                                 Text("← Left item is 50% width")
                                     .backgroundColor(.systemGray5)
                             }
-                        }                    )
+                        }
+                    )
                 }
             }
             
@@ -227,32 +230,30 @@ class ConstraintReaderExamplesView: UIView {
                             .textAlignment(.right)
                     }
                     .inset(h: 16, v: 12)
-                    .backgroundColor(.systemGray5)
+                    .backgroundColor(.systemGray6)
                     .cornerRadius(12)
                     
                     Text("Responsive font size", font: .caption)
                     #CodeExample(
                         ConstraintReader { constraint in
                             let width = constraint.maxSize.width
-                            let fontSize: CGFloat = {
-                                if width > 300 { return 24 }
-                                else if width > 200 { return 18 }
-                                else { return 14 }
-                            }()
-                            
+                            let fontSize: CGFloat = if width > 300 { 24 }
+                                else if width > 200 { 18 }
+                                else { 14 }
+
                             return VStack(spacing: 8) {
                                 Text("Width: \(Int(width))pt", font: .caption)
                                     .textColor(.secondaryLabel)
                                 Text("Responsive Text", font: .systemFont(ofSize: fontSize, weight: .bold))
                                 Text("Font size: \(Int(fontSize))pt", font: .caption)
                                     .textColor(.secondaryLabel)
-                            }.inset(16).backgroundColor(.systemGray5).cornerRadius(12)
+                            }
                         }.size(width: .percentage(viewModel.widthPercentage))
                     )
                     
                     Text("Horizontal paginated view", font: .caption)
                     Text("Each page fills the full width of the container. Perfect for onboarding screens or image galleries.", font: .caption).textColor(.secondaryLabel)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ConstraintReader { constraint in
                             HStack {
                                 // Page 1
@@ -306,17 +307,7 @@ class ConstraintReaderExamplesView: UIView {
                 
                 VStack(spacing: 10) {
                     Text("Square based on available width", font: .caption)
-                    Code {
-                        """
-                        ConstraintReader { constraint in
-                            let size = min(constraint.maxSize.width, 200)
-                            return Space(width: size, height: size)
-                                .backgroundColor(.systemPurple)
-                        }
-                        """
-                    }
-                    
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ConstraintReader { constraint in
                             let size = min(constraint.maxSize.width - 20, 200)
                             return Space(width: size, height: size)
@@ -328,14 +319,14 @@ class ConstraintReaderExamplesView: UIView {
                                             .textColor(.white)
                                         Text("Square", font: .caption)
                                             .textColor(.white.withAlphaComponent(0.8))
-                                    }
+                                    }.inset(12)
                                 }
-                        }.backgroundColor(.systemGray5)
+                        }
                     )
                     
                     Text("Aspect ratio calculation", font: .caption)
                     Text("Maintain 16:9 aspect ratio within available space.", font: .caption).textColor(.secondaryLabel)
-                    #CodeExample(
+                    #CodeExampleNoInsets(
                         ConstraintReader { constraint in
                             let maxWidth = constraint.maxSize.width - 20
                             let maxHeight = constraint.maxSize.height
@@ -359,9 +350,9 @@ class ConstraintReaderExamplesView: UIView {
                                             .textColor(.white)
                                         Text("\(Int(size.width))×\(Int(size.height))", font: .caption)
                                             .textColor(.white.withAlphaComponent(0.8))
-                                    }
+                                    }.inset(12)
                                 }
-                        }.backgroundColor(.systemGray5).size(height: 200)
+                        }.size(height: 200)
                     )
                 }
             }
@@ -374,7 +365,7 @@ class ConstraintReaderExamplesView: UIView {
                     VStack(spacing: 10) {
                         Text("Horizontal scrolling cards", font: .caption)
                         Text("Each card takes 80% of screen width.", font: .caption).textColor(.secondaryLabel)
-                        #CodeExample(
+                        #CodeExampleNoInsets(
                             ConstraintReader { constraint in
                                 HStack(spacing: 15) {
                                     for i in 1...5 {
@@ -406,7 +397,7 @@ class ConstraintReaderExamplesView: UIView {
                     VStack(spacing: 10) {
                         Text("Split view layout", font: .caption)
                         Text("Left sidebar 30%, right content 70%.", font: .caption).textColor(.secondaryLabel)
-                        #CodeExample(
+                        #CodeExampleNoInsets(
                             ConstraintReader { constraint in
                                 HStack {
                                     VStack(spacing: 8) {
@@ -456,7 +447,7 @@ class ConstraintReaderExamplesView: UIView {
                                             .constraint(constraint)
                                     }
                                 }
-                            }.inset(16)
+                            }
                         )
                     }
                     
@@ -468,7 +459,7 @@ class ConstraintReaderExamplesView: UIView {
                                 let spacing: CGFloat = 12
                                 let totalSpacing = spacing * 2 // 2 gaps for 3 columns
                                 let columnWidth = (constraint.maxSize.width - totalSpacing - 20) / 3
-                                
+
                                 return VStack(spacing: 12) {
                                     HStack(spacing: spacing) {
                                         for i in 1...3 {
@@ -477,13 +468,13 @@ class ConstraintReaderExamplesView: UIView {
                                                     .tintColor(.systemBlue)
                                                 Text("Col \(i)", font: .caption)
                                             }
-                                            .inset(v: 12)
+                                            .inset(12)
                                             .backgroundColor(.systemGray5)
                                             .cornerRadius(8)
                                             .size(width: columnWidth)
                                         }
                                     }
-                                    
+
                                     HStack(spacing: spacing) {
                                         for i in 4...6 {
                                             VStack(spacing: 8) {
@@ -491,13 +482,14 @@ class ConstraintReaderExamplesView: UIView {
                                                     .tintColor(.systemGreen)
                                                 Text("Col \(i)", font: .caption)
                                             }
-                                            .inset(v: 12)
+                                            .inset(12)
                                             .backgroundColor(.systemGray5)
                                             .cornerRadius(8)
                                             .size(width: columnWidth)
                                         }
                                     }
-                                }                            }.backgroundColor(.systemGray5)
+                                }
+                            }
                         )
                     }
                 }
@@ -639,14 +631,10 @@ class ConstraintReaderExamplesView: UIView {
                                 Text("Value types (Int, Double, CGFloat) are safe to capture", font: .caption).textColor(.secondaryLabel)
                             }
                         }
+
+                        Text("This applies to all escaping closures in UIComponent, not just ConstraintReader!", font: .body).textColor(.secondaryLabel)
                     }.inset(16).backgroundColor(.systemBlue.withAlphaComponent(0.1)).cornerRadius(12)
                 }
-                
-                Text("💡 This applies to all escaping closures in UIComponent, not just ConstraintReader!", font: .body)
-                    .textColor(.secondaryLabel)
-                    .inset(16)
-                    .backgroundColor(.systemOrange.withAlphaComponent(0.1))
-                    .cornerRadius(12)
             }
             
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()

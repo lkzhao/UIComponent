@@ -73,6 +73,10 @@ struct Chapter: Equatable {
             view: AnimationExamplesView.self
         ),
         Chapter(
+            title: "View Hierarchy",
+            view: ViewHierarchyExamplesView.self
+        ),
+        Chapter(
             title: "Environment",
             view: EnvironmentExamplesView.self
         ),
