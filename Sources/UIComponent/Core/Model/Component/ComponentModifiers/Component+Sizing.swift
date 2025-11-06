@@ -35,6 +35,13 @@ extension Component {
         ConstraintOverrideComponent(content: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(size.width), height: .absolute(size.height)))
     }
 
+    /// Sets an absolute size for the component.
+    /// - Parameter size: A `CGFloat` value that specifies the absolute size for the component.
+    /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden size constraints.
+    public func size(_ size: CGFloat) -> ConstraintOverrideComponent<Self> {
+        ConstraintOverrideComponent(content: self, transformer: SizeStrategyConstraintTransformer(width: .absolute(size), height: .absolute(size)))
+    }
+
     /// Sets an absolute size for the component based on the constraint.
     /// - Parameter sizeProvider: A closure that takes a `Constraint` and returns a size.
     /// - Returns: A `ConstraintOverrideComponent` that represents the modified component with overridden size.

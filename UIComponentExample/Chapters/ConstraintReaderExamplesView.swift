@@ -10,7 +10,7 @@ import UIComponent
 class ConstraintReaderExamplesView: UIView {
     @Observable
     class ViewModel {
-        var widthPercentage: Double = 1.0
+        var widthPoints: CGFloat = 300.0
     }
     
     let viewModel = ViewModel()
@@ -18,6 +18,28 @@ class ConstraintReaderExamplesView: UIView {
     override func updateProperties() {
         super.updateProperties()
         let viewModel = viewModel
+
+        let slider = HStack(spacing: 12, alignItems: .center) {
+            Text("Width:", font: .body)
+
+            ViewComponent<Slider>()
+                .minimumValue(120)
+                .maximumValue(300)
+                .value(viewModel.widthPoints)
+                .onValueChanged {
+                    viewModel.widthPoints = $0
+                }
+                .size(width: 200, height: 30)
+                .flex()
+
+            Text("\(Int(viewModel.widthPoints))pt", font: .bodyBold)
+                .size(width: 60)
+                .textAlignment(.right)
+        }
+        .inset(h: 16, v: 12)
+        .backgroundColor(.systemGray6)
+        .cornerRadius(12)
+
         componentEngine.component = VStack(spacing: 40) {
             Text("ConstraintReader Examples", font: .title)
             
@@ -179,38 +201,16 @@ class ConstraintReaderExamplesView: UIView {
                 Text("ConstraintReader can calculate layout properties based on available space.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 10) {
-                    Text("Adjust the slider to limit the width and see how the layout adapts.", font: .caption).textColor(.secondaryLabel)
+                    Text("Adjust the slider to change the width and see how the layout adapts.", font: .caption).textColor(.secondaryLabel)
                     
-                    // Slider control
-                    HStack(spacing: 12, alignItems: .center) {
-                        Text("Width:", font: .body)
-                        
-                        ViewComponent<Slider>()
-                            .value(viewModel.widthPercentage)
-                            .onValueChanged { [weak self] newValue in
-                                self?.viewModel.widthPercentage = newValue
-                            }
-                            .update { slider in
-                                slider.slider.minimumValue = 0.1
-                                slider.slider.maximumValue = 1.0
-                            }
-                            .size(width: 200, height: 30)
-                            .flex()
-                        
-                        Text("\(Int(viewModel.widthPercentage * 100))%", font: .bodyBold)
-                            .size(width: 50)
-                            .textAlignment(.right)
-                    }
-                    .inset(h: 16, v: 12)
-                    .backgroundColor(.systemGray6)
-                    .cornerRadius(12)
-                    
+                    slider
+
                     Text("Responsive font size", font: .caption)
                     #CodeExample(
                         ConstraintReader { constraint in
                             let width = constraint.maxSize.width
-                            let fontSize: CGFloat = if width > 300 { 24 }
-                                else if width > 200 { 18 }
+                            let fontSize: CGFloat = if width > 250 { 24 }
+                                else if width > 150 { 18 }
                                 else { 14 }
 
                             return VStack(spacing: 8) {
@@ -220,7 +220,7 @@ class ConstraintReaderExamplesView: UIView {
                                 Text("Font size: \(Int(fontSize))pt", font: .caption)
                                     .textColor(.secondaryLabel)
                             }
-                        }.size(width: .percentage(viewModel.widthPercentage))
+                        }.size(width: viewModel.widthPoints)
                     )
                     
                     Text("Horizontal paginated view", font: .caption)
@@ -266,7 +266,7 @@ class ConstraintReaderExamplesView: UIView {
                             }
                             .scrollView()
                             .isPagingEnabled(true)
-                        }.size(width: .percentage(viewModel.widthPercentage), height: 200)
+                        }.size(width: viewModel.widthPoints, height: 200)
                     )
                 }
             }
@@ -276,13 +276,15 @@ class ConstraintReaderExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Custom Constraint Calculations", font: .subtitle)
                 Text("Access constraint properties to make advanced sizing decisions.", font: .body).textColor(.secondaryLabel)
-                
+
+
                 VStack(spacing: 10) {
+                    slider
                     Text("Square based on available width", font: .caption)
                     #CodeExampleNoInsets(
                         ConstraintReader { constraint in
-                            let size = min(constraint.maxSize.width - 20, 200)
-                            return Space(width: size, height: size)
+                            let size = min(constraint.maxSize.width, 200)
+                            return Space()
                                 .backgroundColor(.systemPurple)
                                 .cornerRadius(12)
                                 .overlay {
@@ -293,14 +295,16 @@ class ConstraintReaderExamplesView: UIView {
                                             .textColor(.white.withAlphaComponent(0.8))
                                     }.inset(12)
                                 }
-                        }
+                                .size(size)
+                        }.size(width: viewModel.widthPoints)
                     )
-                    
+
+                    slider
                     Text("Aspect ratio calculation", font: .caption)
                     Text("Maintain 16:9 aspect ratio within available space.", font: .caption).textColor(.secondaryLabel)
                     #CodeExampleNoInsets(
                         ConstraintReader { constraint in
-                            let maxWidth = constraint.maxSize.width - 20
+                            let maxWidth = constraint.maxSize.width
                             let maxHeight = constraint.maxSize.height
                             
                             // Calculate 16:9 dimensions that fit
@@ -314,7 +318,7 @@ class ConstraintReaderExamplesView: UIView {
                                 size = CGSize(width: heightBasedWidth, height: maxHeight)
                             }
                             
-                            return Space(width: size.width, height: size.height)
+                            return Space()
                                 .backgroundColor(.systemIndigo)
                                 .overlay {
                                     VStack(spacing: 4) {
@@ -324,7 +328,8 @@ class ConstraintReaderExamplesView: UIView {
                                             .textColor(.white.withAlphaComponent(0.8))
                                     }.inset(12)
                                 }
-                        }.size(height: 200)
+                                .size(size)
+                        }.size(width: viewModel.widthPoints, height: 200)
                     )
                 }
             }
@@ -537,12 +542,11 @@ class ConstraintReaderExamplesView: UIView {
                     Text("When possible, extract values before creating the closure.", font: .caption).textColor(.secondaryLabel)
                     Code {
                         """
-                        let percentage = self.widthPercentage // Copy value
+                        let widthPoints = self.widthPoints // Copy value
                         
                         ConstraintReader { constraint in
                             // ✅ BEST: Only captures a value type
-                            let width = constraint.maxSize.width * percentage
-                            return Space(width: width, height: 50)
+                            return Space(width: widthPoints, height: 50)
                         }
                         """
                     }
@@ -560,8 +564,7 @@ class ConstraintReaderExamplesView: UIView {
                             componentEngine.component = VStack {
                                 ConstraintReader { constraint in
                                     // Safe: captures local viewModel, not self
-                                    let width = constraint.maxSize.width * viewModel.widthPercentage
-                                    return Text("Width: \\(width)")
+                                    return Text("Width: \\(viewModel.widthPoints)")
                                 }
                             }
                         }
