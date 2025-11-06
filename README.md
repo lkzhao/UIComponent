@@ -8,6 +8,8 @@ In version 5.0, UIComponent can also easily render SwiftUI View alongside UIView
 
 ### Getting Started
 
+#### The best way to learn the project is to download or clone the repo, then open the `UIComponentExample.xcodeproj` and run it on your mac or an iPad simulator!
+
 - [Installation](https://lkzhao.com/UIComponent/documentation/uicomponent/installation)
 - [Component Basics](https://lkzhao.com/UIComponent/documentation/uicomponent/componentbasics)
 - [Custom View](https://lkzhao.com/UIComponent/documentation/uicomponent/customview)
@@ -25,4 +27,4 @@ In version 5.0, UIComponent can also easily render SwiftUI View alongside UIView
 - [4.0 Changes](https://lkzhao.com/UIComponent/documentation/uicomponent/version4migrationguide)
 - [5.0 Changes](https://lkzhao.com/UIComponent/documentation/uicomponent/version5migrationguide)
 
-> Checkout the [Examples](https://github.com/lkzhao/UIComponent/tree/master/Examples) folder for code examples.
+> Checkout the [UIComponentExample/Chapters](https://github.com/lkzhao/UIComponent/tree/master/UIComponentExample/Chapters) folder for code examples.
