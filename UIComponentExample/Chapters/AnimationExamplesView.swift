@@ -8,6 +8,11 @@
 import UIComponent
 
 class AnimationExamplesView: UIView {
+    struct ListItem: Identifiable {
+        let id: String = UUID().uuidString
+        let index: Int
+    }
+    
     @Observable
     class AnimationViewModel {
         var showItem: Bool = true
@@ -17,6 +22,12 @@ class AnimationExamplesView: UIView {
         var enableCascade: Bool = false
         var customAnimItems: [String] = ["Alpha", "Beta", "Gamma"]
         var updateAnimationFrame: CGRect = CGRect(x: 0, y: 0, width: 100, height: 40)
+        var sharedItems: [ListItem] = [
+            ListItem(index: 1),
+            ListItem(index: 2),
+            ListItem(index: 3),
+        ]
+        var sharedItemNextIndex: Int = 4
     }
     
     let viewModel = AnimationViewModel()
@@ -381,27 +392,97 @@ class AnimationExamplesView: UIView {
                 }
             }
 
-            // TODO: provide examples
             VStack(spacing: 10) {
                 Text("Animator Common Issues", font: .subtitle)
                 VStack(spacing: 10) {
-                    VStack(spacing: 4) {
-                        Text("id not assigned", font: .bodyBold)
+                    VStack(spacing: 6) {
+                        Text("Issue 1: id not assigned", font: .bodyBold)
                         Text("If a component doesn't have a stable id, UIComponent cannot track it across updates, leading to unexpected animation behavior. Always assign unique ids to animatable components.", font: .body).textColor(.secondaryLabel)
+                        
+                        Text("❌ Without id: Wrong item animates", font: .caption).textColor(.systemRed)
+                        Text("Tap any item to delete it. Notice how the animation happens on the wrong item because UIComponent can't track which item was removed.", font: .caption).textColor(.secondaryLabel)
+                        #CodeExampleNoInsets(
+                            VStack(spacing: 8, alignItems: .stretch) {
+                                for (i, item) in viewModel.sharedItems.enumerated() {
+                                    Text("Item \(item.index): Tap to Delete", font: .body)
+                                        .inset(h: 16, v: 10)
+                                        .tappableView {
+                                            viewModel.sharedItems.remove(at: i)
+                                        }
+                                        .backgroundColor(.systemGray6)
+                                        .cornerRadius(8)
+                                        // ❌ No .id() modifier - UIComponent can't track items
+                                }
+                                Text("Add Item")
+                                    .textAlignment(.center)
+                                    .inset(h: 16, v: 10)
+                                    .tappableView {
+                                        viewModel.sharedItems.append(ListItem(index: viewModel.sharedItemNextIndex))
+                                        viewModel.sharedItemNextIndex += 1
+                                    }
+                                    .backgroundColor(.systemBlue)
+                                    .cornerRadius(8)
+                            }
+                            .inset(10)
+                            .scrollView()
+                            .with(\.componentEngine.animator, TransformAnimator(transform: CATransform3DMakeScale(0.5, 0.5, 1.0)))
+                            .size(width: 240, height: 280)
+                        )
+                        
+                        Text("✅ With id: Correct item animates", font: .caption).textColor(.systemGreen)
+                        Text("Now each item has a unique id. The correct item animates out when deleted.", font: .caption).textColor(.secondaryLabel)
+                        #CodeExampleNoInsets(
+                            VStack(spacing: 8, alignItems: .stretch) {
+                                for (i, item) in viewModel.sharedItems.enumerated() {
+                                    Text("Item \(item.index): Tap to Delete", font: .body)
+                                        .inset(h: 16, v: 10)
+                                        .tappableView {
+                                            viewModel.sharedItems.remove(at: i)
+                                        }
+                                        .backgroundColor(.systemGray6)
+                                        .cornerRadius(8)
+                                        .id(item.id) // ✅ Unique id allows proper tracking
+                                }
+                                Text("Add Item")
+                                    .textAlignment(.center)
+                                    .inset(h: 16, v: 10)
+                                    .tappableView {
+                                        viewModel.sharedItems.append(ListItem(index: viewModel.sharedItemNextIndex))
+                                        viewModel.sharedItemNextIndex += 1
+                                    }
+                                    .backgroundColor(.systemBlue)
+                                    .cornerRadius(8)
+                                    .id("addButton") // Same for the add button
+                            }
+                            .inset(10)
+                            .scrollView()
+                            .with(\.componentEngine.animator, TransformAnimator(transform: CATransform3DMakeScale(0.5, 0.5, 1.0)))
+                            .size(width: 240, height: 280)
+                        )
                     }
 
                     Separator()
 
                     VStack(spacing: 4) {
-                        Text("animator assignment doesn't cross view boundary", font: .bodyBold)
+                        Text("Issue 2: Animator doesn't cross view boundary", font: .bodyBold)
                         Text("Components that are wrapped in view wrapper modifiers like .view(), .scrollView(), .tappableView(), etc... create a new view boundary. Animators set on parent views do not propagate across these boundaries. To ensure animations work as expected, set the animator on the specific component.", font: .body).textColor(.secondaryLabel)
+                        ChapterLink(
+                            title: "See View Hierarchy chapter for more details.",
+                            viewType: ViewHierarchyExamplesView.self,
+                            anchorId: "animator-issues"
+                        )
                     }
 
                     Separator()
 
                     VStack(spacing: 4) {
-                        Text("Wrap components into view() to animate together", font: .bodyBold)
+                        Text("Issue 3: Wrap components to animate together", font: .bodyBold)
                         Text("When assigning animators, wrap multiple components into a single .view() to ensure they animate together as a group. Especially when modifiers like .insets() are applied. This allows the animator to treat them as a single unit during insertions, deletions, and updates.", font: .body).textColor(.secondaryLabel)
+                        ChapterLink(
+                            title: "See View Hierarchy chapter for more details.",
+                            viewType: ViewHierarchyExamplesView.self,
+                            anchorId: "animator-issues"
+                        )
                     }
                 }
                 .inset(16)

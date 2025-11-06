@@ -28,4 +28,8 @@ extension UIView {
         }
         return nil
     }
+
+    var parentHomeView: HomeView? {
+        parentViewController?.view as? HomeView
+    }
 }

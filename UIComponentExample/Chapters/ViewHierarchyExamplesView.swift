@@ -427,7 +427,7 @@ class ViewHierarchyExamplesView: UIView {
             }
 
             VStack(spacing: 10) {
-                Text("⚠️ Gotcha: Animators and view boundaries", font: .subtitle)
+                Text("⚠️ Gotcha: Animators and view boundaries", font: .subtitle).id("animator-issues")
                 Text("Animators have two common issues related to view hierarchy: they may only apply to the background view instead of the entire component, and they don't cross view boundaries.", font: .body).textColor(.systemOrange)
                 
                 VStack(spacing: 15) {
