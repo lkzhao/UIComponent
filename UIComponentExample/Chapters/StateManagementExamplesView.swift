@@ -156,7 +156,7 @@ class StateManagementExamplesView: UIView {
             // MARK: - Observable Pattern (iOS 26+)
             
             VStack(spacing: 10) {
-                Text("Observable pattern with updateProperties (iOS 26+)", font: .subtitle)
+                Text("Observable pattern with updateProperties (iOS 26+)", font: .subtitle).id("observable-pattern")
                 Text("On iOS 26 and later, use the @Observable macro with updateProperties() for automatic UI updates. This modern approach eliminates manual reloadComponent() calls.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 15) {

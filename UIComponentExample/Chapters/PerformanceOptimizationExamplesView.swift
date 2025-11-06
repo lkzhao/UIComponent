@@ -62,8 +62,7 @@ class PerformanceOptimizationExamplesView: UIView {
             // MARK: - Automatic Optimizations
             
             VStack(spacing: 10) {
-                Text("Built-in automatic optimizations", font: .subtitle)
-                Text("UIComponent automatically optimizes rendering without any configuration. Understanding these built-in features helps you write efficient code.", font: .body).textColor(.secondaryLabel)
+                Text("Built-in optimizations", font: .subtitle)
                 
                 VStack(spacing: 15) {
                     VStack(spacing: 6) {
@@ -116,9 +115,122 @@ class PerformanceOptimizationExamplesView: UIView {
                             """
                         }
                     }
+                    
+                    Separator()
+                    
+                    VStack(spacing: 6) {
+                        Text("4. Component creation is cheap", font: .bodyBold)
+                        Text("Components are Swift value types (structs), making them incredibly lightweight to create. You can freely create component hierarchies multiple times without performance concerns. Layout calculations and view rendering are batched and optimized, so even if you rebuild the entire component tree on every state change, it remains performant.", font: .body).textColor(.secondaryLabel)
+                        Code {
+                            """
+                            // Creating components is cheap - they're just structs
+                            let component = VStack {
+                                Text("Hello")
+                                Text("World")
+                            }  // No UIViews created, just data structures
+                            
+                            // Even rebuilding the tree on each update is fine
+                            func render() {
+                                componentEngine.component = VStack {
+                                    for item in items {
+                                        Text(item)  // Recreated each time, still fast
+                                    }
+                                }
+                            }
+                            """
+                        }
+                    }
                 }
                 .inset(16)
                 .backgroundColor(.systemBlue.withAlphaComponent(0.1))
+                .cornerRadius(12)
+            }
+            
+            // MARK: - How Component Creation Works
+            
+            VStack(spacing: 10) {
+                Text("How component creation stays fast", font: .subtitle)
+                Text("Understanding how UIComponent batches work helps you write efficient code without overthinking performance.", font: .body).textColor(.secondaryLabel)
+                
+                VStack(spacing: 15) {
+                    VStack(spacing: 6) {
+                        Text("Components are just data", font: .bodyBold)
+                        Text("When you create a VStack, HStack, or Text component, you're just creating a lightweight Swift struct. No layout calculations happen, no views are created. It's similar to creating a simple data structure.", font: .body).textColor(.secondaryLabel)
+                        Code {
+                            """
+                            // This is cheap - just creating structs
+                            let header = HStack {
+                                Text("Title")
+                                Image(systemName: "star")
+                            }
+                            
+                            // This is also cheap - structs containing structs
+                            let page = VStack {
+                                header
+                                Text("Content")
+                            }
+                            """
+                        }
+                    }
+                    
+                    Separator()
+                    
+                    VStack(spacing: 6) {
+                        Text("Layout and rendering are batched", font: .bodyBold)
+                        Text("When you assign a component to componentEngine.component, UIComponent doesn't immediately calculate layout or render views. Instead, it marks the engine as needing update and schedules a batch update. Multiple changes in the same run loop are coalesced into a single layout pass.", font: .body).textColor(.secondaryLabel)
+                        Code {
+                            """
+                            // All these assignments are batched into one update
+                            viewModel.item1 = "Updated"  // Triggers component rebuild
+                            viewModel.item2 = "Updated"  // Triggers component rebuild
+                            viewModel.item3 = "Updated"  // Triggers component rebuild
+                            
+                            // Only one layout pass happens after all changes complete
+                            // Layout: Calculate positions of all components
+                            // Render: Update/create only changed views
+                            """
+                        }
+                    }
+                    
+                    Separator()
+                    
+                    VStack(spacing: 6) {
+                        Text("Even better: Use updateProperties for automatic batching", font: .bodyBold)
+                        Text("The updateProperties() method provides an even more efficient pattern. When you use @Observable view models, UIComponent automatically batches all state changes and calls updateProperties once, where you rebuild the component tree. This means component tree creation is also batched with the layout and render phases.", font: .body).textColor(.secondaryLabel)
+                        Code {
+                            """
+                            @Observable
+                            class ViewModel {
+                                var count = 0
+                                var isEnabled = false
+                            }
+                            
+                            override func updateProperties() {
+                                super.updateProperties()
+                                componentEngine.component = VStack {
+                                    Text("Count: \\(viewModel.count)")
+                                    if viewModel.isEnabled {
+                                        Text("Enabled")
+                                    }
+                                }
+                            }
+                            
+                            // Multiple state changes trigger ONE updateProperties call
+                            viewModel.count += 1
+                            viewModel.isEnabled = true
+                            // → Single updateProperties() → Single layout → Single render
+                            """
+                        }
+                        
+                        ChapterLink(
+                            title: "See State Management chapter for more details on @Observable and updateProperties",
+                            viewType: StateManagementExamplesView.self,
+                            anchorId: "observable-pattern"
+                        )
+                    }
+                }
+                .inset(16)
+                .backgroundColor(.systemMint.withAlphaComponent(0.1))
                 .cornerRadius(12)
             }
             
@@ -459,8 +571,8 @@ class PerformanceOptimizationExamplesView: UIView {
                             .tintColor(.systemBlue)
                             .size(width: 24, height: 24)
                         VStack(spacing: 4) {
-                            Text("Trust the defaults", font: .bodyBold)
-                            Text("UIComponent's automatic optimizations handle most cases. Only add explicit optimizations when profiling shows a problem.", font: .body).textColor(.secondaryLabel)
+                            Text("Use ViewComponent generators", font: .bodyBold)
+                            Text("Always prefer ViewComponent<ViewType>() or ViewComponent { ... } over creating view instances directly.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
@@ -469,8 +581,8 @@ class PerformanceOptimizationExamplesView: UIView {
                             .tintColor(.systemGreen)
                             .size(width: 24, height: 24)
                         VStack(spacing: 4) {
-                            Text("Use ViewComponent generators", font: .bodyBold)
-                            Text("Always prefer ViewComponent<ViewType>() or ViewComponent { ... } over creating view instances directly.", font: .body).textColor(.secondaryLabel)
+                            Text("Profile before optimizing", font: .bodyBold)
+                            Text("Use Instruments to identify actual bottlenecks. Don't optimize based on assumptions.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
@@ -479,8 +591,8 @@ class PerformanceOptimizationExamplesView: UIView {
                             .tintColor(.systemOrange)
                             .size(width: 24, height: 24)
                         VStack(spacing: 4) {
-                            Text("Profile before optimizing", font: .bodyBold)
-                            Text("Use Instruments to identify actual bottlenecks. Don't optimize based on assumptions.", font: .body).textColor(.secondaryLabel)
+                            Text("Keep it simple", font: .bodyBold)
+                            Text("Complexity adds bugs. Use reuseKey and async layout only when measurements prove they're needed.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
@@ -489,8 +601,8 @@ class PerformanceOptimizationExamplesView: UIView {
                             .tintColor(.systemPurple)
                             .size(width: 24, height: 24)
                         VStack(spacing: 4) {
-                            Text("Keep it simple", font: .bodyBold)
-                            Text("Complexity adds bugs. Use reuseKey and async layout only when measurements prove they're needed.", font: .body).textColor(.secondaryLabel)
+                            Text("Leverage .lazy for expensive layouts", font: .bodyBold)
+                            Text("When individual items have complex layout logic, .lazy can provide significant improvements.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
@@ -499,8 +611,8 @@ class PerformanceOptimizationExamplesView: UIView {
                             .tintColor(.systemPink)
                             .size(width: 24, height: 24)
                         VStack(spacing: 4) {
-                            Text("Leverage .lazy for expensive layouts", font: .bodyBold)
-                            Text("When individual items have complex layout logic, .lazy can provide significant improvements.", font: .body).textColor(.secondaryLabel)
+                            Text("Keep custom component initialization lightweight", font: .bodyBold)
+                            Text("When creating custom components, avoid heavy computations in init(). Instead, defer expensive work to layout(_:) time where you have access to constraints. For even more performance in a large list, implement a custom RenderNode to perform work at render time when the component becomes visible.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                 }
