@@ -317,7 +317,7 @@ class FlexExamplesView: UIView {
                                 Image(systemName: "person.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40))
                                     .tintColor(.systemBlue)
 
-                                VStack(spacing: 4, alignItems: .start) {
+                                VStack(spacing: 4) {
                                     Text("John Doe", font: .bodyBold)
                                     Text("john.doe@example.com", font: .body)
                                         .textColor(.secondaryLabel)

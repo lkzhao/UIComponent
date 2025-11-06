@@ -191,7 +191,7 @@ class WaterfallExamplesView: UIView {
                 #CodeExampleNoInsets(
                     Waterfall(columns: 2, spacing: 10) {
                         for i in 1...6 {
-                            VStack(spacing: 8, alignItems: .start) {
+                            VStack(spacing: 8) {
                                 HStack(spacing: 8, alignItems: .center) {
                                     Circle(size: 30)
                                         .backgroundColor(.systemBlue)
@@ -199,7 +199,7 @@ class WaterfallExamplesView: UIView {
                                             Text("\(i)", font: .caption)
                                                 .textColor(.white)
                                         }
-                                    VStack(spacing: 2, alignItems: .start) {
+                                    VStack(spacing: 2) {
                                         Text("Item \(i)", font: .title)
                                         Text("Subtitle", font: .caption)
                                             .textColor(.secondaryLabel)

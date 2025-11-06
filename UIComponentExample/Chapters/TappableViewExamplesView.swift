@@ -156,7 +156,7 @@ class TappableViewExamplesView: UIView {
                     HStack(spacing: 10, alignItems: .center) {
                         Image(systemName: "photo", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
                             .tintColor(.systemBlue)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Preview Image", font: .bodyBold)
                             Text("Long press to preview", font: .caption).textColor(.secondaryLabel)
                         }
@@ -385,11 +385,11 @@ class TappableViewExamplesView: UIView {
                 Text("Practical example: Interactive card", font: .subtitle)
                 Text("Create cards with multiple actions using both tap and context menu.", font: .body).textColor(.secondaryLabel)
                 #CodeExampleNoInsets(
-                    VStack(spacing: 12, alignItems: .start) {
+                    VStack(spacing: 12) {
                         HStack(spacing: 10, alignItems: .center) {
                             Image(systemName: "doc.text.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
                                 .tintColor(.systemBlue)
-                            VStack(spacing: 4, alignItems: .start) {
+                            VStack(spacing: 4) {
                                 Text("Document.pdf", font: .bodyBold)
                                 Text("2.5 MB • Modified today", font: .caption)
                                     .textColor(.secondaryLabel)

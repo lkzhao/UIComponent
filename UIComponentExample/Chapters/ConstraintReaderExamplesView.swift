@@ -254,7 +254,7 @@ class ConstraintReaderExamplesView: UIView {
                     Text("Each page fills the full width of the container. Perfect for onboarding screens or image galleries.", font: .caption).textColor(.secondaryLabel)
                     #CodeExample(
                         ConstraintReader { constraint in
-                            HStack(spacing: 0) {
+                            HStack {
                                 // Page 1
                                 VStack(spacing: 12, justifyContent: .center, alignItems: .center) {
                                     Image(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40))
@@ -408,7 +408,7 @@ class ConstraintReaderExamplesView: UIView {
                         Text("Left sidebar 30%, right content 70%.", font: .caption).textColor(.secondaryLabel)
                         #CodeExample(
                             ConstraintReader { constraint in
-                                HStack(spacing: 0) {
+                                HStack {
                                     VStack(spacing: 8) {
                                         Text("Sidebar", font: .bodyBold)
                                         Text("30% width", font: .caption)
@@ -523,19 +523,19 @@ class ConstraintReaderExamplesView: UIView {
                     }
                     
                     VStack(spacing: 8) {
-                        HStack(spacing: 8, alignItems: .start) {
+                        HStack(spacing: 8) {
                             Text("1.", font: .body).textColor(.systemRed)
                             Text("View holds the component hierarchy", font: .body)
                         }
-                        HStack(spacing: 8, alignItems: .start) {
+                        HStack(spacing: 8) {
                             Text("2.", font: .body).textColor(.systemRed)
                             Text("Component contains ConstraintReader", font: .body)
                         }
-                        HStack(spacing: 8, alignItems: .start) {
+                        HStack(spacing: 8) {
                             Text("3.", font: .body).textColor(.systemRed)
                             Text("ConstraintReader's closure strongly captures self", font: .body)
                         }
-                        HStack(spacing: 8, alignItems: .start) {
+                        HStack(spacing: 8) {
                             Text("→", font: .body).textColor(.systemRed)
                             Text("Retain cycle! View never deallocates", font: .bodyBold).textColor(.systemRed)
                         }
@@ -607,34 +607,34 @@ class ConstraintReaderExamplesView: UIView {
                 
                 VStack(spacing: 10) {
                     Text("Key Rules", font: .subtitle)
-                    VStack(spacing: 12, alignItems: .start) {
-                        HStack(spacing: 10, alignItems: .start) {
+                    VStack(spacing: 12) {
+                        HStack(spacing: 10) {
                             Text("1.", font: .bodyBold).textColor(.systemBlue)
-                            VStack(spacing: 4, alignItems: .start) {
+                            VStack(spacing: 4) {
                                 Text("ConstraintReader's closure is escaping", font: .body)
                                 Text("It's stored and called later during layout", font: .caption).textColor(.secondaryLabel)
                             }
                         }
                         
-                        HStack(spacing: 10, alignItems: .start) {
+                        HStack(spacing: 10) {
                             Text("2.", font: .bodyBold).textColor(.systemBlue)
-                            VStack(spacing: 4, alignItems: .start) {
+                            VStack(spacing: 4) {
                                 Text("Use [weak self] when accessing self", font: .body)
                                 Text("Prevents retain cycles between view and component", font: .caption).textColor(.secondaryLabel)
                             }
                         }
                         
-                        HStack(spacing: 10, alignItems: .start) {
+                        HStack(spacing: 10) {
                             Text("3.", font: .bodyBold).textColor(.systemBlue)
-                            VStack(spacing: 4, alignItems: .start) {
+                            VStack(spacing: 4) {
                                 Text("Prefer capturing local variables", font: .body)
                                 Text("Copy values/objects to local vars in updateProperties()", font: .caption).textColor(.secondaryLabel)
                             }
                         }
                         
-                        HStack(spacing: 10, alignItems: .start) {
+                        HStack(spacing: 10) {
                             Text("4.", font: .bodyBold).textColor(.systemBlue)
-                            VStack(spacing: 4, alignItems: .start) {
+                            VStack(spacing: 4) {
                                 Text("Extract values when possible", font: .body)
                                 Text("Value types (Int, Double, CGFloat) are safe to capture", font: .caption).textColor(.secondaryLabel)
                             }

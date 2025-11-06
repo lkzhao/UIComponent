@@ -463,7 +463,7 @@ class SizingAndConstraintExamplesView: UIView {
                                     .contentMode(.scaleAspectFit)
                                     .size(width: 50, height: 50)
                                 
-                                VStack(spacing: 4, alignItems: .start) {
+                                VStack(spacing: 4) {
                                     Text("John Doe", font: .bodyBold)
                                     Text("Software Engineer", font: .body)
                                         .textColor(.secondaryLabel)
@@ -541,14 +541,14 @@ class SizingAndConstraintExamplesView: UIView {
                     VStack(spacing: 10) {
                         Text("Card with flexible content area", font: .caption)
                         #CodeExample(
-                            VStack(spacing: 0, alignItems: .start) {
+                            VStack {
                                 Image(systemName: "photo", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40))
                                     .tintColor(.systemGray)
                                     .contentMode(.scaleAspectFit)
                                     .size(width: .fill, height: 120)
                                     .backgroundColor(.systemGray6)
                                 
-                                VStack(spacing: 8, alignItems: .start) {
+                                VStack(spacing: 8) {
                                     Text("Card Title", font: .bodyBold)
                                     Text("This is a description that adapts to the card width but respects min/max constraints")
                                         .textColor(.secondaryLabel)

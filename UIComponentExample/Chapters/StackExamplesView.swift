@@ -103,7 +103,7 @@ class StackExamplesView: UIView {
                 VStack(spacing: 10) {
                     Text("alignItems: .start (default)", font: .caption)
                     #CodeExample(
-                        HStack(spacing: 10, alignItems: .start) {
+                        HStack(spacing: 10) {
                             Text("Small", font: .body).inset(8).backgroundColor(.systemBlue)
                             Text("Big", font: .title).inset(8).backgroundColor(.systemBlue)
                             Text("Medium", font: .subtitle).inset(8).backgroundColor(.systemBlue)
@@ -145,7 +145,7 @@ class StackExamplesView: UIView {
                 VStack(spacing: 10) {
                     Text("HStack with alignSelf", font: .caption)
                     #CodeExample(
-                        HStack(spacing: 10, alignItems: .start) {
+                        HStack(spacing: 10) {
                             Text("Default")
                                 .inset(8)
                                 .backgroundColor(.systemBlue)
@@ -169,7 +169,7 @@ class StackExamplesView: UIView {
                     
                     Text("VStack with alignSelf", font: .caption)
                     #CodeExample(
-                        VStack(spacing: 10, alignItems: .start) {
+                        VStack(spacing: 10) {
                             Text("Default (start)")
                                 .inset(8)
                                 .backgroundColor(.systemBlue)
@@ -230,7 +230,7 @@ class StackExamplesView: UIView {
                 #CodeExample(
                     HStack(spacing: 10, alignItems: .center) {
                         Image(systemName: "person.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)).tintColor(.systemBlue)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("John Doe", font: .bodyBold)
                             Text("john.doe@example.com", font: .body).textColor(.secondaryLabel)
                         }.flex()

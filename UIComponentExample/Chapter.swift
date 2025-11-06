@@ -80,5 +80,9 @@ struct Chapter: Equatable {
             title: "Performance Optimization",
             view: PerformanceOptimizationExamplesView.self
         ),
+        Chapter(
+            title: "State Management",
+            view: StateManagementExamplesView.self
+        ),
     ]
 }

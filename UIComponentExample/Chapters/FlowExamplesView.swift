@@ -150,7 +150,7 @@ class FlowExamplesView: UIView {
                 VStack(spacing: 10) {
                     Text("alignItems: .start (default)", font: .caption)
                     #CodeExample(
-                        Flow(spacing: 8, alignItems: .start) {
+                        Flow(spacing: 8) {
                             Text("Small", font: .body).inset(8).backgroundColor(.systemBlue).cornerRadius(4)
                             Text("Large", font: .title).inset(12).backgroundColor(.systemBlue).cornerRadius(4)
                             Text("Medium", font: .subtitle).inset(10).backgroundColor(.systemBlue).cornerRadius(4)
@@ -284,7 +284,7 @@ class FlowExamplesView: UIView {
                 Text("Align self", font: .subtitle)
                 Text("Individual items can override the parent's alignItems using the alignSelf modifier.", font: .body).textColor(.secondaryLabel)
                 #CodeExample(
-                    Flow(spacing: 8, alignItems: .start) {
+                    Flow(spacing: 8) {
                         Text("Default", font: .body)
                             .inset(12)
                             .backgroundColor(.systemBlue)

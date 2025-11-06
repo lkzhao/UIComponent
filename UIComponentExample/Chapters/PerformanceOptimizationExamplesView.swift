@@ -66,7 +66,7 @@ class PerformanceOptimizationExamplesView: UIView {
                 Text("UIComponent automatically optimizes rendering without any configuration. Understanding these built-in features helps you write efficient code.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 15) {
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("1. Visible-only rendering", font: .bodyBold)
                         Text("UIComponent only renders views that are visible in the current viewport. When you scroll, views are created on-demand and removed when scrolled off-screen. This means you can have thousands of items in a list with minimal memory footprint.", font: .body).textColor(.secondaryLabel)
                         Code {
@@ -86,7 +86,7 @@ class PerformanceOptimizationExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("2. Deferred view creation", font: .bodyBold)
                         Text("Views are not created during layout. UIComponent first calculates layout for all components, then creates UIView instances only for visible items when rendering. This separates expensive layout calculations from view creation.", font: .body).textColor(.secondaryLabel)
                         Code {
@@ -102,7 +102,7 @@ class PerformanceOptimizationExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("3. Automatic visibility testing", font: .bodyBold)
                         Text("The ComponentEngine performs visibility tests to determine which components intersect with the visible frame. Different layout types (VStack, Flow, Waterfall) have optimized visibility algorithms that avoid checking every single item.", font: .body).textColor(.secondaryLabel)
                         Code {
@@ -129,7 +129,7 @@ class PerformanceOptimizationExamplesView: UIView {
                 Text("When you need to use UIKit views, always use ViewComponent with a generator function rather than creating UIView instances directly. This allows UIComponent to defer view creation until the component is actually visible.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 15) {
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("❌ Avoid: Creating views eagerly", font: .bodyBold).textColor(.systemRed)
                         Text("This creates all UISwitch instances immediately during component construction, even for items not visible on screen.", font: .body).textColor(.secondaryLabel)
                         Code {
@@ -149,7 +149,7 @@ class PerformanceOptimizationExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("✅ Prefer: Using ViewComponent generator", font: .bodyBold).textColor(.systemGreen)
                         Text("The generator function is called only when the view becomes visible. UIComponent creates views lazily as you scroll, keeping memory usage low.", font: .body).textColor(.secondaryLabel)
                         Code {
@@ -169,7 +169,7 @@ class PerformanceOptimizationExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("💡 Best: Custom UIView with updateProperties", font: .bodyBold).textColor(.systemBlue)
                         Text("For complex cells, create a custom UIView subclass. This allows internal layout and state management to be encapsulated within the view and only gets run when the view is visible.", font: .body).textColor(.secondaryLabel)
                         Code {
@@ -210,20 +210,20 @@ class PerformanceOptimizationExamplesView: UIView {
                 Text("In version 5.0+, view reuse is opt-in using the .reuseKey() modifier. When you assign a reuse key, UIComponent pools and reuses views of that type instead of destroying and recreating them. This can improve performance for expensive view initialization, but requires careful state management.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 15) {
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("When to use view reuse", font: .bodyBold)
                         Text("Consider using view reuse when:", font: .body).textColor(.secondaryLabel)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("• View initialization is expensive (complex setup, heavy graphics)", font: .body)
                             Text("• You have many similar items in a scrollable list", font: .body)
                             Text("• You can properly manage view state during reuse", font: .body)
                         }.inset(top: 4)
                     }
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("When NOT to use view reuse", font: .bodyBold)
                         Text("Avoid view reuse when:", font: .body).textColor(.secondaryLabel)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("• Views are simple and cheap to create", font: .body)
                             Text("• State management becomes too complex", font: .body)
                             Text("• Each view has unique configuration that's hard to reset", font: .body)
@@ -232,7 +232,7 @@ class PerformanceOptimizationExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Basic usage", font: .bodyBold)
                         Code {
                             """
@@ -250,7 +250,7 @@ class PerformanceOptimizationExamplesView: UIView {
                         }
                     }
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Custom view with prepareForReuse", font: .bodyBold)
                         Text("Implement the ReuseableView protocol to clean up state when a view is reused.", font: .body).textColor(.secondaryLabel)
                         Code {
@@ -303,14 +303,14 @@ class PerformanceOptimizationExamplesView: UIView {
                 Text("The .lazy modifier defers both layout calculation and rendering until a component becomes visible. This is powerful for complex layouts where the initial layout pass would be expensive.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 15) {
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("How it works", font: .bodyBold)
                         Text("Without .lazy, UIComponent calculates the layout for all components during the initial layout phase, even if they're not visible. With .lazy, you provide a size upfront, and the actual layout is deferred until the component scrolls into view.", font: .body).textColor(.secondaryLabel)
                     }
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Basic usage with fixed size", font: .bodyBold)
                         Code {
                             """
@@ -328,7 +328,7 @@ class PerformanceOptimizationExamplesView: UIView {
                         }
                     }
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Dynamic size with size provider", font: .bodyBold)
                         Text("When item sizes vary, use a size provider closure that calculates size based on the constraint.", font: .body).textColor(.secondaryLabel)
                         Code {
@@ -350,9 +350,9 @@ class PerformanceOptimizationExamplesView: UIView {
                         }
                     }
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("When to use .lazy", font: .bodyBold)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("✓ Components with expensive layout calculations", font: .body)
                             Text("✓ Long lists with complex item layouts", font: .body)
                             Text("✓ When you know item sizes in advance", font: .body)
@@ -381,7 +381,7 @@ class PerformanceOptimizationExamplesView: UIView {
                 Text("Async layout moves the layout calculation to a background thread, keeping the main thread responsive during complex layout operations. Note that this doesn't make layout faster—it just prevents UI blocking.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 15) {
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Enabling async layout", font: .bodyBold)
                         Code {
                             """
@@ -402,18 +402,18 @@ class PerformanceOptimizationExamplesView: UIView {
                         }
                     }
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Benefits", font: .bodyBold)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("• Main thread stays responsive during layout", font: .body)
                             Text("• Smooth scrolling even with complex layouts", font: .body)
                             Text("• User can interact while layout completes", font: .body)
                         }
                     }
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Important considerations", font: .bodyBold)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("• Layout code must be thread-safe", font: .body)
                             Text("• Don't access UI properties during layout", font: .body)
                             Text("• View hierarchy updates asynchronously", font: .body)
@@ -421,9 +421,9 @@ class PerformanceOptimizationExamplesView: UIView {
                         }
                     }
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("When to use async layout", font: .bodyBold)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("✓ Layout takes > 16ms (causes frame drops)", font: .body)
                             Text("✓ User needs responsive UI during load", font: .body)
                             Text("✓ Your layout code is thread-safe", font: .body)
@@ -454,51 +454,51 @@ class PerformanceOptimizationExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Best practices", font: .subtitle)
                 VStack(spacing: 12) {
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "1.circle.fill")
                             .tintColor(.systemBlue)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Trust the defaults", font: .bodyBold)
                             Text("UIComponent's automatic optimizations handle most cases. Only add explicit optimizations when profiling shows a problem.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "2.circle.fill")
                             .tintColor(.systemGreen)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Use ViewComponent generators", font: .bodyBold)
                             Text("Always prefer ViewComponent<ViewType>() or ViewComponent { ... } over creating view instances directly.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "3.circle.fill")
                             .tintColor(.systemOrange)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Profile before optimizing", font: .bodyBold)
                             Text("Use Instruments to identify actual bottlenecks. Don't optimize based on assumptions.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "4.circle.fill")
                             .tintColor(.systemPurple)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Keep it simple", font: .bodyBold)
                             Text("Complexity adds bugs. Use reuseKey and async layout only when measurements prove they're needed.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "5.circle.fill")
                             .tintColor(.systemPink)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Leverage .lazy for expensive layouts", font: .bodyBold)
                             Text("When individual items have complex layout logic, .lazy can provide significant improvements.", font: .body).textColor(.secondaryLabel)
                         }.flex()
@@ -535,7 +535,7 @@ class OptimizedListExample: UIView {
         super.updateProperties()
         let viewModel = viewModel
         
-        componentEngine.component = VStack(spacing: 0, alignItems: .stretch) {
+        componentEngine.component = VStack(alignItems: .stretch) {
             // Header
             HStack(spacing: 10, justifyContent: .spaceBetween, alignItems: .center) {
                 Text("Optimized List", font: .bodyBold)
@@ -584,7 +584,7 @@ class OptimizedItemCell: UIView {
             Image(systemName: "doc.text", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20))
                 .tintColor(.systemBlue)
             
-            VStack(spacing: 4, alignItems: .start) {
+            VStack(spacing: 4) {
                 Text(title, font: .bodyBold)
                 Text(detail, font: .caption)
                     .textColor(.secondaryLabel)

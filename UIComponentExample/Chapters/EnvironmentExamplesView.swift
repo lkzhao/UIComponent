@@ -69,7 +69,7 @@ class EnvironmentExamplesView: UIView {
                 VStack(spacing: 10) {
                     Text("Without font environment", font: .caption)
                     #CodeExample(
-                        VStack(spacing: 8, alignItems: .start) {
+                        VStack(spacing: 8) {
                             Text("This uses default system font")
                             Text("So does this")
                             Text("And this")
@@ -78,7 +78,7 @@ class EnvironmentExamplesView: UIView {
                     
                     Text("With font environment", font: .caption)
                     #CodeExample(
-                        VStack(spacing: 8, alignItems: .start) {
+                        VStack(spacing: 8) {
                             Text("This uses bold 18pt font")
                             Text("So does this")
                             Text("And this")
@@ -88,7 +88,7 @@ class EnvironmentExamplesView: UIView {
                     
                     Text("Override environment font", font: .caption)
                     #CodeExample(
-                        VStack(spacing: 8, alignItems: .start) {
+                        VStack(spacing: 8) {
                             Text("Uses environment font (bold 18pt)")
                             Text("Uses environment font (bold 18pt)")
                             Text("I override with italic 14pt", font: .italicSystemFont(ofSize: 14))
@@ -107,7 +107,7 @@ class EnvironmentExamplesView: UIView {
                 VStack(spacing: 10) {
                     Text("Set text color environment", font: .caption)
                     #CodeExample(
-                        VStack(spacing: 8, alignItems: .start) {
+                        VStack(spacing: 8) {
                             Text("This text is blue")
                             Text("So is this text")
                             Text("And this one too")
@@ -117,7 +117,7 @@ class EnvironmentExamplesView: UIView {
                     
                     Text("Combine font and text color", font: .caption)
                     #CodeExample(
-                        VStack(spacing: 8, alignItems: .start) {
+                        VStack(spacing: 8) {
                             Text("Large bold red text")
                             Text("Also large bold red text")
                             Text("Small green override", font: .systemFont(ofSize: 12))
@@ -138,10 +138,10 @@ class EnvironmentExamplesView: UIView {
                 VStack(spacing: 10) {
                     Text("Nested font environments", font: .caption)
                     #CodeExample(
-                        VStack(spacing: 12, alignItems: .start) {
+                        VStack(spacing: 12) {
                             Text("Uses outer environment (20pt)")
                             
-                            VStack(spacing: 6, alignItems: .start) {
+                            VStack(spacing: 6) {
                                 Text("Uses inner environment (14pt)")
                                 Text("Also uses inner (14pt)")
                             }
@@ -157,10 +157,10 @@ class EnvironmentExamplesView: UIView {
                     
                     Text("Nested color environments", font: .caption)
                     #CodeExample(
-                        VStack(spacing: 12, alignItems: .start) {
+                        VStack(spacing: 12) {
                             Text("Blue text from outer")
                             
-                            VStack(spacing: 6, alignItems: .start) {
+                            VStack(spacing: 6) {
                                 Text("Green text from inner")
                                 Text("Also green")
                             }
@@ -260,7 +260,7 @@ class EnvironmentExamplesView: UIView {
                             VStack(spacing: 8) {
                                 Text("Error Section", font: .title)
                                 
-                                VStack(spacing: 6, alignItems: .start) {
+                                VStack(spacing: 6) {
                                     HStack(spacing: 8, alignItems: .center) {
                                         Image(systemName: "exclamationmark.circle.fill")
                                         Text("Invalid credentials", font: .bodyBold)
@@ -287,17 +287,17 @@ class EnvironmentExamplesView: UIView {
                         Text("Card with hierarchy", font: .caption)
                         Text("Different font sizes for different levels of hierarchy.", font: .caption).textColor(.secondaryLabel)
                         #CodeExample(
-                            VStack(spacing: 16, alignItems: .start) {
+                            VStack(spacing: 16) {
                                 Text("News Article", font: .title)
                                 
-                                VStack(spacing: 8, alignItems: .start) {
+                                VStack(spacing: 8) {
                                     Text("Breaking: UIComponent 2.0 Released", font: .title)
                                     Text("The latest version brings new features and improvements")
                                         .textColor(.secondaryLabel)
                                 }
                                 .font(.systemFont(ofSize: 16))
                                 
-                                VStack(spacing: 6, alignItems: .start) {
+                                VStack(spacing: 6) {
                                     Text("What's new:", font: .bodyBold)
                                     Text("• Environment system improvements")
                                     Text("• Better performance")
@@ -376,44 +376,44 @@ class EnvironmentExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Best practices", font: .subtitle)
                 VStack(spacing: 12) {
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "checkmark.circle.fill")
                             .tintColor(.systemGreen)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Use convenience modifiers", font: .bodyBold)
                             Text("Prefer .font() and .textColor() over .environment() for built-in values", font: .body)
                                 .textColor(.secondaryLabel)
                         }
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "checkmark.circle.fill")
                             .tintColor(.systemGreen)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Environment for shared data", font: .bodyBold)
                             Text("Use environment for configuration, themes, and widely-shared context", font: .body)
                                 .textColor(.secondaryLabel)
                         }
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "checkmark.circle.fill")
                             .tintColor(.systemGreen)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Provide sensible defaults", font: .bodyBold)
                             Text("Always define meaningful default values in your environment keys", font: .body)
                                 .textColor(.secondaryLabel)
                         }
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "checkmark.circle.fill")
                             .tintColor(.systemGreen)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Don't overuse", font: .bodyBold)
                             Text("For data used by one or two components, consider passing it directly", font: .body)
                                 .textColor(.secondaryLabel)
@@ -464,12 +464,12 @@ struct UserProfileComponent: Component {
     
     func layout(_ constraint: Constraint) -> some RenderNode {
         if let user = user {
-            return VStack(spacing: 8, alignItems: .start) {
+            return VStack(spacing: 8) {
                 HStack(spacing: 12, alignItems: .center) {
                     Image(systemName: "person.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40))
                         .tintColor(.systemBlue)
                     
-                    VStack(spacing: 4, alignItems: .start) {
+                    VStack(spacing: 4) {
                         Text("Welcome, \(user.name)!", font: .bodyBold)
                         Text(user.email, font: .body)
                             .textColor(.secondaryLabel)

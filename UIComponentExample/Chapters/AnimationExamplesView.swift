@@ -158,7 +158,7 @@ class AnimationExamplesView: UIView {
                         }
                     }
                     #CodeExample(
-                        VStack(spacing: 8, alignItems: .start) {
+                        VStack(spacing: 8) {
                             for item in viewModel.items {
                                 Text(item, font: .body)
                                     .inset(h: 16, v: 8)
@@ -192,7 +192,7 @@ class AnimationExamplesView: UIView {
                     }
                     
                     #CodeExample(
-                        VStack(spacing: 8, alignItems: .start) {
+                        VStack(spacing: 8) {
                             for (i, id) in viewModel.cascadeItems.enumerated() {
                                 Text("Item \(i)", font: .body)
                                     .inset(h: 16, v: 10)
@@ -296,7 +296,7 @@ class AnimationExamplesView: UIView {
                     }
                     
                     #CodeExample(
-                        VStack(spacing: 8, alignItems: .start) {
+                        VStack(spacing: 8) {
                             for item in viewModel.customAnimItems {
                                 Text(item, font: .body)
                                     .inset(h: 16, v: 10)
@@ -410,33 +410,33 @@ class AnimationExamplesView: UIView {
 
             VStack(spacing: 10) {
                 Text("Best practices", font: .subtitle)
-                VStack(spacing: 8, alignItems: .start) {
-                    VStack(spacing: 4, alignItems: .start) {
+                VStack(spacing: 8) {
+                    VStack(spacing: 4) {
                         Text("1. Check isReloading", font: .bodyBold)
                         Text("Only animate during component updates, not during scroll operations. Use hostingView.componentEngine.isReloading to check.", font: .body).textColor(.secondaryLabel)
                     }
                     
-                    VStack(spacing: 4, alignItems: .start) {
+                    VStack(spacing: 4) {
                         Text("2. Check hasReloaded", font: .bodyBold)
                         Text("Skip animations on the first reload using hostingView.componentEngine.hasReloaded to avoid animating initial content.", font: .body).textColor(.secondaryLabel)
                     }
                     
-                    VStack(spacing: 4, alignItems: .start) {
+                    VStack(spacing: 4) {
                         Text("3. Check bounds intersection", font: .bodyBold)
                         Text("Only animate views that are visible on screen using hostingView.bounds.intersects(frame) for better performance.", font: .body).textColor(.secondaryLabel)
                     }
                     
-                    VStack(spacing: 4, alignItems: .start) {
+                    VStack(spacing: 4) {
                         Text("4. Use spring animations", font: .bodyBold)
                         Text("Spring animations feel more natural. Use UIView.animate with usingSpringWithDamping for bouncy, organic motion.", font: .body).textColor(.secondaryLabel)
                     }
                     
-                    VStack(spacing: 4, alignItems: .start) {
+                    VStack(spacing: 4) {
                         Text("5. Keep durations short", font: .bodyBold)
                         Text("Animations should be quick (0.2-0.5s). Longer durations can make your UI feel sluggish.", font: .body).textColor(.secondaryLabel)
                     }
                     
-                    VStack(spacing: 4, alignItems: .start) {
+                    VStack(spacing: 4) {
                         Text("6. Always call completion", font: .bodyBold)
                         Text("In delete animations, always call the completion block when done. UIComponent needs this to clean up views properly.", font: .body).textColor(.secondaryLabel)
                     }
@@ -530,7 +530,7 @@ class AnimatedListExample: UIView {
         super.updateProperties()
         let viewModel = viewModel
         
-        componentEngine.component = VStack(spacing: 0, alignItems: .stretch) {
+        componentEngine.component = VStack(alignItems: .stretch) {
             // Header
             HStack(spacing: 10, alignItems: .center) {
                 Text("Animated List", font: .bodyBold)
@@ -550,7 +550,7 @@ class AnimatedListExample: UIView {
             Separator()
             
             // List items
-            VStack(spacing: 0, alignItems: .stretch) {
+            VStack(alignItems: .stretch) {
                 for (index, item) in viewModel.items.enumerated() {
                     HStack(spacing: 12, alignItems: .center) {
                         Image(systemName: "circle.fill")

@@ -64,13 +64,13 @@ class CustomComponentExamplesView: UIView {
                 Text("ComponentBuilder is the easiest way to create custom components. Instead of implementing layout(_:), you implement build() to return another component.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 15) {
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Basic wrapper component", font: .bodyBold)
                         Text("Create a simple card component that wraps content with consistent styling.", font: .body).textColor(.secondaryLabel)
                         
                         #CodeExample(
                             Card {
-                                VStack(spacing: 8, alignItems: .start) {
+                                VStack(spacing: 8) {
                                     Text("Simple Card", font: .bodyBold)
                                     Text("This is a reusable card component", font: .body)
                                         .textColor(.secondaryLabel)
@@ -83,7 +83,7 @@ class CustomComponentExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Component with parameters", font: .bodyBold)
                         Text("Add parameters to make your components configurable.", font: .body).textColor(.secondaryLabel)
                         
@@ -108,7 +108,7 @@ class CustomComponentExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Component accepting child content", font: .bodyBold)
                         Text("Use @ComponentArrayBuilder to accept arbitrary child components.", font: .body).textColor(.secondaryLabel)
                         
@@ -131,7 +131,7 @@ class CustomComponentExamplesView: UIView {
                 Text("Here are some useful components you can create for your app.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 20) {
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Avatar component", font: .bodyBold)
                         #CodeExample(
                             HStack(spacing: 12) {
@@ -143,7 +143,7 @@ class CustomComponentExamplesView: UIView {
                         Code(Avatar.codeRepresentation)
                     }
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Badge component", font: .bodyBold)
                         #CodeExample(
                             HStack(spacing: 10) {
@@ -156,10 +156,10 @@ class CustomComponentExamplesView: UIView {
                         Code(Badge.codeRepresentation)
                     }
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("List row component", font: .bodyBold)
                         #CodeExampleNoInsets(
-                            VStack(spacing: 0) {
+                            VStack {
                                 ListRow(
                                     icon: "folder.fill",
                                     title: "Documents",
@@ -193,7 +193,7 @@ class CustomComponentExamplesView: UIView {
                 Text("When you need direct access to the constraint for calculations, use the Component protocol instead of ComponentBuilder. The layout(_:) method receives the constraint as a parameter, and you must call .layout(constraint) at the end to convert your component to a RenderNode.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 15) {
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("The problem", font: .bodyBold)
                         Text("You want to create a grid of items in a Flow layout where each item perfectly fills 1/3 of the width, accounting for spacing.", font: .body).textColor(.secondaryLabel)
                         
@@ -217,7 +217,7 @@ class CustomComponentExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("The solution: write a custom FlowGrid component", font: .bodyBold).textColor(.systemGreen)
                         Text("Use Component protocol to get direct access to the constraint parameter in layout(_:). Calculate the item width based on columns and spacing, then wrap a Flow layout that sizes all children appropriately.", font: .body).textColor(.secondaryLabel)
                         
@@ -258,7 +258,7 @@ class CustomComponentExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Advanced example: Responsive card", font: .bodyBold)
                         Text("A card that changes its layout based on available width.", font: .body).textColor(.secondaryLabel)
                         
@@ -285,22 +285,22 @@ class CustomComponentExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("⚠️ Type erasure with .eraseToAnyRenderNode()", font: .bodyBold).textColor(.systemOrange)
                         Text("Notice in ResponsiveCard that we call .eraseToAnyRenderNode() on both branches. This is necessary because:", font: .body).textColor(.secondaryLabel)
                         
-                        VStack(spacing: 8, alignItems: .start) {
-                            VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 8) {
+                            VStack(spacing: 4) {
                                 Text("1. Different return types", font: .bodyBold)
                                 Text("The VStack branch and HStack branch produce different RenderNode types. Swift's type system requires all return paths to have the same type.", font: .body).textColor(.secondaryLabel)
                             }
                             
-                            VStack(spacing: 4, alignItems: .start) {
+                            VStack(spacing: 4) {
                                 Text("2. Type erasure makes them compatible", font: .bodyBold)
                                 Text(".eraseToAnyRenderNode() converts any RenderNode into an AnyRenderNode, which allows all branches to return the same concrete type (AnyRenderNode).", font: .body).textColor(.secondaryLabel)
                             }
                             
-                            VStack(spacing: 4, alignItems: .start) {
+                            VStack(spacing: 4) {
                                 Text("3. When you need it", font: .bodyBold)
                                 Text("Only needed when your layout(_:) method has conditional logic that returns different component hierarchies. If you always return the same structure, you can use 'some RenderNode'.", font: .body).textColor(.secondaryLabel)
                             }
@@ -338,24 +338,29 @@ class CustomComponentExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Other type erasure methods", font: .bodyBold)
                         Text("UIComponent provides additional type erasure methods for different use cases:", font: .body).textColor(.secondaryLabel)
                         
-                        VStack(spacing: 8, alignItems: .start) {
-                            VStack(spacing: 4, alignItems: .start) {
-                                Text("• .eraseToAnyComponent()", font: .bodyBold)
+                        VStack(spacing: 8) {
+                            VStack(spacing: 4) {
+                                Text(".eraseToAnyComponent()", font: .bodyBold)
                                 Text("Erases a Component to AnyComponent. Useful when you need to store or return components of different types.", font: .body).textColor(.secondaryLabel)
                             }
                             
-                            VStack(spacing: 4, alignItems: .start) {
-                                Text("• .eraseToAnyComponentOfView()", font: .bodyBold)
+                            VStack(spacing: 4) {
+                                Text(".eraseToAnyComponentOfView()", font: .bodyBold)
                                 Text("Erases a Component to AnyComponentOfView<View>. Use when you need type erasure but want to preserve the view type information.", font: .body).textColor(.secondaryLabel)
                             }
                             
-                            VStack(spacing: 4, alignItems: .start) {
-                                Text("• .eraseToAnyRenderNode()", font: .bodyBold)
+                            VStack(spacing: 4) {
+                                Text(".eraseToAnyRenderNode()", font: .bodyBold)
                                 Text("Erases a RenderNode to AnyRenderNode. Most commonly used in layout(_:) methods with conditional returns.", font: .body).textColor(.secondaryLabel)
+                            }
+                            
+                            VStack(spacing: 4) {
+                                Text(".eraseToAnyRenderNodeOfView()", font: .bodyBold)
+                                Text("Erases a RenderNode to AnyRenderNodeOfView<View>. Use when you need type erasure for RenderNodes but want to preserve the view type information.", font: .body).textColor(.secondaryLabel)
                             }
                         }
                         .inset(12)
@@ -377,6 +382,15 @@ class CustomComponentExamplesView: UIView {
                                     return Text("Option B").eraseToAnyComponentOfView()
                                 }
                             }
+                            
+                            // Example: .eraseToAnyRenderNodeOfView() preserving view type
+                            func layout(_ constraint: Constraint) -> AnyRenderNodeOfView<UILabel> {
+                                if condition {
+                                    return Text("Option A").layout(constraint).eraseToAnyRenderNodeOfView()
+                                } else {
+                                    return Text("Option B").layout(constraint).eraseToAnyRenderNodeOfView()
+                                }
+                            }
                             """
                         }
                     }
@@ -390,7 +404,7 @@ class CustomComponentExamplesView: UIView {
                 Text("For advanced use cases, you can implement custom layout logic by conforming to the Component protocol and implementing layout(_:) directly. This gives you complete control over child positioning.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 15) {
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Understanding layout(_:)", font: .bodyBold)
                         Text("The layout method receives a Constraint and must return a RenderNode. The RenderNode contains the size, children render nodes, and their positions.", font: .body).textColor(.secondaryLabel)
                         
@@ -409,25 +423,25 @@ class CustomComponentExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Built-in RenderNode types", font: .bodyBold)
                         Text("UIComponent provides several RenderNode types optimized for different layouts:", font: .body).textColor(.secondaryLabel)
                         
-                        VStack(spacing: 8, alignItems: .start) {
-                            VStack(spacing: 4, alignItems: .start) {
-                                Text("• VerticalRenderNode", font: .bodyBold)
+                        VStack(spacing: 8) {
+                            VStack(spacing: 4) {
+                                Text("VerticalRenderNode", font: .bodyBold)
                                 Text("Optimized for vertical lists. Uses binary search for visible items. Children must be sorted by Y position.", font: .caption).textColor(.secondaryLabel)
                             }
-                            VStack(spacing: 4, alignItems: .start) {
-                                Text("• HorizontalRenderNode", font: .bodyBold)
+                            VStack(spacing: 4) {
+                                Text("HorizontalRenderNode", font: .bodyBold)
                                 Text("Optimized for horizontal lists. Uses binary search for visible items. Children must be sorted by X position.", font: .caption).textColor(.secondaryLabel)
                             }
-                            VStack(spacing: 4, alignItems: .start) {
-                                Text("• SlowRenderNode", font: .bodyBold)
+                            VStack(spacing: 4) {
+                                Text("SlowRenderNode", font: .bodyBold)
                                 Text("Loops through all children to check visibility. Use when children aren't in a predictable order.", font: .caption).textColor(.secondaryLabel)
                             }
-                            VStack(spacing: 4, alignItems: .start) {
-                                Text("• AlwaysRenderNode", font: .bodyBold)
+                            VStack(spacing: 4) {
+                                Text("AlwaysRenderNode", font: .bodyBold)
                                 Text("Renders all children always. Use for small, always-visible layouts.", font: .caption).textColor(.secondaryLabel)
                             }
                         }.inset(12).backgroundColor(.systemGray6).cornerRadius(8)
@@ -435,7 +449,7 @@ class CustomComponentExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Example: Custom MyVStack", font: .bodyBold)
                         Text("A simple vertical stack implementation to show how layout components work.", font: .body).textColor(.secondaryLabel)
                         
@@ -463,7 +477,7 @@ class CustomComponentExamplesView: UIView {
                     
                     Separator()
                     
-                    VStack(spacing: 6, alignItems: .start) {
+                    VStack(spacing: 6) {
                         Text("Example: Custom diagonal layout", font: .bodyBold)
                         Text("A more creative layout that positions items diagonally.", font: .body).textColor(.secondaryLabel)
                         
@@ -489,61 +503,61 @@ class CustomComponentExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("Best practices", font: .subtitle)
                 VStack(spacing: 12) {
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "1.circle.fill")
                             .tintColor(.systemBlue)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Start with ComponentBuilder", font: .bodyBold)
                             Text("Use ComponentBuilder for most cases. Only implement layout(_:) when you need custom layout logic.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "2.circle.fill")
                             .tintColor(.systemGreen)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Keep components small and focused", font: .bodyBold)
                             Text("Each component should have a single responsibility. Compose multiple small components rather than creating one large component.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "3.circle.fill")
                             .tintColor(.systemOrange)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Use structs, not classes", font: .bodyBold)
                             Text("Components should be value types (structs). This ensures they're thread-safe and work well with UIComponent's architecture.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "4.circle.fill")
                             .tintColor(.systemPurple)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Avoid capturing self in closures", font: .bodyBold)
                             Text("When using closures (like in ConstraintReader), be careful about memory management. Capture local variables instead of self when possible.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "5.circle.fill")
                             .tintColor(.systemPink)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Consider performance", font: .bodyBold)
                             Text("For components used in large lists, ensure layout calculations are efficient. Use .lazy modifier if needed.", font: .body).textColor(.secondaryLabel)
                         }.flex()
                     }
                     
-                    HStack(spacing: 10, alignItems: .start) {
+                    HStack(spacing: 10) {
                         Image(systemName: "6.circle.fill")
                             .tintColor(.systemIndigo)
                             .size(width: 24, height: 24)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("Use Environment for shared config", font: .bodyBold)
                             Text("For values used across many components (theme colors, fonts), use Environment instead of passing props through every level.", font: .body).textColor(.secondaryLabel)
                         }.flex()
@@ -559,9 +573,9 @@ class CustomComponentExamplesView: UIView {
             VStack(spacing: 10) {
                 Text("When should you create custom components?", font: .subtitle)
                 VStack(spacing: 12) {
-                    VStack(spacing: 8, alignItems: .start) {
+                    VStack(spacing: 8) {
                         Text("✅ Good reasons:", font: .bodyBold).textColor(.systemGreen)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("• You're repeating the same UI pattern in multiple places", font: .body)
                             Text("• You want to encapsulate complex logic", font: .body)
                             Text("• You need a custom layout algorithm", font: .body)
@@ -573,9 +587,9 @@ class CustomComponentExamplesView: UIView {
                     .backgroundColor(.systemGreen.withAlphaComponent(0.1))
                     .cornerRadius(12)
                     
-                    VStack(spacing: 8, alignItems: .start) {
+                    VStack(spacing: 8) {
                         Text("❌ Avoid over-abstraction:", font: .bodyBold).textColor(.systemOrange)
-                        VStack(spacing: 4, alignItems: .start) {
+                        VStack(spacing: 4) {
                             Text("• Don't create components for one-off UIs", font: .body)
                             Text("• Don't add unnecessary parameters \"just in case\"", font: .body)
                             Text("• Don't wrap every single built-in component", font: .body)
@@ -604,7 +618,7 @@ struct Card: ComponentBuilder {
     }
     
     func build() -> some Component {
-        VStack(spacing: 0, alignItems: .stretch, children: children)
+        VStack(alignItems: .stretch, children: children)
             .inset(16)
             .backgroundColor(.systemBackground)
             .cornerRadius(12)
@@ -670,7 +684,7 @@ struct UserCard: ComponentBuilder {
             Image(systemName: "person.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40))
                 .tintColor(.systemBlue)
             
-            VStack(spacing: 4, alignItems: .start) {
+            VStack(spacing: 4) {
                 Text(name, font: .bodyBold)
                 Text(email, font: .body)
                     .textColor(.secondaryLabel)
@@ -726,7 +740,7 @@ struct ListRow: ComponentBuilder {
                 .contentMode(.center)
                 .size(width: 24, height: 24)
             
-            VStack(spacing: 4, alignItems: .start) {
+            VStack(spacing: 4) {
                 Text(title, font: .bodyBold)
                 Text(subtitle, font: .caption)
                     .textColor(.secondaryLabel)
@@ -805,7 +819,7 @@ struct ResponsiveCard: Component {
                 Image(systemName: icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 50))
                     .tintColor(.systemBlue)
                 
-                VStack(spacing: 6, alignItems: .start) {
+                VStack(spacing: 6) {
                     Text(title, font: .title)
                     Text(description, font: .body)
                         .textColor(.secondaryLabel)
