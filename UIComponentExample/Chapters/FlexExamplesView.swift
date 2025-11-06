@@ -326,7 +326,7 @@ class FlexExamplesView: UIView {
 
                                 Image(systemName: "chevron.right")
                                     .tintColor(.tertiaryLabel)
-                            }.inset(16).backgroundColor(.systemGray6)
+                            }
                         )
                     }
 
@@ -347,7 +347,7 @@ class FlexExamplesView: UIView {
 
                                 Image(systemName: "ellipsis")
                                     .tintColor(.label)
-                            }.inset(h: 16, v: 12).backgroundColor(.systemGray6)
+                            }
                         )
                     }
 
@@ -376,7 +376,7 @@ class FlexExamplesView: UIView {
                                         .cornerRadius(8)
                                         .flex()
                                 }
-                            }.inset(16)
+                            }
                         )
                     }
 
