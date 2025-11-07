@@ -21,6 +21,12 @@ extension RenderNodeWrapper {
     public var size: CGSize {
         content.size
     }
+    public var ascender: CGFloat {
+        content.ascender
+    }
+    public var descender: CGFloat {
+        content.descender
+    }
     public var positions: [CGPoint] {
         content.positions
     }

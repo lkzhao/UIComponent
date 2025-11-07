@@ -35,21 +35,21 @@ public struct ZStack: Component {
             .map { (idx, node) in
                 var result = CGRect(origin: .zero, size: node.size)
                 switch verticalAlignment {
-                case .start:
+                case .start, .baselineFirst:
                     result.origin.y = 0
                 case .center:
                     result.origin.y = (size.height - node.size.height) / 2
-                case .end:
+                case .end, .baselineLast:
                     result.origin.y = size.height - node.size.height
                 case .stretch:
                     result.size.height = size.height
                 }
                 switch horizontalAlignment {
-                case .start:
+                case .start, .baselineFirst:
                     result.origin.x = 0
                 case .center:
                     result.origin.x = (size.width - node.size.width) / 2
-                case .end:
+                case .end, .baselineLast:
                     result.origin.x = size.width - node.size.width
                 case .stretch:
                     result.size.width = size.width

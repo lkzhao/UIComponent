@@ -14,6 +14,26 @@ public enum TextContent {
     case string(String, UIFont)
     case attributedString(NSAttributedString)
 
+    // The ascender of the text content.
+    var ascender: CGFloat {
+        switch self {
+        case .string(_, let font):
+            return font.ascender
+        case .attributedString(let string):
+            return string.ascender
+        }
+    }
+
+    // The ascender of the text content.
+    var descender: CGFloat {
+        switch self {
+        case .string(_, let font):
+            return font.descender
+        case .attributedString(let string):
+            return string.descender
+        }
+    }
+
     func apply(to label: UILabel) {
         switch self {
         case .string(let string, let font):
@@ -137,7 +157,9 @@ public struct Text: Component {
                 textColor: textColor,
                 numberOfLines: numberOfLines,
                 lineBreakMode: lineBreakMode,
-                size: size.bound(to: constraint)
+                size: size.bound(to: constraint),
+                ascender: content.ascender,
+                descender: content.descender
             )
         }
 
@@ -176,7 +198,9 @@ public struct Text: Component {
                 textColor: textColor,
                 numberOfLines: numberOfLines,
                 lineBreakMode: lineBreakMode,
-                size: rect.size.bound(to: constraint)
+                size: rect.size.bound(to: constraint),
+                ascender: content.ascender,
+                descender: content.descender
             )
         } else {
             // Faster route
@@ -188,7 +212,9 @@ public struct Text: Component {
                 textColor: textColor,
                 numberOfLines: numberOfLines,
                 lineBreakMode: lineBreakMode,
-                size: size.bound(to: constraint)
+                size: size.bound(to: constraint),
+                ascender: content.ascender,
+                descender: content.descender
             )
         }
     }
@@ -206,6 +232,10 @@ public struct TextRenderNode: RenderNode {
     public let lineBreakMode: NSLineBreakMode
     /// The calculated size of the rendered text.
     public let size: CGSize
+    /// The ascender of the rendered text. Used for baseline alignment.
+    public let ascender: CGFloat
+    /// The descender of the rendered text. Used for baseline alignment.
+    public let descender: CGFloat
 
     /// Initializes a new `TextRenderNode` with the given parameters.
     /// - Parameters:
@@ -213,17 +243,43 @@ public struct TextRenderNode: RenderNode {
     ///   - numberOfLines: The maximum number of lines to use for rendering.
     ///   - lineBreakMode: The technique to use for wrapping and truncating the text.
     ///   - size: The calculated size of the rendered text.
-    public init(content: TextContent, textColor: UIColor? = nil, numberOfLines: Int, lineBreakMode: NSLineBreakMode, size: CGSize) {
+    ///   - ascender: The ascender of the rendered text.
+    ///   - descender: The descender of the rendered text.
+    public init(
+        content: TextContent,
+        textColor: UIColor? = nil,
+        numberOfLines: Int,
+        lineBreakMode: NSLineBreakMode,
+        size: CGSize,
+        ascender: CGFloat,
+        descender: CGFloat
+    ) {
         self.content = content
         self.textColor = textColor
         self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
         self.size = size
+        self.ascender = ascender
+        self.descender = descender
     }
 
     /// Convenience initializer for creating a `TextRenderNode` with a plain string.
-    public init(attributedString: NSAttributedString, numberOfLines: Int, lineBreakMode: NSLineBreakMode, size: CGSize) {
-        self.init(content: .attributedString(attributedString), numberOfLines: numberOfLines, lineBreakMode: lineBreakMode, size: size)
+    public init(
+        attributedString: NSAttributedString,
+        numberOfLines: Int,
+        lineBreakMode: NSLineBreakMode,
+        size: CGSize,
+        ascender: CGFloat,
+        descender: CGFloat
+    ) {
+        self.init(
+            content: .attributedString(attributedString),
+            numberOfLines: numberOfLines,
+            lineBreakMode: lineBreakMode,
+            size: size,
+            ascender: ascender,
+            descender: descender
+        )
     }
 
     /// Updates the provided `UILabel` with the render node's properties.

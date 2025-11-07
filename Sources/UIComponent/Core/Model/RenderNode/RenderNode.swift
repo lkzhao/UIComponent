@@ -30,6 +30,16 @@ public protocol RenderNode<View> {
     /// The size of the render node.
     var size: CGSize { get }
 
+    /// The ascender of the render node.
+    /// This is the distance from the top of the node to its baseline.
+    /// Used for baseline alignment.
+    var ascender: CGFloat { get }
+
+    /// The descender of the render node.
+    /// This is the distance from the node's baseline to its bottom.
+    /// Used for baseline alignment.
+    var descender: CGFloat { get }
+
     /// The positions of child render nodes relative to this node's origin.
     var positions: [CGPoint] { get }
 
@@ -121,6 +131,8 @@ extension RenderNode {
 
     }
 
+    public var ascender: CGFloat { size.height }
+    public var descender: CGFloat { 0 }
     public var children: [any RenderNode] { [] }
     public var positions: [CGPoint] { [] }
 

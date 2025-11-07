@@ -215,6 +215,25 @@ extension FlexLayout {
                 lineSize = size(main: main(lineSize), cross: crossMax)
             }
 
+            // If there are baseline-aligned items, calculate its baseline
+            // and adjust the line's main size if needed.
+            var lineStartToBaselineMax: CGFloat = 0
+            var lineBaselineToEndMax: CGFloat = 0
+            for index in range {
+                let renderNode = renderNodes[index]
+                let itemAlign = renderNode.alignSelf ?? alignItems
+
+                if itemAlign == .baselineFirst || itemAlign == .baselineLast {
+                    let itemMain = main(renderNode.size)
+                    let itemBaseline = (itemAlign == .baselineFirst) ? renderNode.ascender : (itemMain + renderNode.descender)
+                    lineStartToBaselineMax = max(lineStartToBaselineMax, itemBaseline)
+                    lineBaselineToEndMax = max(lineBaselineToEndMax, itemMain - itemBaseline)
+                }
+            }
+            let lineMain = max(lineStartToBaselineMax + lineBaselineToEndMax, main(lineSize))
+            lineSize = size(main: lineMain, cross: cross(lineSize))
+            let lineBaseline = lineStartToBaselineMax
+
             // Calculate the starting offset and spacing for the cross axis based on the justifyContent property.
             var (crossOffset, crossSpacing) = LayoutHelper.distribute(
                 justifyContent: justifyContent,
@@ -247,6 +266,10 @@ extension FlexLayout {
                     alignValue = main(lineSize) - main(child.size)
                 case .center:
                     alignValue = (main(lineSize) - main(child.size)) / 2
+                case .baselineFirst:
+                    alignValue = lineBaseline - child.ascender
+                case .baselineLast:
+                    alignValue = lineBaseline - (main(child.size) + child.descender)
                 }
                 // Set the position for the current child.
                 positions.append(point(main: mainOffset + alignValue, cross: crossOffset))

@@ -50,14 +50,12 @@ extension Stack {
             var crossValue: CGFloat = 0
             let alignChild = child.alignSelf ?? alignItems
             switch alignChild {
-            case .start:
+            case .start, .stretch, .baselineFirst:
                 crossValue = 0
-            case .end:
+            case .end, .baselineLast:
                 crossValue = crossMax - cross(child.size)
             case .center:
                 crossValue = (crossMax - cross(child.size)) / 2
-            case .stretch:
-                crossValue = 0
             }
             positions.append(point(main: primaryOffset, cross: crossValue))
             primaryOffset += main(child.size) + distributedSpacing

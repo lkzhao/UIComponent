@@ -49,9 +49,19 @@ public struct OffsetRenderNode: RenderNode {
         self.offset = offset
     }
 
-    /// The size of the render node, adjusted for the insets.
+    /// The size of the render node, adjusted for the offset.
     public var size: CGSize {
         content.size
+    }
+
+    /// The ascender of the render node, adjusted for the offset.
+    public var ascender: CGFloat {
+        content.ascender + offset.y
+    }
+
+    /// The descender of the render node, adjusted for the offset.
+    public var descender: CGFloat {
+        content.descender + offset.y
     }
 
     /// The content render nodes of this render node.

@@ -187,6 +187,50 @@ class FlowExamplesView: UIView {
                             Text("Tiny", font: .caption).inset(6).backgroundColor(.systemPurple).cornerRadius(4)
                         }.size(width: 300)
                     )
+
+                    Text("alignItems: .baselineFirst", font: .caption)
+                    #CodeExample(
+                        Flow(spacing: 8, alignItems: .baselineFirst) {
+                            Text("Small", font: .body)
+                                .inset(8)
+                                .backgroundColor(.systemPurple)
+                                .cornerRadius(4)
+                            Text("Large\nLarge", font: .title)
+                                .inset(12)
+                                .backgroundColor(.systemPurple)
+                                .cornerRadius(4)
+                            Text("Medium", font: .subtitle)
+                                .inset(10)
+                                .backgroundColor(.systemPurple)
+                                .cornerRadius(4)
+                            Text("Tiny", font: .caption)
+                                .inset(6)
+                                .backgroundColor(.systemPurple)
+                                .cornerRadius(4)
+                        }.size(width: 300)
+                    )
+
+                    Text("alignItems: .baselineLast", font: .caption)
+                    #CodeExample(
+                        Flow(spacing: 8, alignItems: .baselineLast) {
+                            Text("Small", font: .body)
+                                .inset(8)
+                                .backgroundColor(.systemPurple)
+                                .cornerRadius(4)
+                            Text("Large\nLarge", font: .title)
+                                .inset(12)
+                                .backgroundColor(.systemPurple)
+                                .cornerRadius(4)
+                            Text("Medium", font: .subtitle)
+                                .inset(10)
+                                .backgroundColor(.systemPurple)
+                                .cornerRadius(4)
+                            Text("Tiny", font: .caption)
+                                .inset(6)
+                                .backgroundColor(.systemPurple)
+                                .cornerRadius(4)
+                        }.size(width: 300)
+                    )
                 }
             }
             
@@ -301,6 +345,18 @@ class FlowExamplesView: UIView {
                             .backgroundColor(.systemPurple)
                             .cornerRadius(4)
                             .alignSelf(.stretch)
+
+                        Text("Baseline\nfirst",  font: .body)
+                            .inset(12)
+                            .backgroundColor(.systemPurple)
+                            .cornerRadius(4)
+                            .alignSelf(.baselineFirst)
+
+                        Text("Baseline\nlast",  font: .body)
+                            .inset(12)
+                            .backgroundColor(.systemPurple)
+                            .cornerRadius(4)
+                            .alignSelf(.baselineLast)
                     }
                 )
             }
