@@ -4,7 +4,7 @@ import Foundation
 import SwiftUI
 
 /// A result builder that constructs an array of components.
-/// This builder is used to support the UIComponent USL.
+/// This builder is used to support the UIComponent DSL.
 @resultBuilder
 public struct ComponentArrayBuilder {
     public static func buildExpression(_ expression: ComponentArrayContainer) -> [any Component] {

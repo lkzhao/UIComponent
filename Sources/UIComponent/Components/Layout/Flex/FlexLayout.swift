@@ -180,7 +180,7 @@ extension FlexLayout {
             justifyContent: alignContent,
             maxPrimary: mainMax,
             totalPrimary: totalHeight,
-            minimunSpacing: lineSpacing,
+            minimumSpacing: lineSpacing,
             numberOfItems: lineData.count
         )
 
@@ -239,7 +239,7 @@ extension FlexLayout {
                 justifyContent: justifyContent,
                 maxPrimary: crossMax,
                 totalPrimary: cross(lineSize),
-                minimunSpacing: interitemSpacing,
+                minimumSpacing: interitemSpacing,
                 numberOfItems: count
             )
 
