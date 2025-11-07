@@ -13,14 +13,6 @@ import UIKit
 @MainActor
 struct DataCachingTest {
 
-    init() {
-        CacheEngine.clearGlobalCache()
-    }
-
-    deinit {
-        CacheEngine.clearGlobalCache()
-    }
-
     class DataHolder<T> {
         var data: T
         init(data: T) {
