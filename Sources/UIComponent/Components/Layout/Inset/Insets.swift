@@ -56,6 +56,16 @@ struct InsetsRenderNode: RenderNode {
         content.size.inset(by: -insets)
     }
 
+    /// The ascender of the render node, adjusted for the top inset.
+    var ascender: CGFloat {
+        content.ascender + insets.top
+    }
+
+    /// The descender of the render node, adjusted for the bottom inset.
+    var descender: CGFloat {
+        content.descender - insets.bottom
+    }
+
     /// The content render nodes of this render node.
     var children: [any RenderNode] {
         [content]
