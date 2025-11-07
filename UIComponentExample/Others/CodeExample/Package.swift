@@ -20,8 +20,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "602.0.0-latest"),
-        .package(url: "https://github.com/lkzhao/UIComponent", from: "5.0.6"),
         .package(url: "https://github.com/raspu/Highlightr", from: "2.3.0"),
+        .package(name: "UIComponent", path: "../../.."),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
