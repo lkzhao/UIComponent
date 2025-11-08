@@ -159,7 +159,7 @@ class EnvironmentExamplesView: UIView {
             // MARK: - ForegroundColor Color Environment
             
             VStack(spacing: 10) {
-                Text("foreground color environment", font: .subtitle)
+                Text("Foreground color environment", font: .subtitle)
                 Text("Similar to Text color, you can also add a default tint color to Image. However, it's important to note that the priority order of text color in Text is textColor > foregroundColor.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 10) {
