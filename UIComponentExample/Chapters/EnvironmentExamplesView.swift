@@ -95,6 +95,33 @@ class EnvironmentExamplesView: UIView {
                         }
                         .font(.boldSystemFont(ofSize: 18))
                     )
+                    Text("It also applies to Images (System Symbols only).", font: .caption)
+                    #CodeExample(
+                        VStack(spacing: 8) {
+                            Text("Uses environment font (bold 18pt)")
+                            Image(systemName: "alarm")
+                            Text("Uses environment font (bold 18pt)")
+                            Image(systemName: "alarm")
+                            Text("I override with font 14pt", font: .systemFont(ofSize: 14))
+                            Image(systemName: "alarm")
+                                .font(.systemFont(ofSize: 14))
+                        }
+                        .font(.boldSystemFont(ofSize: 18))
+                    )
+                    Text("Usage Tips", font: .caption)
+                    #CodeExample(
+                        VStack(spacing: 8) {
+                            let defalutConfiguration = UIImage.SymbolConfiguration(hierarchicalColor: .systemPink)
+                            Text("Use UIImage.Configuration", font: .systemFont(ofSize: 14))
+                            let configuration = UIImage.SymbolConfiguration(scale: .large)
+                                .applying(defalutConfiguration)
+                            Image(systemName: "alarm", withConfiguration: configuration)
+                                .font(nil)
+                            Text("Use environment value.", font: .systemFont(ofSize: 14))
+                            Image(systemName: "alarm", withConfiguration: defalutConfiguration)
+                        }
+                        .font(.systemFont(ofSize: 22))
+                    )
                 }
             }
             
@@ -125,6 +152,35 @@ class EnvironmentExamplesView: UIView {
                         }
                         .font(.boldSystemFont(ofSize: 20))
                         .textColor(.systemRed)
+                    )
+                }
+            }
+            
+            // MARK: - ForegroundColor Color Environment
+            
+            VStack(spacing: 10) {
+                Text("foreground color environment", font: .subtitle)
+                Text("Similar to Text color, you can also add a default tint color to Image. However, it's important to note that the priority order of text color in Text is textColor > foregroundColor.", font: .body).textColor(.secondaryLabel)
+                
+                VStack(spacing: 10) {
+                    Text("Achieve a consistent style using foregroundColor and font.", font: .caption)
+                    #CodeExample(
+                        HStack(spacing: 8) {
+                            Label("Like", systemImage: "heart")
+                                .labelBackground()
+                                .foregroundColor(.systemPink)
+                            Label("Success", systemImage: "checkmark")
+                                .labelBackground()
+                                .foregroundColor(.systemGreen)
+                            Label("Retry", systemImage: "arrow.trianglehead.clockwise.rotate.90")
+                                .labelBackground()
+                                .foregroundColor(.systemBlue)
+                            Label("Different text colors", systemImage: "scribble")
+                                .labelBackground()
+                                .foregroundColor(.systemIndigo)
+                                .textColor(.systemPurple)
+                        }
+                        .font(.systemFont(ofSize: 16, weight: .medium))
                     )
                 }
             }
