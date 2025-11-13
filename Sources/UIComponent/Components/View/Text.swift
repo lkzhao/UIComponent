@@ -62,6 +62,8 @@ public struct Text: Component {
     @Environment(\.font) var font
     /// Environment-injected text color used when rendering plain strings.
     @Environment(\.textColor) var textColor
+    /// The foreground color to use when displaying this text
+    @Environment(\.foregroundColor) var foregroundColor
     /// The content of the text, which can be a plain string or an attributed string.
     public let content: TextContent
     /// The maximum number of lines to display the text. 0 means no limit.
@@ -146,6 +148,7 @@ public struct Text: Component {
         if case .string(let string, _) = content, let envFont = font {
             content = .string(string, envFont)
         }
+        var textColor = textColor ?? foregroundColor
         if Self.useSharedLabelForSizing, Thread.isMainThread {
             // Fastest route, but not thread safe.
             layoutLabel.numberOfLines = numberOfLines
