@@ -7,19 +7,22 @@ let sizingHostingController = UIHostingController(rootView: AnyView(EmptyView())
 
 public struct SwiftUIComponent: Component {
     public let content: AnyView
+    public let disableSafeArea: Bool
 
-    public init<Content: View>(_ content: Content) {
+    public init<Content: View>(disableSafeArea: Bool = true, _ content: Content) {
+        self.disableSafeArea = disableSafeArea
         self.content = AnyView(content)
     }
 
-    public init<Content: View>(@ViewBuilder _ content: () -> Content) {
+    public init<Content: View>(disableSafeArea: Bool = true, @ViewBuilder _ content: () -> Content) {
+        self.disableSafeArea = disableSafeArea
         self.content = AnyView(content())
     }
 
     public func layout(_ constraint: Constraint) -> some RenderNode {
         sizingHostingController.rootView = content
         let size = sizingHostingController.sizeThatFits(in: constraint.maxSize)
-        return ViewComponent<SwiftUIHostingView>().swiftUIView(content).size(size).layout(constraint)
+        return ViewComponent<SwiftUIHostingView>().disableSafeArea(disableSafeArea).swiftUIView(content).size(size).layout(constraint)
     }
 }
 
@@ -35,6 +38,12 @@ class SwiftUIHostingView: UIView {
         }
     }
 
+    var disableSafeArea: Bool = true {
+        didSet {
+            hostingController?._disableSafeArea = disableSafeArea
+        }
+    }
+
     var swiftUIView: AnyView? {
         didSet {
             if let swiftUIView {
@@ -42,7 +51,7 @@ class SwiftUIHostingView: UIView {
                     hostingController.rootView = swiftUIView
                 } else {
                     hostingController = UIHostingController(rootView: swiftUIView)
-                    hostingController?._disableSafeArea = true
+                    hostingController?._disableSafeArea = disableSafeArea
                     if #available(iOS 16.0, *) {
                         hostingController?.sizingOptions = .intrinsicContentSize
                     }
