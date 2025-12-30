@@ -9,7 +9,6 @@ public typealias UIFont = NSFont
 public typealias UIColor = NSColor
 public typealias UIImage = NSImage
 public typealias UIBezierPath = NSBezierPath
-public typealias UIEvent = NSEvent
 public typealias UIEdgeInsets = NSEdgeInsets
 
 extension NSView {
@@ -75,7 +74,7 @@ extension NSView {
         }
     }
 
-    public func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+    public func point(inside point: CGPoint, with event: PlatformEvent?) -> Bool {
         bounds.contains(point)
     }
 

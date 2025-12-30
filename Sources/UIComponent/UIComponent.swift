@@ -14,6 +14,7 @@ public typealias PlatformFont = UIFont
 public typealias PlatformBezierPath = UIBezierPath
 public typealias PlatformEdgeInsets = UIEdgeInsets
 public typealias PlatformScrollView = UIScrollView
+public typealias PlatformEvent = UIEvent
 
 #elseif canImport(AppKit)
 @_exported import AppKit
@@ -24,4 +25,5 @@ public typealias PlatformColor = NSColor
 public typealias PlatformFont = NSFont
 public typealias PlatformBezierPath = NSBezierPath
 public typealias PlatformEdgeInsets = NSEdgeInsets
+public typealias PlatformEvent = NSEvent
 #endif
