@@ -8,14 +8,14 @@ import AppKit
 /// The separator can be either horizontal or vertical depending on the given constraints.
 public struct Separator: ComponentBuilder {
     /// The default color of the separator.
-    public static var defaultSeparatorColor: UIColor = UIColor.separator
+    public static var defaultSeparatorColor: PlatformColor = PlatformColor.separator
 
     /// The color of the separator.
-    public let color: UIColor
+    public let color: PlatformColor
 
     /// Initializes a new separator with the specified color.
     /// - Parameter color: The color of the separator. If not specified, the default separator color is used.
-    public init(color: UIColor = Separator.defaultSeparatorColor) {
+    public init(color: PlatformColor = Separator.defaultSeparatorColor) {
         self.color = color
     }
 

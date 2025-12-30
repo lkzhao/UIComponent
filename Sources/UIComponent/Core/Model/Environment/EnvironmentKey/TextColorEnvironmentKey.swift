@@ -2,14 +2,14 @@
 
 /// The key for accessing the default text color from the environment.
 public struct TextColorEnvironmentKey: EnvironmentKey {
-    public static var defaultValue: UIColor? {
+    public static var defaultValue: PlatformColor? {
         nil
     }
 }
 
 public extension EnvironmentValues {
     /// The text color value in the environment.
-    var textColor: UIColor? {
+    var textColor: PlatformColor? {
         get { self[TextColorEnvironmentKey.self] }
         set { self[TextColorEnvironmentKey.self] = newValue }
     }
@@ -17,9 +17,9 @@ public extension EnvironmentValues {
 
 public extension Component {
     /// Modifies the text color environment value for the component.
-    /// - Parameter color: The UIColor to be set in the environment.
+    /// - Parameter color: The PlatformColor to be set in the environment.
     /// - Returns: An environment component with the new text color value.
-    func textColor(_ color: UIColor?) -> EnvironmentComponent<UIColor?, Self> {
+    func textColor(_ color: PlatformColor?) -> EnvironmentComponent<PlatformColor?, Self> {
         environment(\.textColor, value: color)
     }
 }

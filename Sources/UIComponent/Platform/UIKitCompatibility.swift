@@ -6,7 +6,6 @@ import QuartzCore
 
 public typealias UIView = NSView
 public typealias UIFont = NSFont
-public typealias UIColor = NSColor
 public typealias UIEdgeInsets = NSEdgeInsets
 
 extension NSView {
