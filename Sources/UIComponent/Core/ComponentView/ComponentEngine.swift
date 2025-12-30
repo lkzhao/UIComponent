@@ -100,7 +100,9 @@ public final class ComponentEngine {
     /// The size of the content within the view.
     public private(set) var contentSize: CGSize = .zero {
         didSet {
+#if canImport(UIKit)
             (view as? UIScrollView)?.contentSize = contentSize
+#endif
         }
     }
     
@@ -112,7 +114,11 @@ public final class ComponentEngine {
     
     /// The insets applied to the content of the view.
     var contentInset: UIEdgeInsets {
+#if canImport(UIKit)
         (view as? UIScrollView)?.adjustedContentInset ?? .zero
+#else
+        .zero
+#endif
     }
     
     /// The bounds of the view.
@@ -127,7 +133,11 @@ public final class ComponentEngine {
     
     /// The scale at which the content of the view is zoomed.
     var zoomScale: CGFloat {
+#if canImport(UIKit)
         (view as? UIScrollView)?.zoomScale ?? 1
+#else
+        1
+#endif
     }
 
     /// Initializes a new `ComponentEngine` with the given view.
@@ -235,7 +245,11 @@ public final class ComponentEngine {
         isRendering = true
 
         animator.willUpdate(hostingView: view)
+#if canImport(UIKit)
         let visibleFrame = (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
+#else
+        let visibleFrame = bounds.inset(by: visibleFrameInsets)
+#endif
 
         var newVisibleRenderables = renderNode._visibleRenderables(in: visibleFrame)
 
@@ -292,12 +306,19 @@ public final class ComponentEngine {
                 }
             } else {
                 cell = renderable.renderNode._makeView()
+#if canImport(UIKit)
                 UIView.performWithoutAnimation {
                     cell.bounds.size = frame.bounds.size
                     cell.center = frame.center
                     cell.layoutIfNeeded()
                     renderable.renderNode._updateView(cell)
                 }
+#else
+                cell.bounds.size = frame.bounds.size
+                cell.center = frame.center
+                cell.layoutIfNeeded()
+                renderable.renderNode._updateView(cell)
+#endif
                 animator.insert(hostingView: view, view: cell, frame: frame)
                 newViews[index] = cell
             }
@@ -403,11 +424,15 @@ extension ComponentEngine {
     }
 
     @discardableResult public func scrollTo(id: String, animated: Bool) -> Bool {
+#if canImport(UIKit)
         if let frame = renderNode?.frame(id: id), let view = view as? UIScrollView {
             view.scrollRectToVisible(frame, animated: animated)
             return true
         } else {
             return false
         }
+#else
+        false
+#endif
     }
 }

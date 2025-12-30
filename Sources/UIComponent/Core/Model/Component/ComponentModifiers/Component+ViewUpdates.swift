@@ -43,7 +43,12 @@ extension Component {
     public func roundedCorner() -> UpdateComponent<Self> {
         ModifierComponent(content: self) { node in
             node.update { view in
+#if os(macOS)
+                view.wantsLayer = true
+                view.layer?.cornerRadius = min(node.size.width, node.size.height) / 2
+#else
                 view.layer.cornerRadius = min(node.size.width, node.size.height) / 2
+#endif
             }
         }
     }

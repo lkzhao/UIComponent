@@ -1,4 +1,5 @@
 /// A render node that wraps content and provides custom animations for insert, update, and delete operations.
+#if canImport(UIKit)
 public struct AnimatorWrapperRenderNode<Content: RenderNode>: RenderNodeWrapper {
     public let content: Content
     var passthroughUpdate: Bool
@@ -44,3 +45,4 @@ extension RenderNode {
         AnimatorWrapperRenderNode(content: self, passthroughUpdate: false, deleteBlock: deleteBlock)
     }
 }
+#endif

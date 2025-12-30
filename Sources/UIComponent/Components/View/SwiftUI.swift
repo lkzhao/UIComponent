@@ -1,8 +1,13 @@
 //  Created by Luke Zhao on 5/12/25.
 
+#if canImport(SwiftUI)
 import SwiftUI
 
+#if canImport(UIKit)
 let sizingHostingController = UIHostingController(rootView: AnyView(EmptyView()))
+#else
+let sizingHostingView = NSHostingView(rootView: AnyView(EmptyView()))
+#endif
 
 public struct SwiftUIComponent: Component {
     public let content: AnyView
@@ -19,12 +24,24 @@ public struct SwiftUIComponent: Component {
     }
 
     public func layout(_ constraint: Constraint) -> some RenderNode {
+#if canImport(UIKit)
         sizingHostingController.rootView = content
         let size = sizingHostingController.sizeThatFits(in: constraint.maxSize)
-        return ViewComponent<SwiftUIHostingView>().disableSafeArea(disableSafeArea).swiftUIView(content).size(size).layout(constraint)
+#else
+        sizingHostingView.rootView = content
+        sizingHostingView.frame = CGRect(origin: .zero, size: constraint.maxSize)
+        sizingHostingView.layoutSubtreeIfNeeded()
+        let size = sizingHostingView.fittingSize.bound(to: constraint)
+#endif
+        return ViewComponent<SwiftUIHostingView>()
+            .disableSafeArea(disableSafeArea)
+            .swiftUIView(content)
+            .size(size)
+            .layout(constraint)
     }
 }
 
+#if canImport(UIKit)
 class SwiftUIHostingView: UIView {
     var hostingController: UIHostingController<AnyView>? {
         didSet {
@@ -101,3 +118,48 @@ extension UIView {
         return (responder as? UIViewController)
     }
 }
+#else
+class SwiftUIHostingView: NSView {
+    private var hostingView: NSHostingView<AnyView>? {
+        didSet {
+            guard hostingView != oldValue else { return }
+            oldValue?.removeFromSuperview()
+            if let hostingView {
+                addSubview(hostingView)
+                hostingView.frame = bounds
+                hostingView.autoresizingMask = [.width, .height]
+            }
+        }
+    }
+
+    var disableSafeArea: Bool = true
+
+    var swiftUIView: AnyView? {
+        didSet {
+            if let swiftUIView {
+                if let hostingView {
+                    hostingView.rootView = swiftUIView
+                } else {
+                    let hostingView = NSHostingView(rootView: swiftUIView)
+                    hostingView.wantsLayer = true
+                    hostingView.layer?.backgroundColor = NSColor.clear.cgColor
+                    self.hostingView = hostingView
+                }
+            } else {
+                hostingView = nil
+            }
+        }
+    }
+
+    override func layout() {
+        super.layout()
+        hostingView?.frame = bounds
+    }
+
+    override var intrinsicContentSize: NSSize {
+        hostingView?.fittingSize ?? super.intrinsicContentSize
+    }
+}
+#endif
+
+#endif

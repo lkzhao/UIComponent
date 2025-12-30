@@ -61,6 +61,19 @@ extension CGRect {
     }
 }
 
+#if os(macOS)
+extension CGRect {
+    @inlinable func inset(by insets: UIEdgeInsets) -> CGRect {
+        CGRect(
+            x: origin.x + insets.left,
+            y: origin.y + insets.top,
+            width: size.width - insets.left - insets.right,
+            height: size.height - insets.top - insets.bottom
+        )
+    }
+}
+#endif
+
 extension Comparable {
     @inlinable func clamp(_ minValue: Self, _ maxValue: Self) -> Self {
         self < minValue ? minValue : (self > maxValue ? maxValue : self)

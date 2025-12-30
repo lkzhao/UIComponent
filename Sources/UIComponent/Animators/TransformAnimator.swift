@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 2018-12-27.
 
+#if canImport(UIKit)
 @available(*, deprecated, renamed: "TransformAnimator")
 public typealias AnimatedReloadAnimator = TransformAnimator
 
@@ -128,3 +129,4 @@ public struct TransformAnimator: Animator {
         }
     }
 }
+#endif

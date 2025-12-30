@@ -23,5 +23,7 @@ open class ComponentView: UIView, ComponentDisplayableView {
 /// and ``ComponentScrollView`` supports rendering components.
 ///
 /// See ``ComponentDisplayableView`` for usage details.
+#if canImport(UIKit)
 open class ComponentScrollView: UIScrollView, ComponentDisplayableView {
 }
+#endif

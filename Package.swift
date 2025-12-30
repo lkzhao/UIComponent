@@ -6,6 +6,7 @@ let package = Package(
     name: "UIComponent",
     platforms: [
         .iOS("13.0"),
+        .macOS("12.0"),
         .tvOS("15.0")
     ],
     products: [

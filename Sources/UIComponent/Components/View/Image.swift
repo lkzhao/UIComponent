@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 8/23/20.
 
+#if canImport(UIKit)
 /// An image component that renders an UIImageView
 public struct Image: Component {
     /// The underlying `UIImage` instance.
@@ -77,3 +78,4 @@ public struct ImageRenderNode: RenderNode {
         view.image = image
     }
 }
+#endif

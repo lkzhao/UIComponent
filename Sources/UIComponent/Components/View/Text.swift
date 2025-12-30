@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 8/22/20.
 
+#if canImport(UIKit)
 #if os(tvOS)
 extension UIFont {
     public static let systemFontSize: Double = 16.0
@@ -267,3 +268,4 @@ public struct TextRenderNode: RenderNode {
         content.apply(to: label)
     }
 }
+#endif

@@ -63,7 +63,12 @@ open class ReuseManager: NSObject {
     ) -> T {
         let queuedView = reusableViews[identifier]?.popLast() as? T
         let view = queuedView ?? defaultView()
+#if os(macOS)
+        view.wantsLayer = true
+        view.layer?.removeAllAnimations()
+#else
         view.layer.removeAllAnimations()
+#endif
         (view as? ReuseableView)?.prepareForReuse()
         if !removeFromSuperviewWhenReuse {
             view.isHidden = false

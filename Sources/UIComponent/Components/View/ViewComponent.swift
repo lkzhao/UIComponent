@@ -43,7 +43,13 @@ public struct ViewComponent<View: UIView>: Component {
     /// - Parameter constraint: A `Constraint` instance that provides the maximum size that the view can take.
     /// - Returns: A `ViewRenderNode` instance that represents the layout of the view.
     public func layout(_ constraint: Constraint) -> ViewRenderNode<View> {
-        ViewRenderNode(size: (view?.sizeThatFits(constraint.maxSize) ?? .zero).bound(to: constraint), view: view, generator: generator)
+#if os(macOS)
+        let fitting = self.view?.fittingSize ?? .zero
+        let clamped = CGSize(width: min(fitting.width, constraint.maxSize.width), height: min(fitting.height, constraint.maxSize.height))
+        return ViewRenderNode(size: clamped.bound(to: constraint), view: self.view, generator: generator)
+#else
+        return ViewRenderNode(size: (self.view?.sizeThatFits(constraint.maxSize) ?? .zero).bound(to: constraint), view: self.view, generator: generator)
+#endif
     }
 }
 
@@ -120,6 +126,12 @@ extension UIView: Component {
     /// - Parameter constraint: The constraints within which the view should be laid out.
     /// - Returns: A `ViewRenderNode` representing the laid out view.
     public func layout(_ constraint: Constraint) -> ViewRenderNode<UIView> {
-        ViewRenderNode(size: constraint.isTight ? constraint.maxSize : sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
+#if os(macOS)
+        let fitting = fittingSize
+        let clamped = CGSize(width: min(fitting.width, constraint.maxSize.width), height: min(fitting.height, constraint.maxSize.height))
+        return ViewRenderNode(size: constraint.isTight ? constraint.maxSize : clamped.bound(to: constraint), view: self)
+#else
+        return ViewRenderNode(size: constraint.isTight ? constraint.maxSize : sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
+#endif
     }
 }

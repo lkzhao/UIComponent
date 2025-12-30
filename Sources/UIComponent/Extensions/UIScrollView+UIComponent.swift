@@ -1,6 +1,6 @@
 //  Created by Luke on 4/16/17.
 
-
+#if canImport(UIKit)
 extension UIScrollView {
     public var visibleFrame: CGRect {
         bounds
@@ -45,3 +45,4 @@ extension UIScrollView {
         setContentOffset(target, animated: animated)
     }
 }
+#endif

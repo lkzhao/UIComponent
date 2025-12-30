@@ -85,3 +85,5 @@ iOSInjectionProject/
 
 .build-ios/
 .clang-module-cache/
+.build-cache/
+.build-scratch/

@@ -35,19 +35,20 @@ public struct AnyComponent: Component {
 /// SomeComponent().eraseToAnyComponentOfView()
 /// ```
 public struct AnyComponentOfView<View: UIView>: Component {
-    /// The content component being type-erased.
-    public let content: any Component
+    private let _layout: (Constraint) -> AnyRenderNodeOfView<View>
 
     /// Initializes a new type-erased component with the provided content component.
     /// - Parameter content: The content component to be type-erased, which must produce a `View` of the specified type.
     public init<Content: Component>(content: Content) where Content.R.View == View {
-        self.content = content
+        self._layout = { constraint in
+            AnyRenderNodeOfView(content.layout(constraint))
+        }
     }
     
     /// Lays out the content component within the given constraints and returns a type-erased render node specialized for the `View` type.
     /// - Parameter constraint: The constraints to use for laying out the content component.
     /// - Returns: A type-erased `AnyRenderNodeOfView` representing the layout of the content component.
     public func layout(_ constraint: Constraint) -> AnyRenderNodeOfView<View> {
-        AnyRenderNodeOfView(content.layout(constraint))
+        _layout(constraint)
     }
 }

@@ -4,12 +4,16 @@
 public struct AnyRenderNode: RenderNode {
     /// The underlying `RenderNode` instance being type-erased.
     public let erasing: any RenderNode
+    private let _makeView: () -> UIView
+    private let _updateView: (UIView) -> Void
     
     /// Initializes a new `AnyRenderNode` with the provided `RenderNode`.
     ///
     /// - Parameter erasing: The `RenderNode` instance to type-erase.
-    public init(_ erasing: any RenderNode) {
+    public init<R: RenderNode>(_ erasing: R) {
         self.erasing = erasing
+        self._makeView = { erasing._makeView() }
+        self._updateView = { view in erasing._updateView(view) }
     }
 
     // MARK: - RenderNode methods
@@ -36,10 +40,10 @@ public struct AnyRenderNode: RenderNode {
         erasing.adjustVisibleFrame(frame: frame)
     }
     public func updateView(_ view: UIView) {
-        erasing._updateView(view)
+        _updateView(view)
     }
     public func makeView() -> UIView {
-        erasing.makeView()
+        _makeView()
     }
     public func contextValue(_ key: RenderNodeContextKey) -> Any? {
         erasing.contextValue(key)
@@ -50,12 +54,16 @@ public struct AnyRenderNode: RenderNode {
 public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
     /// The underlying `RenderNode` instance being type-erased.
     public let erasing: any RenderNode
+    private let _makeView: () -> View
+    private let _updateView: (View) -> Void
     
     /// Initializes a new `AnyRenderNodeOfView` with the provided `RenderNode`.
     ///
     /// - Parameter erasing: The `RenderNode` instance to type-erase.
-    public init(_ erasing: any RenderNode) {
+    public init<R: RenderNode>(_ erasing: R) where R.View == View {
         self.erasing = erasing
+        self._makeView = { erasing._makeView() as! View }
+        self._updateView = { view in erasing._updateView(view) }
     }
 
     // MARK: - RenderNode methods
@@ -82,10 +90,10 @@ public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
         erasing.adjustVisibleFrame(frame: frame)
     }
     public func updateView(_ view: View) {
-        erasing._updateView(view)
+        _updateView(view)
     }
     public func makeView() -> View {
-        erasing.makeView() as! View
+        _makeView()
     }
     public func contextValue(_ key: RenderNodeContextKey) -> Any? {
         erasing.contextValue(key)

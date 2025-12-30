@@ -1,3 +1,4 @@
+#if canImport(UIKit) && !os(tvOS)
 @available(iOS 14.0, *)
 public extension Component {
     /// Wrap the content in a component that displays the provided menu when tapped.
@@ -21,3 +22,4 @@ public extension Component {
         PrimaryMenuComponent(component: self, menuBuilder: menuBuilder)
     }
 }
+#endif

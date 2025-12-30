@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 7/17/24.
 
+#if canImport(UIKit)
 extension UIView {
     // Access to the underlying Component Engine
     public var componentEngine: ComponentEngine {
@@ -18,10 +19,24 @@ extension UIView {
         }
     }
 }
+#else
+extension UIView {
+    public var componentEngine: ComponentEngine {
+        if let componentEngine = _componentEngine {
+            return componentEngine
+        }
+        let componentEngine = ComponentEngine(view: self)
+        _componentEngine = componentEngine
+        _startObservingLayoutForUIComponent()
+        return componentEngine
+    }
+}
+#endif
 
 private struct AssociatedKeys {
     static var componentEngine: Void?
     static var onFirstReload: Void?
+    static var layoutObserverTokens: Void?
 }
 
 extension UIView {
@@ -39,6 +54,29 @@ extension UIView {
         }
     }
 
+#if os(macOS)
+    fileprivate func _startObservingLayoutForUIComponent() {
+        guard objc_getAssociatedObject(self, &AssociatedKeys.layoutObserverTokens) == nil else { return }
+
+        postsFrameChangedNotifications = true
+        postsBoundsChangedNotifications = true
+
+        let center = NotificationCenter.default
+        let tokens: [NSObjectProtocol] = [
+            center.addObserver(forName: NSView.frameDidChangeNotification, object: self, queue: nil) { [weak self] _ in
+                self?._componentEngine?.setNeedsRender()
+            },
+            center.addObserver(forName: NSView.boundsDidChangeNotification, object: self, queue: nil) { [weak self] _ in
+                self?._componentEngine?.setNeedsRender()
+            },
+        ]
+        objc_setAssociatedObject(self, &AssociatedKeys.layoutObserverTokens, tokens, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    }
+#endif
+}
+
+#if canImport(UIKit)
+extension UIView {
     static let swizzle_sizeThatFits: Void = {
         guard let originalMethod = class_getInstanceMethod(UIView.self, #selector(sizeThatFits(_:))),
               let swizzledMethod = class_getInstanceMethod(UIView.self, #selector(swizzled_sizeThatFits(_:)))
@@ -118,3 +156,4 @@ extension UIScrollView {
         }
     }
 }
+#endif

@@ -1,5 +1,9 @@
 //  Created by Luke Zhao on 8/24/20.
 
+#if os(macOS)
+import AppKit
+#endif
+
 /// A `Separator` is a `ComponentBuilder` that creates a visual divider based on the specified color.
 /// The separator can be either horizontal or vertical depending on the given constraints.
 public struct Separator: ComponentBuilder {
@@ -39,6 +43,8 @@ public struct Separator: ComponentBuilder {
 private func screenScale() -> CGFloat {
     #if os(visionOS)
     return 2.0
+    #elseif os(macOS)
+    return NSScreen.main?.backingScaleFactor ?? 2.0
     #else
     return UIScreen.main.scale
     #endif

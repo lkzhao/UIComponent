@@ -1,6 +1,6 @@
 //  Created by Luke Zhao on 11/26/22.
 
-#if !os(tvOS)
+#if canImport(UIKit) && !os(tvOS)
 /// `PrimaryMenuConfig` defines the configuration for a `PrimaryMenu`.
 /// It provides customization options such as highlight state changes and tap actions.
 @available(iOS 14.0, *)

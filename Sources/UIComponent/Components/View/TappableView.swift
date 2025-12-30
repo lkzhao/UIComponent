@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 6/8/21.
 
+#if canImport(UIKit)
 /// TappableViewConfig is a structure that defines the configuration for a TappableView.
 /// It contains closures that can be used to customize the behavior of the view when it is tapped or highlighted.
 public struct TappableViewConfig {
@@ -316,4 +317,5 @@ extension TappableView: UIContextMenuInteractionDelegate {
         }
     }
 }
+#endif
 #endif

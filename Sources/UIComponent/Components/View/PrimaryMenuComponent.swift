@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 1/19/24.
 
+#if canImport(UIKit) && !os(tvOS)
 /// A component that renders a ``PrimaryMenu``
 @available(iOS 14.0, *)
 public struct PrimaryMenuComponent: Component {
@@ -105,3 +106,4 @@ public extension Component {
         environment(\.primaryMenuConfig, value: primaryMenuConfig)
     }
 }
+#endif

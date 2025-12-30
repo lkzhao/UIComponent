@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 8/19/21.
 
+#if canImport(UIKit)
 /// `WrapperAnimator` is a subclass of `Animator` that allows for additional
 /// animation handling by providing custom blocks for insert, update, and delete operations.
 /// It can also pass through these update operation to another animator if needed.
@@ -50,3 +51,4 @@ public struct WrapperAnimator: Animator {
         }
     }
 }
+#endif
