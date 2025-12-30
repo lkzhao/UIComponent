@@ -48,16 +48,10 @@ public enum TextContent {
     }
 }
 
-/// A shared UILabel instance used for sizing text when `useSharedLabelForSizing` is true.
-private let layoutLabel = UILabel()
-
 /// A `Text` component represents a piece of text with styling and layout information.
 /// It can be initialized with either a plain `String` or an `NSAttributedString`.
 /// It also supports the new swift `AttributedString` from iOS 15 for more complex styling.
 public struct Text: Component {
-    /// A flag to determine if a shared UILabel should be used for sizing.
-    public static var useSharedLabelForSizing = true
-
     /// Environment-injected font used when rendering plain strings.
     @Environment(\.font) var font
     /// Environment-injected text color used when rendering plain strings.
@@ -145,22 +139,6 @@ public struct Text: Component {
         var content = content
         if case .string(let string, _) = content, let envFont = font {
             content = .string(string, envFont)
-        }
-        if Self.useSharedLabelForSizing, Thread.isMainThread {
-            // Fastest route, but not thread safe.
-            layoutLabel.numberOfLines = numberOfLines
-            layoutLabel.lineBreakMode = lineBreakMode
-            content.apply(to: layoutLabel)
-            let size = layoutLabel.sizeThatFits(constraint.maxSize)
-            return TextRenderNode(
-                content: content,
-                textColor: textColor,
-                numberOfLines: numberOfLines,
-                lineBreakMode: lineBreakMode,
-                size: size.bound(to: constraint),
-                ascender: content.ascender,
-                descender: content.descender
-            )
         }
 
         let attributedString: NSAttributedString
