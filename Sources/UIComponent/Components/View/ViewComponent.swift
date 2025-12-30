@@ -1,11 +1,11 @@
 //  Created by Luke Zhao on 8/23/20.
 
-/// A `ViewComponent`is a Component that encapsulates a `UIView` or a generator closure that can create a `UIView`.
+/// A `ViewComponent`is a Component that encapsulates a platform view or a generator closure that can create a platform view.
 /// See <doc:CustomView> for more details
-public struct ViewComponent<View: UIView>: Component {
-    /// The `UIView` instance that the component manages.
+public struct ViewComponent<View: PlatformView>: Component {
+    /// The view instance that the component manages.
     public let view: View?
-    /// A generator closure that can create a `UIView` instance when needed.
+    /// A generator closure that can create a view instance when needed.
     public let generator: (() -> View)?
     
     /// Private initializer for the component that takes an optional `UIView` and an optional generator closure.
@@ -17,23 +17,23 @@ public struct ViewComponent<View: UIView>: Component {
         self.generator = generator
     }
     
-    /// Public initializer that takes an optional `UIView`.
+    /// Public initializer that takes an optional view.
     /// If the view is not provided, the component will be initialized without a view and generator.
-    /// - Parameter view: An optional `UIView` instance to be managed by the component.
+    /// - Parameter view: An optional view instance to be managed by the component.
     public init(view: View? = nil) {
         self.init(view: view, generator: nil)
     }
     
     /// Public initializer that takes a generator closure and wraps it with an `@autoclosure` to delay its execution.
     /// The generator is marked as `@escaping` because it will be stored and used later.
-    /// - Parameter generator: A closure that generates a `UIView` instance, wrapped in an `@autoclosure`.
+    /// - Parameter generator: A closure that generates a view instance, wrapped in an `@autoclosure`.
     public init(generator: @autoclosure @escaping () -> View) {
         self.init(view: nil, generator: generator)
     }
 
     /// Public initializer that takes a generator closure and wraps it with an `@autoclosure` to delay its execution.
     /// The generator is marked as `@escaping` because it will be stored and used later.
-    /// - Parameter generator: A closure that generates a `UIView` instance.
+    /// - Parameter generator: A closure that generates a view instance.
     public init(generator: @escaping () -> View) {
         self.init(view: nil, generator: generator)
     }
@@ -53,13 +53,13 @@ public struct ViewComponent<View: UIView>: Component {
     }
 }
 
-/// A `ViewRenderNode` encapsulates the layout information for a `UIView` and its associated generator.
-public struct ViewRenderNode<View: UIView>: RenderNode {
+/// A `ViewRenderNode` encapsulates the layout information for a platform view and its associated generator.
+public struct ViewRenderNode<View: PlatformView>: RenderNode {
     /// The calculated size of the view.
     public let size: CGSize
-    /// The `UIView` instance managed by the render node.
+    /// The view instance managed by the render node.
     public let view: View?
-    /// A generator closure that can create a `UIView` instance when needed.
+    /// A generator closure that can create a view instance when needed.
     public let generator: (() -> View)?
 
     /// Initializes a `ViewRenderNode` with a specified size, optional view, and optional generator.
@@ -95,8 +95,8 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
         self.init(size: size, view: nil, generator: generator)
     }
 
-    /// Creates and returns a `UIView` instance, either from the existing view or by using the generator.
-    /// - Returns: A `UIView` instance.
+    /// Creates and returns a view instance, either from the existing view or by using the generator.
+    /// - Returns: A view instance.
     public func makeView() -> View {
         if let view {
             return view
@@ -121,11 +121,11 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
 }
 
 /// Extension to make `UIView` conform to `Component`, allowing it to be used within the component hierarchy.
-extension UIView: Component {
+extension PlatformView: Component {
     /// Lays out the view within the given constraints and returns a `ViewRenderNode` representing its layout.
     /// - Parameter constraint: The constraints within which the view should be laid out.
     /// - Returns: A `ViewRenderNode` representing the laid out view.
-    public func layout(_ constraint: Constraint) -> ViewRenderNode<UIView> {
+    public func layout(_ constraint: Constraint) -> ViewRenderNode<PlatformView> {
 #if os(macOS)
         let fitting = fittingSize
         let clamped = CGSize(width: min(fitting.width, constraint.maxSize.width), height: min(fitting.height, constraint.maxSize.height))

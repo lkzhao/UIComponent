@@ -32,7 +32,7 @@ public struct DynamicOffset: Component {
 }
 
 public struct OffsetRenderNode: RenderNode {
-    public typealias View = UIView
+    public typealias View = PlatformView
 
     public let content: any RenderNode
     public let offset: CGPoint

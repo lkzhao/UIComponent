@@ -27,7 +27,7 @@ public struct Space: Component {
 /// A render node that represents a space in the UI.
 public struct SpaceRenderNode: RenderNode {
     /// The view type that this render node represents.
-    public typealias View = UIView
+    public typealias View = PlatformView
 
     /// The size of the space.
     public let size: CGSize

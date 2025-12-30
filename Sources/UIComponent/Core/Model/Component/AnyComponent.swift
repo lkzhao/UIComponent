@@ -34,7 +34,7 @@ public struct AnyComponent: Component {
 /// ```swift
 /// SomeComponent().eraseToAnyComponentOfView()
 /// ```
-public struct AnyComponentOfView<View: UIView>: Component {
+public struct AnyComponentOfView<View: PlatformView>: Component {
     private let _layout: (Constraint) -> AnyRenderNodeOfView<View>
 
     /// Initializes a new type-erased component with the provided content component.

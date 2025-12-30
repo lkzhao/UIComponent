@@ -17,7 +17,7 @@ public extension RenderNodeContextKey {
 @dynamicMemberLookup
 public protocol RenderNode<View> {
     /// The `UIView` class that this render node represents.
-    associatedtype View: UIView
+    associatedtype View: PlatformView
 
     /// A Boolean value indicating whether the render node should render its own view.
     var shouldRenderView: Bool { get }
@@ -162,7 +162,7 @@ extension RenderNode {
         contextValue(.reuseKey) as? String
     }
 
-    internal func _makeView() -> UIView {
+    internal func _makeView() -> PlatformView {
         if let reuseKey {
             ReuseManager.shared.dequeue(identifier: reuseKey, makeView())
         } else {
@@ -170,7 +170,7 @@ extension RenderNode {
         }
     }
 
-    internal func _updateView(_ view: UIView) {
+    internal func _updateView(_ view: PlatformView) {
         guard let view = view as? View else { return }
         return updateView(view)
     }

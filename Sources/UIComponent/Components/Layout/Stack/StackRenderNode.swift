@@ -46,7 +46,7 @@ extension StackRenderNode {
 /// - Children must be sorted by their x position value.
 /// - Needs to provide a mainAxisMaxValue with the max width of the children.
 public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
-    public typealias View = UIView
+    public typealias View = PlatformView
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]
@@ -71,7 +71,7 @@ public struct HorizontalRenderNode: StackRenderNode, HorizontalLayoutProtocol {
 /// - Children must be sorted by their y position value.
 /// - Needs to provide a mainAxisMaxValue with the max height of the children.
 public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
-    public typealias View = UIView
+    public typealias View = PlatformView
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]
@@ -94,7 +94,7 @@ public struct VerticalRenderNode: StackRenderNode, VerticalLayoutProtocol {
 /// - Renders children when they are inside the visible frame.
 /// - This could be slow because it needs to loop through all children to check whether they are inside the visible frame.
 public struct SlowRenderNode: RenderNode {
-    public typealias View = UIView
+    public typealias View = PlatformView
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]
@@ -130,7 +130,7 @@ public struct SlowRenderNode: RenderNode {
 /// - Renders all childrens all the time.
 /// - Not suitable for rendering a list of items.
 public struct AlwaysRenderNode: RenderNode {
-    public typealias View = UIView
+    public typealias View = PlatformView
     public let size: CGSize
     public let children: [any RenderNode]
     public let positions: [CGPoint]

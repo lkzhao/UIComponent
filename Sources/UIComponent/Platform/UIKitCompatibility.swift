@@ -4,8 +4,6 @@
 import AppKit
 import QuartzCore
 
-public typealias UIView = NSView
-
 extension NSView {
     public var alpha: CGFloat {
         get { alphaValue }

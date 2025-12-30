@@ -2,10 +2,11 @@
 
 /// A type-erased wrapper for any `RenderNode`.
 public struct AnyRenderNode: RenderNode {
+    public typealias View = PlatformView
     /// The underlying `RenderNode` instance being type-erased.
     public let erasing: any RenderNode
-    private let _makeView: () -> UIView
-    private let _updateView: (UIView) -> Void
+    private let _makeView: () -> PlatformView
+    private let _updateView: (PlatformView) -> Void
     
     /// Initializes a new `AnyRenderNode` with the provided `RenderNode`.
     ///
@@ -39,10 +40,10 @@ public struct AnyRenderNode: RenderNode {
     public func adjustVisibleFrame(frame: CGRect) -> CGRect {
         erasing.adjustVisibleFrame(frame: frame)
     }
-    public func updateView(_ view: UIView) {
+    public func updateView(_ view: PlatformView) {
         _updateView(view)
     }
-    public func makeView() -> UIView {
+    public func makeView() -> PlatformView {
         _makeView()
     }
     public func contextValue(_ key: RenderNodeContextKey) -> Any? {
@@ -51,7 +52,7 @@ public struct AnyRenderNode: RenderNode {
 }
 
 /// A type-erased wrapper for any `RenderNode` specialized for a specific `UIView` subclass.
-public struct AnyRenderNodeOfView<View: UIView>: RenderNode {
+public struct AnyRenderNodeOfView<View: PlatformView>: RenderNode {
     /// The underlying `RenderNode` instance being type-erased.
     public let erasing: any RenderNode
     private let _makeView: () -> View

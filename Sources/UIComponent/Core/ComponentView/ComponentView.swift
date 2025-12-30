@@ -10,7 +10,7 @@
 /// and ``ComponentScrollView`` supports rendering components.
 ///
 /// See ``ComponentDisplayableView`` for usage details.
-open class ComponentView: UIView, ComponentDisplayableView {
+open class ComponentView: PlatformView, ComponentDisplayableView {
 }
 
 /// A `UIScrollView` that can render components

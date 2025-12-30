@@ -75,7 +75,7 @@ public struct DynamicVStack: Component {
 }
 
 public struct DynamicVStackRenderNode: DynamicStackRenderNode, VerticalLayoutProtocol {
-    public typealias View = UIView
+    public typealias View = PlatformView
 
     public let count: Int
     public let constraintSize: CGSize
@@ -85,7 +85,7 @@ public struct DynamicVStackRenderNode: DynamicStackRenderNode, VerticalLayoutPro
 }
 
 public struct DynamicHStackRenderNode: DynamicStackRenderNode, HorizontalLayoutProtocol {
-    public typealias View = UIView
+    public typealias View = PlatformView
 
     public let count: Int
     public let constraintSize: CGSize

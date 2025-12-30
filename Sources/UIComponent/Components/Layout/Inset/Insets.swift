@@ -44,7 +44,7 @@ public struct DynamicInsets: Component {
 /// A render node that represents a view with insets.
 /// It contains a content render node and applies the specified edge insets to it.
 struct InsetsRenderNode: RenderNode {
-    typealias View = UIView
+    typealias View = PlatformView
 
     let content: any RenderNode
     let insets: PlatformEdgeInsets

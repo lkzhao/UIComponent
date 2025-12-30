@@ -1,7 +1,7 @@
 //  Created by Luke Zhao on 7/17/24.
 
 #if canImport(UIKit)
-extension UIView {
+extension PlatformView {
     // Access to the underlying Component Engine
     public var componentEngine: ComponentEngine {
         get {
@@ -20,7 +20,7 @@ extension UIView {
     }
 }
 #else
-extension UIView {
+extension PlatformView {
     public var componentEngine: ComponentEngine {
         if let componentEngine = _componentEngine {
             return componentEngine
@@ -39,7 +39,7 @@ private struct AssociatedKeys {
     static var layoutObserverTokens: Void?
 }
 
-extension UIView {
+extension PlatformView {
     fileprivate var _componentEngine: ComponentEngine? {
         get {
             objc_getAssociatedObject(self, &AssociatedKeys.componentEngine) as? ComponentEngine
@@ -76,7 +76,7 @@ extension UIView {
 }
 
 #if canImport(UIKit)
-extension UIView {
+extension PlatformView {
     static let swizzle_sizeThatFits: Void = {
         guard let originalMethod = class_getInstanceMethod(UIView.self, #selector(sizeThatFits(_:))),
               let swizzledMethod = class_getInstanceMethod(UIView.self, #selector(swizzled_sizeThatFits(_:)))

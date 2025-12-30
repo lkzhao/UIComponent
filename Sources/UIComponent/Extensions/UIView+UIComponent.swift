@@ -1,6 +1,6 @@
 //  Created by Luke Zhao on 2017-07-24.
 
-extension UIView {
+extension PlatformView {
     private struct AssociatedKeys {
         static var ckContext = "ckContext"
     }
@@ -23,7 +23,7 @@ extension UIView {
     }
 }
 
-@objc extension UIView {
+@objc extension PlatformView {
     func recycleForUIComponentReuse() {
         if let _ckContext,
             let reuseIdentifier = _ckContext.reuseIdentifier,

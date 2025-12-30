@@ -1,9 +1,9 @@
 //  Created by Luke Zhao on 8/23/20.
 
-/// Wraps a `component` inside a `UIView`.
+/// Wraps a `component` inside a platform view.
 ///
 /// This is used to power the `.view()` and `.scrollView()` modifiers.
-public struct ViewWrapperComponent<View: UIView>: Component {
+public struct ViewWrapperComponent<View: PlatformView>: Component {
     let component: any Component
     public init(component: any Component) {
         self.component = component
@@ -17,7 +17,7 @@ public struct ViewWrapperComponent<View: UIView>: Component {
 }
 
 /// RenderNode for the `ViewWrapperComponent`
-public struct ViewWrapperRenderNode<View: UIView>: RenderNode {
+public struct ViewWrapperRenderNode<View: PlatformView>: RenderNode {
     public let size: CGSize
     public let component: any Component
     public let content: any RenderNode

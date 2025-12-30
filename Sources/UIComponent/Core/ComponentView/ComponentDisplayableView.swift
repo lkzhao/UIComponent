@@ -1,7 +1,7 @@
 //  Created by Luke Zhao on 2016-02-12.
 
 /// A helper protocol that provides easier access to the underlying component engine's methods
-public protocol ComponentDisplayableView: UIView {}
+public protocol ComponentDisplayableView: PlatformView {}
 
 /// Extension to provide easier access to the underlying component engine's methods
 extension ComponentDisplayableView {
@@ -19,7 +19,7 @@ extension ComponentDisplayableView {
     }
 
     /// A closure that is called after the first reload.
-    public var onFirstReload: ((UIView) -> Void)? {
+    public var onFirstReload: ((PlatformView) -> Void)? {
         get { componentEngine.onFirstReload }
         set { componentEngine.onFirstReload = newValue }
     }
@@ -64,7 +64,7 @@ extension ComponentDisplayableView {
     public var hasReloaded: Bool { reloadCount > 0 }
 
     /// The views that are currently visible and being rendered by this view.
-    public var visibleViews: [UIView] {
+    public var visibleViews: [PlatformView] {
         componentEngine.visibleViews
     }
 
@@ -104,7 +104,7 @@ extension ComponentDisplayableView {
     }
 
     /// Returns the view at a given point if it exists within the visible views.
-    public func view(at point: CGPoint) -> UIView? {
+    public func view(at point: CGPoint) -> PlatformView? {
         componentEngine.view(at: point)
     }
 
@@ -114,13 +114,13 @@ extension ComponentDisplayableView {
     }
 
     /// Returns the visible view associated with a given identifier if it exists within the visible renderables.
-    public func visibleView(id: String) -> UIView? {
+    public func visibleView(id: String) -> PlatformView? {
         componentEngine.visibleView(id: id)
     }
 }
 
 extension ComponentDisplayableView where Self: PlatformScrollView {
-    public var contentView: UIView? {
+    public var contentView: PlatformView? {
         get { componentEngine.contentView }
         set { componentEngine.contentView = newValue }
     }

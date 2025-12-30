@@ -26,7 +26,7 @@ public struct Separator: ComponentBuilder {
     ///
     /// - Returns: A component representing the separator.
     public func build() -> some Component {
-        ViewComponent<UIView>().backgroundColor(color)
+        ViewComponent<PlatformView>().backgroundColor(color)
             .constraint { constraint in
                 if constraint.minSize.height <= 0, constraint.maxSize.width != .infinity {
                     let size = CGSize(width: constraint.maxSize.width, height: 1 / screenScale())

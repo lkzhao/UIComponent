@@ -5,7 +5,7 @@ public protocol ComponentEngineReloadDelegate: AnyObject {
     /// Asks the delegate if the component engine should be reloaded.
     /// - Parameter view: The `UIView` that is asking for permission to reload.
     /// - Returns: A Boolean value indicating whether the view should be reloaded.
-    func componentEngineShouldReload(_ view: UIView) -> Bool
+    func componentEngineShouldReload(_ view: PlatformView) -> Bool
 }
 
 /// `ComponentEngine` is the main class that powers the rendering of components.
@@ -21,7 +21,7 @@ public final class ComponentEngine {
     public var asyncLayout = false
 
     /// The view that is managed by this engine.
-    weak var view: UIView?
+    weak var view: PlatformView?
 
     /// The component that will be rendered.
     public var component: (any Component)? {
@@ -67,7 +67,7 @@ public final class ComponentEngine {
     public var hasReloaded: Bool { reloadCount > 0 }
 
     /// An array of visible views on the screen.
-    public private(set) var visibleViews: [UIView] = []
+    public private(set) var visibleViews: [PlatformView] = []
 
     /// An array of `Renderable` objects corresponding to the visible views.
     public private(set) var visibleRenderables: [Renderable] = []
@@ -79,10 +79,10 @@ public final class ComponentEngine {
     public private(set) var contentOffsetDelta: CGPoint = .zero
 
     /// A closure that is called after the first reload.
-    public var onFirstReload: ((UIView) -> Void)?
+    public var onFirstReload: ((PlatformView) -> Void)?
 
     /// A view used to support zooming. Setting a `contentView` will render all views inside the content view.
-    public var contentView: UIView? {
+    public var contentView: PlatformView? {
         didSet {
             oldValue?.removeFromSuperview()
             if let contentView {
@@ -171,7 +171,7 @@ public final class ComponentEngine {
 
     /// Initializes a new `ComponentEngine` with the given view.
     /// - Parameter view: The `UIView` to be managed by the engine.
-    init(view: UIView) {
+    init(view: PlatformView) {
         self.view = view
     }
 
@@ -302,7 +302,7 @@ public final class ComponentEngine {
             newIdentifierSet[finalId] = index
         }
 
-        var newViews = [UIView?](repeating: nil, count: newVisibleRenderables.count)
+        var newViews = [PlatformView?](repeating: nil, count: newVisibleRenderables.count)
 
         // 1st pass, delete all removed cells and move existing cells
         for index in 0..<visibleViews.count {
@@ -322,7 +322,7 @@ public final class ComponentEngine {
 
         // 2nd pass, insert new views
         for (index, renderable) in newVisibleRenderables.enumerated() {
-            let cell: UIView
+            let cell: PlatformView
             let frame = renderable.frame
             let animator = renderable.renderNode.animator ?? animator
             let containerView = contentView ?? view
@@ -356,7 +356,7 @@ public final class ComponentEngine {
         }
 
         visibleRenderables = newVisibleRenderables
-        visibleViews = newViews as! [UIView]
+        visibleViews = newViews as! [PlatformView]
         lastRenderBounds = bounds
         cacheEngine.endLoading()
         needsRender = false
@@ -430,7 +430,7 @@ public final class ComponentEngine {
 /// Extension to provide additional functionalities to view lookup and frame calculation.
 extension ComponentEngine {
     /// Returns the view at a given point if it exists within the visible views.
-    public func view(at point: CGPoint) -> UIView? {
+    public func view(at point: CGPoint) -> PlatformView? {
         guard let view else { return nil }
         return visibleViews.first {
             $0.point(inside: $0.convert(point, from: view), with: nil)
@@ -443,7 +443,7 @@ extension ComponentEngine {
     }
 
     /// Returns the visible view associated with a given identifier if it exists within the visible renderables.
-    public func visibleView(id: String) -> UIView? {
+    public func visibleView(id: String) -> PlatformView? {
         for (view, renderable) in zip(visibleViews, visibleRenderables) {
             if renderable.id == id {
                 return view
