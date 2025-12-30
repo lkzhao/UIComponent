@@ -119,8 +119,7 @@ extension ComponentDisplayableView {
     }
 }
 
-#if canImport(UIKit)
-extension ComponentDisplayableView where Self: UIScrollView {
+extension ComponentDisplayableView where Self: PlatformScrollView {
     public var contentView: UIView? {
         get { componentEngine.contentView }
         set { componentEngine.contentView = newValue }
@@ -130,4 +129,3 @@ extension ComponentDisplayableView where Self: UIScrollView {
         componentEngine.scrollTo(id: id, animated: animated)
     }
 }
-#endif

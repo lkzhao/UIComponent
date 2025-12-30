@@ -14,15 +14,7 @@ extension Component {
 
     /// Wraps the component in a `UIScrollView`.
     /// - Returns: A `ViewWrapperComponent` that renders the component within a `UIScrollView`.
-#if canImport(UIKit)
-    public func scrollView() -> ViewWrapperComponent<UIScrollView> {
+    public func scrollView() -> ViewWrapperComponent<PlatformScrollView> {
         ViewWrapperComponent(component: self)
     }
-#elseif os(macOS)
-    /// Wraps the component in an `NSScrollView`.
-    /// - Returns: A `MacScrollViewWrapperComponent` that renders the component within an `NSScrollView`.
-    public func scrollView() -> MacScrollViewWrapperComponent {
-        MacScrollViewWrapperComponent(component: self)
-    }
-#endif
 }

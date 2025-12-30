@@ -86,7 +86,15 @@ public final class ComponentEngine {
         didSet {
             oldValue?.removeFromSuperview()
             if let contentView {
+#if os(macOS)
+                if let scrollView = view as? PlatformScrollView {
+                    scrollView.documentView = contentView
+                } else {
+                    view?.addSubview(contentView)
+                }
+#else
                 view?.addSubview(contentView)
+#endif
             }
         }
     }
@@ -108,8 +116,24 @@ public final class ComponentEngine {
     
     /// The offset of the scrolled content.
     var contentOffset: CGPoint {
-        get { view?.bounds.origin ?? .zero }
-        set { view?.bounds.origin = newValue }
+        get {
+#if os(macOS)
+            if let scrollView = view as? PlatformScrollView {
+                return scrollView.contentView.bounds.origin
+            }
+#endif
+            return view?.bounds.origin ?? .zero
+        }
+        set {
+#if os(macOS)
+            if let scrollView = view as? PlatformScrollView {
+                scrollView.contentView.scroll(to: newValue)
+                scrollView.reflectScrolledClipView(scrollView.contentView)
+                return
+            }
+#endif
+            view?.bounds.origin = newValue
+        }
     }
     
     /// The insets applied to the content of the view.
@@ -123,7 +147,12 @@ public final class ComponentEngine {
     
     /// The bounds of the view.
     var bounds: CGRect {
-        view?.bounds ?? .zero
+#if os(macOS)
+        if let scrollView = view as? PlatformScrollView {
+            return scrollView.contentView.bounds
+        }
+#endif
+        return view?.bounds ?? .zero
     }
     
     /// The size of the view adjusted for the content inset.
@@ -432,7 +461,14 @@ extension ComponentEngine {
             return false
         }
 #else
-        false
+#if os(macOS)
+        if let frame = renderNode?.frame(id: id), let scrollView = view as? PlatformScrollView {
+            scrollView.contentView.scroll(to: frame.origin)
+            scrollView.reflectScrolledClipView(scrollView.contentView)
+            return true
+        }
+#endif
+        return false
 #endif
     }
 }

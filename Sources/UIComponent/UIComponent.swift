@@ -13,6 +13,7 @@ public typealias PlatformColor = UIColor
 public typealias PlatformFont = UIFont
 public typealias PlatformBezierPath = UIBezierPath
 public typealias PlatformEdgeInsets = UIEdgeInsets
+public typealias PlatformScrollView = UIScrollView
 
 #elseif canImport(AppKit)
 @_exported import AppKit
