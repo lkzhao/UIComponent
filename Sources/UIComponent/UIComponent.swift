@@ -17,6 +17,7 @@ public typealias PlatformScrollView = UIScrollView
 public typealias PlatformEvent = UIEvent
 public typealias PlatformImageView = UIImageView
 public typealias PlatformImageConfiguration = UIImage.Configuration
+public typealias PlatformLabel = UILabel
 
 #elseif canImport(AppKit)
 @_exported import AppKit
@@ -30,4 +31,5 @@ public typealias PlatformEdgeInsets = NSEdgeInsets
 public typealias PlatformEvent = NSEvent
 public typealias PlatformImageView = NSImageView
 public typealias PlatformImageConfiguration = NSImage.SymbolConfiguration
+public typealias PlatformLabel = NSTextField
 #endif
