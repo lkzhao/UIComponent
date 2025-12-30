@@ -15,6 +15,8 @@ public typealias PlatformBezierPath = UIBezierPath
 public typealias PlatformEdgeInsets = UIEdgeInsets
 public typealias PlatformScrollView = UIScrollView
 public typealias PlatformEvent = UIEvent
+public typealias PlatformImageView = UIImageView
+public typealias PlatformImageConfiguration = UIImage.Configuration
 
 #elseif canImport(AppKit)
 @_exported import AppKit
@@ -26,4 +28,6 @@ public typealias PlatformFont = NSFont
 public typealias PlatformBezierPath = NSBezierPath
 public typealias PlatformEdgeInsets = NSEdgeInsets
 public typealias PlatformEvent = NSEvent
+public typealias PlatformImageView = NSImageView
+public typealias PlatformImageConfiguration = NSImage.SymbolConfiguration
 #endif

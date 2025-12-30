@@ -1,34 +1,51 @@
 //  Created by Luke Zhao on 8/23/20.
 
-#if canImport(UIKit)
-/// An image component that renders an UIImageView
+#if os(macOS)
+import AppKit
+#endif
+
+/// An image component that renders a platform image view.
 public struct Image: Component {
-    /// The underlying `UIImage` instance.
-    public let image: UIImage
+    /// The underlying platform image.
+    public let image: PlatformImage
 
     /// Initializes an `Image` component with the name of an image asset.
     /// - Parameter imageName: The name of the image asset to load.
     /// - Note: In DEBUG mode, if the image is not found, an assertion failure is triggered.
     public init(_ imageName: String) {
 #if DEBUG
-        if let image = UIImage(named: imageName) {
+        #if canImport(UIKit)
+        if let image = PlatformImage(named: imageName) {
             self.init(image)
         } else {
             let error = "Image should be initialized with a valid image name. Image named \(imageName) not found."
             assertionFailure(error)
-            self.init(UIImage())
+            self.init(PlatformImage())
         }
+        #else
+        if let image = PlatformImage(named: NSImage.Name(imageName)) {
+            self.init(image)
+        } else {
+            let error = "Image should be initialized with a valid image name. Image named \(imageName) not found."
+            assertionFailure(error)
+            self.init(PlatformImage())
+        }
+        #endif
 #else
-        self.init(UIImage(named: imageName) ?? UIImage())
+        #if canImport(UIKit)
+        self.init(PlatformImage(named: imageName) ?? PlatformImage())
+        #else
+        self.init(PlatformImage(named: NSImage.Name(imageName)) ?? PlatformImage())
+        #endif
 #endif
         
     }
 
     /// Initializes an `Image` component with an `ImageResource`.
     /// - Parameter resource: The `ImageResource` to load the image from.
-    @available(iOS 17.0, *)
+    @available(iOS 17.0, macOS 14.0, *)
     public init(_ resource: ImageResource) {
-        self.init(UIImage(resource: resource))
+        self.init(PlatformImage(resource: resource))
     }
 
     /// Initializes an `Image` component with the name of a system image (SFSymbol).
@@ -36,24 +53,50 @@ public struct Image: Component {
     ///   - systemName: The name of the system image to load.
     ///   - configuration: The configuration to use for the system image.
     /// - Note: In DEBUG mode, if the system image is not found, an assertion failure is triggered.
-    public init(systemName: String, withConfiguration configuration: UIImage.Configuration? = nil) {
+    public init(systemName: String, withConfiguration configuration: PlatformImageConfiguration? = nil) {
 #if DEBUG
-        if let systemImage = UIImage(systemName: systemName, withConfiguration: configuration) {
+        #if canImport(UIKit)
+        if let systemImage = PlatformImage(systemName: systemName, withConfiguration: configuration) {
             self.init(systemImage)
         } else {
             let error = "Image should be initialized with a valid system image name. System image named \(systemName) not found."
             assertionFailure(error)
-            self.init(UIImage())
+            self.init(PlatformImage())
         }
+        #else
+        if let base = PlatformImage(systemSymbolName: systemName, accessibilityDescription: nil) {
+            if let configuration {
+                self.init(base.withSymbolConfiguration(configuration) ?? base)
+            } else {
+                self.init(base)
+            }
+        } else {
+            let error = "Image should be initialized with a valid system image name. System image named \(systemName) not found."
+            assertionFailure(error)
+            self.init(PlatformImage())
+        }
+        #endif
 #else
-        self.init(UIImage(systemName: systemName, withConfiguration: configuration) ?? UIImage())
+        #if canImport(UIKit)
+        self.init(PlatformImage(systemName: systemName, withConfiguration: configuration) ?? PlatformImage())
+        #else
+        if let base = PlatformImage(systemSymbolName: systemName, accessibilityDescription: nil) {
+            if let configuration {
+                self.init(base.withSymbolConfiguration(configuration) ?? base)
+            } else {
+                self.init(base)
+            }
+        } else {
+            self.init(PlatformImage())
+        }
+        #endif
 #endif
         
     }
 
-    /// Initializes an `Image` component with a `UIImage` instance.
-    /// - Parameter image: The `UIImage` instance to use for the component.
-    public init(_ image: UIImage) {
+    /// Initializes an `Image` component with a platform image.
+    /// - Parameter image: The platform image to use for the component.
+    public init(_ image: PlatformImage) {
         self.image = image
     }
 
@@ -68,14 +111,13 @@ public struct Image: Component {
 /// A render node that represents an image.
 public struct ImageRenderNode: RenderNode {
     /// The image to be rendered.
-    public let image: UIImage
+    public let image: PlatformImage
     /// The size to render the image.
     public let size: CGSize
     
     /// Updates the given image view with the render node's image.
     /// - Parameter view: The image view to update.
-    public func updateView(_ view: UIImageView) {
+    public func updateView(_ view: PlatformImageView) {
         view.image = image
     }
 }
-#endif
