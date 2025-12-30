@@ -1,5 +1,3 @@
-import UIKit
-
 extension RenderNode {
     /// Erases the type of the render node and wraps it in a type-erasing `AnyRenderNode`.
     /// - Returns: An `AnyRenderNode` instance.

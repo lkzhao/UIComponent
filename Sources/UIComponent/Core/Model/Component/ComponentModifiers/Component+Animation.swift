@@ -1,5 +1,3 @@
-import UIKit
-
 /// A component produced by ``Component/animateInsert(_:)``, ``Component/animateUpdate(passthrough:_:)``, & ``Component/animateDelete(_:)`` modifiers
 public typealias AnimatorWrapperComponent<Content: Component> = ModifierComponent<Content, AnimatorWrapperRenderNode<Content.R>>
 

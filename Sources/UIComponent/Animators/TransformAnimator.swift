@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 2018-12-27.
 
-import UIKit
-
 @available(*, deprecated, renamed: "TransformAnimator")
 public typealias AnimatedReloadAnimator = TransformAnimator
 

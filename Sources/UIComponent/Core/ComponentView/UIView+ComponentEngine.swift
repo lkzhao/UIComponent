@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 7/17/24.
 //
 
-import UIKit
-
 extension UIView {
     // Access to the underlying Component Engine
     public var componentEngine: ComponentEngine {
@@ -125,4 +123,3 @@ extension UIScrollView {
         }
     }
 }
-

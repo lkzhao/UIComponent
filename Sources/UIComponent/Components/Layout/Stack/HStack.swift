@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/6/21.
 
-import UIKit
-
 /// A horizontal stack component that lays out its children in a horizontal line.
 public struct HStack: Component, Stack, HorizontalLayoutProtocol {
     /// The spacing between each child component.

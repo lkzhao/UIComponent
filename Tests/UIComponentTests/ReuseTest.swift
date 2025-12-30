@@ -2,7 +2,6 @@
 
 import Testing
 @testable import UIComponent
-import UIKit
 
 @Suite("Reuse Tests")
 @MainActor

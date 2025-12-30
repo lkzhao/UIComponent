@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/23/20.
 
-import Foundation
-
 /// `Join`  is used to interleave components with separators.
 /// It can be used when building children of a layout component.
 ///

@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 5/3/24.
 
-import UIKit
-
 /// A `RenderNodeChild` represents a child node of another RenderNode
 /// It holds the child render node, its position within the parent, and its index within the parent.
 public struct RenderNodeChild {

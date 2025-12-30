@@ -1,8 +1,6 @@
 //  Created by Luke Zhao on 8/27/20.
 
 
-import UIKit
-
 /// Protocol defining a delegate responsible for determining if a component engine should be reloaded.
 public protocol ComponentEngineReloadDelegate: AnyObject {
     /// Asks the delegate if the component engine should be reloaded.

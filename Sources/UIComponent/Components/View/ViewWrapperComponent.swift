@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/23/20.
 
-import UIKit
-
 /// Wraps a `component` inside a `UIView`.
 ///
 /// This is used to power the `.view()` and `.scrollView()` modifiers.

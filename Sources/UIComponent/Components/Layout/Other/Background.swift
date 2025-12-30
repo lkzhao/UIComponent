@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 5/16/21.
 
-import UIKit
-
 /// Renders a single `content` component with a `background` component below the content.
 /// The size of the `content` is calculated first, then the size is applied to the `background` component.
 /// The intrinsic size of the `background` component is ignored.

@@ -1,5 +1,3 @@
-import UIKit
-
 extension Component {
     /// Conditionally applies a modification to the component if the given boolean value is true.
     /// - Parameters:

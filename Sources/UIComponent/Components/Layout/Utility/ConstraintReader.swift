@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/25/20.
 
-import UIKit
-
 /// Read incoming constraint and pass it to a Component `builder` block. There are a few use cases.
 ///
 /// ### Dynamic Layout Property

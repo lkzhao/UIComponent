@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/23/20.
 
-import UIKit
-
 /// A component that represents a space with a specific size.
 public struct Space: Component {
     /// The size of the space.

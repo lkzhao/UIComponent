@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 1/20/24.
 //
 
-import Foundation
-
 /// `EnvironmentValues` is a container for environment-specific values.
 /// It provides a type-safe interface to access values keyed by custom types conforming to `EnvironmentKey`.
 ///

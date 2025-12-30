@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/27/20.
 
-import UIKit
-
 /// A `UIView` that can render components.
 /// It provides simple access to the properties and method of the underlying ``ComponentEngine``
 ///

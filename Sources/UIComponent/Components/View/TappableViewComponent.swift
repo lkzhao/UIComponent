@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 1/18/24.
 //
 
-import Foundation
-
 /// A component that renders a ``TappableView``
 public struct TappableViewComponent: Component {
     /// The configuration for the tappable view, obtained from the environment.

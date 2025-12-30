@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 1/14/24.
 
-import UIKit
-
 /// A type-erased wrapper for any `RenderNode`.
 public struct AnyRenderNode: RenderNode {
     /// The underlying `RenderNode` instance being type-erased.

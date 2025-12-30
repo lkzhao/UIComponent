@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 6/25/23.
 //
 
-import Foundation
-
 /// A `ModifierComponent` is a generic structure that represents a component that can be modified.
 /// It takes a `Component` and applies a modification to produce a `RenderNode`.
 ///

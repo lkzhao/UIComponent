@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 10/10/22.
 
-import UIKit
-
 /// A component that observes the visible bounds of its content.
 public struct VisibleBoundsObserverComponent<Content: Component>: Component {
     /// The child component that it will observe.

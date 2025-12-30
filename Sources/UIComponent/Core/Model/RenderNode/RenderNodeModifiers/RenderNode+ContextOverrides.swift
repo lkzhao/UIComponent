@@ -1,5 +1,3 @@
-import UIKit
-
 extension RenderNode {
     /// Creates a render node that overrides the identifier of the content.
     /// - Parameter id: An optional identifier to be set for the content.

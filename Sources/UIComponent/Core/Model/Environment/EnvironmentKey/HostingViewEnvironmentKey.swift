@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 1/20/24.
 //
 
-import UIKit
-
 /// A environment key that holds a reference to the current `UIView` displaying the component.
 public struct HostingViewEnvironmentKey: EnvironmentKey {
     public static var defaultValue: UIView? {

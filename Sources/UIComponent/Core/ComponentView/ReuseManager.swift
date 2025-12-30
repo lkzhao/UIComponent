@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 2017-07-21.
 
-import UIKit
-
 public protocol ReuseableView: UIView {
     func prepareForReuse()
 }

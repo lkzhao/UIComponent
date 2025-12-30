@@ -1,6 +1,4 @@
 
-import UIKit
-
 /// A protocol that defines the properties and behaviors of a pager component.
 /// A pager is responsible for laying out a series of components in a swipeable full screen pager format.
 public protocol Pager: BaseLayoutProtocol {
@@ -100,4 +98,3 @@ extension VPager {
         self.init(alignItems: alignItems, children: content())
     }
 }
-

@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/23/20.
 
-import UIKit
-
 /// An enumeration that defines different strategies for sizing elements.
 /// - `fill`: The element should expand to fill the available space.
 /// - `fit`: The element should be contained within the available space, but fit to its own size.

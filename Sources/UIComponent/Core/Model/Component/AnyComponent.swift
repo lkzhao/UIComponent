@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 6/21/23.
 //
 
-import UIKit
-
 /// A type-erased `Component`
 ///
 /// Useful for:

@@ -82,3 +82,6 @@ iOSInjectionProject/
 
 # Serena (MCP server)
 .serena/
+
+.build-ios/
+.clang-module-cache/

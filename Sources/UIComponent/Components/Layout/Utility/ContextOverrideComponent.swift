@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/23/20.
 
-import UIKit
-
 /// Wraps a content component and overrides its context with the specified values.
 public struct ContextOverrideComponent<Content: Component>: Component {
     /// The content component that this component wraps.

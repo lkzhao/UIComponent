@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 1/20/24.
 //
 
-import Foundation
-
 /// A component that injects an environment value into the content.
 ///
 /// Instead of creating it directly, use the ``ComponentBuilder/environment(_:value:)`` method.
@@ -49,4 +47,3 @@ public struct EnvironmentComponent<Value, Content: Component>: Component {
         }
     }
 }
-

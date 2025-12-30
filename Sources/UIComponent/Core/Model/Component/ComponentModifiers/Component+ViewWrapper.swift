@@ -1,5 +1,3 @@
-import UIKit
-
 extension Component {
     /// Wraps the component in a `UIView`.
     /// - Returns: A `ViewWrapperComponent` that renders the component within a UIView.

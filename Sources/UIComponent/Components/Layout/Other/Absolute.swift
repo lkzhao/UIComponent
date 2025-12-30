@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/29/20.
 
-import UIKit
-
 /// A Component that renders a list of child components base on the provided `children` and `frames` parameters.
 public struct Absolute: Component {
     /// The child components that the `Absolute` component will render.

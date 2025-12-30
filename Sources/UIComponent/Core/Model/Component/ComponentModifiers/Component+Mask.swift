@@ -1,5 +1,3 @@
-import UIKit
-
 extension Component {
     /// Applies the given component as a mask to the receiver.
     /// - Parameter component: The component used to build the masking view.

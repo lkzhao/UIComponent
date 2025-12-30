@@ -1,5 +1,3 @@
-import UIKit
-
 extension Component {
     /// Applies flexible layout properties to the component.
     /// This is used in conjunction with a flex container (FlexRow, FlexColumn, HStack, VStack).

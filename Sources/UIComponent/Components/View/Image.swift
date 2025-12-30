@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/23/20.
 
-import UIKit
-
 /// An image component that renders an UIImageView
 public struct Image: Component {
     /// The underlying `UIImage` instance.

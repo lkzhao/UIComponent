@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/23/20.
 
-import UIKit
-
 /// A protocol that defines the requirements for a waterfall layout.
 /// A waterfall layout is a type of layout that arranges items in multiple columns with varying item heights.
 /// - Parameters:

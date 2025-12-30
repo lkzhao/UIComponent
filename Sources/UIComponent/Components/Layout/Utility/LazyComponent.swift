@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 5/12/25.
 
-import Foundation
-
 /// A component that defers the layout and rendering of its content until needed.
 ///
 /// `LazyComponent` is useful for optimizing performance by delaying the creation and layout of its content

@@ -1,5 +1,3 @@
-import UIKit
-
 extension Component {
     // MARK: - Background modifiers
 

@@ -1,6 +1,5 @@
 //  Created by Luke Zhao on 5/12/25.
 
-import Foundation
 import SwiftUI
 
 let sizingHostingController = UIHostingController(rootView: AnyView(EmptyView()))

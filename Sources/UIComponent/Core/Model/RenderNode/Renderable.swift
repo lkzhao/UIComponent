@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/22/20.
 
-import UIKit
-
 /// A `Renderable` represents an object that can be rendered within a given frame.
 /// It contains a reference to a `RenderNode` which dictates how the rendering should be done.
 public struct Renderable {

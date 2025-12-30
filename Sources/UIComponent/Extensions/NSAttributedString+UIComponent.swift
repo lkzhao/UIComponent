@@ -1,8 +1,5 @@
 //  Created by Huy on 11/5/25.
 
-import Foundation
-import UIKit
-
 extension NSAttributedString {
 
     // Returns the ascender of an attributed string.

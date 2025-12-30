@@ -1,8 +1,6 @@
 //  Created by y H on 2021/7/25.
 
 
-import UIKit
-
 /// Renders the ``content`` component with a badge (overlay) component on top.
 /// The ``Badge`` component is similar to the ``Overlay`` component. The differences between ``Badge`` and ``Overlay`` are the following:
 /// 1. `Badge` calculates the `badge` size based on its own content.

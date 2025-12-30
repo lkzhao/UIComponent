@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 7/18/21.
 
-import UIKit
-
 /// Flow layout component, similar to ``UICollectionViewFlowLayout``. It is type aliased to ``FlexRow``
 public typealias Flow = FlexRow
 

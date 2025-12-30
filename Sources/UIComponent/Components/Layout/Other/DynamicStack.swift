@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 5/4/24.
 //
 
-import UIKit
-
 /// A component that lays out its children horizontally in a paging fashion similar to an ``HStack``.
 /// However, instead of creating the child components all at once, it creates them on demand when it needs to render the specific cell.
 public struct DynamicHStack: Component {

@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/22/20.
 
-import UIKit
-
 /// A protocol representing a stack layout and provide the stack layout implementation.
 public protocol Stack: BaseLayoutProtocol {
     /// The space between adjacent children in the stack.

@@ -1,5 +1,3 @@
-import UIKit
-
 /// A component produced by the ``Component/update(_:)`` modifier
 public typealias UpdateComponent<Content: Component> = ModifierComponent<Content, UpdateRenderNode<Content.R>>
 

@@ -1,6 +1,5 @@
 //  Created by Luke Zhao on 8/22/20.
 
-import Foundation
 import SwiftUI
 
 /// A result builder that constructs an array of components.

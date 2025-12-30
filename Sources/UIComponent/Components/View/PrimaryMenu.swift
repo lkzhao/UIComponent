@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 11/26/22.
 //
 
-import UIKit
-
 #if !os(tvOS)
 /// `PrimaryMenuConfig` defines the configuration for a `PrimaryMenu`.
 /// It provides customization options such as highlight state changes and tap actions.

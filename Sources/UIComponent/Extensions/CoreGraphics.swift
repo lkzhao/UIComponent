@@ -1,8 +1,6 @@
 //  Created by Luke Zhao on 10/17/21.
 
 
-import UIKit
-
 extension CGSize {
     /// A size with infinite width and height.
     static public let infinity: CGSize = CGSize(width: CGFloat.infinity, height: CGFloat.infinity)

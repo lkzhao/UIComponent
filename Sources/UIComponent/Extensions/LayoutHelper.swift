@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/22/20.
 
-import UIKit
-
 /// An enumeration to define the main axis alignment of a layout.
 public enum MainAxisAlignment: CaseIterable {
     case start, end, center, spaceBetween, spaceAround, spaceEvenly

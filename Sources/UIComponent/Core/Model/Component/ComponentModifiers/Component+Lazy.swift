@@ -1,5 +1,3 @@
-import UIKit
-
 extension Component {
     /// Makes the component lazy with a fixed size, deferring its internal layout and rendering until needed.
     /// - Parameter size: The fixed size to use for the lazy component.

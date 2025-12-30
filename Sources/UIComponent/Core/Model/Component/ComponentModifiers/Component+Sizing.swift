@@ -1,5 +1,3 @@
-import UIKit
-
 extension Component {
     /// Adjusts the size of the component using specified strategies for width and height.
     /// - Parameters:

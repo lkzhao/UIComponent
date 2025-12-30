@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/23/20.
 
-import UIKit
-
 /// A `ViewComponent`is a Component that encapsulates a `UIView` or a generator closure that can create a `UIView`.
 /// See <doc:CustomView> for more details
 public struct ViewComponent<View: UIView>: Component {

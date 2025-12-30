@@ -1,5 +1,3 @@
-import UIKit
-
 extension Component {
     // MARK: - Inset modifiers
 

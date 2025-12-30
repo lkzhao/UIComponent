@@ -7,7 +7,6 @@
 
 import Testing
 @testable import UIComponent
-import UIKit
 
 @Suite("Data Caching")
 @MainActor

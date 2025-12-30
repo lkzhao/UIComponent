@@ -1,6 +1,5 @@
 //  Created by Luke Zhao on 7/29/24.
 
-import UIKit
 import simd
 
 public struct VStackItemOffset: Component {
@@ -52,4 +51,3 @@ public extension HStack {
         HStackItemOffset(offset: offset, stack: self)
     }
 }
-

@@ -1,5 +1,3 @@
-import UIKit
-
 @available(iOS 14.0, *)
 public extension Component {
     /// Wrap the content in a component that displays the provided menu when tapped.

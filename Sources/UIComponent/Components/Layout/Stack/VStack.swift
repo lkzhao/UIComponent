@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/6/21.
 
-import UIKit
-
 /// A vertical stack component that arranges its children in a vertical line.
 public struct VStack: Component, Stack, VerticalLayoutProtocol {
     /// The spacing between each component in the stack.

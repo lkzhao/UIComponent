@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/22/20.
 
-import Foundation
-
 /// Basic building block of UIComponent.
 /// The only method that it require is ``Component/layout(_:)`` which calculates
 /// the layout of the component and generate a ``RenderNode``

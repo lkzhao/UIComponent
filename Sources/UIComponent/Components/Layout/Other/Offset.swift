@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 4/23/24.
 //
 
-import UIKit
-
 /// Wraps a content component and applies the specified offset to it.
 /// Instead of creating an instance directly, use the ``Component/offset(_:)`` modifier.
 public struct Offset: Component {

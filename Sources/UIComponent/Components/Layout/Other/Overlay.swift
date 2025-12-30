@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 6/12/21.
 
-import Foundation
-
 /// Renders a single `content` component with a `overlay` component on top.
 /// The size of the `content` is calculated first, then the size is applied to the `overlay` component.
 /// The intrinsic size of the `overlay` component is ignored.

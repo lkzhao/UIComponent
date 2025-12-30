@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 6/23/23.
 //
 
-import Foundation
-
 /// A protocol that wraps a content `RenderNode` to and pass through all the render node methods.
 /// Its render node methods can be overriden by the conforming type.
 public protocol RenderNodeWrapper<Content>: RenderNode {

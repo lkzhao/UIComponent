@@ -7,7 +7,6 @@
 
 import Testing
 @testable import UIComponent
-import UIKit
 
 public struct AspectSpace: Component {
     let size: CGSize

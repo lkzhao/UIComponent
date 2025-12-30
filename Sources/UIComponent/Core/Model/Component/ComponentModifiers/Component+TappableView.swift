@@ -1,5 +1,3 @@
-import UIKit
-
 extension Component {
     /// Creates a tappable view component from the current component with a tap action. See ``TappableView`` for detail.
     /// - Parameters:

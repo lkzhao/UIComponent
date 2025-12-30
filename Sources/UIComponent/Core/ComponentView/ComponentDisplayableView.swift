@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 2016-02-12.
 
-import UIKit
-
 /// A helper protocol that provides easier access to the underlying component engine's methods
 public protocol ComponentDisplayableView: UIView {}
 

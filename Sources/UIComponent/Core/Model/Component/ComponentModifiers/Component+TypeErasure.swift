@@ -1,5 +1,3 @@
-import UIKit
-
 extension Component {
     /// Wraps the current component in a type-erased ``AnyComponent`` container.
     /// - Returns: A type erased ``AnyComponent`` that renders the same view as the current component.

@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 1/20/24.
 //
 
-import UIKit
-
 /// The key for accessing the default font from the environment.
 public struct FontEnvironmentKey: EnvironmentKey {
     public static var defaultValue: UIFont? {

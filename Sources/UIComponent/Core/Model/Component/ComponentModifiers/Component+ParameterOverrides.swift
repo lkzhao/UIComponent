@@ -1,5 +1,3 @@
-import UIKit
-
 /// A component produced by the ``Component/id(_:)`` modifier
 public typealias IDComponent<Content: Component> = ModifierComponent<Content, ContextOverrideRenderNode<Content.R>>
 

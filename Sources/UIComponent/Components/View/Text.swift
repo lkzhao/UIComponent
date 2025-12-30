@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/22/20.
 
-import UIKit
-
 #if os(tvOS)
 extension UIFont {
     public static let systemFontSize: Double = 16.0

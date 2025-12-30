@@ -1,5 +1,3 @@
-import UIKit
-
 extension Component {
     /// Applies an offset to the component using the specified `CGPoint`.
     /// - Parameter offset: The `CGPoint` value to apply as an offset.

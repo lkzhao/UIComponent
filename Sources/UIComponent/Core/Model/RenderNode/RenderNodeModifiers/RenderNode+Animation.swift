@@ -1,5 +1,3 @@
-import UIKit
-
 /// A render node that wraps content and provides custom animations for insert, update, and delete operations.
 public struct AnimatorWrapperRenderNode<Content: RenderNode>: RenderNodeWrapper {
     public let content: Content

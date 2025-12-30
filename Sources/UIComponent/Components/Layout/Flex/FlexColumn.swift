@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 7/18/21.
 
-import UIKit
-
 /// A `FlexColumn` structures its children in a vertical column using flexbox properties. Once the column is filled, it will wrap to the next column.
 ///
 /// ```

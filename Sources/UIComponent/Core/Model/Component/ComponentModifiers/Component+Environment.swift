@@ -1,5 +1,3 @@
-import UIKit
-
 // MARK: - Environment modifiers
 public extension Component {
     /// Applies an environment value to the component for the given key path.

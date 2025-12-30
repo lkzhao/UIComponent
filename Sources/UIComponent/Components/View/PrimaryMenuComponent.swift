@@ -5,8 +5,6 @@
 //  Created by Luke Zhao on 1/19/24.
 //
 
-import UIKit
-
 /// A component that renders a ``PrimaryMenu``
 @available(iOS 14.0, *)
 public struct PrimaryMenuComponent: Component {

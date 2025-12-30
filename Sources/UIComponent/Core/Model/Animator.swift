@@ -1,8 +1,6 @@
 //  Created by Luke Zhao on 2017-07-19.
 
 
-import UIKit
-
 /// `Animator` is a base class that provides default implementations for animations
 /// related to the insertion, deletion, and updating of views.
 /// Subclasses can override these methods to provide custom animation behavior.

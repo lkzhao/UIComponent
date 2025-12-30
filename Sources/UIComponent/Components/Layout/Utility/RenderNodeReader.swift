@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/26/20.
 
-import Foundation
-
 /// A `RenderNodeReader` is a component that allows reading the layout result of its content component.
 /// It provides a mechanism to access the render node produced by the content component after layout.
 public struct RenderNodeReader<ChildComponent: Component>: Component {

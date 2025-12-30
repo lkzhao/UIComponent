@@ -33,7 +33,6 @@ After installation, you can start using UIComponent in any UIView:
 
 ```swift
 import UIComponent
-import UIKit
 
 class MyViewController: UIViewController {
     override func viewDidLoad() {

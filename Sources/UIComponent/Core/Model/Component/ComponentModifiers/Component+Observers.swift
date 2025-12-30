@@ -1,5 +1,3 @@
-import UIKit
-
 /// Direction describing the scrolling axis monitored by scroll observers.
 public enum ScrollDirection {
     case horizontal

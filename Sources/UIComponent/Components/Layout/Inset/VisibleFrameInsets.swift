@@ -1,7 +1,5 @@
 //  Created by Luke Zhao on 8/23/20.
 
-import UIKit
-
 /// A component that applies fixed insets to the visible frame of its child component.
 ///
 /// If the insets is negative, the child component will be rendered outside of the visible frame.
@@ -113,4 +111,3 @@ public struct DynamicVisibleFrameInsetRenderNode<Content: RenderNode>: RenderNod
         frame.inset(by: insetProvider(frame))
     }
 }
-
