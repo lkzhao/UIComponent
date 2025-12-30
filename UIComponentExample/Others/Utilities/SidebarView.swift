@@ -1,9 +1,4 @@
-//
-//  SidebarView.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 11/4/25.
-//
 
 class SidebarView: UIView {
     let viewModel: HomeViewModel

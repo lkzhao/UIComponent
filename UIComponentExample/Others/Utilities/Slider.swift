@@ -1,11 +1,4 @@
-//
-//  Slider.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 11/5/25.
-//
-
-
 
 class Slider: UIView {
     let slider = UISlider()

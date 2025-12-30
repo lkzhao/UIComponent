@@ -1,10 +1,4 @@
-//
-//  SimpleExamplesView.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 11/4/25.
-//
-
 
 class SimpleExamplesView: UIView {
     @Observable

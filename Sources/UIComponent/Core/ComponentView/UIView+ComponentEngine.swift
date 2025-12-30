@@ -1,9 +1,4 @@
-//
-//  UIView+ComponentEngine.swift
-//
-//
 //  Created by Luke Zhao on 7/17/24.
-//
 
 extension UIView {
     // Access to the underlying Component Engine

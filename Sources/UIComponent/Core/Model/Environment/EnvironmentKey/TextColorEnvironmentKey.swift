@@ -1,9 +1,4 @@
-//
-//  TextColorEnvironmentKey.swift
-//  
-//
 //  Created by Luke Zhao on 2024-12-17.
-//
 
 /// The key for accessing the default text color from the environment.
 public struct TextColorEnvironmentKey: EnvironmentKey {

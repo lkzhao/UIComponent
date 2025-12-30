@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 6/21/23.
-//
 
 /// A type-erased `Component`
 ///

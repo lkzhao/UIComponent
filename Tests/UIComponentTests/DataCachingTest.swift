@@ -1,9 +1,4 @@
-//
-//  DataCachingTest.swift
-//  UIComponent
-//
 //  Created by Luke Zhao on 11/8/24.
-//
 
 import Testing
 @testable import UIComponent

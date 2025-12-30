@@ -1,6 +1,5 @@
 //  Created by Luke Zhao on 8/22/20.
 
-
 /// A base render node protocol for a stack that provide implementation for ``visibleChildren(in:)``
 public protocol StackRenderNode: RenderNode, BaseLayoutProtocol {
     /// The size of the render node.

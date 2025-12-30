@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 1/20/24.
-//
 
 /// The key for accessing the default font from the environment.
 public struct FontEnvironmentKey: EnvironmentKey {

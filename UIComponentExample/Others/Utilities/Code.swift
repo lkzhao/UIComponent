@@ -1,9 +1,4 @@
-//
-//  Code.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 11/4/25.
-//
 
 struct Code: ComponentBuilder {
     let code: String

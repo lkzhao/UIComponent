@@ -1,9 +1,4 @@
-//
-//  AsyncImage.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 11/5/25.
-//
 
 import Kingfisher
 

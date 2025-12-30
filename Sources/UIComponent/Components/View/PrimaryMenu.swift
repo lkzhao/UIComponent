@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 11/26/22.
-//
 
 #if !os(tvOS)
 /// `PrimaryMenuConfig` defines the configuration for a `PrimaryMenu`.

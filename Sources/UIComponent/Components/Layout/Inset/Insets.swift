@@ -1,6 +1,5 @@
 //  Created by Luke Zhao on 8/23/20.
 
-
 /// Wraps a content component and applies the specified edge insets to it.
 /// Instead of creating an instance directly, use the ``Component/inset(by:)`` modifier.
 public struct Insets: Component {

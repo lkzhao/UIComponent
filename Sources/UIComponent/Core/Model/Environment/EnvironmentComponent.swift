@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 1/20/24.
-//
 
 /// A component that injects an environment value into the content.
 ///

@@ -1,6 +1,5 @@
 //  Created by Luke Zhao on 8/22/20.
 
-
 /// A structure representing constraints for sizing an element, with minimum and maximum size limits.
 public struct Constraint {
     /// The minimum size that the element should at least occupy.

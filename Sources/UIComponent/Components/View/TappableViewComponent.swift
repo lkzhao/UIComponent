@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 1/18/24.
-//
 
 /// A component that renders a ``TappableView``
 public struct TappableViewComponent: Component {

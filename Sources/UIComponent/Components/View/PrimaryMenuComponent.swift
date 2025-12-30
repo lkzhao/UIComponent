@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 1/19/24.
-//
 
 /// A component that renders a ``PrimaryMenu``
 @available(iOS 14.0, *)

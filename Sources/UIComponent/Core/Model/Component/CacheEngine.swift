@@ -1,6 +1,5 @@
 //  Created by Luke Zhao on 4/24/25.
 
-
 struct CacheEngine {
     private static var globalCachingData: [String: Any] = [:]
     private lazy var cachingData: [String: Any] = [:]

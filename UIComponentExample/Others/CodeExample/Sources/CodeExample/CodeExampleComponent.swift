@@ -1,9 +1,4 @@
-//
-//  CodeExampleComponent.swift
-//  CodeExample
-//
 //  Created by Luke Zhao on 11/4/25.
-//
 
 import UIComponent
 import UIKit

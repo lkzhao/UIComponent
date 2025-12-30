@@ -1,9 +1,4 @@
-//
-//  InlineCode.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 11/4/25.
-//
 
 struct InlineCode: ComponentBuilder {
     let code: String

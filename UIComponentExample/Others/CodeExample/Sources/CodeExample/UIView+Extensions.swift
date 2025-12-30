@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  CodeExample
-//
 //  Created by Luke Zhao on 11/4/25.
-//
 
 import UIKit
 

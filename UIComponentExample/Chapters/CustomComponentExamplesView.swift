@@ -1,9 +1,4 @@
-//
-//  CustomComponentExamplesView.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 11/6/25.
-//
 
 import UIComponent
 

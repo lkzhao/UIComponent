@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
 //  Created by Luke Zhao on 2/20/24.
-//
 
 /// A component that lays out its children horizontally in a paging fashion similar to an ``HPager``.
 /// However, instead of creating the child components all at once, it creates them on demand when it needs to render the specific page.

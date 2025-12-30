@@ -1,9 +1,4 @@
-//
-//  HostingViewEnvironmentKey.swift
-//
-//
 //  Created by Luke Zhao on 1/20/24.
-//
 
 /// A environment key that holds a reference to the current `UIView` displaying the component.
 public struct HostingViewEnvironmentKey: EnvironmentKey {

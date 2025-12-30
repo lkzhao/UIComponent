@@ -1,9 +1,4 @@
-//
-//  AppDelegate.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 11/4/25.
-//
 
 @_exported import UIKit
 @_exported import CodeExample

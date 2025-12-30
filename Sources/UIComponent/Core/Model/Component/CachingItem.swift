@@ -1,10 +1,4 @@
-//
-//  CachingItem.swift
-//  UIComponent
-//
 //  Created by Luke Zhao on 11/8/24.
-//
-
 
 /// The scope that determines the lifetime of the cached item.
 public enum CacheScope {

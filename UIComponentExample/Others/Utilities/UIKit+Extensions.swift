@@ -1,9 +1,4 @@
-//
-//  UIFont.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 11/4/25.
-//
 
 extension UIFont {
     static let title = UIFont.boldSystemFont(ofSize: 32)

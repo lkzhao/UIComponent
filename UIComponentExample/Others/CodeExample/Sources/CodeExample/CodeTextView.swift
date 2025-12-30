@@ -1,9 +1,4 @@
-//
-//  CodeView.swift
-//  UIComponentExample
-//
 //  Created by Luke Zhao on 11/4/25.
-//
 
 @preconcurrency import UIComponent
 import Highlightr
