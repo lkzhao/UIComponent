@@ -2,14 +2,14 @@
 
 /// The key for accessing the default font from the environment.
 public struct FontEnvironmentKey: EnvironmentKey {
-    public static var defaultValue: UIFont? {
+    public static var defaultValue: PlatformFont? {
         nil
     }
 }
 
 public extension EnvironmentValues {
     /// The font value in the environment.
-    var font: UIFont? {
+    var font: PlatformFont? {
         get { self[FontEnvironmentKey.self] }
         set { self[FontEnvironmentKey.self] = newValue }
     }
@@ -17,9 +17,9 @@ public extension EnvironmentValues {
 
 public extension Component {
     /// Modifies the font environment value for the component.
-    /// - Parameter font: The UIFont to be set in the environment.
+    /// - Parameter font: The PlatformFont to be set in the environment.
     /// - Returns: An environment component with the new font value.
-    func font(_ font: UIFont?) -> EnvironmentComponent<UIFont?, Self> {
+    func font(_ font: PlatformFont?) -> EnvironmentComponent<PlatformFont?, Self> {
         environment(\.font, value: font)
     }
 }

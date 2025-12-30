@@ -8,7 +8,7 @@ extension NSAttributedString {
     public var ascender: CGFloat {
         guard length > 0 else { return 0 }
 
-        guard let font = attribute(.font, at: 0, effectiveRange: nil) as? UIFont else {
+        guard let font = attribute(.font, at: 0, effectiveRange: nil) as? PlatformFont else {
             return 0
         }
 
@@ -27,7 +27,7 @@ extension NSAttributedString {
     // It is the descender of the last character's font.
     public var descender: CGFloat {
         guard length > 0 else { return 0 }
-        guard let font = attribute(.font, at: length - 1, effectiveRange: nil) as? UIFont else {
+        guard let font = attribute(.font, at: length - 1, effectiveRange: nil) as? PlatformFont else {
             return 0
         }
         return font.descender
