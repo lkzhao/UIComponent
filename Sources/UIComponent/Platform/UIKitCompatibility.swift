@@ -5,7 +5,6 @@ import AppKit
 import QuartzCore
 
 public typealias UIView = NSView
-public typealias UIEdgeInsets = NSEdgeInsets
 
 extension NSView {
     public var alpha: CGFloat {
@@ -76,9 +75,9 @@ extension NSView {
 
 }
 
-extension NSEdgeInsets {
-    public static var zero: NSEdgeInsets {
-        NSEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+extension PlatformEdgeInsets {
+    public static var zero: PlatformEdgeInsets {
+        PlatformEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
 }
 

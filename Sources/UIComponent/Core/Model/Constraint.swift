@@ -29,7 +29,7 @@ public struct Constraint {
     /// Returns a new constraint that is inset by the specified edge insets.
     /// - Parameter insets: The edge insets to inset the constraint by.
     /// - Returns: A new `Constraint` instance with the inset sizes.
-    public func inset(by insets: UIEdgeInsets) -> Constraint {
+    public func inset(by insets: PlatformEdgeInsets) -> Constraint {
         Constraint(
             minSize: CGSize(
                 width: max(0, minSize.width == .infinity ? .infinity : minSize.width - insets.left - insets.right),

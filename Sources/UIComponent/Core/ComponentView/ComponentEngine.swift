@@ -61,7 +61,7 @@ public final class ComponentEngine {
     }
 
     /// Insets for the visible frame. This will be applied to the `visibleFrame` used to retrieve views for the viewport.
-    public var visibleFrameInsets: UIEdgeInsets = .zero
+    public var visibleFrameInsets: PlatformEdgeInsets = .zero
 
     /// A flag indicating whether this engine has rendered at least once.
     public var hasReloaded: Bool { reloadCount > 0 }
@@ -137,7 +137,7 @@ public final class ComponentEngine {
     }
     
     /// The insets applied to the content of the view.
-    var contentInset: UIEdgeInsets {
+    var contentInset: PlatformEdgeInsets {
 #if canImport(UIKit)
         (view as? UIScrollView)?.adjustedContentInset ?? .zero
 #else

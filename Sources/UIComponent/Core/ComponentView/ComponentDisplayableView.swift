@@ -30,7 +30,7 @@ extension ComponentDisplayableView {
     }
 
     /// The visible frame insets that are applied to the viewport before fetching the views from the renderNode.
-    public var visibleFrameInsets: UIEdgeInsets {
+    public var visibleFrameInsets: PlatformEdgeInsets {
         get { componentEngine.visibleFrameInsets }
         set { componentEngine.visibleFrameInsets = newValue }
     }

@@ -4,13 +4,13 @@
 /// Instead of creating an instance directly, use the ``Component/inset(by:)`` modifier.
 public struct Insets: Component {
     let content: any Component
-    let insets: UIEdgeInsets
+    let insets: PlatformEdgeInsets
 
     /// Initializes a new Insets component with a content component and specific edge insets.
     /// - Parameters:
     ///   - content: The content component to apply insets to.
     ///   - insets: The edge insets to apply to the content component.
-    public init(content: any Component, insets: UIEdgeInsets) {
+    public init(content: any Component, insets: PlatformEdgeInsets) {
         self.content = content
         self.insets = insets
     }
@@ -24,13 +24,13 @@ public struct Insets: Component {
 /// Instead of creating an instance directly, use the ``Component/inset(_:)-1mpsn`` modifier.
 public struct DynamicInsets: Component {
     let content: any Component
-    let insetProvider: (Constraint) -> UIEdgeInsets
+    let insetProvider: (Constraint) -> PlatformEdgeInsets
 
     /// Initializes a new DynamicInsets component with a content component and an inset provider.
     /// - Parameters:
     ///   - content: The content component to apply dynamic insets to.
     ///   - insetProvider: A closure that provides edge insets based on the given constraints.
-    public init(content: any Component, insetProvider: @escaping (Constraint) -> UIEdgeInsets) {
+    public init(content: any Component, insetProvider: @escaping (Constraint) -> PlatformEdgeInsets) {
         self.content = content
         self.insetProvider = insetProvider
     }
@@ -47,7 +47,7 @@ struct InsetsRenderNode: RenderNode {
     typealias View = UIView
 
     let content: any RenderNode
-    let insets: UIEdgeInsets
+    let insets: PlatformEdgeInsets
 
     /// The size of the render node, adjusted for the insets.
     var size: CGSize {

@@ -38,7 +38,7 @@ extension CGSize {
         CGSize(width: left.width * right, height: left.height * right)
     }
 
-    @inlinable func inset(by insets: UIEdgeInsets) -> CGSize {
+    @inlinable func inset(by insets: PlatformEdgeInsets) -> CGSize {
         CGSize(width: width - insets.left - insets.right, height: height - insets.top - insets.bottom)
     }
 }
@@ -63,7 +63,7 @@ extension CGRect {
 
 #if os(macOS)
 extension CGRect {
-    @inlinable func inset(by insets: UIEdgeInsets) -> CGRect {
+    @inlinable func inset(by insets: PlatformEdgeInsets) -> CGRect {
         CGRect(
             x: origin.x + insets.left,
             y: origin.y + insets.top,
@@ -80,9 +80,9 @@ extension Comparable {
     }
 }
 
-extension UIEdgeInsets {
-    @inlinable static prefix func - (inset: UIEdgeInsets) -> UIEdgeInsets {
-        UIEdgeInsets(top: -inset.top, left: -inset.left, bottom: -inset.bottom, right: -inset.right)
+extension PlatformEdgeInsets {
+    @inlinable static prefix func - (inset: PlatformEdgeInsets) -> PlatformEdgeInsets {
+        PlatformEdgeInsets(top: -inset.top, left: -inset.left, bottom: -inset.bottom, right: -inset.right)
     }
 }
 
