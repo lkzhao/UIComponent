@@ -13,7 +13,7 @@ extension PlatformScrollView {
 #if os(macOS)
         let inset: PlatformEdgeInsets
         if #available(macOS 10.10, *) {
-            inset = contentInsets
+            inset = contentInsets + scrollerInsets
         } else {
             inset = .zero
         }
@@ -27,7 +27,7 @@ extension PlatformScrollView {
 #if os(macOS)
         let inset: PlatformEdgeInsets
         if #available(macOS 10.10, *) {
-            inset = contentInsets
+            inset = contentInsets + scrollerInsets
         } else {
             inset = .zero
         }
@@ -41,7 +41,7 @@ extension PlatformScrollView {
 #if os(macOS)
         let inset: PlatformEdgeInsets
         if #available(macOS 10.10, *) {
-            inset = contentInsets
+            inset = contentInsets + scrollerInsets
         } else {
             inset = .zero
         }
@@ -108,4 +108,3 @@ extension PlatformScrollView {
 #endif
     }
 }
-

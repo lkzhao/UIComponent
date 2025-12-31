@@ -84,6 +84,22 @@ extension PlatformEdgeInsets {
     @inlinable static prefix func - (inset: PlatformEdgeInsets) -> PlatformEdgeInsets {
         PlatformEdgeInsets(top: -inset.top, left: -inset.left, bottom: -inset.bottom, right: -inset.right)
     }
+
+    @inlinable static func + (left: PlatformEdgeInsets, right: PlatformEdgeInsets) -> PlatformEdgeInsets {
+        PlatformEdgeInsets(
+            top: left.top + right.top,
+            left: left.left + right.left,
+            bottom: left.bottom + right.bottom,
+            right: left.right + right.right
+        )
+    }
+
+    @inlinable static func += (left: inout PlatformEdgeInsets, right: PlatformEdgeInsets) {
+        left.top += right.top
+        left.left += right.left
+        left.bottom += right.bottom
+        left.right += right.right
+    }
 }
 
 extension Collection {

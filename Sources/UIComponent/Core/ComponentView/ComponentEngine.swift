@@ -144,7 +144,7 @@ public final class ComponentEngine {
 #if os(macOS)
         if let scrollView = view as? PlatformScrollView {
             if #available(macOS 10.10, *) {
-                return scrollView.contentInsets
+                return scrollView.contentInsets + scrollView.scrollerInsets
             }
         }
 #endif
