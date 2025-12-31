@@ -322,6 +322,8 @@ extension TappableView: UIContextMenuInteractionDelegate {
 #elseif os(macOS)
 /// A macOS implementation of `TappableView` that supports tap and highlight behavior.
 open class TappableView: PlatformView {
+    private var trackingAreaToken: NSTrackingArea?
+
     /// The configuration object for the TappableView, which defines the behavior of the view when it is tapped or highlighted.
     public var config: TappableViewConfig?
 
@@ -357,20 +359,48 @@ open class TappableView: PlatformView {
         super.init(coder: coder)
     }
 
+    open override func updateTrackingAreas() {
+        if let trackingAreaToken {
+            removeTrackingArea(trackingAreaToken)
+        }
+        let trackingArea = NSTrackingArea(
+            rect: bounds,
+            options: [.activeInActiveApp, .inVisibleRect, .mouseEnteredAndExited, .enabledDuringMouseDrag],
+            owner: self,
+            userInfo: nil
+        )
+        addTrackingArea(trackingArea)
+        trackingAreaToken = trackingArea
+        super.updateTrackingAreas()
+    }
+
     open override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
         isHighlighted = true
     }
 
+    open override func mouseDragged(with event: NSEvent) {
+        super.mouseDragged(with: event)
+        let location = convert(event.locationInWindow, from: nil)
+        isHighlighted = bounds.contains(location)
+    }
+
     open override func mouseUp(with event: NSEvent) {
         defer { isHighlighted = false }
         super.mouseUp(with: event)
+        let location = convert(event.locationInWindow, from: nil)
+        guard bounds.contains(location) else { return }
+
         (config ?? .default).didTap?(self)
         if event.clickCount == 2 {
             onDoubleTap?(self)
         } else {
             onTap?(self)
         }
+    }
+
+    open override func mouseEntered(with event: NSEvent) {
+        super.mouseEntered(with: event)
     }
 
     open override func mouseExited(with event: NSEvent) {

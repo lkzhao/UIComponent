@@ -162,6 +162,8 @@ extension PrimaryMenu: UIPointerInteractionDelegate {
 /// A macOS view that displays a menu when clicked.
 @available(iOS 14.0, macOS 11.0, *)
 public class PrimaryMenu: PlatformView {
+    private var trackingAreaToken: NSTrackingArea?
+
     /// Indicates whether any `PrimaryMenu` is currently showing a menu.
     public static fileprivate(set) var isShowingMenu = false
 
@@ -199,21 +201,44 @@ public class PrimaryMenu: PlatformView {
         super.init(coder: coder)
     }
 
+    public override func updateTrackingAreas() {
+        if let trackingAreaToken {
+            removeTrackingArea(trackingAreaToken)
+        }
+        let trackingArea = NSTrackingArea(
+            rect: bounds,
+            options: [.activeInActiveApp, .inVisibleRect, .mouseEnteredAndExited, .enabledDuringMouseDrag],
+            owner: self,
+            userInfo: nil
+        )
+        addTrackingArea(trackingArea)
+        trackingAreaToken = trackingArea
+        super.updateTrackingAreas()
+    }
+
     public override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
         isPressed = true
+    }
+
+    public override func mouseDragged(with event: NSEvent) {
+        super.mouseDragged(with: event)
+        let location = convert(event.locationInWindow, from: nil)
+        isPressed = bounds.contains(location)
     }
 
     public override func mouseUp(with event: NSEvent) {
         defer { isPressed = false }
         super.mouseUp(with: event)
 
+        let location = convert(event.locationInWindow, from: nil)
+        guard bounds.contains(location) else { return }
+
         (config ?? .default).didTap?(self)
         guard let menu = menuBuilder?(self) else { return }
 
         isShowingMenu = true
         PrimaryMenu.isShowingMenu = true
-        let location = convert(event.locationInWindow, from: nil)
         menu.popUp(positioning: nil, at: location, in: self)
         isShowingMenu = false
         PrimaryMenu.isShowingMenu = false
