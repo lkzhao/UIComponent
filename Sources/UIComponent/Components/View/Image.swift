@@ -114,6 +114,18 @@ public struct ImageRenderNode: RenderNode {
     public let image: PlatformImage
     /// The size to render the image.
     public let size: CGSize
+
+    public func makeView() -> PlatformImageView {
+        let view = PlatformImageView()
+#if canImport(UIKit)
+        view.contentMode = .scaleToFill
+        view.clipsToBounds = true
+#elseif os(macOS)
+        view.imageAlignment = .alignCenter
+        view.imageScaling = .scaleAxesIndependently
+#endif
+        return view
+    }
     
     /// Updates the given image view with the render node's image.
     /// - Parameter view: The image view to update.
