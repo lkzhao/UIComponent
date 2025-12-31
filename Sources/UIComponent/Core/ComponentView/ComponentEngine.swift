@@ -141,7 +141,14 @@ public final class ComponentEngine {
 #if canImport(UIKit)
         (view as? UIScrollView)?.adjustedContentInset ?? .zero
 #else
-        .zero
+#if os(macOS)
+        if let scrollView = view as? PlatformScrollView {
+            if #available(macOS 10.10, *) {
+                return scrollView.contentInsets
+            }
+        }
+#endif
+        return .zero
 #endif
     }
     
