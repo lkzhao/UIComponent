@@ -3,13 +3,13 @@
 /// Protocol defining a delegate responsible for determining if a component engine should be reloaded.
 public protocol ComponentEngineReloadDelegate: AnyObject {
     /// Asks the delegate if the component engine should be reloaded.
-    /// - Parameter view: The `UIView` that is asking for permission to reload.
+    /// - Parameter view: The `PlatformView` that is asking for permission to reload.
     /// - Returns: A Boolean value indicating whether the view should be reloaded.
     func componentEngineShouldReload(_ view: PlatformView) -> Bool
 }
 
 /// `ComponentEngine` is the main class that powers the rendering of components.
-/// It manages a `UIView` and handles rendering the component to the view.
+/// It manages a `PlatformView` and handles rendering the component to the view.
 public final class ComponentEngine {
 
     /// A static weak reference to a delegate that decides if a component engine should reload.
@@ -177,7 +177,7 @@ public final class ComponentEngine {
     }
 
     /// Initializes a new `ComponentEngine` with the given view.
-    /// - Parameter view: The `UIView` to be managed by the engine.
+    /// - Parameter view: The `PlatformView` to be managed by the engine.
     init(view: PlatformView) {
         self.view = view
     }
