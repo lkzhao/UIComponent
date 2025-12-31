@@ -49,7 +49,7 @@ public class PrimaryMenu: UIControl {
     public var isShowingMenu = false
 
     /// The menu to be displayed when the control is interacted with.
-    public var menuBuilder: ((PrimaryMenu) -> UIMenu)? {
+    public var menuBuilder: ((PrimaryMenu) -> PlatformMenu)? {
         didSet {
             guard isShowingMenu else { return }
             if let menuBuilder {
