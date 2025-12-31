@@ -326,6 +326,7 @@ open class TappableView: PlatformView {
     private var longPressWorkItem: DispatchWorkItem?
     private var didTriggerLongPress = false
     private var didPushCursor = false
+    private var isControlClick = false
 
     /// A closure that provides a context menu to be displayed when the TappableView is right-clicked or long-pressed.
     public var contextMenuProvider: ((TappableView) -> PlatformMenu?)?
@@ -440,6 +441,7 @@ open class TappableView: PlatformView {
     open override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
         isHighlighted = true
+        isControlClick = event.modifierFlags.contains(.control) && contextMenuProvider != nil
         scheduleLongPressIfNeeded()
     }
 
@@ -456,6 +458,14 @@ open class TappableView: PlatformView {
         let location = convert(event.locationInWindow, from: nil)
         guard bounds.contains(location) else { return }
         guard !didTriggerLongPress else { return }
+
+        if isControlClick, let menu = contextMenuProvider?(self) {
+            isControlClick = false
+            (config ?? .default).didTap?(self)
+            menu.popUp(positioning: nil, at: location, in: self)
+            return
+        }
+        isControlClick = false
 
         (config ?? .default).didTap?(self)
         if event.clickCount == 2 {
