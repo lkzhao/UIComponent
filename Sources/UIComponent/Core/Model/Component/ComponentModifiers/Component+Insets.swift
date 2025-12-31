@@ -87,15 +87,15 @@ extension Component {
         Insets(content: self, insets: PlatformEdgeInsets(top: rest, left: rest, bottom: rest, right: right))
     }
 
-    /// Applies padding to the component using the specified `UIEdgeInsets`.
-    /// - Parameter insets: The `UIEdgeInsets` value to apply as padding.
+    /// Applies padding to the component using the specified `PlatformEdgeInsets`.
+    /// - Parameter insets: The `PlatformEdgeInsets` value to apply as padding.
     /// - Returns: A component wrapped with the specified padding.
     public func inset(_ insets: PlatformEdgeInsets) -> some Component {
         Insets(content: self, insets: insets)
     }
 
     /// Applies dynamic padding to the component based on constraints at layout time.
-    /// - Parameter insetProvider: A closure that provides `UIEdgeInsets` based on the given `Constraint`.
+    /// - Parameter insetProvider: A closure that provides `PlatformEdgeInsets` based on the given `Constraint`.
     /// - Returns: A component that dynamically adjusts its padding based on the provided insets.
     public func inset(_ insetProvider: @escaping (Constraint) -> PlatformEdgeInsets) -> some Component {
         DynamicInsets(content: self, insetProvider: insetProvider)
@@ -142,15 +142,15 @@ extension Component {
         VisibleFrameInsets(content: self, insets: PlatformEdgeInsets(top: v, left: 0, bottom: v, right: 0))
     }
 
-    /// Applies visible frame insets to the component using the specified `UIEdgeInsets`.
-    /// - Parameter insets: The `UIEdgeInsets` value to apply as visible frame insets.
+    /// Applies visible frame insets to the component using the specified `PlatformEdgeInsets`.
+    /// - Parameter insets: The `PlatformEdgeInsets` value to apply as visible frame insets.
     /// - Returns: A component wrapped with the specified visible frame insets.
     public func visibleInset(_ insets: PlatformEdgeInsets) -> VisibleFrameInsets<Self> {
         VisibleFrameInsets(content: self, insets: insets)
     }
 
     /// Applies dynamic visible frame insets to the component based on constraints at layout time.
-    /// - Parameter insetProvider: A closure that provides `UIEdgeInsets` based on the given `CGRect`.
+    /// - Parameter insetProvider: A closure that provides `PlatformEdgeInsets` based on the given `CGRect`.
     /// - Returns: A component that dynamically adjusts its visible frame insets based on the provided insets.
     public func visibleInset(_ insetProvider: @escaping (CGRect) -> PlatformEdgeInsets) -> DynamicVisibleFrameInset<Self> {
         DynamicVisibleFrameInset(content: self, insetProvider: insetProvider)
