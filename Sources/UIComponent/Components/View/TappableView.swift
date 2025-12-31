@@ -117,7 +117,7 @@ open class TappableView: PlatformView {
     }
 
     /// A closure that is called when a long press gesture is recognized on the TappableView.
-    public var onLongPress: ((TappableView, UILongPressGestureRecognizer) -> Void)? {
+    public var onLongPress: ((TappableView, PlatformLongPressGesture) -> Void)? {
         didSet {
             if onLongPress != nil {
                 addGestureRecognizer(longPressGestureRecognizer)
@@ -200,10 +200,10 @@ open class TappableView: PlatformView {
     private var _pointerStyleProvider: Any?
 
     /// A closure that provides a pointer style when the TappableView is hovered over with a pointer device.
-    /// Available only on iOS 13.4 and later.
+    /// On macOS, this is an `NSCursor`.
     @available(iOS 13.4, *)
-    public var pointerStyleProvider: (() -> UIPointerStyle?)? {
-        get { _pointerStyleProvider as? () -> UIPointerStyle? }
+    public var pointerStyleProvider: (() -> PlatformPointerStyle?)? {
+        get { _pointerStyleProvider as? () -> PlatformPointerStyle? }
         set { _pointerStyleProvider = newValue }
     }
 #endif
@@ -327,15 +327,16 @@ open class TappableView: PlatformView {
     private var didTriggerLongPress = false
     private var didPushCursor = false
     private var isControlClick = false
+    private var activeLongPressGesture: PlatformLongPressGesture?
 
     /// A closure that provides a context menu to be displayed when the TappableView is right-clicked or long-pressed.
     public var contextMenuProvider: ((TappableView) -> PlatformMenu?)?
 
     /// A closure that is called when the view is long-pressed (click-and-hold).
-    public var onLongPress: ((TappableView) -> Void)?
+    public var onLongPress: ((TappableView, PlatformLongPressGesture) -> Void)?
 
     /// A closure that provides a cursor when the view is hovered.
-    public var pointerStyleProvider: (() -> NSCursor?)?
+    public var pointerStyleProvider: (() -> PlatformPointerStyle?)?
 
     /// The pasteboard types this view accepts for drop.
     /// Setting this to a non-empty array registers the view as a drop destination.
@@ -412,9 +413,14 @@ open class TappableView: PlatformView {
         super.updateTrackingAreas()
     }
 
-    private func cancelLongPress() {
+    private func cancelLongPress(sendCancel: Bool = true) {
         longPressWorkItem?.cancel()
         longPressWorkItem = nil
+        if sendCancel, let activeLongPressGesture {
+            activeLongPressGesture.state = .cancelled
+            onLongPress?(self, activeLongPressGesture)
+            self.activeLongPressGesture = nil
+        }
     }
 
     private func scheduleLongPressIfNeeded() {
@@ -427,7 +433,9 @@ open class TappableView: PlatformView {
             guard self.isHighlighted else { return }
 
             self.didTriggerLongPress = true
-            self.onLongPress?(self)
+            let gesture = PlatformLongPressGesture(state: .began)
+            self.activeLongPressGesture = gesture
+            self.onLongPress?(self, gesture)
 
             if let menu = self.contextMenuProvider?(self) {
                 let location = self.convert(self.window?.mouseLocationOutsideOfEventStream ?? .zero, from: nil)
@@ -454,9 +462,16 @@ open class TappableView: PlatformView {
     open override func mouseUp(with event: NSEvent) {
         defer { isHighlighted = false }
         super.mouseUp(with: event)
-        cancelLongPress()
+        cancelLongPress(sendCancel: false)
         let location = convert(event.locationInWindow, from: nil)
         guard bounds.contains(location) else { return }
+
+        if didTriggerLongPress, let activeLongPressGesture {
+            activeLongPressGesture.state = .ended
+            onLongPress?(self, activeLongPressGesture)
+            self.activeLongPressGesture = nil
+            return
+        }
         guard !didTriggerLongPress else { return }
 
         if isControlClick, let menu = contextMenuProvider?(self) {

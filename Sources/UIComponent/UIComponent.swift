@@ -20,6 +20,9 @@ public typealias PlatformImageConfiguration = UIImage.Configuration
 public typealias PlatformLabel = UILabel
 public typealias PlatformMenu = UIMenu
 public typealias PlatformRectEdge = UIRectEdge
+@available(iOS 13.4, *)
+public typealias PlatformPointerStyle = UIPointerStyle
+public typealias PlatformLongPressGesture = UILongPressGestureRecognizer
 
 #elseif canImport(AppKit)
 @_exported import AppKit
@@ -35,6 +38,25 @@ public typealias PlatformImageView = NSImageView
 public typealias PlatformImageConfiguration = NSImage.SymbolConfiguration
 public typealias PlatformLabel = NSTextField
 public typealias PlatformMenu = NSMenu
+
+public typealias PlatformPointerStyle = NSCursor
+
+public final class PlatformLongPressGesture {
+    public enum State {
+        case possible
+        case began
+        case changed
+        case ended
+        case cancelled
+        case failed
+    }
+
+    public var state: State
+
+    public init(state: State = .possible) {
+        self.state = state
+    }
+}
 
 public struct PlatformRectEdge: OptionSet {
     public let rawValue: Int
