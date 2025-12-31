@@ -1,6 +1,5 @@
 //  Created by Luke Zhao on 8/19/21.
 
-#if canImport(UIKit)
 /// `WrapperAnimator` is a subclass of `Animator` that allows for additional
 /// animation handling by providing custom blocks for insert, update, and delete operations.
 /// It can also pass through these update operation to another animator if needed.
@@ -10,13 +9,13 @@ public struct WrapperAnimator: Animator {
     /// Determines whether the `WrapperAnimator` should pass the update operation to the underlying `content` animator after executing `updateBlock`.
     public var passthroughUpdate: Bool = false
     /// A block that is executed when a new view is inserted. If `nil`, the insert operation is passed to the underlying `content` animator.
-    public var insertBlock: ((UIView, UIView, CGRect) -> Void)?
+    public var insertBlock: ((PlatformView, PlatformView, CGRect) -> Void)?
     /// A block that is executed when a view needs to be updated. If `nil`, the update operation is passed to the underlying `content` animator.
-    public var updateBlock: ((UIView, UIView, CGRect) -> Void)?
+    public var updateBlock: ((PlatformView, PlatformView, CGRect) -> Void)?
     /// A block that is executed when a view is deleted. If `nil`, the delete operation is passed to the underlying `content` animator.
-    public var deleteBlock: ((UIView, UIView, @escaping () -> Void) -> Void)?
+    public var deleteBlock: ((PlatformView, PlatformView, @escaping () -> Void) -> Void)?
 
-    public func shift(hostingView: UIView, delta: CGPoint, view: UIView) {
+    public func shift(hostingView: PlatformView, delta: CGPoint, view: PlatformView) {
         (content ?? hostingView.componentEngine.animator).shift(
             hostingView: hostingView,
             delta: delta,
@@ -24,7 +23,7 @@ public struct WrapperAnimator: Animator {
         )
     }
 
-    public func update(hostingView: UIView, view: UIView, frame: CGRect) {
+    public func update(hostingView: PlatformView, view: PlatformView, frame: CGRect) {
         if let updateBlock {
             updateBlock(hostingView, view, frame)
             if passthroughUpdate {
@@ -35,7 +34,7 @@ public struct WrapperAnimator: Animator {
         }
     }
 
-    public func insert(hostingView: UIView, view: UIView, frame: CGRect) {
+    public func insert(hostingView: PlatformView, view: PlatformView, frame: CGRect) {
         if let insertBlock {
             insertBlock(hostingView, view, frame)
         } else {
@@ -43,7 +42,7 @@ public struct WrapperAnimator: Animator {
         }
     }
 
-    public func delete(hostingView: UIView, view: UIView, completion: @escaping () -> Void) {
+    public func delete(hostingView: PlatformView, view: PlatformView, completion: @escaping () -> Void) {
         if let deleteBlock {
             deleteBlock(hostingView, view, completion)
         } else {
@@ -51,4 +50,3 @@ public struct WrapperAnimator: Animator {
         }
     }
 }
-#endif
