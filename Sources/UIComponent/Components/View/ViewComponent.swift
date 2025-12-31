@@ -8,10 +8,10 @@ public struct ViewComponent<View: PlatformView>: Component {
     /// A generator closure that can create a view instance when needed.
     public let generator: (() -> View)?
     
-    /// Private initializer for the component that takes an optional `UIView` and an optional generator closure.
+    /// Private initializer for the component that takes an optional `PlatformView` and an optional generator closure.
     /// - Parameters:
-    ///   - view: An optional `UIView` instance to be managed by the component.
-    ///   - generator: An optional closure that generates a `UIView` instance.
+    ///   - view: An optional `PlatformView` instance to be managed by the component.
+    ///   - generator: An optional closure that generates a `PlatformView` instance.
     private init(view: View?, generator: (() -> View)?) {
         self.view = view
         self.generator = generator
@@ -65,8 +65,8 @@ public struct ViewRenderNode<View: PlatformView>: RenderNode {
     /// Initializes a `ViewRenderNode` with a specified size, optional view, and optional generator.
     /// - Parameters:
     ///   - size: The size of the view.
-    ///   - view: An optional `UIView` instance.
-    ///   - generator: An optional closure that generates a `UIView`.
+    ///   - view: An optional `PlatformView` instance.
+    ///   - generator: An optional closure that generates a `PlatformView`.
     fileprivate init(size: CGSize, view: View?, generator: (() -> View)?) {
         self.size = size
         self.view = view
@@ -82,7 +82,7 @@ public struct ViewRenderNode<View: PlatformView>: RenderNode {
     /// Initializes a `ViewRenderNode` with a specified size and a view.
     /// - Parameters:
     ///   - size: The size of the view.
-    ///   - view: A `UIView` instance.
+    ///   - view: A `PlatformView` instance.
     public init(size: CGSize, view: View) {
         self.init(size: size, view: view, generator: nil)
     }
@@ -90,7 +90,7 @@ public struct ViewRenderNode<View: PlatformView>: RenderNode {
     /// Initializes a `ViewRenderNode` with a specified size and a generator.
     /// - Parameters:
     ///   - size: The size of the view.
-    ///   - generator: A closure that generates a `UIView`.
+    ///   - generator: A closure that generates a `PlatformView`.
     public init(size: CGSize, generator: @escaping (() -> View)) {
         self.init(size: size, view: nil, generator: generator)
     }
@@ -108,7 +108,7 @@ public struct ViewRenderNode<View: PlatformView>: RenderNode {
     }
 
     /// Updates the provided view with new data or state.
-    /// - Parameter view: The `UIView` instance to update.
+    /// - Parameter view: The `PlatformView` instance to update.
     public func updateView(_ view: View) {}
 
     public func contextValue(_ key: RenderNodeContextKey) -> Any? {
@@ -120,7 +120,7 @@ public struct ViewRenderNode<View: PlatformView>: RenderNode {
     }
 }
 
-/// Extension to make `UIView` conform to `Component`, allowing it to be used within the component hierarchy.
+/// Extension to make `PlatformView` conform to `Component`, allowing it to be used within the component hierarchy.
 extension PlatformView: Component {
     /// Lays out the view within the given constraints and returns a `ViewRenderNode` representing its layout.
     /// - Parameter constraint: The constraints within which the view should be laid out.
