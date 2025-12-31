@@ -183,6 +183,9 @@ public class PrimaryMenu: PlatformView {
     /// The menu to be displayed when the view is interacted with.
     public var menuBuilder: ((PrimaryMenu) -> PlatformMenu)?
 
+    /// A closure that provides a cursor when the view is hovered.
+    public var pointerStyleProvider: (() -> NSCursor?)?
+
     /// A flag indicating whether the view is currently in a pressed state.
     public private(set) var isPressed: Bool = false {
         didSet {
@@ -244,9 +247,22 @@ public class PrimaryMenu: PlatformView {
         PrimaryMenu.isShowingMenu = false
     }
 
+    public override func mouseEntered(with event: NSEvent) {
+        super.mouseEntered(with: event)
+        pointerStyleProvider?()?.set()
+    }
+
     public override func mouseExited(with event: NSEvent) {
         super.mouseExited(with: event)
         isPressed = false
+    }
+
+    public override func rightMouseUp(with event: NSEvent) {
+        defer { isPressed = false }
+        super.rightMouseUp(with: event)
+        guard let menu = menuBuilder?(self) else { return }
+        let location = convert(event.locationInWindow, from: nil)
+        menu.popUp(positioning: nil, at: location, in: self)
     }
 }
 #endif
