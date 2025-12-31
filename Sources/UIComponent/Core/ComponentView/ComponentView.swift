@@ -11,6 +11,9 @@
 ///
 /// See ``ComponentDisplayableView`` for usage details.
 open class ComponentView: PlatformView, ComponentDisplayableView {
+#if os(macOS)
+    public override var isFlipped: Bool { true }
+#endif
 }
 
 /// A `UIScrollView` that can render components

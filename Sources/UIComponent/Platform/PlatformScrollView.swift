@@ -3,12 +3,16 @@
 #if os(macOS)
 import AppKit
 
+private final class UIComponentFlippedView: NSView {
+    override var isFlipped: Bool { true }
+}
+
 open class PlatformScrollView: NSScrollView, ComponentDisplayableView {
     public let hostingDocumentView: NSView
     private var boundsObserver: NSObjectProtocol?
 
     public override init(frame frameRect: NSRect) {
-        let documentView = NSView(frame: .zero)
+        let documentView = UIComponentFlippedView(frame: .zero)
         documentView.wantsLayer = true
         self.hostingDocumentView = documentView
 
@@ -35,7 +39,7 @@ open class PlatformScrollView: NSScrollView, ComponentDisplayableView {
     }
 
     public required init?(coder: NSCoder) {
-        let documentView = NSView(frame: .zero)
+        let documentView = UIComponentFlippedView(frame: .zero)
         documentView.wantsLayer = true
         self.hostingDocumentView = documentView
 
@@ -66,4 +70,3 @@ open class PlatformScrollView: NSScrollView, ComponentDisplayableView {
     }
 }
 #endif
-
