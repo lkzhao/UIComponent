@@ -165,6 +165,7 @@ extension PrimaryMenu: UIPointerInteractionDelegate {
 public class PrimaryMenu: PlatformView {
     private var trackingAreaToken: NSTrackingArea?
     private var didPushCursor = false
+    private var isControlClick = false
 
     /// Indicates whether any `PrimaryMenu` is currently showing a menu.
     public static fileprivate(set) var isShowingMenu = false
@@ -224,6 +225,7 @@ public class PrimaryMenu: PlatformView {
     public override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
         isPressed = true
+        isControlClick = event.modifierFlags.contains(.control) && menuBuilder != nil
     }
 
     public override func mouseDragged(with event: NSEvent) {
@@ -238,6 +240,18 @@ public class PrimaryMenu: PlatformView {
 
         let location = convert(event.locationInWindow, from: nil)
         guard bounds.contains(location) else { return }
+
+        if isControlClick, let menu = menuBuilder?(self) {
+            isControlClick = false
+            (config ?? .default).didTap?(self)
+            isShowingMenu = true
+            PrimaryMenu.isShowingMenu = true
+            menu.popUp(positioning: nil, at: location, in: self)
+            isShowingMenu = false
+            PrimaryMenu.isShowingMenu = false
+            return
+        }
+        isControlClick = false
 
         (config ?? .default).didTap?(self)
         guard let menu = menuBuilder?(self) else { return }
@@ -271,6 +285,7 @@ public class PrimaryMenu: PlatformView {
         super.rightMouseUp(with: event)
         guard let menu = menuBuilder?(self) else { return }
         let location = convert(event.locationInWindow, from: nil)
+        (config ?? .default).didTap?(self)
         menu.popUp(positioning: nil, at: location, in: self)
     }
 }
