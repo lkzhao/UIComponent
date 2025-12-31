@@ -187,7 +187,7 @@ public class PrimaryMenu: PlatformView {
     public var menuBuilder: ((PrimaryMenu) -> PlatformMenu)?
 
     /// A closure that provides a cursor when the view is hovered.
-    public var pointerStyleProvider: (() -> NSCursor?)?
+    public var pointerStyleProvider: (() -> PlatformPointerStyle?)?
 
     /// A flag indicating whether the view is currently in a pressed state.
     public private(set) var isPressed: Bool = false {
