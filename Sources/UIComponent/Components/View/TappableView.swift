@@ -328,6 +328,7 @@ open class TappableView: PlatformView {
     private var didPushCursor = false
     private var isControlClick = false
     private var activeLongPressGesture: PlatformLongPressGesture?
+    private var pressLocationInView: CGPoint?
 
     /// A closure that provides a context menu to be displayed when the TappableView is right-clicked or long-pressed.
     public var contextMenuProvider: ((TappableView) -> PlatformMenu?)?
@@ -438,7 +439,7 @@ open class TappableView: PlatformView {
             self.onLongPress?(self, gesture)
 
             if let menu = self.contextMenuProvider?(self) {
-                let location = self.convert(self.window?.mouseLocationOutsideOfEventStream ?? .zero, from: nil)
+                let location = self.pressLocationInView ?? .zero
                 menu.popUp(positioning: nil, at: location, in: self)
             }
         }
@@ -449,6 +450,7 @@ open class TappableView: PlatformView {
     open override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
         isHighlighted = true
+        pressLocationInView = convert(event.locationInWindow, from: nil)
         isControlClick = event.modifierFlags.contains(.control) && contextMenuProvider != nil
         scheduleLongPressIfNeeded()
     }
@@ -463,6 +465,7 @@ open class TappableView: PlatformView {
         defer { isHighlighted = false }
         super.mouseUp(with: event)
         cancelLongPress(sendCancel: false)
+        defer { pressLocationInView = nil }
         let location = convert(event.locationInWindow, from: nil)
         guard bounds.contains(location) else { return }
 
@@ -502,6 +505,7 @@ open class TappableView: PlatformView {
         super.mouseExited(with: event)
         isHighlighted = false
         cancelLongPress()
+        pressLocationInView = nil
         if didPushCursor {
             NSCursor.pop()
             didPushCursor = false
