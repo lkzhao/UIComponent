@@ -335,6 +335,31 @@ open class TappableView: PlatformView {
     /// A closure that provides a cursor when the view is hovered.
     public var pointerStyleProvider: (() -> NSCursor?)?
 
+    /// The pasteboard types this view accepts for drop.
+    /// Setting this to a non-empty array registers the view as a drop destination.
+    public var dropTypes: [NSPasteboard.PasteboardType] = [] {
+        didSet {
+            guard dropTypes != oldValue else { return }
+            if dropTypes.isEmpty {
+                unregisterDraggedTypes()
+            } else {
+                registerForDraggedTypes(dropTypes)
+            }
+        }
+    }
+
+    /// Called when a drag enters the view.
+    public var onDragEntered: ((TappableView, NSDraggingInfo) -> NSDragOperation)?
+
+    /// Called when a drag updates within the view.
+    public var onDragUpdated: ((TappableView, NSDraggingInfo) -> NSDragOperation)?
+
+    /// Called when a drag exits the view.
+    public var onDragExited: ((TappableView, NSDraggingInfo) -> Void)?
+
+    /// Called to perform the drop operation.
+    public var onPerformDrop: ((TappableView, NSDraggingInfo) -> Bool)?
+
     /// The configuration object for the TappableView, which defines the behavior of the view when it is tapped or highlighted.
     public var config: TappableViewConfig?
 
@@ -461,6 +486,35 @@ open class TappableView: PlatformView {
         guard let menu = contextMenuProvider?(self) else { return }
         let location = convert(event.locationInWindow, from: nil)
         menu.popUp(positioning: nil, at: location, in: self)
+    }
+
+    // MARK: - Drag & Drop
+
+    open override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+        if let onDragEntered {
+            return onDragEntered(self, sender)
+        }
+        return dropTypes.isEmpty ? [] : .copy
+    }
+
+    open override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
+        if let onDragUpdated {
+            return onDragUpdated(self, sender)
+        }
+        return dropTypes.isEmpty ? [] : .copy
+    }
+
+    open override func draggingExited(_ sender: NSDraggingInfo?) {
+        super.draggingExited(sender)
+        guard let sender else { return }
+        onDragExited?(self, sender)
+    }
+
+    open override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        if let onPerformDrop {
+            return onPerformDrop(self, sender)
+        }
+        return false
     }
 }
 #endif
