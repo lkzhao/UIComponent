@@ -12,8 +12,8 @@ extension Component {
         ViewWrapperComponent(component: self)
     }
 
-    /// Wraps the component in a `UIScrollView`.
-    /// - Returns: A `ViewWrapperComponent` that renders the component within a `UIScrollView`.
+    /// Wraps the component in a `PlatformScrollView`.
+    /// - Returns: A `ViewWrapperComponent` that renders the component within a `PlatformScrollView`.
     public func scrollView() -> ViewWrapperComponent<PlatformScrollView> {
         ViewWrapperComponent(component: self)
     }
