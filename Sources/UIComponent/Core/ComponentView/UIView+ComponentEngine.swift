@@ -27,6 +27,9 @@ extension PlatformView {
         }
         let componentEngine = ComponentEngine(view: self)
         _componentEngine = componentEngine
+#if os(macOS)
+        _ = NSView.swizzle_layout
+#endif
         _startObservingLayoutForUIComponent()
         return componentEngine
     }
@@ -64,16 +67,32 @@ extension PlatformView {
         let center = NotificationCenter.default
         let tokens: [NSObjectProtocol] = [
             center.addObserver(forName: NSView.frameDidChangeNotification, object: self, queue: nil) { [weak self] _ in
-                self?._componentEngine?.setNeedsRender()
+                self?._componentEngine?.layoutSubview()
             },
             center.addObserver(forName: NSView.boundsDidChangeNotification, object: self, queue: nil) { [weak self] _ in
-                self?._componentEngine?.setNeedsRender()
+                self?._componentEngine?.layoutSubview()
             },
         ]
         objc_setAssociatedObject(self, &AssociatedKeys.layoutObserverTokens, tokens, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
 #endif
 }
+
+#if os(macOS)
+extension NSView {
+    static let swizzle_layout: Void = {
+        guard let originalMethod = class_getInstanceMethod(NSView.self, NSSelectorFromString("layout")),
+              let swizzledMethod = class_getInstanceMethod(NSView.self, #selector(swizzled_layout))
+        else { return }
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+    }()
+
+    @objc func swizzled_layout() {
+        swizzled_layout()
+        _componentEngine?.layoutSubview()
+    }
+}
+#endif
 
 #if canImport(UIKit)
 extension PlatformView {

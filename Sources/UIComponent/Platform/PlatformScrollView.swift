@@ -31,7 +31,7 @@ open class PlatformScrollView: NSScrollView, ComponentDisplayableView {
             object: contentView,
             queue: nil
         ) { [weak self] _ in
-            self?.componentEngine.setNeedsRender()
+            self?.componentEngine.layoutSubview()
         }
 
         // Ensure subviews are mounted into the document view.
@@ -57,7 +57,7 @@ open class PlatformScrollView: NSScrollView, ComponentDisplayableView {
             object: contentView,
             queue: nil
         ) { [weak self] _ in
-            self?.componentEngine.setNeedsRender()
+            self?.componentEngine.layoutSubview()
         }
 
         componentEngine.contentView = documentView
