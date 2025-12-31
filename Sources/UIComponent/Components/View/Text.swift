@@ -203,12 +203,20 @@ public struct TextRenderNode: RenderNode {
 #if canImport(UIKit)
         UILabel()
 #else
-        let label = NSTextField(labelWithString: "")
+        let label: NSTextField
+        if numberOfLines == 1 || lineBreakMode == .byTruncatingHead || lineBreakMode == .byTruncatingMiddle || lineBreakMode == .byTruncatingTail || lineBreakMode == .byClipping {
+            label = NSTextField(labelWithString: "")
+        } else {
+            label = NSTextField(wrappingLabelWithString: "")
+        }
         label.isSelectable = false
         label.isEditable = false
         label.isBezeled = false
         label.drawsBackground = false
         label.allowsEditingTextAttributes = true
+        label.cell?.wraps = numberOfLines != 1
+        label.cell?.isScrollable = false
+        label.cell?.usesSingleLineMode = numberOfLines == 1
         return label
 #endif
     }
@@ -224,6 +232,9 @@ public struct TextRenderNode: RenderNode {
         content.apply(to: view)
         view.textColor = textColor
         view.cell?.lineBreakMode = lineBreakMode
+        view.cell?.wraps = numberOfLines != 1
+        view.cell?.isScrollable = false
+        view.cell?.usesSingleLineMode = numberOfLines == 1
         if numberOfLines != 0 {
             view.maximumNumberOfLines = numberOfLines
         } else {
@@ -232,4 +243,3 @@ public struct TextRenderNode: RenderNode {
 #endif
     }
 }
-
