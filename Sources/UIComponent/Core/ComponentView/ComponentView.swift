@@ -27,7 +27,7 @@ open class ComponentView: PlatformView, ComponentDisplayableView {
 ///
 /// See ``ComponentDisplayableView`` for usage details.
 #if os(macOS)
-public typealias ComponentScrollView = PlatformScrollView
+open class ComponentScrollView: PlatformScrollView {}
 #elseif canImport(UIKit)
 open class ComponentScrollView: PlatformScrollView, ComponentDisplayableView {}
 #endif
