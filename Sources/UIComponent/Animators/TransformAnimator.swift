@@ -1,6 +1,5 @@
 //  Created by Luke Zhao on 2018-12-27.
 
-#if canImport(UIKit)
 @available(*, deprecated, renamed: "TransformAnimator")
 public typealias AnimatedReloadAnimator = TransformAnimator
 
@@ -37,6 +36,7 @@ public struct TransformAnimator: Animator {
         self.showInsertionAnimationOnOutOfBoundsItems = showInsertionAnimationOnOutOfBoundsItems
     }
 
+#if canImport(UIKit)
     public func delete(hostingView: UIView, view: UIView, completion: @escaping () -> Void) {
         if hostingView.componentEngine.isReloading, hostingView.bounds.intersects(view.frame) {
             let baseTransform = view.layer.transform
@@ -128,5 +128,29 @@ public struct TransformAnimator: Animator {
             )
         }
     }
-}
+#else
+    public func delete(hostingView: PlatformView, view: PlatformView, completion: @escaping () -> Void) {
+        completion()
+    }
+
+    public func insert(hostingView: PlatformView, view: PlatformView, frame: CGRect) {
+        view.bounds.size = frame.size
+        view.center = frame.center
+        view.wantsLayer = true
+        view.layer?.transform = CATransform3DIdentity
+        view.alpha = 1
+    }
+
+    public func update(hostingView _: PlatformView, view: PlatformView, frame: CGRect) {
+        if view.bounds.size != frame.size {
+            view.bounds.size = frame.size
+        }
+        if view.center != frame.center {
+            view.center = frame.center
+        }
+        if view.alpha != 1 {
+            view.alpha = 1
+        }
+    }
 #endif
+}
