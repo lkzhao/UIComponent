@@ -44,8 +44,20 @@ private func screenScale() -> CGFloat {
     #if os(visionOS)
     return 2.0
     #elseif os(macOS)
-    return NSScreen.main?.backingScaleFactor ?? 2.0
+    if Thread.isMainThread {
+        return NSScreen.main?.backingScaleFactor ?? 2.0
+    } else {
+        return DispatchQueue.main.sync {
+            NSScreen.main?.backingScaleFactor ?? 2.0
+        }
+    }
     #else
-    return UIScreen.main.scale
+    if Thread.isMainThread {
+        return UIScreen.main.scale
+    } else {
+        return DispatchQueue.main.sync {
+            UIScreen.main.scale
+        }
+    }
     #endif
 }
