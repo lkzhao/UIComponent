@@ -350,10 +350,13 @@ public final class ComponentEngine {
                     renderable.renderNode._updateView(cell)
                 }
 #else
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
                 cell.bounds.size = frame.bounds.size
                 cell.center = frame.center
                 cell.layoutIfNeeded()
                 renderable.renderNode._updateView(cell)
+                CATransaction.commit()
 #endif
                 animator.insert(hostingView: view, view: cell, frame: frame)
                 newViews[index] = cell
