@@ -1,6 +1,5 @@
 //  Created by Luke Zhao on 6/8/21.
 
-#if canImport(UIKit)
 /// TappableViewConfig is a structure that defines the configuration for a TappableView.
 /// It contains closures that can be used to customize the behavior of the view when it is tapped or highlighted.
 public struct TappableViewConfig {
@@ -67,7 +66,8 @@ public typealias TappableViewConfiguration = TappableViewConfig
 /// }.pointerStyleProvider {
 ///    UIPointerStyle(...) // return the pointer style you want to be displayed
 /// }
-open class TappableView: UIView {
+#if canImport(UIKit)
+open class TappableView: PlatformView {
     /// The configuration object for the TappableView, which defines the behavior of the view when it is tapped or highlighted.
     public var config: TappableViewConfig?
 
@@ -318,4 +318,64 @@ extension TappableView: UIContextMenuInteractionDelegate {
     }
 }
 #endif
+
+#elseif os(macOS)
+/// A macOS implementation of `TappableView` that supports tap and highlight behavior.
+open class TappableView: PlatformView {
+    /// The configuration object for the TappableView, which defines the behavior of the view when it is tapped or highlighted.
+    public var config: TappableViewConfig?
+
+    /// Deprecated: Use `config` instead.
+    @available(*, deprecated, renamed: "config")
+    public var configuration: TappableViewConfig? {
+        get { config }
+        set { config = newValue }
+    }
+
+    /// A closure that is called when the TappableView is tapped.
+    public var onTap: ((TappableView) -> Void)?
+
+    /// A closure that is called when the TappableView is double-tapped.
+    public var onDoubleTap: ((TappableView) -> Void)?
+
+    /// A Boolean value that determines whether the TappableView is in a highlighted state.
+    /// Changes to this property can trigger an update to the view's appearance.
+    open var isHighlighted: Bool = false {
+        didSet {
+            guard isHighlighted != oldValue else { return }
+            (config ?? .default).onHighlightChanged?(self, isHighlighted)
+        }
+    }
+
+    public override var isFlipped: Bool { true }
+
+    public override init(frame frameRect: CGRect) {
+        super.init(frame: frameRect)
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    open override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
+        isHighlighted = true
+    }
+
+    open override func mouseUp(with event: NSEvent) {
+        defer { isHighlighted = false }
+        super.mouseUp(with: event)
+        (config ?? .default).didTap?(self)
+        if event.clickCount == 2 {
+            onDoubleTap?(self)
+        } else {
+            onTap?(self)
+        }
+    }
+
+    open override func mouseExited(with event: NSEvent) {
+        super.mouseExited(with: event)
+        isHighlighted = false
+    }
+}
 #endif

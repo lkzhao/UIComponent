@@ -1,6 +1,5 @@
 //  Created by Luke Zhao on 1/18/24.
 
-#if canImport(UIKit)
 /// A component that renders a ``TappableView``
 public struct TappableViewComponent: Component {
     /// The configuration for the tappable view, obtained from the environment.
@@ -94,4 +93,3 @@ public extension Component {
         environment(\.tappableViewConfig, value: tappableViewConfig)
     }
 }
-#endif
