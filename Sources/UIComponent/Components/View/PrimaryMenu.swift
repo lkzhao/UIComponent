@@ -163,6 +163,7 @@ extension PrimaryMenu: UIPointerInteractionDelegate {
 @available(iOS 14.0, macOS 11.0, *)
 public class PrimaryMenu: PlatformView {
     private var trackingAreaToken: NSTrackingArea?
+    private var didPushCursor = false
 
     /// Indicates whether any `PrimaryMenu` is currently showing a menu.
     public static fileprivate(set) var isShowingMenu = false
@@ -249,12 +250,19 @@ public class PrimaryMenu: PlatformView {
 
     public override func mouseEntered(with event: NSEvent) {
         super.mouseEntered(with: event)
-        pointerStyleProvider?()?.set()
+        if let cursor = pointerStyleProvider?() {
+            cursor.push()
+            didPushCursor = true
+        }
     }
 
     public override func mouseExited(with event: NSEvent) {
         super.mouseExited(with: event)
         isPressed = false
+        if didPushCursor {
+            NSCursor.pop()
+            didPushCursor = false
+        }
     }
 
     public override func rightMouseUp(with event: NSEvent) {

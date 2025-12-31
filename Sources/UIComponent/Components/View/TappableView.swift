@@ -325,6 +325,7 @@ open class TappableView: PlatformView {
     private var trackingAreaToken: NSTrackingArea?
     private var longPressWorkItem: DispatchWorkItem?
     private var didTriggerLongPress = false
+    private var didPushCursor = false
 
     /// A closure that provides a context menu to be displayed when the TappableView is right-clicked or long-pressed.
     public var contextMenuProvider: ((TappableView) -> PlatformMenu?)?
@@ -466,13 +467,20 @@ open class TappableView: PlatformView {
 
     open override func mouseEntered(with event: NSEvent) {
         super.mouseEntered(with: event)
-        pointerStyleProvider?()?.set()
+        if let cursor = pointerStyleProvider?() {
+            cursor.push()
+            didPushCursor = true
+        }
     }
 
     open override func mouseExited(with event: NSEvent) {
         super.mouseExited(with: event)
         isHighlighted = false
         cancelLongPress()
+        if didPushCursor {
+            NSCursor.pop()
+            didPushCursor = false
+        }
     }
 
     open override func rightMouseDown(with event: NSEvent) {
@@ -485,6 +493,7 @@ open class TappableView: PlatformView {
         super.rightMouseUp(with: event)
         guard let menu = contextMenuProvider?(self) else { return }
         let location = convert(event.locationInWindow, from: nil)
+        (config ?? .default).didTap?(self)
         menu.popUp(positioning: nil, at: location, in: self)
     }
 
