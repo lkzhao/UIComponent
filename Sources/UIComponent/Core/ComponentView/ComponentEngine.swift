@@ -470,8 +470,13 @@ extension ComponentEngine {
 #else
 #if os(macOS)
         if let frame = renderNode?.frame(id: id), let scrollView = view as? PlatformScrollView {
-            scrollView.contentView.scroll(to: frame.origin)
-            scrollView.reflectScrolledClipView(scrollView.contentView)
+            if let documentView = scrollView.documentView {
+                documentView.scrollToVisible(frame)
+                scrollView.reflectScrolledClipView(scrollView.contentView)
+            } else {
+                scrollView.contentView.scroll(to: frame.origin)
+                scrollView.reflectScrolledClipView(scrollView.contentView)
+            }
             return true
         }
 #endif
