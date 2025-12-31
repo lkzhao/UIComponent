@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/6/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import Foundation
 
 struct ChapterLink: Component {
@@ -33,3 +34,4 @@ fileprivate extension UIView {
         scrollView.setContentOffset(CGPoint(x: 0, y: frame.minY - 20), animated: false)
     }
 }
+#endif

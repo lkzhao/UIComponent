@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/5/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 @Observable
@@ -420,7 +421,6 @@ class FlowExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-
 @GenerateCode
 class FilterChipsExampleView: UIView {
     @Observable
@@ -459,3 +459,4 @@ class FilterChipsExampleView: UIView {
     }
 }
 
+#endif

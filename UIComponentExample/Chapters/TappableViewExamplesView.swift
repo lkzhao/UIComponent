@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/5/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 class TappableViewExamplesView: UIView {
@@ -470,4 +471,4 @@ class TappableViewExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().delaysContentTouches(false).contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-
+#endif

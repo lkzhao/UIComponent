@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/5/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 class AnimationExamplesView: UIView {
@@ -534,8 +535,6 @@ class AnimationExamplesView: UIView {
             .fill()
     }
 }
-
-
 @GenerateCode
 struct FadeAnimator: Animator {
     let duration: TimeInterval
@@ -666,5 +665,4 @@ class AnimatedListExample: UIView {
     }
 }
 
-
-
+#endif

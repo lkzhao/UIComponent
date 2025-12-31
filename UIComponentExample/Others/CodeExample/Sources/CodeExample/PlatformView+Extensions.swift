@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/4/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIKit
 
 extension UIView {
@@ -95,18 +96,6 @@ extension UIView {
         }
     }
 
-    @objc open var firstResponder: UIView? {
-        if isFirstResponder {
-            return self
-        }
-        for subview in subviews {
-            if let firstResponder = subview.firstResponder {
-                return firstResponder
-            }
-        }
-        return nil
-    }
-
     @objc open class var isInAnimationBlock: Bool {
         UIView.perform(NSSelectorFromString("_isInAnimationBlock")) != nil
     }
@@ -166,3 +155,53 @@ extension UIView {
     }
 }
 
+#elseif os(macOS)
+import AppKit
+import QuartzCore
+
+extension NSView {
+    @objc open var cornerRadius: CGFloat {
+        get { layer?.cornerRadius ?? 0 }
+        set {
+            wantsLayer = true
+            layer?.cornerRadius = newValue
+        }
+    }
+
+    @objc open var cornerCurve: CALayerCornerCurve {
+        get { layer?.cornerCurve ?? .circular }
+        set {
+            wantsLayer = true
+            layer?.cornerCurve = newValue
+        }
+    }
+
+    @objc open var zPosition: CGFloat {
+        get { layer?.zPosition ?? 0 }
+        set {
+            wantsLayer = true
+            layer?.zPosition = newValue
+        }
+    }
+
+    @objc open var borderWidth: CGFloat {
+        get { layer?.borderWidth ?? 0 }
+        set {
+            wantsLayer = true
+            layer?.borderWidth = newValue
+        }
+    }
+
+    @objc open var borderColor: NSColor? {
+        get {
+            guard let cgColor = layer?.borderColor else { return nil }
+            return NSColor(cgColor: cgColor)
+        }
+        set {
+            wantsLayer = true
+            layer?.borderColor = newValue?.cgColor
+        }
+    }
+}
+
+#endif

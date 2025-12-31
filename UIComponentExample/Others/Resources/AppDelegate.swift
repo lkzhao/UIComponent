@@ -1,33 +1,67 @@
 //  Created by Luke Zhao on 11/4/25.
 
-@_exported import UIKit
 @_exported import CodeExample
 @_exported import UIComponent
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
+@_exported import UIKit
+
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        return true
+        true
     }
-
-    // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+        UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
-
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-    }
-
-
 }
 
+#elseif os(macOS)
+import AppKit
+
+@main
+final class AppDelegate: NSObject, NSApplicationDelegate {
+  private var window: NSWindow?
+
+  func applicationDidFinishLaunching(_ notification: Notification) {
+    let window = NSWindow(
+      contentRect: NSRect(x: 0, y: 0, width: 1000, height: 720),
+      styleMask: [.titled, .closable, .miniaturizable, .resizable],
+      backing: .buffered,
+      defer: false
+    )
+    window.title = "UIComponentExample"
+    window.center()
+
+    let hostingView = NSView()
+    hostingView.componentEngine.component = VStack(spacing: 12, justifyContent: .center, alignItems: .center) {
+      Text("UIComponent Example", font: .boldSystemFont(ofSize: 24))
+      Text("macOS build is a minimal shell (examples are iOS-first for now).", font: .systemFont(ofSize: 14))
+        .textColor(.systemGray)
+      Space(width: 200, height: 200).backgroundColor(.blue)
+    }
+    .inset(24)
+    .fill()
+
+    window.contentView = hostingView
+    window.makeKeyAndOrderFront(nil)
+    NSApp.activate(ignoringOtherApps: true)
+
+    self.window = window
+  }
+}
+
+class UIComponentExampleApplication: NSApplication {
+  let strongDelegate = AppDelegate()
+
+  override init() {
+    super.init()
+    self.delegate = strongDelegate
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+}
+#endif

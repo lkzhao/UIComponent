@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/6/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 class ViewHierarchyExamplesView: UIView {
@@ -629,4 +630,4 @@ class ViewHierarchyExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-
+#endif

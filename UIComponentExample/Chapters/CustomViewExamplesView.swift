@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/4/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 @GenerateCode
 class MyCustomView: UIView {
     var name: String = ""
@@ -15,3 +16,4 @@ class CustomViewExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
+#endif

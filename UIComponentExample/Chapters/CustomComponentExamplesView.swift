@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/6/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 class CustomComponentExamplesView: UIView {
@@ -931,11 +932,12 @@ struct DiagonalStack: Component {
         let size = CGSize(width: maxX, height: maxY)
         
         // Use SlowRenderNode since items aren't in sorted order
-        return SlowRenderNode(
-            size: size,
-            children: childrenRenderNodes,
-            positions: childrenPositions
-        )
+    return SlowRenderNode(
+        size: size,
+        children: childrenRenderNodes,
+        positions: childrenPositions
+    )
     }
 }
 
+#endif

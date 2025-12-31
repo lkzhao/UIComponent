@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/4/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -50,4 +51,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-
+#endif

@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/5/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 class ConstraintReaderExamplesView: UIView {
@@ -610,4 +611,4 @@ class ConstraintReaderExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-
+#endif

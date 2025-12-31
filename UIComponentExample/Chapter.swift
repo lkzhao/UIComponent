@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/5/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 struct Chapter: Equatable {
     let title: String
     let view: UIView.Type
@@ -83,3 +84,4 @@ struct Chapter: Equatable {
         ),
     ]
 }
+#endif

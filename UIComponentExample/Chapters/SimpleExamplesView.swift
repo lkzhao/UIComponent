@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/4/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 class SimpleExamplesView: UIView {
     @Observable
     class IntroViewModel {
@@ -80,5 +81,4 @@ class SimpleExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-
-
+#endif

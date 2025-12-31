@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/4/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 struct Block: ComponentBuilder {
     let text: String
     func build() -> some Component {
@@ -19,3 +20,4 @@ extension Component {
         }
     }
 }
+#endif

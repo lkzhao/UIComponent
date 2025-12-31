@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/4/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 class ViewController<View: UIView>: UIViewController {
     var rootView: View {
         view as! View
@@ -15,3 +16,4 @@ class ViewController<View: UIView>: UIViewController {
         self.view = View()
     }
 }
+#endif

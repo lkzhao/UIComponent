@@ -1,9 +1,6 @@
 //  Created by Luke Zhao on 11/4/25.
 
 import UIComponent
-import UIKit
-
-let sizingTextView = CodeTextView()
 
 public struct CodeExampleComponent: Component {
     public enum Style {
@@ -43,12 +40,28 @@ public struct CodeExampleComponent: Component {
 }
 
 public extension Component {
-    func codeBlockStyle(backgroundColor: UIColor = .systemGray.withAlphaComponent(0.1)) -> any Component {
+    func codeBlockStyle(backgroundColor: PlatformColor = {
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
+        UIColor.systemGray.withAlphaComponent(0.1)
+#elseif os(macOS)
+        NSColor.systemGray.withAlphaComponent(0.1)
+#else
+        PlatformColor.clear
+#endif
+    }()) -> any Component {
         self.backgroundColor(backgroundColor)
             .cornerRadius(10.0)
             .cornerCurve(.continuous)
             .borderWidth(0.5)
-            .borderColor(UIColor.separator)
+            .borderColor({
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
+                UIColor.separator
+#elseif os(macOS)
+                NSColor.separatorColor
+#else
+                nil
+#endif
+            }())
             .clipsToBounds(true)
     }
 }

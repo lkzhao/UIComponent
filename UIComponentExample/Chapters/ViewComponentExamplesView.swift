@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/5/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 class ViewComponentExamplesView: UIView {
@@ -202,7 +203,6 @@ class ViewComponentExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-
 // MARK: - Examples
 @GenerateCode
 class MyView: UIView {
@@ -232,3 +232,5 @@ class MySwitch: UISwitch {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+#endif

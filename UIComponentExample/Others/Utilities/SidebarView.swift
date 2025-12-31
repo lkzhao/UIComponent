@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/4/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 class SidebarView: UIView {
     let viewModel: HomeViewModel
 
@@ -35,3 +36,4 @@ class SidebarView: UIView {
         .fill()
     }
 }
+#endif

@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/4/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 extension UIFont {
     static let title = UIFont.boldSystemFont(ofSize: 32)
     static let subtitle = UIFont.boldSystemFont(ofSize: 20)
@@ -28,3 +29,4 @@ extension UIView {
         parentViewController?.view as? HomeView
     }
 }
+#endif

@@ -2,6 +2,10 @@
 
 import UIComponent
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
+private let sizingTextView = CodeTextView()
+#endif
+
 public struct CodeComponent: Component {
     let code: String
     public init(_ code: String) {
@@ -11,8 +15,15 @@ public struct CodeComponent: Component {
         self.code = codeBlock()
     }
     public func layout(_ constraint: Constraint) -> some RenderNode {
+        let size: CGSize
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
         sizingTextView.code = code
-        let size = sizingTextView.sizeThatFits(constraint.maxSize)
+        size = sizingTextView.sizeThatFits(constraint.maxSize)
+#elseif os(macOS)
+        size = CodeTextView.sizeThatFits(code: code, in: constraint.maxSize)
+#else
+        size = .zero
+#endif
         return ViewComponent<CodeTextView>().code(code).size(size).inset(-4).layout(constraint)
     }
 }

@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/5/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import Kingfisher
 
 struct AsyncImage: ComponentBuilder {
@@ -13,3 +14,4 @@ struct AsyncImage: ComponentBuilder {
             .eraseToAnyComponentOfView()
     }
 }
+#endif

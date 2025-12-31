@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/4/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 struct InlineCode: ComponentBuilder {
     let code: String
     init(_ code: String) {
@@ -19,3 +20,4 @@ struct InlineCode: ComponentBuilder {
             .inset(v: -6)
     }
 }
+#endif

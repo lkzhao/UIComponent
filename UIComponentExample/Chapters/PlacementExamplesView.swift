@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/5/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 class PlacementExamplesView: UIView {
@@ -191,7 +192,6 @@ class PlacementExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-
 // Helper gradient view for background example
 class GradientView: UIView {
     override class var layerClass: AnyClass {
@@ -215,3 +215,5 @@ struct Circle: ComponentBuilder {
             .roundedCorner()
     }
 }
+
+#endif

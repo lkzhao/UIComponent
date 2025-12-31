@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/5/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 class EnvironmentExamplesView: UIView {
@@ -423,7 +424,6 @@ class EnvironmentExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-
 // MARK: - Supporting Types
 
 struct User {
@@ -490,3 +490,4 @@ struct UserProfileComponent: Component {
     }
 }
 
+#endif

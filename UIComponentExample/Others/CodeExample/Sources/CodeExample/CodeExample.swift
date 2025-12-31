@@ -1,5 +1,4 @@
 import UIComponent
-import UIKit
 
 @freestanding(expression)
 public macro CodeExample(_ value: any Component) -> any Component = #externalMacro(module: "CodeExampleMacros", type: "CodeExampleMacro")

@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/5/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 @Observable
@@ -225,7 +226,6 @@ class WaterfallExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-
 class ImageDetailView: UIView {
     var imageData: ImageData? {
         didSet {
@@ -249,3 +249,4 @@ class ImageDetailView: UIView {
     }
 }
 
+#endif

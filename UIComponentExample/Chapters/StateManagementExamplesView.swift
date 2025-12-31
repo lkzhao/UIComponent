@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/6/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 class StateManagementExamplesView: UIView {
@@ -349,7 +350,6 @@ class StateManagementExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-
 // MARK: - Manual State Management Examples
 
 @GenerateCode
@@ -449,7 +449,6 @@ class AutoCounterExample: UIView {
         .fill()
     }
 }
-
 
 // MARK: - List Item State Examples
 
@@ -568,3 +567,4 @@ class ComplexListExample: UIView {
     }
 }
 
+#endif

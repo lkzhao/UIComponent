@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/5/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIComponent
 
 class PerformanceOptimizationExamplesView: UIView {
@@ -619,7 +620,6 @@ class PerformanceOptimizationExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-
 // MARK: - Example Views
 
 @GenerateCode
@@ -705,3 +705,4 @@ class OptimizedItemCell: UIView {
     }
 }
 
+#endif

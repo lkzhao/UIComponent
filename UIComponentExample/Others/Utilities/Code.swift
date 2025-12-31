@@ -1,5 +1,6 @@
 //  Created by Luke Zhao on 11/4/25.
 
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 struct Code: ComponentBuilder {
     let code: String
     init(_ code: String) {
@@ -18,3 +19,4 @@ struct Code: ComponentBuilder {
             .clipsToBounds(true)
     }
 }
+#endif
