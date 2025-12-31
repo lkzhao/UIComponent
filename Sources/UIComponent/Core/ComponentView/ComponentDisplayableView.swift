@@ -119,12 +119,16 @@ extension ComponentDisplayableView {
     }
 }
 
+#if canImport(UIKit)
 extension ComponentDisplayableView where Self: PlatformScrollView {
     public var contentView: PlatformView? {
         get { componentEngine.contentView }
         set { componentEngine.contentView = newValue }
     }
+}
+#endif
 
+extension ComponentDisplayableView where Self: PlatformScrollView {
     @discardableResult public func scrollTo(id: String, animated: Bool) -> Bool {
         componentEngine.scrollTo(id: id, animated: animated)
     }
