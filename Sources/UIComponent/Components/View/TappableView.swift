@@ -590,6 +590,7 @@ open class TappableView: PlatformView {
         super.rightMouseUp(with: event)
         guard let menu = contextMenuProvider?(self) else { return }
         let location = convert(event.locationInWindow, from: nil)
+        guard bounds.contains(location) else { return }
         (config ?? .default).didTap?(self)
         menu.popUp(positioning: nil, at: location, in: self)
     }
