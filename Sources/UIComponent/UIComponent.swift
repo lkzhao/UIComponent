@@ -20,8 +20,14 @@ public typealias PlatformImageConfiguration = UIImage.Configuration
 public typealias PlatformLabel = UILabel
 public typealias PlatformMenu = UIMenu
 public typealias PlatformRectEdge = UIRectEdge
+
+#if os(tvOS)
+public struct PlatformPointerStyle {}
+#else
 @available(iOS 13.4, *)
 public typealias PlatformPointerStyle = UIPointerStyle
+#endif
+
 public typealias PlatformLongPressGesture = UILongPressGestureRecognizer
 
 #elseif canImport(AppKit)
