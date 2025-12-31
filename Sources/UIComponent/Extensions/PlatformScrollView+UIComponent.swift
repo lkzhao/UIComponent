@@ -88,8 +88,19 @@ extension PlatformScrollView {
         default:
             return
         }
-        contentView.scroll(to: target)
-        reflectScrolledClipView(contentView)
+        if animated {
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = 0.25
+                context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                contentView.animator().setBoundsOrigin(target)
+            } completionHandler: { [weak self] in
+                guard let self else { return }
+                self.reflectScrolledClipView(self.contentView)
+            }
+        } else {
+            contentView.scroll(to: target)
+            reflectScrolledClipView(contentView)
+        }
 #else
         let target: CGPoint
         switch edge {

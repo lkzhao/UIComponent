@@ -474,7 +474,30 @@ extension ComponentEngine {
 #else
 #if os(macOS)
         if let frame = renderNode?.frame(id: id), let scrollView = view as? PlatformScrollView {
-            if let documentView = scrollView.documentView {
+            if animated {
+                let visible = scrollView.contentView.bounds
+                var target = visible.origin
+
+                if frame.minX < visible.minX {
+                    target.x = frame.minX
+                } else if frame.maxX > visible.maxX {
+                    target.x = frame.maxX - visible.width
+                }
+
+                if frame.minY < visible.minY {
+                    target.y = frame.minY
+                } else if frame.maxY > visible.maxY {
+                    target.y = frame.maxY - visible.height
+                }
+
+                NSAnimationContext.runAnimationGroup { context in
+                    context.duration = 0.25
+                    context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                    scrollView.contentView.animator().setBoundsOrigin(target)
+                } completionHandler: {
+                    scrollView.reflectScrolledClipView(scrollView.contentView)
+                }
+            } else if let documentView = scrollView.documentView {
                 documentView.scrollToVisible(frame)
                 scrollView.reflectScrolledClipView(scrollView.contentView)
             } else {
