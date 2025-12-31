@@ -4,7 +4,7 @@ public struct UpdateRenderNode<Content: RenderNode>: RenderNodeWrapper {
     public let update: (Content.View) -> Void
 
     public var shouldRenderView: Bool {
-        true // UIView has custom property. So we should render it.
+        true // PlatformView may have custom property. So we should render it.
     }
 
     public func updateView(_ view: Content.View) {
@@ -25,7 +25,7 @@ public struct KeyPathUpdateRenderNode<Value, Content: RenderNode>: RenderNodeWra
     }
 
     public var shouldRenderView: Bool {
-        true // UIView has custom property. So we should render it.
+        true // PlatformView may have custom property. So we should render it.
     }
 }
 

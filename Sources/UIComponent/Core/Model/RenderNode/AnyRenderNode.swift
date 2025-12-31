@@ -51,7 +51,7 @@ public struct AnyRenderNode: RenderNode {
     }
 }
 
-/// A type-erased wrapper for any `RenderNode` specialized for a specific `UIView` subclass.
+/// A type-erased wrapper for any `RenderNode` specialized for a specific `PlatformView` subclass.
 public struct AnyRenderNodeOfView<View: PlatformView>: RenderNode {
     /// The underlying `RenderNode` instance being type-erased.
     public let erasing: any RenderNode

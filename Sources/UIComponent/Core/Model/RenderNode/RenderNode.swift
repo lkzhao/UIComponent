@@ -13,10 +13,10 @@ public extension RenderNodeContextKey {
     static let reuseKey = RenderNodeContextKey("reuseKey")
 }
 
-/// Render nodes are responsible for storing the layout information, generating UIView for rendering, and updating UIView upon reload.
+/// Render nodes are responsible for storing the layout information, generating `PlatformView` for rendering, and updating `PlatformView` upon reload.
 @dynamicMemberLookup
 public protocol RenderNode<View> {
-    /// The `UIView` class that this render node represents.
+    /// The `PlatformView` class that this render node represents.
     associatedtype View: PlatformView
 
     /// A Boolean value indicating whether the render node should render its own view.

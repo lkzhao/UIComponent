@@ -28,7 +28,7 @@ public struct AnyComponent: Component {
     }
 }
 
-/// A type-erased `Component` that is specialized for a specific `UIView` subclass.
+/// A type-erased `Component` that is specialized for a specific `PlatformView` subclass.
 ///
 /// Instead of creating ``AnyComponentOfView`` directly, It is easier to use the ``Component/eraseToAnyComponentOfView()`` modifier to create a type-erased component.
 /// ```swift
