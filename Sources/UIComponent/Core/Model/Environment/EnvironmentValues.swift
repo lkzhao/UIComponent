@@ -89,9 +89,8 @@ public struct EnvironmentValues {
     internal static func with<Result>(values: EnvironmentValues, accessor: () throws -> Result) rethrows -> Result {
         saveCurrentValues()
         current.merge(other: values)
-        let result = try accessor()
-        restoreCurrentValues()
-        return result
+        defer { restoreCurrentValues() }
+        return try accessor()
     }
 }
 
