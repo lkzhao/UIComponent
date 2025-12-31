@@ -77,8 +77,9 @@ public class PrimaryMenu: UIControl {
     private var _pointerStyleProvider: Any?
 
     /// A closure that provides a pointer style when the control is hovered over with a pointer device.
-    public var pointerStyleProvider: (() -> UIPointerStyle?)? {
-        get { _pointerStyleProvider as? () -> UIPointerStyle? }
+    @available(iOS 13.4, *)
+    public var pointerStyleProvider: (() -> PlatformPointerStyle?)? {
+        get { _pointerStyleProvider as? () -> PlatformPointerStyle? }
         set { _pointerStyleProvider = newValue }
     }
 
