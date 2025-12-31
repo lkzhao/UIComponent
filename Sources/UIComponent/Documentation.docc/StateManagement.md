@@ -16,18 +16,25 @@ We recommend writing a `reloadComponent` method and update the `component` field
 struct MyViewModel {
     var count: Int = 0
 }
-class MyViewController: UIViewController {
+final class MyHostingView: PlatformView {
     var viewModel = MyViewModel() {
         didSet {
             reloadComponent()
         }
     }
-    func viewDidLoad() {
-        super.viewDidLoad()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         reloadComponent()
     }
-    func reloadComponent() {
-        view.componentEngine.component = VStack {
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        reloadComponent()
+    }
+
+    private func reloadComponent() {
+        componentEngine.component = VStack {
             Text("Count: \(viewModel.count)")
             Text("Increase").tappableView { [weak self] in
                 self?.viewModel.count += 1
@@ -42,8 +49,8 @@ You might be thinking that recreating the entire Component tree every time is in
 
 There are a few reasons why this is quick to do.
 * Components are swift value types, which are super cheap to construct because they are statically created on the stack rather than on the heap.
-* Although the Component tree is recreated, UIComponent can smartly compare the old Component tree with the new one, and only applies the changes to the UIView hierarchy. This is similar to how [React's Virtual DOM](https://legacy.reactjs.org/docs/faq-internals.html) works.
-* Expensive UIViews are not created unless they become visible.
+* Although the Component tree is recreated, UIComponent can smartly compare the old Component tree with the new one, and only applies the changes to the view hierarchy. This is similar to how [React's Virtual DOM](https://legacy.reactjs.org/docs/faq-internals.html) works.
+* Expensive views are not created unless they become visible.
 * UIComponent can also recycle the views that are no longer visible. This is similar to how the ``UITableView`` works.
 
 If you are worried about performance, there are are few optimization tricks that you can follow in <doc:PerformanceOptimization>.
@@ -53,7 +60,7 @@ If you are worried about performance, there are are few optimization tricks that
 For complex UI, sometimes you don't want to propagate every action to the top level. If this is the case, we recommend creating a custom View that manages the local state.
 
 ```swift
-class ProfileCell: UIView {
+class ProfileCell: PlatformView {
     // external state
     var profile: Profile?  {
         didSet {
@@ -63,7 +70,7 @@ class ProfileCell: UIView {
         }
     }
     // internal state
-    private var profileImage: UIImage? {
+    private var profileImage: PlatformImage? {
         didSet {
             guard profileImage != oldValue else { return }
             reloadComponent()
@@ -73,7 +80,7 @@ class ProfileCell: UIView {
     func reloadComponent() {
         componentEngine.component = VStack {
             HStack {
-                Image(profileImage ?? UIImage(named: "placeholder")!)
+                Image(profileImage ?? PlatformImage(named: "placeholder")!)
                     .size(width: 50, height: 50)
                     .with(\.layer.cornerRadius, 25)
                     .clipsToBounds(true)

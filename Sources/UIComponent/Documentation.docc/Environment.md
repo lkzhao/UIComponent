@@ -24,8 +24,8 @@ In your ``Component`` or ``ComponentBuilder``, use the ``Environment`` property 
 
 ```swift
 struct MyComponent: Component {
-    @Environment(\.font) var font: UIFont
-    @Environment(\.hostingView) var hostingView: UIView?
+    @Environment(\.font) var font: PlatformFont?
+    @Environment(\.hostingView) var hostingView: PlatformView?
     
     func layout(_ constraint: Constraint) -> some RenderNode {
         Text("Hello World")
@@ -48,7 +48,7 @@ VStack {
     MyComponent() // Will use the custom font and color
     Text("Another text") // Will also use the custom font and color
 }
-.font(UIFont.boldSystemFont(ofSize: 20))
+.font(.boldSystemFont(ofSize: 20))
 .textColor(.systemBlue)
 ```
 
@@ -61,8 +61,8 @@ VStack {
     MyComponent()
     Text("Another text")
 }
-.environment(\.font, value: UIFont.boldSystemFont(ofSize: 20))
-.environment(\.textColor, value: UIColor.systemBlue)
+.environment(\.font, value: .boldSystemFont(ofSize: 20))
+.environment(\.textColor, value: .systemBlue)
 ```
 
 **When to use each approach:**
@@ -101,15 +101,23 @@ VStack {
 
 ### Hosting View Environment
 
-Access the current hosting view (the UIView that contains your components):
+Access the current hosting view (the `PlatformView` that contains your components):
 
 ```swift
 struct CustomComponent: Component {
-    @Environment(\.hostingView) var hostingView: UIView?
+    @Environment(\.hostingView) var hostingView: PlatformView?
     
     func layout(_ constraint: Constraint) -> some RenderNode {
         // Access hosting view properties
-        let isDarkMode = hostingView?.traitCollection.userInterfaceStyle == .dark
+        let isDarkMode: Bool = {
+            #if canImport(UIKit)
+            hostingView?.traitCollection.userInterfaceStyle == .dark
+            #elseif canImport(AppKit)
+            hostingView?.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            #else
+            false
+            #endif
+        }()
         
         return Text("Hello")
             .textColor(isDarkMode ? .white : .black)
@@ -192,11 +200,11 @@ struct UserProfileComponent: Component {
                     .font(.boldSystemFont(ofSize: 18))
                 Text(user.email)
                     .font(.systemFont(ofSize: 14))
-                    .textColor(.secondaryLabel)
+                    .textColor(.systemGray)
             }.layout(constraint)
         } else {
             return Text("Please log in")
-                .textColor(.secondaryLabel)
+                .textColor(.systemGray)
                 .layout(constraint)
         }
     }
@@ -239,10 +247,14 @@ Environment values can be computed dynamically:
 
 ```swift
 struct ResponsiveComponent: Component {
-    @Environment(\.hostingView) var hostingView: UIView?
+    @Environment(\.hostingView) var hostingView: PlatformView?
     
     private var isCompact: Bool {
+        #if canImport(UIKit)
         hostingView?.traitCollection.horizontalSizeClass == .compact
+        #else
+        false
+        #endif
     }
     
     func layout(_ constraint: Constraint) -> some RenderNode {

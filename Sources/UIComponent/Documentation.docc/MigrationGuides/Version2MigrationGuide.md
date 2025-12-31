@@ -12,7 +12,7 @@ Space(width: 300, height: 300).view().backgroundColor(.red)
 Space(width: 300, height: 300).backgroundColor(.red)
 ```
 
-The `.view()` modifier was required because `Space` isn't a `ViewComponent` so it doesn't render a UIView onto the screen. Version 2.0 relaxes this requirement and allows any component to render a view onto the screen. The component's renderNode can return `true` for `shouldRenderView` to let the system know that it wants to render a view onto the screen. And corresponding `makeView` and `updateView` will be called if so.
+The `.view()` modifier was required because `Space` isn't a `ViewComponent` so it doesn't render a `PlatformView` onto the screen. Version 2.0 relaxes this requirement and allows any component to render a view onto the screen. The component's renderNode can return `true` for `shouldRenderView` to let the system know that it wants to render a view onto the screen. And corresponding `makeView` and `updateView` will be called if so.
 
 Modifiers can also wrap exising components and force components to render a view. In the above example, `Space` component doesn't usually render a view. But because `.backgroundColor` modifier is applied, it now becomes a `ViewUpdateComponent` which forces it to render a view.
 

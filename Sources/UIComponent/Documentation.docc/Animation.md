@@ -4,7 +4,7 @@ Learn how to animate view transitions
 
 ## Overview
 
-UIComponent allows you to configure an ``Animator`` object to the ``CompoenentEngine`` or at the individual Component level to animate view transitions. Whenever a view is inserted, deleted, or its frame got updated, the animator will be called to perform the corresponding animation. 
+UIComponent allows you to configure an ``Animator`` object to the ``ComponentEngine`` or at the individual Component level to animate view transitions. Whenever a view is inserted, deleted, or its frame got updated, the animator will be called to perform the corresponding animation.
 
 There is also a built-in ``Animator`` called ``TransformAnimator`` which you can use directly.
 
@@ -41,21 +41,44 @@ You can also use the following modifiers to configure custom animation without c
 Text("Animated Insert/Delete/Update")
     .animateInsert { hostingView, view, frame in
         view.alpha = 0.0
+        #if canImport(UIKit)
         UIView.animate(withDuration: 0.3) {
             view.alpha = 1.0
         }
+        #elseif canImport(AppKit)
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.3
+            view.animator().alphaValue = 1.0
+        }
+        #endif
     }
     .animateDelete { hostingView, view, completion in
+        #if canImport(UIKit)
         UIView.animate(withDuration: 0.3) {
             view.alpha = 0.0
         } completion: { _ in
             completion()
         }
+        #elseif canImport(AppKit)
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = 0.3
+            view.animator().alphaValue = 0.0
+        }, completionHandler: completion)
+        #else
+        completion()
+        #endif
     }
     .animateUpdate { hostingView, view, frame in
+        #if canImport(UIKit)
         UIView.animate(withDuration: 0.3) {
             view.frame = frame
         }
+        #elseif canImport(AppKit)
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.3
+            view.animator().frame = frame
+        }
+        #endif
     }
 ```
 
@@ -79,23 +102,32 @@ struct FadeAnimator: Animator {
         self.duration = duration
     }
     
-    func delete(hostingView: UIView, view: UIView,
+    func delete(hostingView: PlatformView, view: PlatformView,
                                 completion: @escaping () -> Void) {
         if  // Only animate when the hostingView's component is updated, not when scrolling.
             hostingView.isReloading, 
             // only animate if the view is deleted visibly on screen. Drop the animation if the cell is not visible.
             hostingView.bounds.intersects(view.frame) {
+            #if canImport(UIKit)
             UIView.animate(withDuration: duration, delay: 0, options: [.allowUserInteraction], animations: {
                 view.alpha = 0
             }, completion: { _ in
                 completion()
             })
+            #elseif canImport(AppKit)
+            NSAnimationContext.runAnimationGroup({ context in
+                context.duration = duration
+                view.animator().alphaValue = 0
+            }, completionHandler: completion)
+            #else
+            completion()
+            #endif
         } else {
             completion()
         }
     }
     
-    func insert(hostingView: UIView, view: UIView, frame: CGRect) {
+    func insert(hostingView: PlatformView, view: PlatformView, frame: CGRect) {
         view.bounds.size = frame.bounds.size
         view.center = frame.center
         if  // Only animate when the hostingView's component is updated, not when scrolling.
@@ -106,13 +138,19 @@ struct FadeAnimator: Animator {
             hostingView.bounds.intersects(frame)
         {
             view.alpha = 0
+            #if canImport(UIKit)
             UIView.animate(withDuration: duration, delay: 0, options: [.allowUserInteraction], animations: {
                 view.alpha = 1
             })
+            #elseif canImport(AppKit)
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = duration
+                view.animator().alphaValue = 1
+            }
+            #endif
         }
     }
 }
 ```
 
 Checkout `TransformAnimator.swift` to see further example of how to implement a custom animator.
-

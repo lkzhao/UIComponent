@@ -22,7 +22,7 @@ VStack(spacing: 8, alignItems: .center) {
 
 ![](ComponentBasics)
 
-To render the ``Component`` on a view, assign the component to the ``UIView.componentEngine.component`` property. The view will automatically reload and display the UI.
+To render the ``Component`` on a view, assign the component to the ``PlatformView.componentEngine.component`` property. The view will automatically reload and display the UI.
 
 ```swift
 // Basic rendering
@@ -54,14 +54,14 @@ VStack {
 
 ### SwiftUI Integration (v5.0+)
 
-UIComponent can seamlessly integrate SwiftUI views alongside UIKit components. UIComponent's result builder is configured to automatically wrap native SwiftUI views, making integration seamless without requiring explicit wrappers for simple cases:
+UIComponent can seamlessly integrate SwiftUI views alongside platform views. UIComponent's result builder is configured to automatically wrap native SwiftUI views, making integration seamless without requiring explicit wrappers for simple cases:
 
 ```swift
 VStack(spacing: 16) {
     // UIComponent Text
     Text("Mixed UI Example")
         .font(.boldSystemFont(ofSize: 20))
-        .textColor(.label)
+        .textColor(.systemBlue)
     
     // SwiftUI Text directly (automatically wrapped by result builder)
     SwiftUI.Text("Hello from SwiftUI!")
@@ -124,7 +124,7 @@ You can use the modifier syntax to assign values to the Component. Here are some
 ```swift
 // modifiers that update view properties
 Text("Hello")
-    .font(UIFont.systemFont(ofSize: 20)) // UILabel.font
+    .font(.systemFont(ofSize: 20)) // PlatformLabel.font
     .textColor(.red) // UILabel.textColor
 
 Image(image)

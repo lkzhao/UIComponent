@@ -23,14 +23,16 @@ To render the UI, UIComponent will ask the `RenderNode` for a flat list of ``Ren
 
 ##### Renderable
 
-``Renderable`` represents a `UIView` that will be rendered in the view hierarchy.
+``Renderable`` represents a `PlatformView` that will be rendered in the view hierarchy.
+
+On iOS/tvOS this is a `UIView`; on macOS this is an `NSView`.
 
 ### Flow chart
 ![](Architecture)
 
 ### Reload
 
-The entire process from the **Component** to the **UIView** being rendered onscreen is called a **"reload"**. This happens when 
+The entire process from the **Component** to the **PlatformView** being rendered onscreen is called a **"reload"**. This happens when 
 * Assign a new ``ComponentEngine/component``  
 * Manually calling ``ComponentEngine/setNeedsReload()`` or ``ComponentEngine/reloadData(contentOffsetAdjustFn:)``
 * Size of the hosting view changes.
@@ -40,7 +42,7 @@ During a reload, the ComponentEngine calls the **layout** method and cache the r
 
 ### Render
 
-The process from the RenderNode to the **UIView** being rendered onscreen is called a **"render"**. This happens when
+The process from the RenderNode to the **PlatformView** being rendered onscreen is called a **"render"**. This happens when
 * Scrolled to a new position (i.e. contentOffset changes)
 * During a reload.
 * Manually calling ``ComponentEngine/setNeedsRender()``
@@ -59,10 +61,10 @@ The framework will then generates a list of ``Renderable``s from the resulting `
 
 With a list of Renderables, ComponentEngine then tries to **display** them onscreen. The ComponentEngine performs a diff algorithm that synchronize the subview list with the Renderable list. 
 
-Each Renderable links to its corresponding RenderNode. If the view is not on screen yet, it will call the RenderNode's ``RenderNode/makeView()-6puft`` to generate a new UIView. If the view is already onscreen, it calls the ``RenderNode/updateView(_:)-2xjz4`` method to update the view to the latest state. 
+Each Renderable links to its corresponding RenderNode. If the view is not on screen yet, it will call the RenderNode's ``RenderNode/makeView()-6puft`` to generate a new PlatformView. If the view is already onscreen, it calls the ``RenderNode/updateView(_:)-2xjz4`` method to update the view to the latest state.
 
 Renderable also contains the frame of the view that should be displayed onscreen. The ComponentEngine will use this frame to set the view's frame.
 
-Once the UIViews have been inserted to the view hierarchy, the entire process is finished.
+Once the views have been inserted to the view hierarchy, the entire process is finished.
 
 > There are some concepts that are omitted for simplicity. For example, like how views are reused, and how animations are performed.

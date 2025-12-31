@@ -117,7 +117,7 @@ VStack {
 
 In version 5.0, the view reuse system has been simplified and made more explicit. Previously, UIComponent would automatically reuse views based on their types, with the ability to customize behavior using the `.reuseStrategy` modifier. Now, view reuse is controlled entirely through the `.reuseKey` modifier, making the behavior more predictable and deterministic.
 
-> The reason for this change is because modern iOS have optimized the UIView creation cost, and newer iPhones are plenty fast. Reusing cells are not gaining much performance back, but requires careful logic to manage the cell state when the cell is reused, making it easy to introduce settle bugs that are hard to reproduce.
+> The reason for this change is because modern iOS have optimized the view creation cost, and newer iPhones are plenty fast. Reusing cells are not gaining much performance back, but requires careful logic to manage the cell state when the cell is reused, making it easy to introduce settle bugs that are hard to reproduce.
 
 ```swift
 // Before version 5.0

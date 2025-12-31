@@ -10,7 +10,7 @@ Learn how to use custom views inside UIComponent
 
 Rendering a custom view inside UIComponent is straightforward.
 
-In fact, UIComponent treats all ``UIKit/UIView`` as components, so you can insert them directly into a Component hierarchy.
+In fact, UIComponent treats all `PlatformView` (i.e. `UIView` on iOS/tvOS and `NSView` on macOS) as components, so you can insert them directly into a Component hierarchy.
 
 ```swift
 // store this as a property somewhere
@@ -50,7 +50,7 @@ Imagine you are rendering a feed with thousands of views. Using ``ViewComponent`
 With the power of @dynamicMemberLookup, any field that exists on the View will be exposed as a modifier. This is all automatic, eliminating the needs to define the modifier function yourself.
 
 ```swift
-class ProfileView: UIView {
+class ProfileView: PlatformView {
     var profile: Profile?
 }
 

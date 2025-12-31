@@ -57,7 +57,7 @@ VStack {
 You can also create a custom view that wraps your child component. This way the child component won't be constructed or layed out when reloading the list.
 
 ```swift
-class ItemView: UIView {
+class ItemView: PlatformView {
     var item: Item? {
         didSet {
             guard item != oldValue else { return }

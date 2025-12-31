@@ -24,29 +24,37 @@ import UIComponent
 ## Requirements
 
 - iOS 15.0+
+- macOS 11.0+
 - Xcode 15.0+
 - Swift 5.9+
 
 ## Quick Start
 
-After installation, you can start using UIComponent in any UIView:
+After installation, you can start using UIComponent in any `PlatformView`:
 
 ```swift
 import UIComponent
 
-class MyViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Render components directly on any UIView
-        view.componentEngine.component = VStack(spacing: 16) {
+final class MyHostingView: PlatformView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        reloadComponent()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        reloadComponent()
+    }
+
+    private func reloadComponent() {
+        componentEngine.component = VStack(spacing: 16) {
             Text("Welcome to UIComponent!")
                 .font(.systemFont(ofSize: 24))
-                .textColor(.label)
-            
-            Text("A modern declarative UI framework for UIKit")
+                .textColor(.systemBlue)
+
+            Text("A modern declarative UI framework for UIKit/AppKit")
                 .font(.systemFont(ofSize: 16))
-                .textColor(.secondaryLabel)
+                .textColor(.systemGray)
                 .textAlignment(.center)
         }
         .inset(20)
@@ -77,7 +85,8 @@ Add `"UIComponent"` to your target's dependencies.
 let package = Package(
     name: "MyPackage",
     platforms: [
-        .iOS("15.0")
+        .iOS("15.0"),
+        .macOS("11.0")
     ],
     products: [
         .library(
