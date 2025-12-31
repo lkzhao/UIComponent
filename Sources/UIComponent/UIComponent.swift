@@ -19,6 +19,7 @@ public typealias PlatformImageView = UIImageView
 public typealias PlatformImageConfiguration = UIImage.Configuration
 public typealias PlatformLabel = UILabel
 public typealias PlatformMenu = UIMenu
+public typealias PlatformRectEdge = UIRectEdge
 
 #elseif canImport(AppKit)
 @_exported import AppKit
@@ -34,4 +35,17 @@ public typealias PlatformImageView = NSImageView
 public typealias PlatformImageConfiguration = NSImage.SymbolConfiguration
 public typealias PlatformLabel = NSTextField
 public typealias PlatformMenu = NSMenu
+
+public struct PlatformRectEdge: OptionSet {
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    public static let top = PlatformRectEdge(rawValue: 1 << 0)
+    public static let left = PlatformRectEdge(rawValue: 1 << 1)
+    public static let bottom = PlatformRectEdge(rawValue: 1 << 2)
+    public static let right = PlatformRectEdge(rawValue: 1 << 3)
+}
 #endif
