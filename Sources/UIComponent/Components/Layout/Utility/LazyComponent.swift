@@ -60,9 +60,9 @@ public class LazyRenderNode<Content: Component>: RenderNodeWrapper {
     public var content: Content.R {
         if _content == nil {
             EnvironmentValues.saveCurrentValues()
+            defer { EnvironmentValues.restoreCurrentValues() }
             EnvironmentValues.current = environmentValues
             _content = component.layout(.init(tightSize: size))
-            EnvironmentValues.restoreCurrentValues()
         }
         return _content!
     }
