@@ -16,7 +16,7 @@ open class ComponentView: PlatformView, ComponentDisplayableView {
 #endif
 }
 
-/// A `UIScrollView` that can render components
+/// A `PlatformScrollView` that can render components
 /// It provides simple access to the properties and method of the underlying ``ComponentEngine``
 ///
 /// You can set the ``component`` property with your component tree for it to render
@@ -26,7 +26,8 @@ open class ComponentView: PlatformView, ComponentDisplayableView {
 /// and ``ComponentScrollView`` supports rendering components.
 ///
 /// See ``ComponentDisplayableView`` for usage details.
-#if canImport(UIKit)
-open class ComponentScrollView: UIScrollView, ComponentDisplayableView {
-}
+#if os(macOS)
+public typealias ComponentScrollView = PlatformScrollView
+#elseif canImport(UIKit)
+open class ComponentScrollView: PlatformScrollView, ComponentDisplayableView {}
 #endif
