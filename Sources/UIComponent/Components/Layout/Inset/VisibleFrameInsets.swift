@@ -44,7 +44,7 @@ public struct DynamicVisibleFrameInset<Content: Component>: Component {
     /// Initializes a new `DynamicVisibleFrameInset` with the given content and inset provider.
     /// - Parameters:
     ///   - content: The content render node to which the dynamic insets will be applied.
-    ///   - insetProvider: A closure that provides a `UIEdgeInsets` value based on the given `CGRect`.
+    ///   - insetProvider: A closure that provides a `PlatformEdgeInsets` value based on the given `CGRect`.
     public init(content: Content, insetProvider: @escaping (CGRect) -> PlatformEdgeInsets) {
         self.content = content
         self.insetProvider = insetProvider
@@ -101,7 +101,7 @@ public struct DynamicVisibleFrameInsetRenderNode<Content: RenderNode>: RenderNod
     /// Initializes a new `DynamicVisibleFrameInsetRenderNode` with the given content and inset provider.
     /// - Parameters:
     ///   - content: The content render node to which the dynamic insets will be applied.
-    ///   - insetProvider: A closure that provides a `UIEdgeInsets` value based on the given `CGRect`.
+    ///   - insetProvider: A closure that provides a `PlatformEdgeInsets` value based on the given `CGRect`.
     public init(content: Content, insetProvider: @escaping (CGRect) -> PlatformEdgeInsets) {
         self.content = content
         self.insetProvider = insetProvider
