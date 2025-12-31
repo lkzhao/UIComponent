@@ -129,28 +129,115 @@ public struct TransformAnimator: Animator {
         }
     }
 #else
+    private func frameFromBoundsAndCenter(size: CGSize, center: CGPoint) -> CGRect {
+        CGRect(
+            x: center.x - size.width / 2,
+            y: center.y - size.height / 2,
+            width: size.width,
+            height: size.height
+        )
+    }
+
+    private func runMacAnimation(
+        duration: TimeInterval,
+        delay: TimeInterval,
+        animations: @escaping () -> Void,
+        completion: @escaping () -> Void
+    ) {
+        let run = {
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = duration
+                context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                animations()
+            } completionHandler: {
+                completion()
+            }
+        }
+
+        if delay > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                run()
+            }
+        } else {
+            run()
+        }
+    }
+
     public func delete(hostingView: PlatformView, view: PlatformView, completion: @escaping () -> Void) {
-        completion()
+        let shouldAnimate = hostingView.componentEngine.isReloading && hostingView.bounds.intersects(view.frame)
+        guard shouldAnimate else {
+            completion()
+            return
+        }
+
+        view.wantsLayer = true
+        let baseTransform = view.layer?.transform ?? CATransform3DIdentity
+        let baseAlpha = view.alphaValue
+
+        runMacAnimation(duration: duration, delay: 0, animations: {
+            if let layer = view.layer {
+                CATransaction.begin()
+                CATransaction.setAnimationDuration(duration)
+                CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
+                layer.transform = self.transform
+                CATransaction.commit()
+            }
+            view.animator().alphaValue = 0
+        }, completion: {
+            if !hostingView.componentEngine.visibleViews.contains(view) {
+                view.layer?.transform = baseTransform
+                view.alphaValue = baseAlpha
+            }
+            completion()
+        })
     }
 
     public func insert(hostingView: PlatformView, view: PlatformView, frame: CGRect) {
-        view.bounds.size = frame.size
-        view.center = frame.center
+        view.frame = frameFromBoundsAndCenter(size: frame.size, center: frame.center)
+
+        let shouldAnimate = hostingView.componentEngine.isReloading
+            && (showInitialInsertionAnimation || hostingView.componentEngine.hasReloaded)
+            && (showInsertionAnimationOnOutOfBoundsItems || hostingView.bounds.intersects(frame))
+
+        guard shouldAnimate else {
+            view.wantsLayer = true
+            view.layer?.transform = CATransform3DIdentity
+            view.alphaValue = 1
+            return
+        }
+
         view.wantsLayer = true
-        view.layer?.transform = CATransform3DIdentity
-        view.alpha = 1
+        let baseTransform = view.layer?.transform ?? CATransform3DIdentity
+        let offsetTime: TimeInterval = cascade ? TimeInterval(frame.origin.distance(hostingView.bounds.origin) / 3000) : 0
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        view.layer?.transform = transform
+        CATransaction.commit()
+        view.alphaValue = 0
+
+        runMacAnimation(duration: duration, delay: offsetTime, animations: {
+            if let layer = view.layer {
+                CATransaction.begin()
+                CATransaction.setAnimationDuration(duration)
+                CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
+                layer.transform = baseTransform
+                CATransaction.commit()
+            }
+            view.animator().alphaValue = 1
+        }, completion: {})
     }
 
     public func update(hostingView _: PlatformView, view: PlatformView, frame: CGRect) {
-        if view.bounds.size != frame.size {
-            view.bounds.size = frame.size
-        }
-        if view.center != frame.center {
-            view.center = frame.center
-        }
-        if view.alpha != 1 {
-            view.alpha = 1
-        }
+        let targetFrame = frameFromBoundsAndCenter(size: frame.size, center: frame.center)
+
+        let shouldAnimate = view.frame != targetFrame || view.alphaValue != 1
+        guard shouldAnimate else { return }
+
+        runMacAnimation(duration: duration, delay: 0, animations: {
+            view.animator().frame = targetFrame
+            view.animator().alphaValue = 1
+        }, completion: {})
     }
 #endif
 }
