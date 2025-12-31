@@ -232,13 +232,14 @@ public final class ComponentEngine {
 
     private var asyncLayoutID: UUID?
     private func layoutComponentAsync(contentOffsetAdjustFn: (() -> CGPoint)?) {
-        guard let view, let component else { return }
+        guard let component else { return }
 
         let adjustedSize = adjustedSize
         let asyncLayoutID = UUID()
         self.asyncLayoutID = asyncLayoutID
         Self.asyncLayoutQueue.async { [weak self] in
-            let renderNode = EnvironmentValues.with(values: .init(\.hostingView, value: view)) {
+            // Avoid referencing the hosting view off the main thread.
+            let renderNode = EnvironmentValues.with(values: .init(\.hostingView, value: nil)) {
                 component.layout(Constraint(maxSize: adjustedSize))
             }
             DispatchQueue.main.async {
