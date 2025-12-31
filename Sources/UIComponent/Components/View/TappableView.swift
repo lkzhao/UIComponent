@@ -103,7 +103,7 @@ open class TappableView: PlatformView {
     #endif
 
     /// The background color to be used for the preview when the TappableView is used in a context menu.
-    public var previewBackgroundColor: UIColor?
+    public var previewBackgroundColor: PlatformColor?
     
     /// A closure that is called when the TappableView is tapped.
     public var onTap: ((TappableView) -> Void)? {
@@ -186,7 +186,7 @@ open class TappableView: PlatformView {
 
     /// A closure that provides a context menu to be displayed when the TappableView is long-pressed.
     /// Setting this property will add a context menu interaction if it's not already present.
-    public var contextMenuProvider: ((TappableView) -> UIMenu?)? {
+    public var contextMenuProvider: ((TappableView) -> PlatformMenu?)? {
         didSet {
             if previewProvider != nil || contextMenuProvider != nil {
                 addInteraction(contextMenuInteraction)
@@ -323,6 +323,17 @@ extension TappableView: UIContextMenuInteractionDelegate {
 /// A macOS implementation of `TappableView` that supports tap and highlight behavior.
 open class TappableView: PlatformView {
     private var trackingAreaToken: NSTrackingArea?
+    private var longPressWorkItem: DispatchWorkItem?
+    private var didTriggerLongPress = false
+
+    /// A closure that provides a context menu to be displayed when the TappableView is right-clicked or long-pressed.
+    public var contextMenuProvider: ((TappableView) -> PlatformMenu?)?
+
+    /// A closure that is called when the view is long-pressed (click-and-hold).
+    public var onLongPress: ((TappableView) -> Void)?
+
+    /// A closure that provides a cursor when the view is hovered.
+    public var pointerStyleProvider: (() -> NSCursor?)?
 
     /// The configuration object for the TappableView, which defines the behavior of the view when it is tapped or highlighted.
     public var config: TappableViewConfig?
@@ -374,9 +385,36 @@ open class TappableView: PlatformView {
         super.updateTrackingAreas()
     }
 
+    private func cancelLongPress() {
+        longPressWorkItem?.cancel()
+        longPressWorkItem = nil
+    }
+
+    private func scheduleLongPressIfNeeded() {
+        guard contextMenuProvider != nil || onLongPress != nil else { return }
+        cancelLongPress()
+
+        didTriggerLongPress = false
+        let item = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            guard self.isHighlighted else { return }
+
+            self.didTriggerLongPress = true
+            self.onLongPress?(self)
+
+            if let menu = self.contextMenuProvider?(self) {
+                let location = self.convert(self.window?.mouseLocationOutsideOfEventStream ?? .zero, from: nil)
+                menu.popUp(positioning: nil, at: location, in: self)
+            }
+        }
+        longPressWorkItem = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: item)
+    }
+
     open override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
         isHighlighted = true
+        scheduleLongPressIfNeeded()
     }
 
     open override func mouseDragged(with event: NSEvent) {
@@ -388,8 +426,10 @@ open class TappableView: PlatformView {
     open override func mouseUp(with event: NSEvent) {
         defer { isHighlighted = false }
         super.mouseUp(with: event)
+        cancelLongPress()
         let location = convert(event.locationInWindow, from: nil)
         guard bounds.contains(location) else { return }
+        guard !didTriggerLongPress else { return }
 
         (config ?? .default).didTap?(self)
         if event.clickCount == 2 {
@@ -401,11 +441,26 @@ open class TappableView: PlatformView {
 
     open override func mouseEntered(with event: NSEvent) {
         super.mouseEntered(with: event)
+        pointerStyleProvider?()?.set()
     }
 
     open override func mouseExited(with event: NSEvent) {
         super.mouseExited(with: event)
         isHighlighted = false
+        cancelLongPress()
+    }
+
+    open override func rightMouseDown(with event: NSEvent) {
+        super.rightMouseDown(with: event)
+        isHighlighted = true
+    }
+
+    open override func rightMouseUp(with event: NSEvent) {
+        defer { isHighlighted = false }
+        super.rightMouseUp(with: event)
+        guard let menu = contextMenuProvider?(self) else { return }
+        let location = convert(event.locationInWindow, from: nil)
+        menu.popUp(positioning: nil, at: location, in: self)
     }
 }
 #endif
