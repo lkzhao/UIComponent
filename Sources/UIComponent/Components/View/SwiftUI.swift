@@ -143,15 +143,28 @@ class SwiftUIHostingView: NSView {
         }
     }
 
-    var disableSafeArea: Bool = true
+    var disableSafeArea: Bool = true {
+        didSet {
+            guard disableSafeArea != oldValue else { return }
+            guard let swiftUIView, let hostingView else { return }
+            hostingView.rootView = wrapSafeAreaIfNeeded(swiftUIView)
+        }
+    }
+    private func wrapSafeAreaIfNeeded(_ view: AnyView) -> AnyView {
+        if disableSafeArea {
+            return AnyView(view.ignoresSafeArea())
+        } else {
+            return view
+        }
+    }
 
     var swiftUIView: AnyView? {
         didSet {
             if let swiftUIView {
                 if let hostingView {
-                    hostingView.rootView = swiftUIView
+                    hostingView.rootView = wrapSafeAreaIfNeeded(swiftUIView)
                 } else {
-                    let hostingView = NSHostingView(rootView: swiftUIView)
+                    let hostingView = NSHostingView(rootView: wrapSafeAreaIfNeeded(swiftUIView))
                     hostingView.wantsLayer = true
                     hostingView.layer?.backgroundColor = NSColor.clear.cgColor
                     self.hostingView = hostingView
@@ -170,6 +183,7 @@ class SwiftUIHostingView: NSView {
     override var intrinsicContentSize: NSSize {
         hostingView?.fittingSize ?? super.intrinsicContentSize
     }
+
 }
 #endif
 
