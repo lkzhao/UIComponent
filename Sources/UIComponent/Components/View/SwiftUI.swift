@@ -24,19 +24,30 @@ public struct SwiftUIComponent: Component {
     }
 
     public func layout(_ constraint: Constraint) -> some RenderNode {
+        func computeSize() -> CGSize {
 #if canImport(UIKit)
-        sizingHostingController.rootView = content
-        let size = sizingHostingController.sizeThatFits(in: constraint.maxSize)
+            sizingHostingController.rootView = content
+            return sizingHostingController.sizeThatFits(in: constraint.maxSize)
 #else
-        sizingHostingView.rootView = content
-        sizingHostingView.frame = CGRect(origin: .zero, size: constraint.maxSize)
-        sizingHostingView.layoutSubtreeIfNeeded()
-        let size = sizingHostingView.fittingSize.bound(to: constraint)
+            sizingHostingView.rootView = content
+            sizingHostingView.frame = CGRect(origin: .zero, size: constraint.maxSize)
+            sizingHostingView.layoutSubtreeIfNeeded()
+            return sizingHostingView.fittingSize.bound(to: constraint)
 #endif
+        }
+
+        let resolvedSize: CGSize
+        if Thread.isMainThread {
+            resolvedSize = computeSize()
+        } else {
+            resolvedSize = DispatchQueue.main.sync {
+                computeSize()
+            }
+        }
         return ViewComponent<SwiftUIHostingView>()
             .disableSafeArea(disableSafeArea)
             .swiftUIView(content)
-            .size(size)
+            .size(resolvedSize)
             .layout(constraint)
     }
 }
