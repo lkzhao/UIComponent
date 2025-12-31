@@ -286,7 +286,17 @@ public class PrimaryMenu: PlatformView {
         guard let menu = menuBuilder?(self) else { return }
         let location = convert(event.locationInWindow, from: nil)
         (config ?? .default).didTap?(self)
+        guard bounds.contains(location) else { return }
+        isShowingMenu = true
+        PrimaryMenu.isShowingMenu = true
         menu.popUp(positioning: nil, at: location, in: self)
+        isShowingMenu = false
+        PrimaryMenu.isShowingMenu = false
+    }
+
+    public override func rightMouseDown(with event: NSEvent) {
+        super.rightMouseDown(with: event)
+        isPressed = true
     }
 }
 #endif
