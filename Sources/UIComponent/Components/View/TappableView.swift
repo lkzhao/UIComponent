@@ -392,6 +392,15 @@ open class TappableView: PlatformView {
     private var activeLongPressGesture: PlatformLongPressGesture?
     private var pressLocationInView: CGPoint?
 
+    deinit {
+        if didPushCursor {
+            NSCursor.pop()
+        }
+        if let trackingAreaToken {
+            removeTrackingArea(trackingAreaToken)
+        }
+    }
+
     /// A closure that provides a context menu to be displayed when the TappableView is right-clicked or long-pressed.
     public var contextMenuProvider: ((TappableView) -> PlatformMenu?)?
 

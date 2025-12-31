@@ -207,6 +207,15 @@ public class PrimaryMenu: PlatformView {
         super.init(coder: coder)
     }
 
+    deinit {
+        if didPushCursor {
+            NSCursor.pop()
+        }
+        if let trackingAreaToken {
+            removeTrackingArea(trackingAreaToken)
+        }
+    }
+
     public override func updateTrackingAreas() {
         if let trackingAreaToken {
             removeTrackingArea(trackingAreaToken)
