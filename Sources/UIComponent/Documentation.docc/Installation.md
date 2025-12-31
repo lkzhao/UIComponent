@@ -23,8 +23,9 @@ import UIComponent
 
 ## Requirements
 
-- iOS 15.0+
-- macOS 11.0+
+- iOS 13.0+
+- macOS 12.0+
+- tvOS 15.0+
 - Xcode 15.0+
 - Swift 5.9+
 
@@ -85,8 +86,9 @@ Add `"UIComponent"` to your target's dependencies.
 let package = Package(
     name: "MyPackage",
     platforms: [
-        .iOS("15.0"),
-        .macOS("11.0")
+        .iOS("13.0"),
+        .macOS("12.0"),
+        .tvOS("15.0")
     ],
     products: [
         .library(
