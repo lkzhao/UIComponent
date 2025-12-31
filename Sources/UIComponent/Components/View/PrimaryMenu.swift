@@ -1,9 +1,9 @@
 //  Created by Luke Zhao on 11/26/22.
 
-#if canImport(UIKit) && !os(tvOS)
+#if !os(tvOS)
 /// `PrimaryMenuConfig` defines the configuration for a `PrimaryMenu`.
 /// It provides customization options such as highlight state changes and tap actions.
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 11.0, *)
 public struct PrimaryMenuConfig {
     /// The default configuration for all PrimaryMenu instances.
     public static var `default`: PrimaryMenuConfig = PrimaryMenuConfig(onHighlightChanged: nil, didTap: nil)
@@ -25,9 +25,10 @@ public struct PrimaryMenuConfig {
 }
 
 @available(*, deprecated, renamed: "PrimaryMenuConfig")
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 11.0, *)
 public typealias PrimaryMenuConfiguration = PrimaryMenuConfig
 
+#if canImport(UIKit)
 /// A UIControl subclass that displays a context menu when tapped.
 @available(iOS 14.0, *)
 public class PrimaryMenu: UIControl {
@@ -157,4 +158,71 @@ extension PrimaryMenu: UIPointerInteractionDelegate {
         }
     }
 }
+#elseif os(macOS)
+/// A macOS view that displays a menu when clicked.
+@available(iOS 14.0, macOS 11.0, *)
+public class PrimaryMenu: PlatformView {
+    /// Indicates whether any `PrimaryMenu` is currently showing a menu.
+    public static fileprivate(set) var isShowingMenu = false
+
+    /// The configuration object that defines behavior for the `PrimaryMenu`.
+    public var config: PrimaryMenuConfig?
+
+    /// Deprecated: Use `config` instead.
+    @available(*, deprecated, renamed: "config")
+    public var configuration: PrimaryMenuConfig? {
+        get { config }
+        set { config = newValue }
+    }
+
+    /// A flag indicating whether the menu is currently being displayed.
+    public var isShowingMenu = false
+
+    /// The menu to be displayed when the view is interacted with.
+    public var menuBuilder: ((PrimaryMenu) -> PlatformMenu)?
+
+    /// A flag indicating whether the view is currently in a pressed state.
+    public private(set) var isPressed: Bool = false {
+        didSet {
+            guard isPressed != oldValue else { return }
+            (config ?? .default).onHighlightChanged?(self, isPressed)
+        }
+    }
+
+    public override var isFlipped: Bool { true }
+
+    public override init(frame frameRect: CGRect) {
+        super.init(frame: frameRect)
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    public override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
+        isPressed = true
+    }
+
+    public override func mouseUp(with event: NSEvent) {
+        defer { isPressed = false }
+        super.mouseUp(with: event)
+
+        (config ?? .default).didTap?(self)
+        guard let menu = menuBuilder?(self) else { return }
+
+        isShowingMenu = true
+        PrimaryMenu.isShowingMenu = true
+        let location = convert(event.locationInWindow, from: nil)
+        menu.popUp(positioning: nil, at: location, in: self)
+        isShowingMenu = false
+        PrimaryMenu.isShowingMenu = false
+    }
+
+    public override func mouseExited(with event: NSEvent) {
+        super.mouseExited(with: event)
+        isPressed = false
+    }
+}
+#endif
 #endif

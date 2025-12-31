@@ -18,6 +18,7 @@ public typealias PlatformEvent = UIEvent
 public typealias PlatformImageView = UIImageView
 public typealias PlatformImageConfiguration = UIImage.Configuration
 public typealias PlatformLabel = UILabel
+public typealias PlatformMenu = UIMenu
 
 #elseif canImport(AppKit)
 @_exported import AppKit
@@ -32,4 +33,5 @@ public typealias PlatformEvent = NSEvent
 public typealias PlatformImageView = NSImageView
 public typealias PlatformImageConfiguration = NSImage.SymbolConfiguration
 public typealias PlatformLabel = NSTextField
+public typealias PlatformMenu = NSMenu
 #endif

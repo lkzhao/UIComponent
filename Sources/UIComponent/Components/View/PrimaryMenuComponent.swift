@@ -1,8 +1,8 @@
 //  Created by Luke Zhao on 1/19/24.
 
-#if canImport(UIKit) && !os(tvOS)
+#if !os(tvOS)
 /// A component that renders a ``PrimaryMenu``
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 11.0, *)
 public struct PrimaryMenuComponent: Component {
     /// The configuration for the primary menu view, obtained from the environment.
     @Environment(\.primaryMenuConfig)
@@ -12,21 +12,21 @@ public struct PrimaryMenuComponent: Component {
     public let component: any Component
 
     /// A builder that constructs the menu to be displayed as part of the primary menu component.
-    public let menuBuilder: (PrimaryMenu) -> UIMenu
+    public let menuBuilder: (PrimaryMenu) -> PlatformMenu
 
-    public init(component: any Component, menuBuilder: @escaping (PrimaryMenu) -> UIMenu) {
+    public init(component: any Component, menuBuilder: @escaping (PrimaryMenu) -> PlatformMenu) {
         self.component = component
         self.menuBuilder = menuBuilder
     }
 
-    public init(component: any Component, menuBuilder: @escaping () -> UIMenu) {
+    public init(component: any Component, menuBuilder: @escaping () -> PlatformMenu) {
         self.component = component
         self.menuBuilder = { _ in
             menuBuilder()
         }
     }
 
-    public init(component: any Component, menu: UIMenu) {
+    public init(component: any Component, menu: PlatformMenu) {
         self.init(component: component, menuBuilder: { _ in menu })
     }
 
@@ -40,7 +40,7 @@ public struct PrimaryMenuComponent: Component {
 }
 
 /// A render node that renders a ``PrimaryMenu``.
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 11.0, *)
 public struct PrimaryMenuRenderNode: RenderNode {
     /// The size of the render node.
     public let size: CGSize
@@ -52,7 +52,7 @@ public struct PrimaryMenuRenderNode: RenderNode {
     public let content: any RenderNode
 
     /// A builder that constructs the menu to be displayed as part of the primary menu component.
-    public let menuBuilder: ((PrimaryMenu) -> UIMenu)?
+    public let menuBuilder: ((PrimaryMenu) -> PlatformMenu)?
 
     /// The configuration for the tappable view.
     public let config: PrimaryMenuConfig?
@@ -73,7 +73,7 @@ public struct PrimaryMenuRenderNode: RenderNode {
 // MARK: - Environment
 
 /// The key for accessing `PrimaryMenuConfig` values within the environment.
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 11.0, *)
 public struct PrimaryMenuConfigEnvironmentKey: EnvironmentKey {
     public static var defaultValue: PrimaryMenuConfig {
         get {
@@ -86,7 +86,7 @@ public struct PrimaryMenuConfigEnvironmentKey: EnvironmentKey {
 }
 
 /// An extension to provide easy access and modification of `PrimaryMenuConfig` within `EnvironmentValues`.
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 11.0, *)
 public extension EnvironmentValues {
     /// The `PrimaryMenuConfig` instance for the current environment.
     var primaryMenuConfig: PrimaryMenuConfig {
@@ -96,7 +96,7 @@ public extension EnvironmentValues {
 }
 
 /// An extension to allow `Component` to modify its environment's `PrimaryMenuConfig`.
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 11.0, *)
 public extension Component {
     /// Modifies the current `PrimaryMenuConfig` of the component's environment.
     ///
