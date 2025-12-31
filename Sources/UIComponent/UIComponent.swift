@@ -30,6 +30,20 @@ public typealias PlatformPointerStyle = UIPointerStyle
 
 public typealias PlatformLongPressGesture = UILongPressGestureRecognizer
 
+#if !os(tvOS)
+public typealias PlatformDropOperation = UIDropOperation
+
+public struct PlatformDropInfo {
+    public let interaction: UIDropInteraction
+    public let session: UIDropSession
+
+    public init(interaction: UIDropInteraction, session: UIDropSession) {
+        self.interaction = interaction
+        self.session = session
+    }
+}
+#endif
+
 #elseif canImport(AppKit)
 @_exported import AppKit
 
@@ -61,6 +75,16 @@ public final class PlatformLongPressGesture {
 
     public init(state: State = .possible) {
         self.state = state
+    }
+}
+
+public typealias PlatformDropOperation = NSDragOperation
+
+public struct PlatformDropInfo {
+    public let draggingInfo: NSDraggingInfo
+
+    public init(draggingInfo: NSDraggingInfo) {
+        self.draggingInfo = draggingInfo
     }
 }
 

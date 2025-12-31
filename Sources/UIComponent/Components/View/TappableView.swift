@@ -151,23 +151,57 @@ open class TappableView: PlatformView {
 
 #if !os(tvOS)
     /// The interaction responsible for handling drop operations on the TappableView.
-    private var dropInteraction: UIDropInteraction?
+    private var legacyDropInteraction: UIDropInteraction?
+    private var platformDropInteraction: UIDropInteraction?
 
     /// The delegate that responds to drop interaction events.
     /// Setting a new delegate will replace any existing drop interaction with a new one using the provided delegate.
+    @available(*, deprecated, message: "Use dropTypes and onDragEntered/onDragUpdated/onDragExited/onPerformDrop instead.")
     public weak var dropDelegate: UIDropInteractionDelegate? {
         didSet {
             guard dropDelegate !== oldValue else { return }
             if let dropDelegate {
-                dropInteraction = UIDropInteraction(delegate: dropDelegate)
-                addInteraction(dropInteraction!)
+                legacyDropInteraction = UIDropInteraction(delegate: dropDelegate)
+                addInteraction(legacyDropInteraction!)
             } else {
-                if let dropInteraction {
-                    removeInteraction(dropInteraction)
+                if let legacyDropInteraction {
+                    removeInteraction(legacyDropInteraction)
                 }
             }
         }
     }
+
+    private var hasPlatformDropHandlers: Bool {
+        !dropTypes.isEmpty || onDragEntered != nil || onDragUpdated != nil || onDragExited != nil || onPerformDrop != nil
+    }
+
+    private func updatePlatformDropInteraction() {
+        guard hasPlatformDropHandlers else {
+            if let platformDropInteraction {
+                removeInteraction(platformDropInteraction)
+                self.platformDropInteraction = nil
+            }
+            return
+        }
+
+        if platformDropInteraction == nil {
+            platformDropInteraction = UIDropInteraction(delegate: self)
+            addInteraction(platformDropInteraction!)
+        }
+    }
+
+    /// The uniform type identifiers this view accepts for drops (UTType identifiers).
+    public var dropTypes: [String] = [] {
+        didSet {
+            guard dropTypes != oldValue else { return }
+            updatePlatformDropInteraction()
+        }
+    }
+
+    public var onDragEntered: ((TappableView, PlatformDropInfo) -> PlatformDropOperation)?
+    public var onDragUpdated: ((TappableView, PlatformDropInfo) -> PlatformDropOperation)?
+    public var onDragExited: ((TappableView, PlatformDropInfo) -> Void)?
+    public var onPerformDrop: ((TappableView, PlatformDropInfo) -> Bool)?
 
     /// A closure that provides a preview view controller to be displayed when the TappableView is used in a context menu.
     /// Setting this property will add a context menu interaction if it's not already present.
@@ -275,6 +309,34 @@ extension TappableView: UIPointerInteractionDelegate {
     }
 }
 
+extension TappableView: UIDropInteractionDelegate {
+    public func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        guard !dropTypes.isEmpty else { return false }
+        return session.hasItemsConforming(toTypeIdentifiers: dropTypes)
+    }
+
+    public func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnter session: UIDropSession) {
+        let info = PlatformDropInfo(interaction: interaction, session: session)
+        _ = onDragEntered?(self, info)
+    }
+
+    public func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        let info = PlatformDropInfo(interaction: interaction, session: session)
+        let operation = onDragUpdated?(self, info) ?? .copy
+        return UIDropProposal(operation: operation)
+    }
+
+    public func dropInteraction(_ interaction: UIDropInteraction, sessionDidExit session: UIDropSession) {
+        let info = PlatformDropInfo(interaction: interaction, session: session)
+        onDragExited?(self, info)
+    }
+
+    public func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        let info = PlatformDropInfo(interaction: interaction, session: session)
+        _ = onPerformDrop?(self, info)
+    }
+}
+
 extension TappableView: UIContextMenuInteractionDelegate {
     public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         if let previewProvider {
@@ -341,28 +403,34 @@ open class TappableView: PlatformView {
 
     /// The pasteboard types this view accepts for drop.
     /// Setting this to a non-empty array registers the view as a drop destination.
-    public var dropTypes: [NSPasteboard.PasteboardType] = [] {
+    public var dropTypes: [String] = [] {
         didSet {
             guard dropTypes != oldValue else { return }
             if dropTypes.isEmpty {
                 unregisterDraggedTypes()
             } else {
-                registerForDraggedTypes(dropTypes)
+                registerForDraggedTypes(dropTypes.map { NSPasteboard.PasteboardType(rawValue: $0) })
             }
         }
     }
 
     /// Called when a drag enters the view.
-    public var onDragEntered: ((TappableView, NSDraggingInfo) -> NSDragOperation)?
+    public var onDragEntered: ((TappableView, PlatformDropInfo) -> PlatformDropOperation)?
 
     /// Called when a drag updates within the view.
-    public var onDragUpdated: ((TappableView, NSDraggingInfo) -> NSDragOperation)?
+    public var onDragUpdated: ((TappableView, PlatformDropInfo) -> PlatformDropOperation)?
 
     /// Called when a drag exits the view.
-    public var onDragExited: ((TappableView, NSDraggingInfo) -> Void)?
+    public var onDragExited: ((TappableView, PlatformDropInfo) -> Void)?
 
     /// Called to perform the drop operation.
-    public var onPerformDrop: ((TappableView, NSDraggingInfo) -> Bool)?
+    public var onPerformDrop: ((TappableView, PlatformDropInfo) -> Bool)?
+
+    @available(*, deprecated, message: "Use dropTypes (as String identifiers) instead.")
+    public var dropPasteboardTypes: [NSPasteboard.PasteboardType] {
+        get { dropTypes.map { NSPasteboard.PasteboardType(rawValue: $0) } }
+        set { dropTypes = newValue.map(\.rawValue) }
+    }
 
     /// The configuration object for the TappableView, which defines the behavior of the view when it is tapped or highlighted.
     public var config: TappableViewConfig?
@@ -530,14 +598,14 @@ open class TappableView: PlatformView {
 
     open override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
         if let onDragEntered {
-            return onDragEntered(self, sender)
+            return onDragEntered(self, PlatformDropInfo(draggingInfo: sender))
         }
         return dropTypes.isEmpty ? [] : .copy
     }
 
     open override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
         if let onDragUpdated {
-            return onDragUpdated(self, sender)
+            return onDragUpdated(self, PlatformDropInfo(draggingInfo: sender))
         }
         return dropTypes.isEmpty ? [] : .copy
     }
@@ -545,12 +613,12 @@ open class TappableView: PlatformView {
     open override func draggingExited(_ sender: NSDraggingInfo?) {
         super.draggingExited(sender)
         guard let sender else { return }
-        onDragExited?(self, sender)
+        onDragExited?(self, PlatformDropInfo(draggingInfo: sender))
     }
 
     open override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
         if let onPerformDrop {
-            return onPerformDrop(self, sender)
+            return onPerformDrop(self, PlatformDropInfo(draggingInfo: sender))
         }
         return false
     }
