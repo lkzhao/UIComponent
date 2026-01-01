@@ -1,9 +1,5 @@
 //  Created by Luke Zhao on 8/24/20.
 
-#if os(macOS)
-import AppKit
-#endif
-
 /// A `Separator` is a `ComponentBuilder` that creates a visual divider based on the specified color.
 /// The separator can be either horizontal or vertical depending on the given constraints.
 public struct Separator: ComponentBuilder {

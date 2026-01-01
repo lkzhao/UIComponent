@@ -26,7 +26,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     let window = NSWindow(
-      contentRect: NSRect(x: 0, y: 0, width: 1000, height: 720),
+      contentRect: NSRect(x: 0, y: 0, width: 900, height: 720),
       styleMask: [.titled, .closable, .miniaturizable, .resizable],
       backing: .buffered,
       defer: false
@@ -34,7 +34,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     window.title = "UIComponentExample"
     window.center()
 
-    let hostingView = NSView()
+    let hostingView = ComponentView()
     hostingView.componentEngine.component = VStack(spacing: 12, justifyContent: .center, alignItems: .center) {
       Text("UIComponent Example", font: .boldSystemFont(ofSize: 24))
       Text("macOS build is a minimal shell (examples are iOS-first for now).", font: .systemFont(ofSize: 14))

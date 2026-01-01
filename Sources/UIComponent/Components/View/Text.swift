@@ -1,9 +1,5 @@
 //  Created by Luke Zhao on 8/22/20.
 
-#if os(macOS)
-import AppKit
-#endif
-
 /// An enumeration that represents the content of a `Text` component.
 /// It can either be a plain `String` or an `NSAttributedString` for more complex styling.
 public enum TextContent {
@@ -203,12 +199,8 @@ public struct TextRenderNode: RenderNode {
 #if canImport(UIKit)
         UILabel()
 #else
-        let label: NSTextField
-        if numberOfLines == 1 || lineBreakMode == .byTruncatingHead || lineBreakMode == .byTruncatingMiddle || lineBreakMode == .byTruncatingTail || lineBreakMode == .byClipping {
-            label = NSTextField(labelWithString: "")
-        } else {
-            label = NSTextField(wrappingLabelWithString: "")
-        }
+        let label = NSTextField()
+        label.cell = NoPaddingTextFieldCell()
         label.isSelectable = false
         label.isEditable = false
         label.isBezeled = false
@@ -228,7 +220,6 @@ public struct TextRenderNode: RenderNode {
         view.lineBreakMode = lineBreakMode
         view.textColor = textColor
 #else
-        view.allowsEditingTextAttributes = true
         content.apply(to: view)
         view.textColor = textColor
         view.cell?.lineBreakMode = lineBreakMode
@@ -243,3 +234,11 @@ public struct TextRenderNode: RenderNode {
 #endif
     }
 }
+
+#if os(macOS)
+class NoPaddingTextFieldCell: NSTextFieldCell {
+  override func drawingRect(forBounds rect: NSRect) -> NSRect {
+    return rect.insetBy(dx: -2, dy: 0) // mac has 2px inset
+  }
+}
+#endif

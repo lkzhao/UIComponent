@@ -1,9 +1,5 @@
 //  Created by Luke Zhao on 8/23/20.
 
-#if os(macOS)
-import AppKit
-#endif
-
 /// An image component that renders a platform image view.
 public struct Image: Component {
     /// The underlying platform image.

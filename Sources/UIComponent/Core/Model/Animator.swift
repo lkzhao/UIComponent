@@ -85,12 +85,17 @@ public extension Animator {
         view: PlatformView,
         frame: CGRect
     ) {
-        if view.bounds.size != frame.size {
-            view.bounds.size = frame.size
-        }
-        if view.center != frame.center {
-            view.center = frame.center
-        }
+#if canImport(UIKit)
+      if view.bounds.size != frame.size {
+        view.bounds.size = frame.size
+      }
+      if view.center != frame.center {
+        view.center = frame.center
+      }
+#else
+      view.frame = frame
+      view.setNeedsDisplay(frame.bounds)
+#endif
     }
     func shift(hostingView: PlatformView, delta: CGPoint, view: PlatformView) {
         view.center += delta
