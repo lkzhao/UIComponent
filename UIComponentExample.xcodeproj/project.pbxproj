@@ -60,7 +60,9 @@
 				A3FBDA7A2EBA62A3004F356C /* Products */,
 				A3FBDE9D2EBA66A8004F356C /* Frameworks */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
 		};
 		A3FBDA7A2EBA62A3004F356C /* Products */ = {
 			isa = PBXGroup;

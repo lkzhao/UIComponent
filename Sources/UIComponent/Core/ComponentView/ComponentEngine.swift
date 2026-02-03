@@ -54,6 +54,9 @@ public final class ComponentEngine {
     /// Internal state to track if the engine is currently reloading.
     public private(set) var isReloading = false
 
+    /// A closure that adjusts the content offset after the layout is finished, but before any view is rendered.
+    public private(set) var nextContentOffsetAdjustFn: (() -> CGPoint)?
+
     /// A computed property to determine if reloading is allowed by consulting the `reloadDelegate`.
     var allowReload: Bool {
         guard let view, let reloadDelegate = Self.reloadDelegate else { return true }
@@ -164,8 +167,10 @@ public final class ComponentEngine {
     /// - Parameter contentOffsetAdjustFn: An optional closure that adjusts the content offset after the layout is finished, but berfore any view is rendered.
     public func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
         guard !isReloading, allowReload else { return }
+        let contentOffsetAdjustFn = contentOffsetAdjustFn ?? nextContentOffsetAdjustFn
         isReloading = true
         defer {
+            nextContentOffsetAdjustFn = nil
             reloadCount += 1
             needsReload = false
             isReloading = false
