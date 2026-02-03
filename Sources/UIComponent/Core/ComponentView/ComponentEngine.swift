@@ -33,6 +33,9 @@ public final class ComponentEngine {
         didSet { setNeedsRender() }
     }
 
+    /// A closure that adjusts the content offset after the layout is finished, but before any view is rendered.
+    public var nextContentOffsetAdjustFn: (() -> CGPoint)?
+
     /// The current `RenderNode`. This is `nil` before the layout is done.
     public private(set) var renderNode: (any RenderNode)?
 
@@ -53,9 +56,6 @@ public final class ComponentEngine {
 
     /// Internal state to track if the engine is currently reloading.
     public private(set) var isReloading = false
-
-    /// A closure that adjusts the content offset after the layout is finished, but before any view is rendered.
-    public private(set) var nextContentOffsetAdjustFn: (() -> CGPoint)?
 
     /// A computed property to determine if reloading is allowed by consulting the `reloadDelegate`.
     var allowReload: Bool {
