@@ -1,5 +1,20 @@
 /// A component produced by the ``Component/id(_:)`` modifier
-public typealias IDComponent<Content: Component> = ModifierComponent<Content, ContextOverrideRenderNode<Content.R>>
+public struct IDComponent<Content: Component>: Component {
+    public let content: Content
+    public let idValue: String?
+
+    public init(content: Content, idValue: String?) {
+        self.content = content
+        self.idValue = idValue
+    }
+
+    public func layout(_ constraint: Constraint) -> ContextOverrideRenderNode<Content.R> {
+        let renderNode = LayoutIdentityContext.withExplicitID(idValue) {
+            content.layout(constraint)
+        }
+        return renderNode.id(idValue)
+    }
+}
 
 /// A component produced by the ``Component/animator(_:)`` modifier
 public typealias AnimatorComponent<Content: Component> = ModifierComponent<Content, ContextOverrideRenderNode<Content.R>>
@@ -12,9 +27,7 @@ extension Component {
     /// - Parameter id: An optional string that uniquely identifies the component.
     /// - Returns: An `IDComponent` that represents the modified component with an assigned ID.
     public func id(_ id: String?) -> IDComponent<Self> {
-        ModifierComponent(content: self) {
-            $0.id(id)
-        }
+        IDComponent(content: self, idValue: id)
     }
 
     /// Associates an animator with the component.

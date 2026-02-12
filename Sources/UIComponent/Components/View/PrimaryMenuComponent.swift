@@ -61,6 +61,9 @@ public struct PrimaryMenuRenderNode: RenderNode {
     public func updateView(_ view: PrimaryMenu) {
         view.config = config
         view.menuBuilder = menuBuilder
+        if let animator = RenderUpdateContextValues.current?.resolvedAnimator {
+            view.componentEngine.animator = animator
+        }
         view.componentEngine.reloadWithExisting(component: component, renderNode: content)
     }
 

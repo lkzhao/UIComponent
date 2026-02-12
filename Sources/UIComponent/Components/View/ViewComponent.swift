@@ -3,6 +3,8 @@
 /// A `ViewComponent`is a Component that encapsulates a `UIView` or a generator closure that can create a `UIView`.
 /// See <doc:CustomView> for more details
 public struct ViewComponent<View: UIView>: Component {
+    @Environment(\.hostingView) private var hostingView
+
     /// The `UIView` instance that the component manages.
     public let view: View?
     /// A generator closure that can create a `UIView` instance when needed.
@@ -43,7 +45,34 @@ public struct ViewComponent<View: UIView>: Component {
     /// - Parameter constraint: A `Constraint` instance that provides the maximum size that the view can take.
     /// - Returns: A `ViewRenderNode` instance that represents the layout of the view.
     public func layout(_ constraint: Constraint) -> ViewRenderNode<View> {
-        ViewRenderNode(size: (view?.sizeThatFits(constraint.maxSize) ?? .zero).bound(to: constraint), view: view, generator: generator)
+        let identity = LayoutIdentityContext.makeIdentity()
+        let hostingView = self.hostingView
+
+        let measuredSize: CGSize
+        let shouldMeasureAfterRender: Bool
+        if constraint.isTight {
+            measuredSize = constraint.maxSize
+            shouldMeasureAfterRender = false
+        } else if let view {
+            measuredSize = view.sizeThatFits(constraint.maxSize)
+            shouldMeasureAfterRender = false
+        } else if let cachedSize = hostingView?.componentEngine.loadViewMeasurementSize(identity: identity, constraint: constraint) {
+            measuredSize = cachedSize
+            shouldMeasureAfterRender = true
+        } else {
+            measuredSize = .zero
+            shouldMeasureAfterRender = true
+        }
+
+        return ViewRenderNode(
+            size: measuredSize.bound(to: constraint),
+            view: view,
+            generator: generator,
+            measurementIdentity: identity,
+            measurementConstraint: constraint,
+            hostingViewProvider: { [weak hostingView] in hostingView },
+            shouldMeasureAfterRender: shouldMeasureAfterRender
+        )
     }
 }
 
@@ -55,16 +84,36 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
     public let view: View?
     /// A generator closure that can create a `UIView` instance when needed.
     public let generator: (() -> View)?
+    /// The identity used for deferred size measurement cache.
+    public let measurementIdentity: String?
+    /// The constraint used for deferred size measurement cache.
+    public let measurementConstraint: Constraint?
+    /// A provider for the hosting view used to persist deferred measurements.
+    public let hostingViewProvider: (() -> UIView?)?
+    /// Whether the node should measure the rendered view and feed back into layout cache.
+    public let shouldMeasureAfterRender: Bool
 
     /// Initializes a `ViewRenderNode` with a specified size, optional view, and optional generator.
     /// - Parameters:
     ///   - size: The size of the view.
     ///   - view: An optional `UIView` instance.
     ///   - generator: An optional closure that generates a `UIView`.
-    fileprivate init(size: CGSize, view: View?, generator: (() -> View)?) {
+    fileprivate init(
+        size: CGSize,
+        view: View?,
+        generator: (() -> View)?,
+        measurementIdentity: String? = nil,
+        measurementConstraint: Constraint? = nil,
+        hostingViewProvider: (() -> UIView?)? = nil,
+        shouldMeasureAfterRender: Bool = false
+    ) {
         self.size = size
         self.view = view
         self.generator = generator
+        self.measurementIdentity = measurementIdentity
+        self.measurementConstraint = measurementConstraint
+        self.hostingViewProvider = hostingViewProvider
+        self.shouldMeasureAfterRender = shouldMeasureAfterRender
     }
 
     /// Initializes a `ViewRenderNode` with a specified size and no view or generator.
@@ -103,7 +152,27 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
 
     /// Updates the provided view with new data or state.
     /// - Parameter view: The `UIView` instance to update.
-    public func updateView(_ view: View) {}
+    public func updateView(_ view: View) {
+        guard shouldMeasureAfterRender,
+              let measurementIdentity,
+              let measurementConstraint,
+              let hostingView = hostingViewProvider?()
+        else {
+            return
+        }
+
+        let measured = view.sizeThatFits(measurementConstraint.maxSize).bound(to: measurementConstraint)
+        let didUpdate = hostingView.componentEngine.storeViewMeasurementSize(
+            measured,
+            identity: measurementIdentity,
+            constraint: measurementConstraint
+        )
+        guard didUpdate else { return }
+
+        DispatchQueue.main.async { [weak hostingView] in
+            hostingView?.componentEngine.setNeedsReload()
+        }
+    }
 
     public func contextValue(_ key: RenderNodeContextKey) -> Any? {
         guard let view else { return nil }

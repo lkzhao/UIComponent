@@ -197,8 +197,10 @@ public final class ComponentEngine {
         let asyncLayoutID = UUID()
         self.asyncLayoutID = asyncLayoutID
         Self.asyncLayoutQueue.async { [weak self] in
-            let renderNode = EnvironmentValues.with(values: .init(\.hostingView, value: view)) {
-                component.layout(Constraint(maxSize: adjustedSize))
+            let renderNode = LayoutIdentityContext.beginLayoutPass {
+                EnvironmentValues.with(values: .init(\.hostingView, value: view)) {
+                    component.layout(Constraint(maxSize: adjustedSize))
+                }
             }
             DispatchQueue.main.async {
                 guard let self, self.asyncLayoutID == asyncLayoutID else { return }
@@ -210,8 +212,10 @@ public final class ComponentEngine {
     private func layoutComponent(contentOffsetAdjustFn: (() -> CGPoint)?) {
         guard let view, let component else { return }
 
-        let renderNode = EnvironmentValues.with(values: .init(\.hostingView, value: view)) {
-            component.layout(Constraint(maxSize: adjustedSize))
+        let renderNode = LayoutIdentityContext.beginLayoutPass {
+            EnvironmentValues.with(values: .init(\.hostingView, value: view)) {
+                component.layout(Constraint(maxSize: adjustedSize))
+            }
         }
         
         didFinishLayout(renderNode: renderNode, contentOffsetAdjustFn: contentOffsetAdjustFn)
@@ -292,7 +296,11 @@ public final class ComponentEngine {
                 cell = existingView
                 if updateViews {
                     // view was on screen before reload, need to update the view.
-                    renderable.renderNode._updateView(cell)
+                    RenderUpdateContextValues.with(
+                        context: .init(resolvedAnimator: animator, renderableID: renderable.id)
+                    ) {
+                        renderable.renderNode._updateView(cell)
+                    }
                     animator.shift(hostingView: view, delta: contentOffsetDelta, view: cell)
                 }
             } else {
@@ -301,7 +309,11 @@ public final class ComponentEngine {
                     cell.bounds.size = frame.bounds.size
                     cell.center = frame.center
                     cell.layoutIfNeeded()
-                    renderable.renderNode._updateView(cell)
+                    RenderUpdateContextValues.with(
+                        context: .init(resolvedAnimator: animator, renderableID: renderable.id)
+                    ) {
+                        renderable.renderNode._updateView(cell)
+                    }
                 }
                 animator.insert(hostingView: view, view: cell, frame: frame)
                 newViews[index] = cell
@@ -323,6 +335,40 @@ public final class ComponentEngine {
     internal var cacheEngine = CacheEngine()
     internal func loadCachingData<T>(id: String, scope: CacheScope, generator: () -> T) -> T {
         cacheEngine.loadCachingData(id: id, scope: scope, generator: generator)
+    }
+
+    // MARK: - View Measurement Caching
+
+    private var viewMeasurementCache: [String: CGSize] = [:]
+
+    internal func loadViewMeasurementSize(identity: String, constraint: Constraint) -> CGSize? {
+        viewMeasurementCache[viewMeasurementCacheKey(identity: identity, constraint: constraint)]
+    }
+
+    @discardableResult internal func storeViewMeasurementSize(_ size: CGSize, identity: String, constraint: Constraint) -> Bool {
+        let key = viewMeasurementCacheKey(identity: identity, constraint: constraint)
+        if let current = viewMeasurementCache[key], current.isApproximatelyEqual(to: size) {
+            return false
+        }
+        viewMeasurementCache[key] = size
+        return true
+    }
+
+    private func viewMeasurementCacheKey(identity: String, constraint: Constraint) -> String {
+        "\(identity)|\(cacheDimension(constraint.minSize.width)),\(cacheDimension(constraint.minSize.height)),\(cacheDimension(constraint.maxSize.width)),\(cacheDimension(constraint.maxSize.height))"
+    }
+
+    private func cacheDimension(_ value: CGFloat) -> String {
+        if value == .infinity {
+            return "inf"
+        }
+        if value == -.infinity {
+            return "-inf"
+        }
+        if value.isNaN {
+            return "nan"
+        }
+        return String((value * 1000).rounded() / 1000)
     }
 
     /// Ensures that the zoom view is centered within the scroll view if it is smaller than the scroll view's bounds.
@@ -414,5 +460,11 @@ extension ComponentEngine {
         } else {
             return false
         }
+    }
+}
+
+private extension CGSize {
+    func isApproximatelyEqual(to other: CGSize, tolerance: CGFloat = 0.5) -> Bool {
+        abs(width - other.width) <= tolerance && abs(height - other.height) <= tolerance
     }
 }

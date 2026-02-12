@@ -50,6 +50,9 @@ public struct MaskComponent<Content: Component>: Component {
                     view.mask = maskView
                 }
                 maskView.frame = CGRect(origin: .zero, size: maskRenderNode.size)
+                if let animator = RenderUpdateContextValues.current?.resolvedAnimator {
+                    maskView.componentEngine.animator = animator
+                }
                 maskView.componentEngine.reloadWithExisting(component: mask, renderNode: maskRenderNode)
             }
             .layout(.init(tightSize: maskRenderNode.size))
