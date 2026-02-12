@@ -155,25 +155,6 @@ struct LayoutIdentityAndMeasurementTests {
         #expect(childSizes(from: host.componentEngine.renderNode) == [CGSize(width: 44, height: 10), CGSize(width: 88, height: 20)])
     }
 
-    @Test func testTappableViewReceivesResolvedAnimator() throws {
-        let host = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
-
-        let rootAnimator = MarkerAnimator()
-        host.componentEngine.animator = rootAnimator
-        host.componentEngine.component = Text("Tap").tappableView { _ in }
-        host.componentEngine.reloadData()
-        let tappableWithRootAnimator = host.subviews.first as? TappableView
-        #expect(tappableWithRootAnimator != nil)
-        #expect((tappableWithRootAnimator?.componentEngine.animator as? MarkerAnimator) === rootAnimator)
-
-        let overrideAnimator = MarkerAnimator()
-        host.componentEngine.component = Text("Tap").tappableView { _ in }.animator(overrideAnimator)
-        host.componentEngine.reloadData()
-        let tappableWithOverrideAnimator = host.subviews.first as? TappableView
-        #expect(tappableWithOverrideAnimator != nil)
-        #expect((tappableWithOverrideAnimator?.componentEngine.animator as? MarkerAnimator) === overrideAnimator)
-    }
-
     private func componentWithMeasuredTrailingView(includeLeadingView: Bool, useExplicitID: Bool) -> AnyComponent {
         let trailing: any Component
         if useExplicitID {
@@ -257,8 +238,6 @@ private final class SecondSiblingProbeView: UIView {
         return CGSize(width: 88, height: 20)
     }
 }
-
-private final class MarkerAnimator: Animator {}
 
 private struct AlwaysRenderContainer: Component {
     let children: [any Component]

@@ -423,7 +423,7 @@ class ViewHierarchyExamplesView: UIView {
 
             VStack(spacing: 10) {
                 Text("⚠️ Gotcha: Animators and view boundaries", font: .subtitle).id("animator-issues")
-                Text("Animators have two common issues related to view hierarchy: they may only apply to the background view instead of the entire component, and they don't cross view boundaries.", font: .body).textColor(.systemOrange)
+                Text("Animators can behave unexpectedly with view hierarchy. A common issue is that applying animator on layout components without .view() may only animate the background layer.", font: .body).textColor(.systemOrange)
                 
                 VStack(spacing: 15) {
                     VStack(spacing: 6) {
@@ -465,93 +465,6 @@ class ViewHierarchyExamplesView: UIView {
                             }.size(width: 240, height: 100)
                         )
                     }
-
-                    VStack(spacing: 6) {
-                        Text("However, wrapping the view also might cause some other issues. Like when animating the frame of the child view inside the wrapper.", font: .body).textColor(.secondaryLabel)
-                        Text("Toggle Size", font: .body)
-                            .inset(h: 20, v: 10)
-                            .backgroundColor(.systemBlue)
-                            .textColor(.white)
-                            .cornerRadius(8)
-                            .tappableView {
-                                viewModel.toggleSize.toggle()
-                            }
-
-                        #CodeExampleNoInsets(
-                            ZStack {
-                                Space(size: viewModel.toggleSize ? CGSize(width: 200, height: 80) : CGSize(width: 100, height: 50))
-                                    .backgroundColor(.systemRed.withAlphaComponent(0.5))
-                                    .view()
-                                    .backgroundColor(.systemBlue)
-                                    .animator(TransformAnimator())
-                            }.size(width: 240, height: 100)
-                        )
-
-                        #CodeExampleNoInsets(
-                            ZStack {
-                                Space(size: viewModel.toggleSize ? CGSize(width: 200, height: 80) : CGSize(width: 100, height: 50))
-                                    .backgroundColor(.systemRed.withAlphaComponent(0.5))
-                                    .animator(TransformAnimator()) // applying animator to the child view too
-                                    .view()
-                                    .backgroundColor(.systemBlue)
-                                    .animator(TransformAnimator())
-                            }.size(width: 240, height: 100)
-                        )
-                    }
-                    
-                    Separator()
-
-                    VStack(spacing: 6) {
-                        Text("Issue 2: ComponentEngine's default animator doesn't apply to child view inside view wrappers", font: .bodyBold).textColor(.systemOrange)
-                        Text("When you use view wrapper modifiers like .view(), .scrollView(), or .tappableView(), they create a new view boundary. The parent's componentEngine animator doesn't apply to children inside these wrapped views. Causing inner view's frame to not be animated.", font: .body).textColor(.secondaryLabel)
-
-                        Text("Toggle Size", font: .body)
-                            .inset(h: 20, v: 10)
-                            .backgroundColor(.systemBlue)
-                            .textColor(.white)
-                            .cornerRadius(8)
-                            .tappableView {
-                                viewModel.toggleSize.toggle()
-                            }
-
-                        Code {
-                            "componentEngine.animator = TransformAnimator() // animator set on the parent componentEngine"
-                        }
-
-                        #CodeExampleNoWrap(
-                            ZStack {
-                                Space(size: viewModel.toggleSize ? CGSize(width: 200, height: 80) : CGSize(width: 100, height: 50))
-                                    .backgroundColor(.systemRed.withAlphaComponent(0.5))
-                                    .view()
-                                    .backgroundColor(.systemBlue)
-                            }
-                            .size(width: 240, height: 100)
-                        )
-
-                        Text("Fix 1: individually apply animator modifier to the child view", font: .body).textColor(.secondaryLabel)
-                        #CodeExampleNoWrap(
-                            ZStack {
-                                Space(size: viewModel.toggleSize ? CGSize(width: 200, height: 80) : CGSize(width: 100, height: 50))
-                                    .backgroundColor(.systemRed.withAlphaComponent(0.5))
-                                    .animator(TransformAnimator())
-                                    .view()
-                                    .backgroundColor(.systemBlue)
-                            }
-                            .size(width: 240, height: 100)
-                        )
-
-                        Text("Fix 2: assign an animator to the view wrapper's componentEngine", font: .body).textColor(.secondaryLabel)
-                        #CodeExampleNoWrap(
-                            ZStack {
-                                Space(size: viewModel.toggleSize ? CGSize(width: 200, height: 80) : CGSize(width: 100, height: 50))
-                                    .backgroundColor(.systemRed.withAlphaComponent(0.5))
-                                    .view()
-                                    .backgroundColor(.systemBlue)
-                                    .with(\.componentEngine.animator, TransformAnimator())
-                            }
-                            .size(width: 240, height: 100)
-                        )
-                    }.view().with(\.componentEngine.animator, TransformAnimator())
                 }
                 .inset(16)
                 .backgroundColor(.systemOrange.withAlphaComponent(0.1))
@@ -629,4 +542,3 @@ class ViewHierarchyExamplesView: UIView {
         }.inset(24).ignoreHeightConstraint().scrollView().contentInsetAdjustmentBehavior(.always).fill()
     }
 }
-

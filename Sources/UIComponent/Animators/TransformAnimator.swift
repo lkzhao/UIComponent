@@ -12,6 +12,8 @@ public struct TransformAnimator: Animator {
     public var duration: TimeInterval
     /// A Boolean value that determines whether the animation should be applied in a cascading manner.
     public var cascade: Bool
+    /// A Boolean value that determines whether animation blocks should include the `.layoutSubviews` option.
+    public var layoutSubviews: Bool
     /// A Boolean value that determines whether to show the initial insertion animation when the view is first loaded.
     public var showInitialInsertionAnimation: Bool = false
     /// A Boolean value that determines whether to show insertion animations for items that are out of the bounds of the hosting view.
@@ -22,18 +24,29 @@ public struct TransformAnimator: Animator {
     ///   - transform: The 3D transform to apply to the view during animation. Defaults to the identity transform.
     ///   - duration: The duration of the animation in seconds. Defaults to 0.5 seconds.
     ///   - cascade: A Boolean value that determines whether the animation should be applied in a cascading manner. Defaults to `false`.
+    ///   - layoutSubviews: A Boolean value that determines whether animation blocks include the `.layoutSubviews` option. Defaults to `true`.
     public init(
         transform: CATransform3D = CATransform3DIdentity,
         duration: TimeInterval = 0.5,
         cascade: Bool = false,
+        layoutSubviews: Bool = true,
         showInitialInsertionAnimation: Bool = false,
         showInsertionAnimationOnOutOfBoundsItems: Bool = false,
     ) {
         self.transform = transform
         self.duration = duration
         self.cascade = cascade
+        self.layoutSubviews = layoutSubviews
         self.showInitialInsertionAnimation = showInitialInsertionAnimation
         self.showInsertionAnimationOnOutOfBoundsItems = showInsertionAnimationOnOutOfBoundsItems
+    }
+
+    internal var animationOptions: UIView.AnimationOptions {
+        var options: UIView.AnimationOptions = [.allowUserInteraction]
+        if layoutSubviews {
+            options.insert(.layoutSubviews)
+        }
+        return options
     }
 
     public func delete(hostingView: UIView, view: UIView, completion: @escaping () -> Void) {
@@ -44,7 +57,7 @@ public struct TransformAnimator: Animator {
                 delay: 0,
                 usingSpringWithDamping: 0.9,
                 initialSpringVelocity: 0,
-                options: [.allowUserInteraction],
+                options: animationOptions,
                 animations: {
                     view.layer.transform = self.transform
                     view.alpha = 0
@@ -77,7 +90,7 @@ public struct TransformAnimator: Animator {
                 delay: offsetTime,
                 usingSpringWithDamping: 0.9,
                 initialSpringVelocity: 0,
-                options: [.allowUserInteraction],
+                options: animationOptions,
                 animations: {
                     view.layer.transform = baseTransform
                     view.alpha = 1
@@ -93,7 +106,7 @@ public struct TransformAnimator: Animator {
                 delay: 0,
                 usingSpringWithDamping: 0.9,
                 initialSpringVelocity: 0,
-                options: [.allowUserInteraction],
+                options: animationOptions,
                 animations: {
                     view.center = frame.center
                 },
@@ -106,7 +119,7 @@ public struct TransformAnimator: Animator {
                 delay: 0,
                 usingSpringWithDamping: 0.9,
                 initialSpringVelocity: 0,
-                options: [.allowUserInteraction],
+                options: animationOptions,
                 animations: {
                     view.bounds.size = frame.bounds.size
                 },
@@ -119,7 +132,7 @@ public struct TransformAnimator: Animator {
                 delay: 0,
                 usingSpringWithDamping: 0.9,
                 initialSpringVelocity: 0,
-                options: [.allowUserInteraction],
+                options: animationOptions,
                 animations: {
                     view.alpha = 1
                 },
