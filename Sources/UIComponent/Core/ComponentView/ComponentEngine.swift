@@ -337,13 +337,13 @@ public final class ComponentEngine {
         viewMeasurementCache[viewMeasurementCacheKey(identity: identity, constraint: constraint)]
     }
 
-    @discardableResult internal func storeViewMeasurementSize(_ size: CGSize, identity: String, constraint: Constraint) -> Bool {
+    @discardableResult internal func storeViewMeasurementSize(_ size: CGSize, identity: String, constraint: Constraint) {
         let key = viewMeasurementCacheKey(identity: identity, constraint: constraint)
         if let current = viewMeasurementCache[key], current.isApproximatelyEqual(to: size) {
-            return false
+            return
         }
         viewMeasurementCache[key] = size
-        return true
+        setNeedsReload()
     }
 
     private func viewMeasurementCacheKey(identity: String, constraint: Constraint) -> String {

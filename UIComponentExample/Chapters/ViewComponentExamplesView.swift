@@ -113,10 +113,6 @@ class ViewComponentExamplesView: UIView {
                         existingSwitch2
                     )
                 }
-                VStack(spacing: 6) {
-                    Text("Did you notice that when using existing views, size is not required?", font: .bodyBold)
-                    Text("This is because the view's intrinsic content size is used for layout. For generator-based ViewComponent, explicit size is now optional thanks to deferred measurement, but still recommended for predictable layout and performance.", font: .body).textColor(.secondaryLabel)
-                }.inset(16).backgroundColor(.secondarySystemBackground).cornerRadius(16)
             }
             
             VStack(spacing: 20) {

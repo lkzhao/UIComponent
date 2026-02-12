@@ -70,7 +70,7 @@ public struct ViewComponent<View: UIView>: Component {
             generator: generator,
             measurementIdentity: identity,
             measurementConstraint: constraint,
-            hostingViewProvider: { [weak hostingView] in hostingView },
+            hostingView: hostingView,
             shouldMeasureAfterRender: shouldMeasureAfterRender
         )
     }
@@ -89,7 +89,7 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
     /// The constraint used for deferred size measurement cache.
     public let measurementConstraint: Constraint?
     /// A provider for the hosting view used to persist deferred measurements.
-    public let hostingViewProvider: (() -> UIView?)?
+    public weak var hostingView: UIView?
     /// Whether the node should measure the rendered view and feed back into layout cache.
     public let shouldMeasureAfterRender: Bool
 
@@ -104,7 +104,7 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
         generator: (() -> View)?,
         measurementIdentity: String? = nil,
         measurementConstraint: Constraint? = nil,
-        hostingViewProvider: (() -> UIView?)? = nil,
+        hostingView: UIView?,
         shouldMeasureAfterRender: Bool = false
     ) {
         self.size = size
@@ -112,30 +112,8 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
         self.generator = generator
         self.measurementIdentity = measurementIdentity
         self.measurementConstraint = measurementConstraint
-        self.hostingViewProvider = hostingViewProvider
+        self.hostingView = hostingView
         self.shouldMeasureAfterRender = shouldMeasureAfterRender
-    }
-
-    /// Initializes a `ViewRenderNode` with a specified size and no view or generator.
-    /// - Parameter size: The size of the view.
-    public init(size: CGSize) {
-        self.init(size: size, view: nil, generator: nil)
-    }
-
-    /// Initializes a `ViewRenderNode` with a specified size and a view.
-    /// - Parameters:
-    ///   - size: The size of the view.
-    ///   - view: A `UIView` instance.
-    public init(size: CGSize, view: View) {
-        self.init(size: size, view: view, generator: nil)
-    }
-
-    /// Initializes a `ViewRenderNode` with a specified size and a generator.
-    /// - Parameters:
-    ///   - size: The size of the view.
-    ///   - generator: A closure that generates a `UIView`.
-    public init(size: CGSize, generator: @escaping (() -> View)) {
-        self.init(size: size, view: nil, generator: generator)
     }
 
     /// Creates and returns a `UIView` instance, either from the existing view or by using the generator.
@@ -156,22 +134,17 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
         guard shouldMeasureAfterRender,
               let measurementIdentity,
               let measurementConstraint,
-              let hostingView = hostingViewProvider?()
+              let hostingView
         else {
             return
         }
 
         let measured = view.sizeThatFits(measurementConstraint.maxSize).bound(to: measurementConstraint)
-        let didUpdate = hostingView.componentEngine.storeViewMeasurementSize(
+        hostingView.componentEngine.storeViewMeasurementSize(
             measured,
             identity: measurementIdentity,
             constraint: measurementConstraint
         )
-        guard didUpdate else { return }
-
-        DispatchQueue.main.async { [weak hostingView] in
-            hostingView?.componentEngine.setNeedsReload()
-        }
     }
 
     public func contextValue(_ key: RenderNodeContextKey) -> Any? {
@@ -189,6 +162,6 @@ extension UIView: Component {
     /// - Parameter constraint: The constraints within which the view should be laid out.
     /// - Returns: A `ViewRenderNode` representing the laid out view.
     public func layout(_ constraint: Constraint) -> ViewRenderNode<UIView> {
-        ViewRenderNode(size: constraint.isTight ? constraint.maxSize : sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
+        ViewComponent(view: self).layout(constraint)
     }
 }
