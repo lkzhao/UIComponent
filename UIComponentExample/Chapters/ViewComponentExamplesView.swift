@@ -86,11 +86,12 @@ class ViewComponentExamplesView: UIView {
                         Text("UIComponent won't initiate the view until it is about to be displayed. This allows for better performance and memory usage, especially when dealing with large lists of components or frequent component updates.", font: .body).textColor(.systemBlue)
                     }.inset(16).backgroundColor(.systemBlue.withAlphaComponent(0.1)).cornerRadius(16)
                     VStack(spacing: 4) {
-                        Text("Because views are initialized at render time, their size won't be available at layout time. Therefore, you should always provide a size for the ViewComponent when using the generator type initializers. Otherwise it will have zero size and won't be visible. For example, the following code doesn't display at all.", font: .body).textColor(.systemRed)
+                        Text("When using generator initializers without an explicit size, ViewComponent now performs deferred measurement. It starts as zero size, then measures after first render, caches the result, and triggers a relayout. So it still appears, but may require an extra layout pass and can visually pop in.", font: .body).textColor(.systemOrange)
+                        Text("For predictable layout and better performance, it's still recommended to provide an explicit size when possible.", font: .body).textColor(.systemOrange)
                         #CodeExampleNoInsets(
                             ViewComponent<UISwitch>()
                         )
-                    }.inset(16).backgroundColor(.systemRed.withAlphaComponent(0.1)).cornerRadius(16)
+                    }.inset(16).backgroundColor(.systemOrange.withAlphaComponent(0.1)).cornerRadius(16)
                 }
 
                 Separator()
@@ -114,7 +115,7 @@ class ViewComponentExamplesView: UIView {
                 }
                 VStack(spacing: 6) {
                     Text("Did you notice that when using existing views, size is not required?", font: .bodyBold)
-                    Text("This is because the view's intrinsic content size is used for layout. So you can use existing views without specifying size. This is in contrast to generating new views dynamically where size must be specified.", font: .body).textColor(.secondaryLabel)
+                    Text("This is because the view's intrinsic content size is used for layout. For generator-based ViewComponent, explicit size is now optional thanks to deferred measurement, but still recommended for predictable layout and performance.", font: .body).textColor(.secondaryLabel)
                 }.inset(16).backgroundColor(.secondarySystemBackground).cornerRadius(16)
             }
             

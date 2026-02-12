@@ -3,16 +3,18 @@
 internal struct LayoutIdentityState {
     internal struct ExplicitScope {
         var id: String
+        var scopeIndex: Int
         var nextChildIndex: Int = 0
     }
 
     var autoIndex: Int = 0
     var explicitScopes: [ExplicitScope] = []
+    var explicitIDScopeCount: [String: Int] = [:]
 }
 
 internal enum LayoutIdentityContext {
-    private static let currentStateKey = "currentLayoutIdentityState"
-    private static let stateStackKey = "layoutIdentityStateStack"
+    private static let currentStateKey = "uicomponent.currentLayoutIdentityState"
+    private static let stateStackKey = "uicomponent.layoutIdentityStateStack"
 
     internal static var currentState: LayoutIdentityState {
         get {
@@ -45,7 +47,9 @@ internal enum LayoutIdentityContext {
         }
 
         var state = currentState
-        state.explicitScopes.append(.init(id: id))
+        let nextScopeIndex = (state.explicitIDScopeCount[id] ?? 0) + 1
+        state.explicitIDScopeCount[id] = nextScopeIndex
+        state.explicitScopes.append(.init(id: id, scopeIndex: nextScopeIndex))
         currentState = state
         defer {
             var state = currentState
@@ -61,16 +65,13 @@ internal enum LayoutIdentityContext {
             scope.nextChildIndex += 1
             state.explicitScopes.append(scope)
             currentState = state
-            if scope.nextChildIndex == 1 {
-                return "id:\(scope.id)"
-            } else {
-                return "id:\(scope.id)#\(scope.nextChildIndex)"
-            }
-        } else {
-            state.autoIndex += 1
-            currentState = state
-            return "auto:\(state.autoIndex)"
+            let scopeSuffix = scope.scopeIndex == 1 ? "" : "@\(scope.scopeIndex)"
+            let childSuffix = scope.nextChildIndex == 1 ? "" : "#\(scope.nextChildIndex)"
+            return "id:\(scope.id)\(scopeSuffix)\(childSuffix)"
         }
+        state.autoIndex += 1
+        currentState = state
+        return "auto:\(state.autoIndex)"
     }
 
     internal static func withState<Result>(state: LayoutIdentityState, accessor: () throws -> Result) rethrows -> Result {
@@ -86,7 +87,7 @@ internal enum LayoutIdentityContext {
 
     private static func restoreCurrentState() {
         guard let state = stateStack.popLast() else {
-            assertionFailure("Inbalanced layout identity save/restore")
+            assertionFailure("Imbalanced layout identity save/restore")
             return
         }
         currentState = state

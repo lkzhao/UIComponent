@@ -2,7 +2,6 @@
 
 internal struct RenderUpdateContext {
     let resolvedAnimator: Animator
-    let renderableID: String
 }
 
 internal enum RenderUpdateContextValues {
@@ -22,5 +21,13 @@ internal enum RenderUpdateContextValues {
         current = context
         defer { current = previous }
         return try accessor()
+    }
+}
+
+internal extension ComponentEngine {
+    func applyResolvedAnimatorFromCurrentUpdateContext() {
+        if let animator = RenderUpdateContextValues.current?.resolvedAnimator {
+            self.animator = animator
+        }
     }
 }

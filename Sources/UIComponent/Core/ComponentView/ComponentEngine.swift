@@ -297,7 +297,7 @@ public final class ComponentEngine {
                 if updateViews {
                     // view was on screen before reload, need to update the view.
                     RenderUpdateContextValues.with(
-                        context: .init(resolvedAnimator: animator, renderableID: renderable.id)
+                        context: .init(resolvedAnimator: animator)
                     ) {
                         renderable.renderNode._updateView(cell)
                     }
@@ -310,7 +310,7 @@ public final class ComponentEngine {
                     cell.center = frame.center
                     cell.layoutIfNeeded()
                     RenderUpdateContextValues.with(
-                        context: .init(resolvedAnimator: animator, renderableID: renderable.id)
+                        context: .init(resolvedAnimator: animator)
                     ) {
                         renderable.renderNode._updateView(cell)
                     }
