@@ -52,9 +52,7 @@ public struct TappableViewRenderNode: RenderNode {
     public func updateView(_ view: TappableView) {
         view.config = config
         view.onTap = onTap
-        let componentEngine = view.componentEngine
-        componentEngine.applyResolvedAnimatorFromCurrentUpdateContext()
-        componentEngine.reloadWithExisting(component: component, renderNode: content)
+        view.componentEngine.reloadWithExisting(component: component, renderNode: content)
     }
 
     public func contextValue(_ key: RenderNodeContextKey) -> Any? {

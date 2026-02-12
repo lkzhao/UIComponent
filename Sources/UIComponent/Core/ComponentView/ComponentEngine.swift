@@ -296,11 +296,7 @@ public final class ComponentEngine {
                 cell = existingView
                 if updateViews {
                     // view was on screen before reload, need to update the view.
-                    RenderUpdateContextValues.with(
-                        context: .init(resolvedAnimator: animator)
-                    ) {
-                        renderable.renderNode._updateView(cell)
-                    }
+                    renderable.renderNode._updateView(cell)
                     animator.shift(hostingView: view, delta: contentOffsetDelta, view: cell)
                 }
             } else {
@@ -309,11 +305,7 @@ public final class ComponentEngine {
                     cell.bounds.size = frame.bounds.size
                     cell.center = frame.center
                     cell.layoutIfNeeded()
-                    RenderUpdateContextValues.with(
-                        context: .init(resolvedAnimator: animator)
-                    ) {
-                        renderable.renderNode._updateView(cell)
-                    }
+                    renderable.renderNode._updateView(cell)
                 }
                 animator.insert(hostingView: view, view: cell, frame: frame)
                 newViews[index] = cell

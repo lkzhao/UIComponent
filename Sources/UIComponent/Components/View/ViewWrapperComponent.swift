@@ -23,9 +23,7 @@ public struct ViewWrapperRenderNode<View: UIView>: RenderNode {
     public let content: any RenderNode
 
     public func updateView(_ view: View) {
-        let componentEngine = view.componentEngine
-        componentEngine.applyResolvedAnimatorFromCurrentUpdateContext()
-        componentEngine.reloadWithExisting(component: component, renderNode: content)
+        view.componentEngine.reloadWithExisting(component: component, renderNode: content)
     }
 
     public func contextValue(_ key: RenderNodeContextKey) -> Any? {
