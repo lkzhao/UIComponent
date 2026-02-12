@@ -3,6 +3,8 @@
 /// A `ViewComponent`is a Component that encapsulates a `UIView` or a generator closure that can create a `UIView`.
 /// See <doc:CustomView> for more details
 public struct ViewComponent<View: UIView>: Component {
+    @Environment(\.hostingView) private var hostingView
+
     /// The `UIView` instance that the component manages.
     public let view: View?
     /// A generator closure that can create a `UIView` instance when needed.
@@ -43,7 +45,34 @@ public struct ViewComponent<View: UIView>: Component {
     /// - Parameter constraint: A `Constraint` instance that provides the maximum size that the view can take.
     /// - Returns: A `ViewRenderNode` instance that represents the layout of the view.
     public func layout(_ constraint: Constraint) -> ViewRenderNode<View> {
-        ViewRenderNode(size: (view?.sizeThatFits(constraint.maxSize) ?? .zero).bound(to: constraint), view: view, generator: generator)
+        let identity = LayoutIdentityContext.makeIdentity()
+        let hostingView = self.hostingView
+
+        let measuredSize: CGSize
+        let shouldMeasureAfterRender: Bool
+        if constraint.isTight {
+            measuredSize = constraint.maxSize
+            shouldMeasureAfterRender = false
+        } else if let view {
+            measuredSize = view.sizeThatFits(constraint.maxSize)
+            shouldMeasureAfterRender = false
+        } else if let cachedSize = hostingView?.componentEngine.loadViewMeasurementSize(identity: identity, constraint: constraint) {
+            measuredSize = cachedSize
+            shouldMeasureAfterRender = true
+        } else {
+            measuredSize = .zero
+            shouldMeasureAfterRender = true
+        }
+
+        return ViewRenderNode(
+            size: measuredSize.bound(to: constraint),
+            view: view,
+            generator: generator,
+            measurementIdentity: identity,
+            measurementConstraint: constraint,
+            hostingView: hostingView,
+            shouldMeasureAfterRender: shouldMeasureAfterRender
+        )
     }
 }
 
@@ -55,38 +84,36 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
     public let view: View?
     /// A generator closure that can create a `UIView` instance when needed.
     public let generator: (() -> View)?
+    /// The identity used for deferred size measurement cache.
+    public let measurementIdentity: String?
+    /// The constraint used for deferred size measurement cache.
+    public let measurementConstraint: Constraint?
+    /// A provider for the hosting view used to persist deferred measurements.
+    public weak var hostingView: UIView?
+    /// Whether the node should measure the rendered view and feed back into layout cache.
+    public let shouldMeasureAfterRender: Bool
 
     /// Initializes a `ViewRenderNode` with a specified size, optional view, and optional generator.
     /// - Parameters:
     ///   - size: The size of the view.
     ///   - view: An optional `UIView` instance.
     ///   - generator: An optional closure that generates a `UIView`.
-    fileprivate init(size: CGSize, view: View?, generator: (() -> View)?) {
+    fileprivate init(
+        size: CGSize,
+        view: View?,
+        generator: (() -> View)?,
+        measurementIdentity: String? = nil,
+        measurementConstraint: Constraint? = nil,
+        hostingView: UIView?,
+        shouldMeasureAfterRender: Bool = false
+    ) {
         self.size = size
         self.view = view
         self.generator = generator
-    }
-
-    /// Initializes a `ViewRenderNode` with a specified size and no view or generator.
-    /// - Parameter size: The size of the view.
-    public init(size: CGSize) {
-        self.init(size: size, view: nil, generator: nil)
-    }
-
-    /// Initializes a `ViewRenderNode` with a specified size and a view.
-    /// - Parameters:
-    ///   - size: The size of the view.
-    ///   - view: A `UIView` instance.
-    public init(size: CGSize, view: View) {
-        self.init(size: size, view: view, generator: nil)
-    }
-
-    /// Initializes a `ViewRenderNode` with a specified size and a generator.
-    /// - Parameters:
-    ///   - size: The size of the view.
-    ///   - generator: A closure that generates a `UIView`.
-    public init(size: CGSize, generator: @escaping (() -> View)) {
-        self.init(size: size, view: nil, generator: generator)
+        self.measurementIdentity = measurementIdentity
+        self.measurementConstraint = measurementConstraint
+        self.hostingView = hostingView
+        self.shouldMeasureAfterRender = shouldMeasureAfterRender
     }
 
     /// Creates and returns a `UIView` instance, either from the existing view or by using the generator.
@@ -103,7 +130,22 @@ public struct ViewRenderNode<View: UIView>: RenderNode {
 
     /// Updates the provided view with new data or state.
     /// - Parameter view: The `UIView` instance to update.
-    public func updateView(_ view: View) {}
+    public func updateView(_ view: View) {
+        guard shouldMeasureAfterRender,
+              let measurementIdentity,
+              let measurementConstraint,
+              let hostingView
+        else {
+            return
+        }
+
+        let measured = view.sizeThatFits(measurementConstraint.maxSize).bound(to: measurementConstraint)
+        hostingView.componentEngine.storeViewMeasurementSize(
+            measured,
+            identity: measurementIdentity,
+            constraint: measurementConstraint
+        )
+    }
 
     public func contextValue(_ key: RenderNodeContextKey) -> Any? {
         guard let view else { return nil }
@@ -120,6 +162,6 @@ extension UIView: Component {
     /// - Parameter constraint: The constraints within which the view should be laid out.
     /// - Returns: A `ViewRenderNode` representing the laid out view.
     public func layout(_ constraint: Constraint) -> ViewRenderNode<UIView> {
-        ViewRenderNode(size: constraint.isTight ? constraint.maxSize : sizeThatFits(constraint.maxSize).bound(to: constraint), view: self)
+        ViewComponent(view: self).layout(constraint)
     }
 }
