@@ -10,9 +10,9 @@ public struct ViewWrapperComponent<View: UIView>: Component {
     }
     public func layout(_ constraint: Constraint) -> ViewWrapperRenderNode<View> {
         let renderNode = component.layout(constraint)
-        return ViewWrapperRenderNode(size: renderNode.size.bound(to: constraint), 
-                                       component: component,
-                                       content: renderNode)
+        return ViewWrapperRenderNode(size: renderNode.size.bound(to: constraint),
+                                     component: component,
+                                     content: renderNode)
     }
 }
 
@@ -23,7 +23,11 @@ public struct ViewWrapperRenderNode<View: UIView>: RenderNode {
     public let content: any RenderNode
 
     public func updateView(_ view: View) {
-        view.componentEngine.reloadWithExisting(component: component, renderNode: content)
+        if let view = view as? UIVisualEffectView {
+            view.contentView.componentEngine.reloadWithExisting(component: component, renderNode: content)
+        } else {
+            view.componentEngine.reloadWithExisting(component: component, renderNode: content)
+        }
     }
 
     public func contextValue(_ key: RenderNodeContextKey) -> Any? {
