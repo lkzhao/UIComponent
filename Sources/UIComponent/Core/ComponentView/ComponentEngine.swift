@@ -313,18 +313,13 @@ public final class ComponentEngine {
         visibleRenderables = newVisibleRenderables
         visibleViews = newViews as! [UIView]
         lastRenderBounds = bounds
-        cacheEngine.endLoading()
         needsRender = false
         isRendering = false
     }
 
-    // MARK: - Data Caching
+    // MARK: - Cached State
 
     internal var measuredSizes: [String: CGSize] = [:]
-    internal var cacheEngine = CacheEngine()
-    internal func loadCachingData<T>(id: String, scope: CacheScope, generator: () -> T) -> T {
-        cacheEngine.loadCachingData(id: id, scope: scope, generator: generator)
-    }
 
     /// Ensures that the zoom view is centered within the scroll view if it is smaller than the scroll view's bounds.
     public func ensureZoomViewIsCentered() {

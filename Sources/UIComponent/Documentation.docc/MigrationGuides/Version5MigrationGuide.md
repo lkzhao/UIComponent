@@ -8,7 +8,6 @@ The main changes in version 5.0 include:
 - [SwiftUI support](#swiftui-support)
 - [Simplified flex layout modifiers](#flex-layout-changes)
 - [Simplified view reuse system](#view-reuse-changes)
-- [CachingItem scope](#cachingitem-scope)
 - [Explicit lazy layout](#lazy-layout-changes)
 - [New context value system for RenderNode](#rendernode-context-value-system)
 
@@ -140,27 +139,6 @@ VStack {
 - if you previously used `.reuseStrategy(.noReuse)`, you can delete it as it is now the default behavior
 - if you previously used `.reuseStrategy(.key("somekey"))`, you need to change it to `.reuseKey("somekey")`
 - if you previously used `.reuseStrategy(.automatic)` or if you still wants cell reuse, consider adding a `.reuseKey` modifier with a custom key to maintain the cell reuse functionality.
-
-## CachingItem Scope
-
-Version 5.0 introduces a new `CacheScope` enum to provide more control over the lifetime of cached items. This allows you to specify how long an item should remain in the cache. Previously CachingItem had no `CacheScope` parameter and the `.hostingView` scope was used.
-
-```swift
-CachingItem(key: "myItem", scope: .component) { // Explicitly specify cache scope
-    // item generation
-} componentBuilder: { item in
-    // component building
-}
-```
-
-The available cache scopes are:
-- `.component`: The item will be cached until this component is no longer in the hosting view's component tree
-- `.hostingView`: The item will be cached until the hosting view is released
-- `.global`: The item will be cached until the application is terminated, or until manually cleared using `CachingItem.clearGlobalCache()` or `CachingItem.clearGlobalCacheData(for:)`
-
-### Changes Required
-- If you were previously using `CachingItem`, you should review your caching needs and choose the appropriate scope. Previouly the scope is `.hostingView`, now the default is `.component`.
-- For items that need to persist even when the component is no long in the component hierarchy, consider using `.hostingView` or `.global` scope.
 
 ## Lazy Layout Changes
 
