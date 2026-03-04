@@ -37,12 +37,7 @@ public struct LazyComponent<Content: Component>: Component {
     /// - Parameter constraint: The constraint to use for layout.
     /// - Returns: A `LazyRenderNode` that wraps the content component and defers its layout.
     public func layout(_ constraint: Constraint) -> LazyRenderNode<Content> {
-        LazyRenderNode(
-            component: component,
-            environmentValues: EnvironmentValues.current,
-            layoutIdentityState: LayoutIdentityContext.currentState,
-            size: sizeProvider(constraint)
-        )
+        LazyRenderNode(component: component, environmentValues: EnvironmentValues.current, size: sizeProvider(constraint))
     }
 }
 
@@ -66,9 +61,7 @@ public class LazyRenderNode<Content: Component>: RenderNodeWrapper {
         if _content == nil {
             EnvironmentValues.saveCurrentValues()
             EnvironmentValues.current = environmentValues
-            _content = LayoutIdentityContext.withState(state: layoutIdentityState) {
-                component.layout(.init(tightSize: size))
-            }
+            _content = component.layout(.init(tightSize: size))
             EnvironmentValues.restoreCurrentValues()
         }
         return _content!
@@ -84,27 +77,15 @@ public class LazyRenderNode<Content: Component>: RenderNodeWrapper {
 
     /// The environment values to use when laying out the content.
     public let environmentValues: EnvironmentValues
-    /// The layout identity state to use when laying out the content.
-    let layoutIdentityState: LayoutIdentityState
 
     /// Initializes a `LazyRenderNode` with the given component, environment values, and size.
     /// - Parameters:
     ///   - component: The content component to be lazily rendered.
     ///   - environmentValues: The environment values to use for layout.
     ///   - size: The size to use for the content component.
-    public convenience init(component: Content, environmentValues: EnvironmentValues, size: CGSize) {
-        self.init(
-            component: component,
-            environmentValues: environmentValues,
-            layoutIdentityState: LayoutIdentityContext.currentState,
-            size: size
-        )
-    }
-
-    init(component: Content, environmentValues: EnvironmentValues, layoutIdentityState: LayoutIdentityState, size: CGSize) {
+    public init(component: Content, environmentValues: EnvironmentValues, size: CGSize) {
         self.component = component
         self.environmentValues = environmentValues
-        self.layoutIdentityState = layoutIdentityState
         self.size = size
     }
 
