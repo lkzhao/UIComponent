@@ -264,38 +264,44 @@ public final class ComponentEngine {
             newIdentifierSet[finalId] = index
         }
 
+        let oldVisibleRenderables = visibleRenderables
+        let oldVisibleViews = visibleViews
+        let diff = ViewDiffHelper.diff(
+            oldIDs: oldVisibleRenderables.map(\.id),
+            newIDs: newVisibleRenderables.map(\.id)
+        )
+
+        let containerView = contentView ?? view
         var newViews = [UIView?](repeating: nil, count: newVisibleRenderables.count)
 
-        // 1st pass, delete all removed cells and move existing cells
-        for index in 0..<visibleViews.count {
-            let renderable = visibleRenderables[index]
-            let id = renderable.id
-            let cell = visibleViews[index]
-            if let index = newIdentifierSet[id] {
-                newViews[index] = cell
-            } else {
-                let animator = renderable.renderNode.animator ?? animator
-                animator.shift(hostingView: view, delta: contentOffsetDelta, view: cell)
-                animator.delete(hostingView: view, view: cell) {
-                    cell.recycleForUIComponentReuse()
-                }
+        // 1st pass, delete removed views.
+        for action in diff.deleteActions {
+            let renderable = oldVisibleRenderables[action.oldIndex]
+            let cell = oldVisibleViews[action.oldIndex]
+            let cellAnimator = renderable.renderNode.animator ?? animator
+            cellAnimator.shift(hostingView: view, delta: contentOffsetDelta, view: cell)
+            cellAnimator.delete(hostingView: view, view: cell) {
+                cell.recycleForUIComponentReuse()
             }
         }
 
-        // 2nd pass, insert new views
-        for (index, renderable) in newVisibleRenderables.enumerated() {
-            let cell: UIView
+        // 2nd pass, update kept views and insert new views.
+        for action in diff.renderActions {
+            let index = action.newIndex
+            let renderable = newVisibleRenderables[index]
             let frame = renderable.frame
-            let animator = renderable.renderNode.animator ?? animator
-            let containerView = contentView ?? view
-            if let existingView = newViews[index] {
-                cell = existingView
+            let cellAnimator = renderable.renderNode.animator ?? animator
+
+            let cell: UIView
+            switch action.kind {
+            case let .keep(oldIndex):
+                cell = oldVisibleViews[oldIndex]
                 if updateViews {
                     // view was on screen before reload, need to update the view.
                     renderable.renderNode._updateView(cell)
-                    animator.shift(hostingView: view, delta: contentOffsetDelta, view: cell)
+                    cellAnimator.shift(hostingView: view, delta: contentOffsetDelta, view: cell)
                 }
-            } else {
+            case let .insert(insertBeforeOldIndex):
                 cell = renderable.renderNode._makeView()
                 UIView.performWithoutAnimation {
                     cell.bounds.size = frame.bounds.size
@@ -303,11 +309,22 @@ public final class ComponentEngine {
                     cell.layoutIfNeeded()
                     renderable.renderNode._updateView(cell)
                 }
-                animator.insert(hostingView: view, view: cell, frame: frame)
-                newViews[index] = cell
+                cellAnimator.insert(hostingView: view, view: cell, frame: frame)
+
+                if let insertBeforeOldIndex {
+                    let insertBeforeView = oldVisibleViews[insertBeforeOldIndex]
+                    if insertBeforeView.superview === containerView {
+                        containerView.insertSubview(cell, belowSubview: insertBeforeView)
+                    } else {
+                        containerView.addSubview(cell)
+                    }
+                } else {
+                    containerView.addSubview(cell)
+                }
             }
-            animator.update(hostingView: view, view: cell, frame: frame)
-            containerView.insertSubview(cell, at: index)
+
+            cellAnimator.update(hostingView: view, view: cell, frame: frame)
+            newViews[index] = cell
         }
 
         visibleRenderables = newVisibleRenderables
