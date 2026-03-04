@@ -2,45 +2,19 @@
 ///
 /// This helper intentionally knows nothing about views, renderables, or animators.
 final class IDDiffHelper {
-    struct Result {
-        var deleteActions: [DeleteAction]
-        var moveActions: [MoveAction]
-        var renderActions: [RenderAction]
-        var unchangedOrderCount: Int?
+    enum Action: Equatable {
+        /// Remove existing item at old index.
+        case delete(oldIndex: Int)
+        /// Reuse existing item from old index for new index.
+        case keep(newIndex: Int, oldIndex: Int)
+        /// Reorder existing item at old index to new index before another old index (or append when nil).
+        case move(newIndex: Int, oldIndex: Int, insertBeforeOldIndex: Int?)
+        /// Insert new item at new index before another old index (or append when nil).
+        case insert(newIndex: Int, insertBeforeOldIndex: Int?)
     }
 
-    struct DeleteAction: Equatable {
-        let oldIndex: Int
-    }
-
-    struct MoveAction: Equatable {
-        let oldIndex: Int
-        let insertBeforeOldIndex: Int?
-    }
-
-    struct RenderAction: Equatable {
-        enum Kind: Equatable {
-            /// Reuse the item currently at `oldIndex`.
-            case keep(oldIndex: Int)
-            /// Create a new item and insert it before the existing item at `oldIndex`.
-            /// `nil` means append to the end.
-            case insert(insertBeforeOldIndex: Int?)
-        }
-
-        let newIndex: Int
-        let kind: Kind
-    }
-
-    static func diff(oldIDs: [String], newIDs: [String]) -> Result {
-        if oldIDs.count == newIDs.count &&
-            zip(oldIDs, newIDs).allSatisfy({ pair in pair.0 == pair.1 }) {
-            return Result(
-                deleteActions: [],
-                moveActions: [],
-                renderActions: [],
-                unchangedOrderCount: newIDs.count
-            )
-        }
+    static func diff(oldIDs: [String], newIDs: [String]) -> [Action] {
+        if oldIDs == newIDs { return keepActions(count: newIDs.count) }
 
         var newIndexByID = [String: Int]()
         newIndexByID.reserveCapacity(newIDs.count)
@@ -49,63 +23,70 @@ final class IDDiffHelper {
         }
 
         var keptOldIndexByNewIndex = [Int?](repeating: nil, count: newIDs.count)
-        var deleteActions = [DeleteAction]()
-        deleteActions.reserveCapacity(oldIDs.count)
+        var deleteOldIndices = [Int]()
+        deleteOldIndices.reserveCapacity(oldIDs.count)
         var keptOldIndicesInOldOrder = [Int]()
         keptOldIndicesInOldOrder.reserveCapacity(min(oldIDs.count, newIDs.count))
 
         for (oldIndex, id) in oldIDs.enumerated() {
             guard let newIndex = newIndexByID[id], keptOldIndexByNewIndex[newIndex] == nil else {
-                deleteActions.append(.init(oldIndex: oldIndex))
+                deleteOldIndices.append(oldIndex)
                 continue
             }
             keptOldIndexByNewIndex[newIndex] = oldIndex
             keptOldIndicesInOldOrder.append(oldIndex)
         }
 
-        let keptOldIndicesInNewOrder = keptOldIndexByNewIndex.compactMap { $0 }
         let moveActions = moveActions(
             keptOldIndicesInOldOrder: keptOldIndicesInOldOrder,
-            keptOldIndicesInNewOrder: keptOldIndicesInNewOrder
+            keptOldIndicesInNewOrder: keptOldIndexByNewIndex.compactMap { $0 }
         )
+        let moveActionByOldIndex = Dictionary(uniqueKeysWithValues: moveActions.map {
+            ($0.oldIndex, $0)
+        })
 
-        var insertBeforeOldIndexByNewIndex = [Int?](repeating: nil, count: newIDs.count)
+        var insertBeforeOldIndexByNewIndex = [Int?](repeating: nil, count: keptOldIndexByNewIndex.count)
         if !newIDs.isEmpty {
             var nextKeptOldIndex: Int?
             for newIndex in stride(from: newIDs.count - 1, through: 0, by: -1) {
-                insertBeforeOldIndexByNewIndex[newIndex] = nextKeptOldIndex
                 if let oldIndex = keptOldIndexByNewIndex[newIndex] {
                     nextKeptOldIndex = oldIndex
+                } else {
+                    insertBeforeOldIndexByNewIndex[newIndex] = nextKeptOldIndex
                 }
             }
         }
 
-        var renderActions = [RenderAction]()
-        renderActions.reserveCapacity(newIDs.count)
+        var actions = [Action]()
+        actions.reserveCapacity(deleteOldIndices.count + newIDs.count)
+
+        for oldIndex in deleteOldIndices {
+            actions.append(.delete(oldIndex: oldIndex))
+        }
         for newIndex in newIDs.indices {
             if let oldIndex = keptOldIndexByNewIndex[newIndex] {
-                renderActions.append(
-                    .init(
-                        newIndex: newIndex,
-                        kind: .keep(oldIndex: oldIndex)
+                if let moveAction = moveActionByOldIndex[oldIndex] {
+                    actions.append(
+                        .move(
+                            newIndex: newIndex,
+                            oldIndex: oldIndex,
+                            insertBeforeOldIndex: moveAction.insertBeforeOldIndex
+                        )
                     )
-                )
+                } else {
+                    actions.append(.keep(newIndex: newIndex, oldIndex: oldIndex))
+                }
             } else {
-                renderActions.append(
-                    .init(
-                        newIndex: newIndex,
-                        kind: .insert(insertBeforeOldIndex: insertBeforeOldIndexByNewIndex[newIndex])
-                    )
-                )
+                actions.append(.insert(newIndex: newIndex, insertBeforeOldIndex: insertBeforeOldIndexByNewIndex[newIndex]))
             }
         }
 
-        return Result(
-            deleteActions: deleteActions,
-            moveActions: moveActions,
-            renderActions: renderActions,
-            unchangedOrderCount: nil
-        )
+        return actions
+    }
+
+    private struct MoveAction {
+        let oldIndex: Int
+        let insertBeforeOldIndex: Int?
     }
 
     private static func moveActions(
@@ -199,5 +180,14 @@ final class IDDiffHelper {
             }
         }
         return low
+    }
+
+    private static func keepActions(count: Int) -> [Action] {
+        var actions = [Action]()
+        actions.reserveCapacity(count)
+        for index in 0..<count {
+            actions.append(.keep(newIndex: index, oldIndex: index))
+        }
+        return actions
     }
 }

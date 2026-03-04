@@ -255,7 +255,7 @@ public final class ComponentEngine {
         )
 
         visibleRenderables = newVisibleRenderables
-        visibleViews = newViews as! [UIView]
+        visibleViews = newViews
         lastRenderBounds = bounds
         needsRender = false
         isRendering = false

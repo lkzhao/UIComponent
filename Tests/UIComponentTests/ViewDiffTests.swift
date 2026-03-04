@@ -9,47 +9,41 @@ struct ViewDiffTests {
     }
 
     @Test func testDiffActions() {
-        let result = IDDiffHelper.diff(
+        let actions = IDDiffHelper.diff(
             oldIDs: ["a", "b", "c", "d"],
             newIDs: ["a", "x", "c", "y"]
         )
-
-        let expectedDeleteActions: [IDDiffHelper.DeleteAction] = [
-            .init(oldIndex: 1),
-            .init(oldIndex: 3)
-        ]
-        #expect(result.deleteActions == expectedDeleteActions)
-        #expect(result.moveActions.isEmpty)
-
-        let expectedRenderActions: [IDDiffHelper.RenderAction] = [
-            .init(newIndex: 0, kind: .keep(oldIndex: 0)),
-            .init(newIndex: 1, kind: .insert(insertBeforeOldIndex: 2)),
-            .init(newIndex: 2, kind: .keep(oldIndex: 2)),
-            .init(newIndex: 3, kind: .insert(insertBeforeOldIndex: nil))
-        ]
-        #expect(result.renderActions == expectedRenderActions)
-        #expect(result.unchangedOrderCount == nil)
+        #expect(actions == [
+            .delete(oldIndex: 1),
+            .delete(oldIndex: 3),
+            .keep(newIndex: 0, oldIndex: 0),
+            .insert(newIndex: 1, insertBeforeOldIndex: 2),
+            .keep(newIndex: 2, oldIndex: 2),
+            .insert(newIndex: 3, insertBeforeOldIndex: nil)
+        ])
     }
 
-    @Test func testDiffUnchangedOrderFastPath() {
-        let result = IDDiffHelper.diff(
+    @Test func testDiffUnchangedOrderProducesKeepActions() {
+        let actions = IDDiffHelper.diff(
             oldIDs: ["a", "b", "c"],
             newIDs: ["a", "b", "c"]
         )
-        #expect(result.deleteActions.isEmpty)
-        #expect(result.moveActions.isEmpty)
-        #expect(result.renderActions.isEmpty)
-        #expect(result.unchangedOrderCount == 3)
+        #expect(actions == [
+            .keep(newIndex: 0, oldIndex: 0),
+            .keep(newIndex: 1, oldIndex: 1),
+            .keep(newIndex: 2, oldIndex: 2)
+        ])
     }
 
     @Test func testDiffMoveActions() {
-        let result = IDDiffHelper.diff(
+        let actions = IDDiffHelper.diff(
             oldIDs: ["a", "b", "c"],
             newIDs: ["c", "a", "b"]
         )
-        #expect(result.deleteActions.isEmpty)
-        #expect(result.moveActions == [
-            .init(oldIndex: 2, insertBeforeOldIndex: 0)
+        #expect(actions == [
+            .move(newIndex: 0, oldIndex: 2, insertBeforeOldIndex: 0),
+            .keep(newIndex: 1, oldIndex: 0),
+            .keep(newIndex: 2, oldIndex: 1)
         ])
     }
 
