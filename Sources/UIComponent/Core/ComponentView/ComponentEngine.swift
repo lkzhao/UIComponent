@@ -103,6 +103,7 @@ public final class ComponentEngine {
     /// The size of the content within the view.
     public private(set) var contentSize: CGSize = .zero {
         didSet {
+            guard contentSize != oldValue else { return }
             (view as? UIScrollView)?.contentSize = contentSize
         }
     }
@@ -122,7 +123,11 @@ public final class ComponentEngine {
     var bounds: CGRect {
         view?.bounds ?? .zero
     }
-    
+
+    var visibleFrame: CGRect {
+        (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
+    }
+
     /// The size of the view adjusted for the content inset.
     var adjustedSize: CGSize {
         bounds.size.inset(by: contentInset)
@@ -144,7 +149,7 @@ public final class ComponentEngine {
         if needsReload || bounds.size != lastRenderBounds.size {
             reloadData()
         } else if bounds != lastRenderBounds || needsRender {
-            render(updateViews: false)
+            render(shouldUpdateViews: false)
         }
         contentView?.frame = CGRect(origin: .zero, size: contentSize)
         ensureZoomViewIsCentered()
@@ -181,7 +186,7 @@ public final class ComponentEngine {
 
         if renderOnly {
             adjustContentOffset(contentOffsetAdjustFn: contentOffsetAdjustFn)
-            render(updateViews: true)
+            render(shouldUpdateViews: true)
         } else if asyncLayout {
             layoutComponentAsync(contentOffsetAdjustFn: contentOffsetAdjustFn)
         } else {
@@ -221,7 +226,7 @@ public final class ComponentEngine {
         contentSize = renderNode.size * zoomScale
         self.renderNode = renderNode
         adjustContentOffset(contentOffsetAdjustFn: contentOffsetAdjustFn)
-        render(updateViews: true)
+        render(shouldUpdateViews: true)
     }
 
     private func adjustContentOffset(contentOffsetAdjustFn: (() -> CGPoint)?) {
@@ -234,98 +239,20 @@ public final class ComponentEngine {
 
     /// Renders the render node based on the visibleFrame, optionally updating views.
     /// - Parameters:
-    ///   - updateViews: A Boolean value that determines if the views should be updated.
-    private func render(updateViews: Bool) {
+    ///   - shouldUpdateViews: A Boolean value that determines if the views should be updated.
+    private func render(shouldUpdateViews: Bool) {
         guard let view, allowReload, !isRendering, let renderNode else { return }
         isRendering = true
 
         animator.willUpdate(hostingView: view)
-        let visibleFrame = (contentView?.convert(bounds, from: view) ?? bounds).inset(by: visibleFrameInsets)
+        contentSize = renderNode.size * zoomScale
 
-        var newVisibleRenderables = renderNode._visibleRenderables(in: visibleFrame)
-
-        if contentSize != renderNode.size * zoomScale {
-            // update contentSize if it is changed. Some renderNodes update
-            // its size when visibleRenderables(in: visibleFrame) is called. e.g. InfiniteLayout
-            contentSize = renderNode.size * zoomScale
-        }
-
-        // construct private identifiers
-        var newIdentifierSet = [String: Int]()
-        for (index, renderable) in newVisibleRenderables.enumerated() {
-            var count = 1
-            let initialId = renderable.id
-            var finalId = initialId
-            while newIdentifierSet[finalId] != nil {
-                finalId = initialId + String(count)
-                newVisibleRenderables[index].id = finalId
-                count += 1
-            }
-            newIdentifierSet[finalId] = index
-        }
-
-        let oldVisibleRenderables = visibleRenderables
-        let oldVisibleViews = visibleViews
-        let diff = ViewDiffHelper.diff(
-            oldIDs: oldVisibleRenderables.map(\.id),
-            newIDs: newVisibleRenderables.map(\.id)
+        let newVisibleRenderables = renderNode._visibleRenderablesWithUniqueIDs(in: visibleFrame)
+        let newViews = ComponentViewDiffApplier.apply(
+            componentEngine: self,
+            newRenderables: newVisibleRenderables,
+            shouldUpdateViews: shouldUpdateViews
         )
-
-        let containerView = contentView ?? view
-        var newViews = [UIView?](repeating: nil, count: newVisibleRenderables.count)
-
-        // 1st pass, delete removed views.
-        for action in diff.deleteActions {
-            let renderable = oldVisibleRenderables[action.oldIndex]
-            let cell = oldVisibleViews[action.oldIndex]
-            let cellAnimator = renderable.renderNode.animator ?? animator
-            cellAnimator.shift(hostingView: view, delta: contentOffsetDelta, view: cell)
-            cellAnimator.delete(hostingView: view, view: cell) {
-                cell.recycleForUIComponentReuse()
-            }
-        }
-
-        // 2nd pass, update kept views and insert new views.
-        for action in diff.renderActions {
-            let index = action.newIndex
-            let renderable = newVisibleRenderables[index]
-            let frame = renderable.frame
-            let cellAnimator = renderable.renderNode.animator ?? animator
-
-            let cell: UIView
-            switch action.kind {
-            case let .keep(oldIndex):
-                cell = oldVisibleViews[oldIndex]
-                if updateViews {
-                    // view was on screen before reload, need to update the view.
-                    renderable.renderNode._updateView(cell)
-                    cellAnimator.shift(hostingView: view, delta: contentOffsetDelta, view: cell)
-                }
-            case let .insert(insertBeforeOldIndex):
-                cell = renderable.renderNode._makeView()
-                UIView.performWithoutAnimation {
-                    cell.bounds.size = frame.bounds.size
-                    cell.center = frame.center
-                    cell.layoutIfNeeded()
-                    renderable.renderNode._updateView(cell)
-                }
-                cellAnimator.insert(hostingView: view, view: cell, frame: frame)
-
-                if let insertBeforeOldIndex {
-                    let insertBeforeView = oldVisibleViews[insertBeforeOldIndex]
-                    if insertBeforeView.superview === containerView {
-                        containerView.insertSubview(cell, belowSubview: insertBeforeView)
-                    } else {
-                        containerView.addSubview(cell)
-                    }
-                } else {
-                    containerView.addSubview(cell)
-                }
-            }
-
-            cellAnimator.update(hostingView: view, view: cell, frame: frame)
-            newViews[index] = cell
-        }
 
         visibleRenderables = newVisibleRenderables
         visibleViews = newViews as! [UIView]
