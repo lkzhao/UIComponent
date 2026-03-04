@@ -91,6 +91,12 @@ class ViewComponentExamplesView: UIView {
                             ViewComponent<UISwitch>()
                         )
                     }.inset(16).backgroundColor(.systemRed.withAlphaComponent(0.1)).cornerRadius(16)
+                    VStack(spacing: 4) {
+                        Text("New in 5.3.0: You can use measureSize(key:) to measure the view's size after the view is initialized. This comes at an performance cost.", font: .body).textColor(.systemGreen)
+                        #CodeExampleNoInsets(
+                            ViewComponent<UISwitch>().measureSize(key: "switch")
+                        )
+                    }.inset(16).backgroundColor(.systemGreen.withAlphaComponent(0.1)).cornerRadius(16)
                 }
 
                 Separator()

@@ -320,6 +320,7 @@ public final class ComponentEngine {
 
     // MARK: - Data Caching
 
+    internal var measuredSizes: [String: CGSize] = [:]
     internal var cacheEngine = CacheEngine()
     internal func loadCachingData<T>(id: String, scope: CacheScope, generator: () -> T) -> T {
         cacheEngine.loadCachingData(id: id, scope: scope, generator: generator)
