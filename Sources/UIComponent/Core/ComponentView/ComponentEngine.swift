@@ -36,6 +36,11 @@ public final class ComponentEngine {
     /// A closure that adjusts the content offset after the layout is finished, but before any view is rendered.
     public var nextContentOffsetAdjustFn: (() -> CGPoint)?
 
+    /// Toggle to use the pre-IDDiff render pipeline.
+    public var useLegacyRenderingMode = false {
+        didSet { setNeedsRender() }
+    }
+
     /// The current `RenderNode`. This is `nil` before the layout is done.
     public private(set) var renderNode: (any RenderNode)?
 
@@ -245,14 +250,23 @@ public final class ComponentEngine {
         isRendering = true
 
         animator.willUpdate(hostingView: view)
+        let newVisibleRenderables = renderNode._visibleRenderablesWithUniqueIDs(in: visibleFrame)
+        // Some render nodes update size while collecting visible renderables.
         contentSize = renderNode.size * zoomScale
 
-        let newVisibleRenderables = renderNode._visibleRenderablesWithUniqueIDs(in: visibleFrame)
-        let newViews = ComponentViewDiffApplier.apply(
-            componentEngine: self,
-            newRenderables: newVisibleRenderables,
-            shouldUpdateViews: shouldUpdateViews
-        )
+        let newViews: [UIView] = if useLegacyRenderingMode {
+            performLegacyRender(
+                hostingView: view,
+                newVisibleRenderables: newVisibleRenderables,
+                shouldUpdateViews: shouldUpdateViews
+            )
+        } else {
+            ComponentViewDiffApplier.apply(
+                componentEngine: self,
+                newRenderables: newVisibleRenderables,
+                shouldUpdateViews: shouldUpdateViews
+            )
+        }
 
         visibleRenderables = newVisibleRenderables
         visibleViews = newViews

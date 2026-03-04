@@ -39,12 +39,7 @@ final class ComponentViewDiffApplier {
             into: &newViews,
             context: context
         )
-        let resolvedViews = newViews.compactMap { $0 }
-        precondition(
-            resolvedViews.count == context.newRenderables.count,
-            "ComponentViewDiffApplier.apply did not resolve views for all new renderables"
-        )
-        return resolvedViews
+        return newViews as! [UIView]
     }
 
     private static func makeContext(
