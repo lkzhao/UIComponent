@@ -191,4 +191,21 @@ extension RenderNode {
         }
         return result
     }
+
+    internal func _visibleRenderablesWithUniqueIDs(in frame: CGRect) -> [Renderable] {
+        var visibleRenderables = _visibleRenderables(in: frame)
+        var identifierSet = [String: Int]()
+        for (index, renderable) in visibleRenderables.enumerated() {
+            var count = 1
+            let initialID = renderable.id
+            var finalID = initialID
+            while identifierSet[finalID] != nil {
+                finalID = initialID + String(count)
+                visibleRenderables[index].id = finalID
+                count += 1
+            }
+            identifierSet[finalID] = index
+        }
+        return visibleRenderables
+    }
 }
