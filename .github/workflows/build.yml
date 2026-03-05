@@ -13,9 +13,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: sersoft-gmbh/xcodebuild-action@v3
-        with:
-          spm-package: .
-          scheme: UIComponent
-          destination: 'platform=iOS Simulator,name=iPhone 16'
-          action: test
+      - name: Test Swift package on iOS Simulator
+        run: |
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+          rsync -a Package.swift Sources Tests "$tmpdir"/
+          cd "$tmpdir"
+          sim_udid="$(xcrun simctl list devices available | awk -F '[()]' '/iPhone 16/ {gsub(/^ +| +$/, "", $2); print $2; exit}')"
+          if [ -z "$sim_udid" ]; then
+            sim_udid="$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/ {gsub(/^ +| +$/, "", $2); print $2; exit}')"
+          fi
+          if [ -z "$sim_udid" ]; then
+            echo "No available iPhone simulator found."
+            exit 1
+          fi
+          xcodebuild \
+            -scheme UIComponent \
+            -destination "platform=iOS Simulator,id=$sim_udid" \
+            test
