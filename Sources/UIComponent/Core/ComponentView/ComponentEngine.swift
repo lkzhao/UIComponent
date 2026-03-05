@@ -178,11 +178,13 @@ public final class ComponentEngine {
     public func reloadData(contentOffsetAdjustFn: (() -> CGPoint)? = nil) {
         guard !isReloading, allowReload else { return }
         let contentOffsetAdjustFn = contentOffsetAdjustFn ?? nextContentOffsetAdjustFn
+        // Clear the current reload request up front so any setNeedsReload() calls
+        // during render/layout are preserved for a follow-up pass.
+        needsReload = false
         isReloading = true
         defer {
             nextContentOffsetAdjustFn = nil
             reloadCount += 1
-            needsReload = false
             isReloading = false
             if let onFirstReload, let view, reloadCount == 1 {
                 onFirstReload(view)
