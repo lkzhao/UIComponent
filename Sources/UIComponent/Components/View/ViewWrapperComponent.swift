@@ -23,8 +23,8 @@ public struct ViewWrapperRenderNode<View: UIView>: RenderNode {
     public let content: any RenderNode
 
     public func updateView(_ view: View) {
-        if let view = view as? UIVisualEffectView {
-            view.contentView.componentEngine.reloadWithExisting(component: component, renderNode: content)
+        if let view = view as? ViewWrapperComponentView {
+            view.contentComponentEngine.reloadWithExisting(component: component, renderNode: content)
         } else {
             view.componentEngine.reloadWithExisting(component: component, renderNode: content)
         }
@@ -32,5 +32,15 @@ public struct ViewWrapperRenderNode<View: UIView>: RenderNode {
 
     public func contextValue(_ key: RenderNodeContextKey) -> Any? {
         content.contextValue(key)
+    }
+}
+
+public protocol ViewWrapperComponentView: UIView {
+    var contentComponentEngine: ComponentEngine { get }
+}
+
+extension UIVisualEffectView: ViewWrapperComponentView {
+    public var contentComponentEngine: ComponentEngine {
+        contentView.componentEngine
     }
 }
