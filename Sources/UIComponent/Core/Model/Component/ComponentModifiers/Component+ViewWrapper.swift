@@ -19,7 +19,6 @@ extension Component {
     }
 
     /// Wraps the component in a `UIVisualEffectView`.
-    @available(iOS 26.0, *)
     public func visualEffectView() -> ViewWrapperComponent<UIVisualEffectView> {
         ViewWrapperComponent<UIVisualEffectView>(component: self)
     }
