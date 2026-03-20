@@ -207,7 +207,7 @@ struct UserProfileComponent: Component {
 
 For a comprehensive example showing how to implement a theme system using environment values, see the **Theme System** example in the UIComponent Examples project:
 
-[`Examples/UIComponentExample/Examples/Theme System/ThemeSystemViewController.swift`](https://github.com/lkzhao/UIComponent/tree/master/Examples/UIComponentExample/Examples/Theme%20System/ThemeSystemViewController.swift)
+[`Examples/UIComponentExample/Examples/Theme System/ThemeSystemViewController.swift`](https://github.com/lkzhao/UIComponent/tree/main/Examples/UIComponentExample/Examples/Theme%20System/ThemeSystemViewController.swift)
 
 This example demonstrates:
 - **Custom environment keys** for theme data

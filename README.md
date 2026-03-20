@@ -27,4 +27,4 @@ In version 5.0, UIComponent can also easily render SwiftUI View alongside UIView
 - [4.0 Changes](https://lkzhao.com/UIComponent/documentation/uicomponent/version4migrationguide)
 - [5.0 Changes](https://lkzhao.com/UIComponent/documentation/uicomponent/version5migrationguide)
 
-> Checkout the [UIComponentExample/Chapters](https://github.com/lkzhao/UIComponent/tree/master/UIComponentExample/Chapters) folder for code examples.
+> Checkout the [UIComponentExample/Chapters](https://github.com/lkzhao/UIComponent/tree/main/UIComponentExample/Chapters) folder for code examples.
