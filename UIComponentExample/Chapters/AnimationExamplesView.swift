@@ -372,16 +372,16 @@ class AnimationExamplesView: UIView {
             
             VStack(spacing: 10) {
                 Text("Custom Animator", font: .subtitle)
-                Text("Create your own animator by conforming to the Animator protocol. Implement insert(), delete(), and update() methods for complete control.", font: .body).textColor(.secondaryLabel)
+                Text("Create your own animator by conforming to the Animator protocol. Built-in animators like FadeAnimator and TransformAnimator cover common cases, and you can override insert(), delete(), and optionally update() for custom behavior.", font: .body).textColor(.secondaryLabel)
                 
                 VStack(spacing: 10) {
-                    Text("Example: FadeAnimator", font: .caption)
-                    Code(FadeAnimator.codeRepresentation)
+                    Text("Example: CustomFadeAnimator", font: .caption)
+                    Code(CustomFadeAnimator.codeRepresentation)
 
                     Text("Usage", font: .caption)
                     Code {
                         """
-                        view.componentEngine.animator = FadeAnimator(duration: 0.5)
+                        view.componentEngine.animator = CustomFadeAnimator(duration: 0.5)
                         """
                     }
                 }
@@ -537,7 +537,7 @@ class AnimationExamplesView: UIView {
 
 
 @GenerateCode
-struct FadeAnimator: Animator {
+struct CustomFadeAnimator: Animator {
     let duration: TimeInterval
 
     init(duration: TimeInterval = 0.3) {
@@ -665,6 +665,5 @@ class AnimatedListExample: UIView {
         .borderColor(.systemGray4)
     }
 }
-
 
 
