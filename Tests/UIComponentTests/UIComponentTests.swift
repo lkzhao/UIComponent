@@ -51,6 +51,57 @@ final class UIComponentTests: XCTestCase {
         view.layoutIfNeeded()
         XCTAssertEqual(view.componentEngine.visibleRenderables.count, 0)
     }
+
+    func testHeightChangeReloadsByDefault() {
+        let view = UIView()
+        view.componentEngine.component = VStack {
+            Text(text1).size(width: 300, height: 300)
+            Text(text2).size(width: 300, height: 300)
+        }
+        view.bounds = CGRect(x: 0, y: 0, width: 300, height: 300)
+        view.layoutIfNeeded()
+        XCTAssertEqual(view.componentEngine.reloadCount, 1)
+
+        view.bounds = CGRect(x: 0, y: 0, width: 300, height: 600)
+        view.layoutIfNeeded()
+        XCTAssertEqual(view.componentEngine.reloadCount, 2)
+        XCTAssertEqual(view.componentEngine.visibleRenderables.count, 2)
+    }
+
+    func testIgnoredAxisSizeChangeOnlyRenders() {
+        let view = UIView()
+        view.componentEngine.component = VStack {
+            Text(text1).size(width: 300, height: 300)
+            Text(text2).size(width: 300, height: 300)
+        }
+        view.componentEngine.reloadOnSizeChangeAxes = [.x]
+        view.bounds = CGRect(x: 0, y: 0, width: 300, height: 300)
+        view.layoutIfNeeded()
+        XCTAssertEqual(view.componentEngine.reloadCount, 1)
+        XCTAssertEqual(view.componentEngine.visibleRenderables.count, 1)
+
+        view.bounds = CGRect(x: 0, y: 0, width: 300, height: 600)
+        view.layoutIfNeeded()
+        XCTAssertEqual(view.componentEngine.reloadCount, 1)
+        XCTAssertEqual(view.componentEngine.visibleRenderables.count, 2)
+        XCTAssertEqual(view.componentEngine.lastRenderBounds.size.height, 600)
+    }
+
+    func testTrackedAxisSizeChangeStillReloads() {
+        let view = UIView()
+        view.componentEngine.component = VStack {
+            Text(text1).size(width: 300, height: 300)
+        }
+        view.componentEngine.reloadOnSizeChangeAxes = [.x]
+        view.bounds = CGRect(x: 0, y: 0, width: 300, height: 300)
+        view.layoutIfNeeded()
+        XCTAssertEqual(view.componentEngine.reloadCount, 1)
+
+        view.bounds = CGRect(x: 0, y: 0, width: 320, height: 300)
+        view.layoutIfNeeded()
+        XCTAssertEqual(view.componentEngine.reloadCount, 2)
+    }
+
     func testTextColor() {
         let view = UIView(frame: .init(origin: .zero, size: CGSize(width: 200, height: 200)))
         view.componentEngine.component = Text("Test").textColor(.red)
