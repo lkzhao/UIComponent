@@ -12,6 +12,21 @@ public protocol ComponentEngineReloadDelegate: AnyObject {
 /// It manages a `UIView` and handles rendering the component to the view.
 public final class ComponentEngine {
 
+    /// The axes where a bounds size change should trigger a reload instead of a render-only update.
+    public struct ReloadAxis: OptionSet {
+        public let rawValue: Int
+
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
+        }
+
+        /// Trigger reloads when the bounds width changes.
+        public static let x = Self(rawValue: 1 << 0)
+
+        /// Trigger reloads when the bounds height changes.
+        public static let y = Self(rawValue: 1 << 1)
+    }
+
     /// A static weak reference to a delegate that decides if a component engine should reload.
     public static weak var reloadDelegate: ComponentEngineReloadDelegate?
 
@@ -32,6 +47,10 @@ public final class ComponentEngine {
     public var animator: Animator = BaseAnimator() {
         didSet { setNeedsRender() }
     }
+
+    /// The axes where a bounds size change should trigger a reload.
+    /// By default, changes on either axis trigger a reload.
+    public var reloadOnSizeChangeAxes: ReloadAxis = [.x, .y]
 
     /// A closure that adjusts the content offset after the layout is finished, but before any view is rendered.
     public var nextContentOffsetAdjustFn: (() -> CGPoint)?
@@ -151,13 +170,20 @@ public final class ComponentEngine {
 
     /// Lays out the subview, reloading data if necessary or rendering if bounds have changed.
     func layoutSubview() {
-        if needsReload || bounds.size != lastRenderBounds.size {
+        if needsReload || shouldReloadForSizeChange {
             reloadData()
         } else if bounds != lastRenderBounds || needsRender {
             render(shouldUpdateViews: false)
         }
         contentView?.frame = CGRect(origin: .zero, size: contentSize)
         ensureZoomViewIsCentered()
+    }
+
+    private var shouldReloadForSizeChange: Bool {
+        let currentSize = bounds.size
+        let lastSize = lastRenderBounds.size
+        return (reloadOnSizeChangeAxes.contains(.x) && currentSize.width != lastSize.width)
+            || (reloadOnSizeChangeAxes.contains(.y) && currentSize.height != lastSize.height)
     }
 
     /// Marks the view as needing a reload (layout + render) and schedules an update.

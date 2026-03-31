@@ -18,6 +18,12 @@ extension ComponentDisplayableView {
         set { componentEngine.animator = newValue }
     }
 
+    /// The axes where a bounds size change should trigger a reload.
+    public var reloadOnSizeChangeAxes: ComponentEngine.ReloadAxis {
+        get { componentEngine.reloadOnSizeChangeAxes }
+        set { componentEngine.reloadOnSizeChangeAxes = newValue }
+    }
+
     /// A closure that is called after the first reload.
     public var onFirstReload: ((UIView) -> Void)? {
         get { componentEngine.onFirstReload }
