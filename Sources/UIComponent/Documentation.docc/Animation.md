@@ -9,10 +9,14 @@ UIComponent allows you to configure an ``Animator`` object to the ``CompoenentEn
 There are also built-in ``Animator`` types called ``TransformAnimator`` and ``FadeAnimator`` which you can use directly.
 
 ```swift
-view.componentEngine.animator = TransformAnimator(transform: CATransform3DMakeScale(0.5, 0.5, 1), duration: 0.4)
+view.componentEngine.animator = TransformAnimator(
+    insertTransform: CATransform3DMakeScale(0.5, 0.5, 1),
+    deleteTransform: CATransform3DMakeTranslation(0, -40, 0),
+    duration: 0.4
+)
 ```
 
-Then whenever a cell is removed or inserted from the hosting view, it will be animated with a scale transform.
+Then whenever a cell is removed or inserted from the hosting view, it will be animated with the configured insertion and deletion transforms.
 TransformAnimator also performs update animation whenever the frame of a view changes.
 ``FadeAnimator`` provides the same insertion and deletion behavior without the transform or update animation.
 

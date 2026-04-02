@@ -6,8 +6,18 @@ public typealias AnimatedReloadAnimator = TransformAnimator
 /// A simple Animator implementation that applies a transform and fade
 /// animation during deletion and insertion.
 public struct TransformAnimator: Animator {
-    /// The 3D transform applied to the view during animation.
-    public var transform: CATransform3D
+    /// The 3D transform applied to the view at the start of insertion animations.
+    public var insertTransform: CATransform3D
+    /// The 3D transform applied to the view at the end of deletion animations.
+    public var deleteTransform: CATransform3D
+    /// Compatibility alias for configuring the same transform for both insertion and deletion.
+    public var transform: CATransform3D {
+        get { insertTransform }
+        set {
+            insertTransform = newValue
+            deleteTransform = newValue
+        }
+    }
     /// The duration of the animation in seconds.
     public var duration: TimeInterval
     /// A Boolean value that determines whether the animation should be applied in a cascading manner.
@@ -19,9 +29,38 @@ public struct TransformAnimator: Animator {
     /// A Boolean value that determines whether to show insertion animations for items that are out of the bounds of the hosting view.
     public var showInsertionAnimationOnOutOfBoundsItems: Bool = false
 
-    /// Initializes a new animator with the specified transform, duration, and cascade options.
+    /// Initializes a new animator with the specified insertion and deletion transforms,
+    /// duration, and cascade options.
     /// - Parameters:
-    ///   - transform: The 3D transform to apply to the view during animation. Defaults to the identity transform.
+    ///   - insertTransform: The 3D transform to apply to the view at the start of insertion animations.
+    ///     Defaults to the identity transform.
+    ///   - deleteTransform: The 3D transform to apply to the view at the end of deletion animations.
+    ///     Defaults to the identity transform.
+    ///   - duration: The duration of the animation in seconds. Defaults to 0.5 seconds.
+    ///   - cascade: A Boolean value that determines whether the animation should be applied in a cascading manner. Defaults to `false`.
+    ///   - layoutSubviews: A Boolean value that determines whether animation blocks include the `.layoutSubviews` option. Defaults to `true`.
+    public init(
+        insertTransform: CATransform3D = CATransform3DIdentity,
+        deleteTransform: CATransform3D = CATransform3DIdentity,
+        duration: TimeInterval = 0.5,
+        cascade: Bool = false,
+        layoutSubviews: Bool = true,
+        showInitialInsertionAnimation: Bool = false,
+        showInsertionAnimationOnOutOfBoundsItems: Bool = false,
+    ) {
+        self.insertTransform = insertTransform
+        self.deleteTransform = deleteTransform
+        self.duration = duration
+        self.cascade = cascade
+        self.layoutSubviews = layoutSubviews
+        self.showInitialInsertionAnimation = showInitialInsertionAnimation
+        self.showInsertionAnimationOnOutOfBoundsItems = showInsertionAnimationOnOutOfBoundsItems
+    }
+
+    /// Initializes a new animator that uses the same transform for insertion and deletion.
+    /// - Parameters:
+    ///   - transform: The 3D transform to apply to both insertion and deletion animations.
+    ///     Defaults to the identity transform.
     ///   - duration: The duration of the animation in seconds. Defaults to 0.5 seconds.
     ///   - cascade: A Boolean value that determines whether the animation should be applied in a cascading manner. Defaults to `false`.
     ///   - layoutSubviews: A Boolean value that determines whether animation blocks include the `.layoutSubviews` option. Defaults to `true`.
@@ -33,12 +72,15 @@ public struct TransformAnimator: Animator {
         showInitialInsertionAnimation: Bool = false,
         showInsertionAnimationOnOutOfBoundsItems: Bool = false,
     ) {
-        self.transform = transform
-        self.duration = duration
-        self.cascade = cascade
-        self.layoutSubviews = layoutSubviews
-        self.showInitialInsertionAnimation = showInitialInsertionAnimation
-        self.showInsertionAnimationOnOutOfBoundsItems = showInsertionAnimationOnOutOfBoundsItems
+        self.init(
+            insertTransform: transform,
+            deleteTransform: transform,
+            duration: duration,
+            cascade: cascade,
+            layoutSubviews: layoutSubviews,
+            showInitialInsertionAnimation: showInitialInsertionAnimation,
+            showInsertionAnimationOnOutOfBoundsItems: showInsertionAnimationOnOutOfBoundsItems,
+        )
     }
 
     internal var animationOptions: UIView.AnimationOptions {
@@ -59,7 +101,7 @@ public struct TransformAnimator: Animator {
                 initialSpringVelocity: 0,
                 options: animationOptions,
                 animations: {
-                    view.layer.transform = self.transform
+                    view.layer.transform = deleteTransform
                     view.alpha = 0
                 },
                 completion: { _ in
@@ -82,7 +124,7 @@ public struct TransformAnimator: Animator {
         if hostingView.componentEngine.isReloading, showInitialInsertionAnimation || hostingView.componentEngine.hasReloaded, showInsertionAnimationOnOutOfBoundsItems || hostingView.bounds.intersects(frame) {
             let offsetTime: TimeInterval = cascade ? TimeInterval(frame.origin.distance(hostingView.bounds.origin) / 3000) : 0
             UIView.performWithoutAnimation {
-                view.layer.transform = transform
+                view.layer.transform = insertTransform
                 view.alpha = 0
             }
             UIView.animate(
