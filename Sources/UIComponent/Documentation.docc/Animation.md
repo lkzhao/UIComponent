@@ -12,8 +12,9 @@ There are also built-in ``Animator`` types called ``TransformAnimator`` and ``Fa
 view.componentEngine.animator = TransformAnimator(
     insertTransform: CATransform3DMakeScale(0.5, 0.5, 1),
     deleteTransform: CATransform3DMakeTranslation(0, -40, 0),
-    timing: .easeInOut,
-    duration: 0.4
+    insertTiming: .easeIn(duration: 0.3),
+    updateTiming: .easeInOut(duration: 0.4),
+    deleteTiming: .spring(duration: 0.5, damping: 0.9)
 )
 ```
 
