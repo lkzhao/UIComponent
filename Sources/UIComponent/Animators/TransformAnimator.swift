@@ -230,13 +230,12 @@ public struct TransformAnimator: Animator {
     ///   - deleteTransform: The 3D transform to apply to the view at the end of deletion animations.
     ///     Defaults to the identity transform.
     ///   - timing: The timing configuration used for insert, delete, and update animations.
-    ///     Defaults to a spring with `0.5` seconds duration and `0.9` damping.
     ///   - cascade: A Boolean value that determines whether the animation should be applied in a cascading manner. Defaults to `false`.
     ///   - layoutSubviews: A Boolean value that determines whether animation blocks include the `.layoutSubviews` option. Defaults to `true`.
     public init(
         insertTransform: CATransform3D = CATransform3DIdentity,
         deleteTransform: CATransform3D = CATransform3DIdentity,
-        timing: Timing = .spring(duration: 0.5, damping: 0.9, initialSpringVelocity: 0),
+        timing: Timing,
         cascade: Bool = false,
         layoutSubviews: Bool = true,
         showInitialInsertionAnimation: Bool = false,
@@ -262,13 +261,13 @@ public struct TransformAnimator: Animator {
     ///     Defaults to the identity transform.
     ///   - deleteTransform: The 3D transform to apply to the view at the end of deletion animations.
     ///     Defaults to the identity transform.
-    ///   - duration: The duration of the animation in seconds. Defaults to 0.5 seconds.
+    ///   - duration: The duration of the animation in seconds.
     ///   - cascade: A Boolean value that determines whether the animation should be applied in a cascading manner. Defaults to `false`.
     ///   - layoutSubviews: A Boolean value that determines whether animation blocks include the `.layoutSubviews` option. Defaults to `true`.
     public init(
         insertTransform: CATransform3D = CATransform3DIdentity,
         deleteTransform: CATransform3D = CATransform3DIdentity,
-        duration: TimeInterval = 0.5,
+        duration: TimeInterval,
         cascade: Bool = false,
         layoutSubviews: Bool = true,
         showInitialInsertionAnimation: Bool = false,
@@ -290,14 +289,12 @@ public struct TransformAnimator: Animator {
     /// Initializes a new animator that uses the same transform for insertion and deletion.
     /// - Parameters:
     ///   - transform: The 3D transform to apply to both insertion and deletion animations.
-    ///     Defaults to the identity transform.
     ///   - timing: The timing configuration used for insert, delete, and update animations.
-    ///     Defaults to a spring with `0.9` damping.
     ///   - cascade: A Boolean value that determines whether the animation should be applied in a cascading manner. Defaults to `false`.
     ///   - layoutSubviews: A Boolean value that determines whether animation blocks include the `.layoutSubviews` option. Defaults to `true`.
     public init(
-        transform: CATransform3D = CATransform3DIdentity,
-        timing: Timing = .spring(duration: 0.5, damping: 0.9, initialSpringVelocity: 0),
+        transform: CATransform3D,
+        timing: Timing,
         cascade: Bool = false,
         layoutSubviews: Bool = true,
         showInitialInsertionAnimation: Bool = false,
@@ -319,12 +316,11 @@ public struct TransformAnimator: Animator {
     /// Initializes a new animator that uses the same transform for insertion and deletion.
     /// - Parameters:
     ///   - transform: The 3D transform to apply to both insertion and deletion animations.
-    ///     Defaults to the identity transform.
     ///   - duration: The duration of the animation in seconds. Defaults to 0.5 seconds.
     ///   - cascade: A Boolean value that determines whether the animation should be applied in a cascading manner. Defaults to `false`.
     ///   - layoutSubviews: A Boolean value that determines whether animation blocks include the `.layoutSubviews` option. Defaults to `true`.
     public init(
-        transform: CATransform3D = CATransform3DIdentity,
+        transform: CATransform3D,
         duration: TimeInterval = 0.5,
         cascade: Bool = false,
         layoutSubviews: Bool = true,
