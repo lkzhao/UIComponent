@@ -17,7 +17,8 @@ extension Component {
             if value {
                 updateBlock(hostingView, view, frame)
             } else {
-                view.frameWithoutTransform = frame
+                view.bounds.size = frame.size
+                view.center = frame.center
             }
         }
     }
