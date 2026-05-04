@@ -25,7 +25,7 @@ public struct Image: Component {
 
     /// Initializes an `Image` component with an `ImageResource`.
     /// - Parameter resource: The `ImageResource` to load the image from.
-    @available(iOS 17.0, *)
+    @available(iOS 17.0, tvOS 17.0, *)
     public init(_ resource: ImageResource) {
         self.init(UIImage(resource: resource))
     }

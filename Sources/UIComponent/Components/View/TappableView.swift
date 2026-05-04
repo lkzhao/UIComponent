@@ -87,11 +87,13 @@ open class TappableView: UIView {
         return gesture
     }()
 
+    #if !os(tvOS)
     /// A interaction for managing spring loading on the TappableView.
     public private(set) lazy var springLoadedInteraction = UISpringLoadedInteraction { [weak self] interaction, context in
         guard let self else { return }
         self.onSpringLoaded?(self)
     }
+    #endif
 
     /// A gesture recognizer for detecting long presses on the TappableView.
     public private(set) lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
@@ -137,6 +139,7 @@ open class TappableView: UIView {
         }
     }
 
+    #if !os(tvOS)
     /// A closure that is called when the TappableView is spring loaded.
     public var onSpringLoaded: ((TappableView) -> Void)? {
         didSet {
@@ -147,6 +150,7 @@ open class TappableView: UIView {
             }
         }
     }
+    #endif
 
 #if !os(tvOS)
     /// The interaction responsible for handling drop operations on the TappableView.
