@@ -220,6 +220,12 @@ open class TappableView: UIView {
         }
     }
 
+    #if os(tvOS)
+    open override var canBecomeFocused: Bool {
+        onTap != nil
+    }
+    #endif
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
         accessibilityTraits = .button
@@ -248,6 +254,31 @@ open class TappableView: UIView {
         super.touchesCancelled(touches, with: event)
         isHighlighted = false
     }
+
+    #if os(tvOS)
+    open override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        super.didUpdateFocus(in: context, with: coordinator)
+        let isFocused = context.nextFocusedView === self
+        isHighlighted = isFocused
+
+        guard (config ?? .default).onHighlightChanged == nil else { return }
+        coordinator.addCoordinatedAnimations {
+            self.transform = isFocused ? CGAffineTransform(scaleX: 1.06, y: 1.06) : .identity
+            self.layer.shadowOpacity = isFocused ? 0.28 : 0
+            self.layer.shadowRadius = isFocused ? 18 : 0
+            self.layer.shadowOffset = CGSize(width: 0, height: isFocused ? 10 : 0)
+            self.layer.shadowColor = UIColor.black.cgColor
+        }
+    }
+
+    open override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        if onTap != nil, presses.contains(where: { $0.type == .select }) {
+            didTap()
+            return
+        }
+        super.pressesEnded(presses, with: event)
+    }
+    #endif
 
     /// Called when a tap is recognized.
     @objc open func didTap() {
