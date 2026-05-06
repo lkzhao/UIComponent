@@ -1,86 +1,40 @@
-//  Created by Luke Zhao on 6/8/21.
+//  Created by Luke Zhao on 5/6/26.
 
-/// TappableViewConfig is a structure that defines the configuration for a TappableView.
+/// GlassTappableViewConfig is a structure that defines the configuration for a GlassTappableView.
 /// It contains closures that can be used to customize the behavior of the view when it is tapped or highlighted.
-public struct TappableViewConfig {
-    /// The default configuration for all TappableView instances.
-    public static var `default`: TappableViewConfig = TappableViewConfig(onHighlightChanged: nil, didTap: nil)
+public struct GlassTappableViewConfig {
+    /// The default configuration for all GlassTappableView instances.
+    public static var `default`: GlassTappableViewConfig = GlassTappableViewConfig(onHighlightChanged: nil, didTap: nil)
 
-    /// Closure to apply highlight state or animation to the TappableView.
-    public var onHighlightChanged: ((TappableView, Bool) -> Void)?
+    /// Closure to apply highlight state or animation to the GlassTappableView.
+    public var onHighlightChanged: ((GlassTappableView, Bool) -> Void)?
 
     /// Closure to be called before the actual onTap action is performed.
-    public var didTap: ((TappableView) -> Void)?
+    public var didTap: ((GlassTappableView) -> Void)?
 
-    /// Initializes a new TappableViewConfig with optional closures for handling highlight changes and tap actions.
+    /// Initializes a new GlassTappableViewConfig with optional closures for handling highlight changes and tap actions.
     /// - Parameters:
     ///   - onHighlightChanged: A closure that is called when the highlight state changes.
     ///   - didTap: A closure that is called before the onTap action.
-    public init(onHighlightChanged: ((TappableView, Bool) -> Void)? = nil, didTap: ((TappableView) -> Void)? = nil) {
+    public init(onHighlightChanged: ((GlassTappableView, Bool) -> Void)? = nil, didTap: ((GlassTappableView) -> Void)? = nil) {
         self.onHighlightChanged = onHighlightChanged
         self.didTap = didTap
     }
 }
 
-@available(*, deprecated, renamed: "TappableViewConfig")
-public typealias TappableViewConfiguration = TappableViewConfig
+/// GlassTappableView is a visual effect view that responds to tap and gesture events.
+/// On iOS 26 and later, it uses an interactive ``UIGlassEffect``. On earlier iOS versions,
+/// it falls back to the system material blur effect.
+///
+/// Normally, this class is created by using the ``Component/glassTappableView(_:)-9c1d0`` modifier instead of manually creating an instance.
+open class GlassTappableView: UIVisualEffectView {
+    /// The configuration object for the GlassTappableView, which defines the behavior of the view when it is tapped or highlighted.
+    public var config: GlassTappableViewConfig?
 
-/// TappableView is view that respond to tap and gesture events.
-/// It can be configured using ``TappableViewConfig`` and supports various gestures such as tap, double tap, and long press.
-/// 
-/// ### Handle Gesture
-/// Assign a block to ``onTap``, ``onDoubleTap``, ``onLongPress`` to handle the corresponding gesture.
-/// Normally, this class is created by using the ``Component/tappableView(_:)-ew7m`` modifier instead of manually creating an instance.
-///
-/// ```swift
-/// Text("Tap Me").tappableView { view in
-///      print("Tapped")
-/// }.onLongPress { (view, gesture) in
-///      if gesture.state == .began {
-///          print("Long pressed")
-///      }
-/// }
-/// ```
-///
-/// ### Display Context Menu
-/// TappableView supports long press context menu. Simply assign a ``contextMenuProvider`` and return a ``UIMenu`` to be displayed.
-/// ```swift
-/// Text("Show Menu").tappableView {
-/// }.contextMenuProvider {
-///     UIMenu(...) // return the menu you want to be displayed
-/// }
-/// ```
-///
-/// ### Handle Drop
-/// TappableView supports acting as a drop target. Simply assign a ``dropDelegate`` and handle the corresponding drop events.
-/// ```swift
-/// Text("Drop Here").tappableView {
-/// }.dropDelegate(yourDropDelegate)
-/// ```
-/// For more advanced drag and drop support, please create a custom View.
-///
-/// ### Pointer Style
-/// TappableView supports pointer style on iPadOS. Simply assign a ``pointerStyleProvider`` and return a ``UIPointerStyle`` to be displayed.
-/// ```swift
-/// Text("Show Pointer").tappableView {
-/// }.pointerStyleProvider {
-///    UIPointerStyle(...) // return the pointer style you want to be displayed
-/// }
-open class TappableView: UIView {
-    /// The configuration object for the TappableView, which defines the behavior of the view when it is tapped or highlighted.
-    public var config: TappableViewConfig?
-
-    /// Deprecated: Use `config` instead.
-    @available(*, deprecated, renamed: "config")
-    public var configuration: TappableViewConfig? {
-        get { config }
-        set { config = newValue }
-    }
-
-    /// A gesture recognizer for detecting single taps on the TappableView.
+    /// A gesture recognizer for detecting single taps on the GlassTappableView.
     public private(set) lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
-    
-    /// A gesture recognizer for detecting double taps on the TappableView.
+
+    /// A gesture recognizer for detecting double taps on the GlassTappableView.
     public private(set) lazy var doubleTapGestureRecognizer: UITapGestureRecognizer = {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap))
         gesture.numberOfTapsRequired = 2
@@ -88,26 +42,26 @@ open class TappableView: UIView {
     }()
 
     #if !os(tvOS)
-    /// A interaction for managing spring loading on the TappableView.
+    /// A interaction for managing spring loading on the GlassTappableView.
     public private(set) lazy var springLoadedInteraction = UISpringLoadedInteraction { [weak self] interaction, context in
         guard let self else { return }
         self.onSpringLoaded?(self)
     }
     #endif
 
-    /// A gesture recognizer for detecting long presses on the TappableView.
+    /// A gesture recognizer for detecting long presses on the GlassTappableView.
     public private(set) lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
-    
+
     #if !os(tvOS)
     /// An interaction object for managing the context menu in response to force touch or long press gestures.
     public private(set) lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
     #endif
 
-    /// The background color to be used for the preview when the TappableView is used in a context menu.
+    /// The background color to be used for the preview when the GlassTappableView is used in a context menu.
     public var previewBackgroundColor: UIColor?
-    
-    /// A closure that is called when the TappableView is tapped.
-    public var onTap: ((TappableView) -> Void)? {
+
+    /// A closure that is called when the GlassTappableView is tapped.
+    public var onTap: ((GlassTappableView) -> Void)? {
         didSet {
             if onTap != nil {
                 addGestureRecognizer(tapGestureRecognizer)
@@ -117,8 +71,8 @@ open class TappableView: UIView {
         }
     }
 
-    /// A closure that is called when a long press gesture is recognized on the TappableView.
-    public var onLongPress: ((TappableView, UILongPressGestureRecognizer) -> Void)? {
+    /// A closure that is called when a long press gesture is recognized on the GlassTappableView.
+    public var onLongPress: ((GlassTappableView, UILongPressGestureRecognizer) -> Void)? {
         didSet {
             if onLongPress != nil {
                 addGestureRecognizer(longPressGestureRecognizer)
@@ -128,8 +82,8 @@ open class TappableView: UIView {
         }
     }
 
-    /// A closure that is called when the TappableView is double-tapped.
-    public var onDoubleTap: ((TappableView) -> Void)? {
+    /// A closure that is called when the GlassTappableView is double-tapped.
+    public var onDoubleTap: ((GlassTappableView) -> Void)? {
         didSet {
             if onDoubleTap != nil {
                 addGestureRecognizer(doubleTapGestureRecognizer)
@@ -140,8 +94,8 @@ open class TappableView: UIView {
     }
 
     #if !os(tvOS)
-    /// A closure that is called when the TappableView is spring loaded.
-    public var onSpringLoaded: ((TappableView) -> Void)? {
+    /// A closure that is called when the GlassTappableView is spring loaded.
+    public var onSpringLoaded: ((GlassTappableView) -> Void)? {
         didSet {
             if onSpringLoaded != nil {
                 addInteraction(springLoadedInteraction)
@@ -150,10 +104,8 @@ open class TappableView: UIView {
             }
         }
     }
-    #endif
 
-#if !os(tvOS)
-    /// The interaction responsible for handling drop operations on the TappableView.
+    /// The interaction responsible for handling drop operations on the GlassTappableView.
     private var dropInteraction: UIDropInteraction?
 
     /// The delegate that responds to drop interaction events.
@@ -172,7 +124,7 @@ open class TappableView: UIView {
         }
     }
 
-    /// A closure that provides a preview view controller to be displayed when the TappableView is used in a context menu.
+    /// A closure that provides a preview view controller to be displayed when the GlassTappableView is used in a context menu.
     /// Setting this property will add a context menu interaction if it's not already present.
     public var previewProvider: (() -> UIViewController?)? {
         didSet {
@@ -187,9 +139,9 @@ open class TappableView: UIView {
     /// A closure that is called when the context menu preview is committed.
     public var onCommitPreview: ((UIContextMenuInteractionCommitAnimating) -> Void)?
 
-    /// A closure that provides a context menu to be displayed when the TappableView is long-pressed.
+    /// A closure that provides a context menu to be displayed when the GlassTappableView is long-pressed.
     /// Setting this property will add a context menu interaction if it's not already present.
-    public var contextMenuProvider: ((TappableView) -> UIMenu?)? {
+    public var contextMenuProvider: ((GlassTappableView) -> UIMenu?)? {
         didSet {
             if previewProvider != nil || contextMenuProvider != nil {
                 addInteraction(contextMenuInteraction)
@@ -202,16 +154,16 @@ open class TappableView: UIView {
     /// A type-erased pointer style provider.
     private var _pointerStyleProvider: Any?
 
-    /// A closure that provides a pointer style when the TappableView is hovered over with a pointer device.
+    /// A closure that provides a pointer style when the GlassTappableView is hovered over with a pointer device.
     /// Available only on iOS 13.4 and later.
     @available(iOS 13.4, *)
     public var pointerStyleProvider: (() -> UIPointerStyle?)? {
         get { _pointerStyleProvider as? () -> UIPointerStyle? }
         set { _pointerStyleProvider = newValue }
     }
-#endif
+    #endif
 
-    /// A Boolean value that determines whether the TappableView is in a highlighted state.
+    /// A Boolean value that determines whether the GlassTappableView is in a highlighted state.
     /// Changes to this property can trigger an update to the view's appearance.
     open var isHighlighted: Bool = false {
         didSet {
@@ -226,18 +178,33 @@ open class TappableView: UIView {
     }
     #endif
 
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        accessibilityTraits = .button
-    #if !os(tvOS)
-        if #available(iOS 13.4, *) {
-            addInteraction(UIPointerInteraction(delegate: self))
-        }
-    #endif
+    public init(frame: CGRect) {
+        super.init(effect: Self.defaultEffect())
+        self.frame = frame
+        configure()
+    }
+
+    public override init(effect: UIVisualEffect?) {
+        super.init(effect: effect ?? Self.defaultEffect())
+        configure()
     }
 
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    public static func defaultEffect() -> UIVisualEffect {
+        #if os(iOS)
+        if #available(iOS 26.0, *) {
+            let effect = UIGlassEffect(style: .regular)
+            effect.isInteractive = true
+            return effect
+        } else {
+            return UIBlurEffect(style: .systemMaterial)
+        }
+        #else
+        return UIBlurEffect(style: .regular)
+        #endif
     }
 
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -295,11 +262,21 @@ open class TappableView: UIView {
     @objc open func didLongPress() {
         onLongPress?(self, longPressGestureRecognizer)
     }
+
+    private func configure() {
+        isUserInteractionEnabled = true
+        accessibilityTraits = .button
+        #if !os(tvOS)
+        if #available(iOS 13.4, *) {
+            addInteraction(UIPointerInteraction(delegate: self))
+        }
+        #endif
+    }
 }
 
 #if !os(tvOS)
 @available(iOS 13.4, *)
-extension TappableView: UIPointerInteractionDelegate {
+extension GlassTappableView: UIPointerInteractionDelegate {
     public func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
         if let pointerStyleProvider {
             return pointerStyleProvider()
@@ -309,7 +286,7 @@ extension TappableView: UIPointerInteractionDelegate {
     }
 }
 
-extension TappableView: UIContextMenuInteractionDelegate {
+extension GlassTappableView: UIContextMenuInteractionDelegate {
     public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         if let previewProvider {
             return UIContextMenuConfiguration(identifier: nil) {
