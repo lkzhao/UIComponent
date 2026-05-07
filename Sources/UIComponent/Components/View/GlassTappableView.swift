@@ -194,16 +194,16 @@ open class GlassTappableView: UIVisualEffectView {
     }
 
     public static func defaultEffect() -> UIVisualEffect {
-        #if os(iOS)
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, tvOS 26.0, macCatalyst 26.0, *) {
             let effect = UIGlassEffect(style: .regular)
             effect.isInteractive = true
             return effect
-        } else {
-            return UIBlurEffect(style: .systemMaterial)
         }
-        #else
+
+        #if os(tvOS)
         return UIBlurEffect(style: .regular)
+        #else
+        return UIBlurEffect(style: .systemMaterial)
         #endif
     }
 
