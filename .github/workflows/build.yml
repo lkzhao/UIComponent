@@ -13,6 +13,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Select latest Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - name: Show Xcode version
+        run: xcodebuild -version
       - name: Test Swift package on iOS Simulator
         run: |
           tmpdir="$(mktemp -d)"
