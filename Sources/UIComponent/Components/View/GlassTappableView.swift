@@ -1,7 +1,7 @@
 //  Created by Luke Zhao on 5/6/26.
 
 /// GlassTappableViewConfig is a structure that defines the configuration for a GlassTappableView.
-/// It contains closures that can be used to customize the behavior of the view when it is tapped, highlighted, or hovered.
+/// It contains closures that can be used to customize the behavior of the view when it is tapped or highlighted.
 public struct GlassTappableViewConfig {
     /// The default configuration for all GlassTappableView instances.
     public static var `default`: GlassTappableViewConfig = GlassTappableViewConfig(onHighlightChanged: nil, didTap: nil)
@@ -9,24 +9,15 @@ public struct GlassTappableViewConfig {
     /// Closure to apply highlight state or animation to the GlassTappableView.
     public var onHighlightChanged: ((GlassTappableView, Bool) -> Void)?
 
-    /// Closure to apply hover state or animation to the GlassTappableView.
-    public var onHoverChanged: ((GlassTappableView, Bool) -> Void)?
-
     /// Closure to be called before the actual onTap action is performed.
     public var didTap: ((GlassTappableView) -> Void)?
 
-    /// Initializes a new GlassTappableViewConfig with optional closures for handling highlight changes, hover changes, and tap actions.
+    /// Initializes a new GlassTappableViewConfig with optional closures for handling highlight changes and tap actions.
     /// - Parameters:
     ///   - onHighlightChanged: A closure that is called when the highlight state changes.
-    ///   - onHoverChanged: A closure that is called when the hover state changes.
     ///   - didTap: A closure that is called before the onTap action.
-    public init(
-        onHighlightChanged: ((GlassTappableView, Bool) -> Void)? = nil,
-        onHoverChanged: ((GlassTappableView, Bool) -> Void)? = nil,
-        didTap: ((GlassTappableView) -> Void)? = nil
-    ) {
+    public init(onHighlightChanged: ((GlassTappableView, Bool) -> Void)? = nil, didTap: ((GlassTappableView) -> Void)? = nil) {
         self.onHighlightChanged = onHighlightChanged
-        self.onHoverChanged = onHoverChanged
         self.didTap = didTap
     }
 }
@@ -181,15 +172,6 @@ open class GlassTappableView: UIVisualEffectView {
         }
     }
 
-    /// A Boolean value that determines whether the GlassTappableView is in a hovered state.
-    /// Changes to this property can trigger an update to the view's appearance.
-    open var isHovered: Bool = false {
-        didSet {
-            guard isHovered != oldValue else { return }
-            (config ?? .default).onHoverChanged?(self, isHovered)
-        }
-    }
-
     #if os(tvOS)
     open override var canBecomeFocused: Bool {
         onTap != nil
@@ -301,14 +283,6 @@ extension GlassTappableView: UIPointerInteractionDelegate {
         } else {
             return UIPointerStyle(effect: .automatic(UITargetedPreview(view: self)), shape: nil)
         }
-    }
-
-    public func pointerInteraction(_ interaction: UIPointerInteraction, willEnter region: UIPointerRegion, animator: UIPointerInteractionAnimating) {
-        isHovered = true
-    }
-
-    public func pointerInteraction(_ interaction: UIPointerInteraction, willExit region: UIPointerRegion, animator: UIPointerInteractionAnimating) {
-        isHovered = false
     }
 }
 
