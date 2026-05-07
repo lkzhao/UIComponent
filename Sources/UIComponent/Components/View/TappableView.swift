@@ -1,7 +1,7 @@
 //  Created by Luke Zhao on 6/8/21.
 
 /// TappableViewConfig is a structure that defines the configuration for a TappableView.
-/// It contains closures that can be used to customize the behavior of the view when it is tapped or highlighted.
+/// It contains closures that can be used to customize the behavior of the view when it is tapped, highlighted, or hovered.
 public struct TappableViewConfig {
     /// The default configuration for all TappableView instances.
     public static var `default`: TappableViewConfig = TappableViewConfig(onHighlightChanged: nil, didTap: nil)
@@ -9,15 +9,24 @@ public struct TappableViewConfig {
     /// Closure to apply highlight state or animation to the TappableView.
     public var onHighlightChanged: ((TappableView, Bool) -> Void)?
 
+    /// Closure to apply hover state or animation to the TappableView.
+    public var onHoverChanged: ((TappableView, Bool) -> Void)?
+
     /// Closure to be called before the actual onTap action is performed.
     public var didTap: ((TappableView) -> Void)?
 
-    /// Initializes a new TappableViewConfig with optional closures for handling highlight changes and tap actions.
+    /// Initializes a new TappableViewConfig with optional closures for handling highlight changes, hover changes, and tap actions.
     /// - Parameters:
     ///   - onHighlightChanged: A closure that is called when the highlight state changes.
+    ///   - onHoverChanged: A closure that is called when the hover state changes.
     ///   - didTap: A closure that is called before the onTap action.
-    public init(onHighlightChanged: ((TappableView, Bool) -> Void)? = nil, didTap: ((TappableView) -> Void)? = nil) {
+    public init(
+        onHighlightChanged: ((TappableView, Bool) -> Void)? = nil,
+        onHoverChanged: ((TappableView, Bool) -> Void)? = nil,
+        didTap: ((TappableView) -> Void)? = nil
+    ) {
         self.onHighlightChanged = onHighlightChanged
+        self.onHoverChanged = onHoverChanged
         self.didTap = didTap
     }
 }
@@ -220,6 +229,15 @@ open class TappableView: UIView {
         }
     }
 
+    /// A Boolean value that determines whether the TappableView is in a hovered state.
+    /// Changes to this property can trigger an update to the view's appearance.
+    open var isHovered: Bool = false {
+        didSet {
+            guard isHovered != oldValue else { return }
+            (config ?? .default).onHoverChanged?(self, isHovered)
+        }
+    }
+
     #if os(tvOS)
     open override var canBecomeFocused: Bool {
         onTap != nil
@@ -306,6 +324,14 @@ extension TappableView: UIPointerInteractionDelegate {
         } else {
             return UIPointerStyle(effect: .automatic(UITargetedPreview(view: self)), shape: nil)
         }
+    }
+
+    public func pointerInteraction(_ interaction: UIPointerInteraction, willEnter region: UIPointerRegion, animator: UIPointerInteractionAnimating) {
+        isHovered = true
+    }
+
+    public func pointerInteraction(_ interaction: UIPointerInteraction, willExit region: UIPointerRegion, animator: UIPointerInteractionAnimating) {
+        isHovered = false
     }
 }
 
