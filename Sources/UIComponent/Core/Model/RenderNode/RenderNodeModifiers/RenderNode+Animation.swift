@@ -16,7 +16,7 @@ public struct AnimatorWrapperRenderNode<Content: RenderNode>: RenderNodeWrapper 
             wrapper.updateBlock = updateBlock
             return wrapper
         }
-        return nil
+        return content.contextValue(key)
     }
 }
 
