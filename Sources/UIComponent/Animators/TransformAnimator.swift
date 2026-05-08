@@ -405,16 +405,6 @@ public struct TransformAnimator: Animator {
                 completion: nil
             )
         }
-        if view.alpha != 1 {
-            updateTiming.animate(
-                layoutSubviews: layoutSubviews,
-                delay: 0,
-                animations: {
-                    view.alpha = 1
-                },
-                completion: nil
-            )
-        }
     }
 }
 
