@@ -74,7 +74,4 @@ struct InsetsRenderNode: RenderNode {
         [CGPoint(x: insets.left, y: insets.top)]
     }
 
-    func contextValue(_ key: RenderNodeContextKey) -> Any? {
-        content.contextValue(key)
-    }
 }
