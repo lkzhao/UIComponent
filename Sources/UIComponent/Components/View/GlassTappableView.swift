@@ -34,6 +34,17 @@ open class GlassTappableView: UIVisualEffectView {
     /// A gesture recognizer for detecting single taps on the GlassTappableView.
     public private(set) lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
 
+    /// A gesture recognizer for immediate press/highlight state.
+    public private(set) lazy var highlightGestureRecognizer: UILongPressGestureRecognizer = {
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(didChangeHighlight))
+        gesture.minimumPressDuration = 0
+        gesture.cancelsTouchesInView = false
+        gesture.delaysTouchesBegan = false
+        gesture.delaysTouchesEnded = false
+        gesture.delegate = self
+        return gesture
+    }()
+
     /// A gesture recognizer for detecting double taps on the GlassTappableView.
     public private(set) lazy var doubleTapGestureRecognizer: UITapGestureRecognizer = {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap))
@@ -266,11 +277,32 @@ open class GlassTappableView: UIVisualEffectView {
     private func configure() {
         isUserInteractionEnabled = true
         accessibilityTraits = .button
+        addGestureRecognizer(highlightGestureRecognizer)
         #if !os(tvOS)
         if #available(iOS 13.4, *) {
             addInteraction(UIPointerInteraction(delegate: self))
         }
         #endif
+    }
+
+    @objc open func didChangeHighlight() {
+        switch highlightGestureRecognizer.state {
+        case .began, .changed:
+            isHighlighted = bounds.contains(highlightGestureRecognizer.location(in: self))
+        case .ended, .cancelled, .failed:
+            isHighlighted = false
+        default:
+            break
+        }
+    }
+}
+
+extension GlassTappableView: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        gestureRecognizer === highlightGestureRecognizer || otherGestureRecognizer === highlightGestureRecognizer
     }
 }
 
