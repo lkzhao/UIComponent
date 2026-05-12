@@ -4,27 +4,17 @@
 /// A waterfall layout is a type of layout that arranges items in multiple columns with varying item heights.
 /// - Parameters:
 ///   - columns: The number of columns in the layout.
-///   - spacing: The spacing between columns and items in the layout.
 ///   - columnSpacing: The spacing between columns in the layout.
 ///   - interItemSpacing: The spacing between items within each column.
 ///   - children: The components that will be laid out according to the waterfall layout.
 public protocol WaterfallLayoutProtocol: BaseLayoutProtocol {
     var columns: Int { get }
-    var spacing: CGFloat { get }
     var columnSpacing: CGFloat { get }
     var interItemSpacing: CGFloat { get }
     var children: [any Component] { get }
 }
 
 extension WaterfallLayoutProtocol {
-    public var columnSpacing: CGFloat {
-        spacing
-    }
-
-    public var interItemSpacing: CGFloat {
-        spacing
-    }
-
     public func layout(_ constraint: Constraint) -> R {
         var renderNodes: [any RenderNode] = []
         var positions: [CGPoint] = []
