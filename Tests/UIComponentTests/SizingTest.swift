@@ -45,4 +45,46 @@ struct SizingTest {
         #expect(component.layout(Constraint(maxSize: CGSize(width: 1000.0, height: .infinity))).size.width == 1000)
         #expect(component.layout(Constraint(maxSize: CGSize(width: 1000.0, height: .infinity))).children.first!.size.width == 1000)
     }
+
+    @Test func testWaterfallSeparateSpacing() throws {
+        let component = Waterfall(columns: 2, columnSpacing: 10, interItemSpacing: 5) {
+            Space(width: 10, height: 20)
+            Space(width: 10, height: 10)
+            Space(width: 10, height: 15)
+        }
+
+        let renderNode = component.layout(Constraint(maxSize: CGSize(width: 110, height: CGFloat.infinity)))
+        #expect(renderNode.size == CGSize(width: 110, height: 30))
+        #expect(renderNode.children.map { $0.size } == [
+            CGSize(width: 50, height: 20),
+            CGSize(width: 50, height: 10),
+            CGSize(width: 50, height: 15)
+        ])
+        #expect(renderNode.positions == [
+            CGPoint(x: 0, y: 0),
+            CGPoint(x: 60, y: 0),
+            CGPoint(x: 60, y: 15)
+        ])
+    }
+
+    @Test func testHorizontalWaterfallSeparateSpacing() throws {
+        let component = HorizontalWaterfall(columns: 2, columnSpacing: 10, interItemSpacing: 5) {
+            Space(width: 20, height: 10)
+            Space(width: 10, height: 10)
+            Space(width: 15, height: 10)
+        }
+
+        let renderNode = component.layout(Constraint(maxSize: CGSize(width: CGFloat.infinity, height: 110)))
+        #expect(renderNode.size == CGSize(width: 30, height: 110))
+        #expect(renderNode.children.map { $0.size } == [
+            CGSize(width: 20, height: 50),
+            CGSize(width: 10, height: 50),
+            CGSize(width: 15, height: 50)
+        ])
+        #expect(renderNode.positions == [
+            CGPoint(x: 0, y: 0),
+            CGPoint(x: 0, y: 60),
+            CGPoint(x: 15, y: 60)
+        ])
+    }
 }
