@@ -186,8 +186,8 @@ public struct TransformAnimator: Animator {
     public var layoutSubviews: Bool
     /// A Boolean value that determines whether to show the initial insertion animation when the view is first loaded.
     public var showInitialInsertionAnimation: Bool = false
-    /// A Boolean value that determines whether to show insertion animations for items that are out of the bounds of the hosting view.
-    public var showInsertionAnimationOnOutOfBoundsItems: Bool = false
+    /// A Boolean value that determines whether to animate items that are out of the bounds of the hosting view.
+    public var animateOnOutOfBoundsItems: Bool = false
 
     /// Initializes a new animator with the specified insertion and deletion transforms,
     /// insert/update/delete timings, and cascade options.
@@ -210,7 +210,7 @@ public struct TransformAnimator: Animator {
         cascade: Bool = false,
         layoutSubviews: Bool = true,
         showInitialInsertionAnimation: Bool = false,
-        showInsertionAnimationOnOutOfBoundsItems: Bool = false,
+        animateOnOutOfBoundsItems: Bool = false,
     ) {
         self.insertTransform = insertTransform
         self.deleteTransform = deleteTransform
@@ -220,7 +220,7 @@ public struct TransformAnimator: Animator {
         self.cascade = cascade
         self.layoutSubviews = layoutSubviews
         self.showInitialInsertionAnimation = showInitialInsertionAnimation
-        self.showInsertionAnimationOnOutOfBoundsItems = showInsertionAnimationOnOutOfBoundsItems
+        self.animateOnOutOfBoundsItems = animateOnOutOfBoundsItems
     }
 
     /// Initializes a new animator that uses the same timing configuration for insert, update, and delete.
@@ -239,7 +239,7 @@ public struct TransformAnimator: Animator {
         cascade: Bool = false,
         layoutSubviews: Bool = true,
         showInitialInsertionAnimation: Bool = false,
-        showInsertionAnimationOnOutOfBoundsItems: Bool = false,
+        animateOnOutOfBoundsItems: Bool = false,
     ) {
         self.init(
             insertTransform: insertTransform,
@@ -250,7 +250,7 @@ public struct TransformAnimator: Animator {
             cascade: cascade,
             layoutSubviews: layoutSubviews,
             showInitialInsertionAnimation: showInitialInsertionAnimation,
-            showInsertionAnimationOnOutOfBoundsItems: showInsertionAnimationOnOutOfBoundsItems,
+            animateOnOutOfBoundsItems: animateOnOutOfBoundsItems,
         )
     }
 
@@ -271,7 +271,7 @@ public struct TransformAnimator: Animator {
         cascade: Bool = false,
         layoutSubviews: Bool = true,
         showInitialInsertionAnimation: Bool = false,
-        showInsertionAnimationOnOutOfBoundsItems: Bool = false,
+        animateOnOutOfBoundsItems: Bool = false,
     ) {
         self.init(
             insertTransform: insertTransform,
@@ -282,7 +282,7 @@ public struct TransformAnimator: Animator {
             cascade: cascade,
             layoutSubviews: layoutSubviews,
             showInitialInsertionAnimation: showInitialInsertionAnimation,
-            showInsertionAnimationOnOutOfBoundsItems: showInsertionAnimationOnOutOfBoundsItems,
+            animateOnOutOfBoundsItems: animateOnOutOfBoundsItems,
         )
     }
 
@@ -298,7 +298,7 @@ public struct TransformAnimator: Animator {
         cascade: Bool = false,
         layoutSubviews: Bool = true,
         showInitialInsertionAnimation: Bool = false,
-        showInsertionAnimationOnOutOfBoundsItems: Bool = false,
+        animateOnOutOfBoundsItems: Bool = false,
     ) {
         self.init(
             insertTransform: transform,
@@ -309,7 +309,7 @@ public struct TransformAnimator: Animator {
             cascade: cascade,
             layoutSubviews: layoutSubviews,
             showInitialInsertionAnimation: showInitialInsertionAnimation,
-            showInsertionAnimationOnOutOfBoundsItems: showInsertionAnimationOnOutOfBoundsItems,
+            animateOnOutOfBoundsItems: animateOnOutOfBoundsItems,
         )
     }
 
@@ -325,7 +325,7 @@ public struct TransformAnimator: Animator {
         cascade: Bool = false,
         layoutSubviews: Bool = true,
         showInitialInsertionAnimation: Bool = false,
-        showInsertionAnimationOnOutOfBoundsItems: Bool = false,
+        animateOnOutOfBoundsItems: Bool = false,
     ) {
         self.init(
             insertTransform: transform,
@@ -336,12 +336,12 @@ public struct TransformAnimator: Animator {
             cascade: cascade,
             layoutSubviews: layoutSubviews,
             showInitialInsertionAnimation: showInitialInsertionAnimation,
-            showInsertionAnimationOnOutOfBoundsItems: showInsertionAnimationOnOutOfBoundsItems,
+            animateOnOutOfBoundsItems: animateOnOutOfBoundsItems,
         )
     }
 
     public func delete(hostingView: UIView, view: UIView, completion: @escaping () -> Void) {
-        if hostingView.componentEngine.isReloading, hostingView.bounds.intersects(view.frame) {
+        if hostingView.componentEngine.isReloading, animateOnOutOfBoundsItems || hostingView.bounds.intersects(view.frame) {
             let baseTransform = view.layer.transform
             deleteTiming.animate(
                 layoutSubviews: layoutSubviews,
@@ -367,7 +367,7 @@ public struct TransformAnimator: Animator {
         view.bounds.size = frame.size
         view.center = frame.center
         let baseTransform = view.layer.transform
-        if hostingView.componentEngine.isReloading, showInitialInsertionAnimation || hostingView.componentEngine.hasReloaded, showInsertionAnimationOnOutOfBoundsItems || hostingView.bounds.intersects(frame) {
+        if hostingView.componentEngine.isReloading, showInitialInsertionAnimation || hostingView.componentEngine.hasReloaded, animateOnOutOfBoundsItems || hostingView.bounds.intersects(frame) {
             let offsetTime: TimeInterval = cascade ? TimeInterval(frame.origin.distance(hostingView.bounds.origin) / 3000) : 0
             UIView.performWithoutAnimation {
                 view.layer.transform = insertTransform
