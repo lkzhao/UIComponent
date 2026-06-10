@@ -12,7 +12,7 @@ struct TransformAnimatorTests {
             cascade: true,
             layoutSubviews: false,
             showInitialInsertionAnimation: true,
-            animateOnOutOfBoundsItems: true
+            animateOutOfBoundsItems: true
         )
 
         #expect(CATransform3DEqualToTransform(animator.insertTransform, transform))
@@ -25,7 +25,7 @@ struct TransformAnimatorTests {
         #expect(animator.cascade)
         #expect(!animator.layoutSubviews)
         #expect(animator.showInitialInsertionAnimation)
-        #expect(animator.animateOnOutOfBoundsItems)
+        #expect(animator.animateOutOfBoundsItems)
     }
 
     @Test func separateTransformsAreStoredIndependently() {

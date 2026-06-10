@@ -10,7 +10,7 @@ public struct FadeAnimator: Animator {
     /// A Boolean value that determines whether to show the initial insertion animation when the view is first loaded.
     public var showInitialInsertionAnimation: Bool = false
     /// A Boolean value that determines whether to animate items that are out of the bounds of the hosting view.
-    public var animateOnOutOfBoundsItems: Bool = false
+    public var animateOutOfBoundsItems: Bool = false
 
     /// Initializes a new animator with the specified duration and cascade options.
     /// - Parameters:
@@ -21,17 +21,17 @@ public struct FadeAnimator: Animator {
         duration: TimeInterval = 0.3,
         cascade: Bool = false,
         showInitialInsertionAnimation: Bool = false,
-        animateOnOutOfBoundsItems: Bool = false,
+        animateOutOfBoundsItems: Bool = false,
     ) {
         self.duration = duration
         self.cascade = cascade
         self.showInitialInsertionAnimation = showInitialInsertionAnimation
-        self.animateOnOutOfBoundsItems = animateOnOutOfBoundsItems
+        self.animateOutOfBoundsItems = animateOutOfBoundsItems
     }
 
     public func delete(hostingView: UIView, view: UIView, completion: @escaping () -> Void) {
         if hostingView.componentEngine.isReloading,
-           animateOnOutOfBoundsItems || hostingView.bounds.intersects(view.frame) {
+           animateOutOfBoundsItems || hostingView.bounds.intersects(view.frame) {
             UIView.animate(
                 withDuration: duration,
                 delay: 0,
@@ -56,7 +56,7 @@ public struct FadeAnimator: Animator {
         view.center = frame.center
         if hostingView.componentEngine.isReloading,
            showInitialInsertionAnimation || hostingView.componentEngine.hasReloaded,
-           animateOnOutOfBoundsItems || hostingView.bounds.intersects(frame) {
+           animateOutOfBoundsItems || hostingView.bounds.intersects(frame) {
             let offsetTime: TimeInterval = cascade ? TimeInterval(frame.origin.distance(hostingView.bounds.origin) / 3000) : 0
             UIView.performWithoutAnimation {
                 view.alpha = 0
