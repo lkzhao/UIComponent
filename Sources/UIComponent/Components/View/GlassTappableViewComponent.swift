@@ -9,15 +9,20 @@ public struct GlassTappableViewComponent: Component {
     /// The underlying component that this `GlassTappableViewComponent` is wrapping.
     public let component: any Component
 
+    /// The tint of the glass; nil for clear glass. See ``GlassTappableView/glassTintColor``.
+    public let tintColor: UIColor?
+
     /// The closure to be called when the tappable view is tapped.
     public let onTap: ((GlassTappableView) -> Void)?
 
     /// Initializes a new `GlassTappableViewComponent` with the given component and optional tap handler.
     /// - Parameters:
     ///   - component: The component to be made tappable.
+    ///   - tintColor: The tint of the glass; nil for clear glass.
     ///   - onTap: An optional closure that is called when the tappable view is tapped.
-    public init(component: any Component, onTap: ((GlassTappableView) -> Void)? = nil) {
+    public init(component: any Component, tintColor: UIColor? = nil, onTap: ((GlassTappableView) -> Void)? = nil) {
         self.component = component
+        self.tintColor = tintColor
         self.onTap = onTap
     }
 
@@ -26,7 +31,14 @@ public struct GlassTappableViewComponent: Component {
     /// - Returns: A `GlassTappableViewRenderNode` representing the laid out component.
     public func layout(_ constraint: Constraint) -> GlassTappableViewRenderNode {
         let renderNode = component.layout(constraint)
-        return GlassTappableViewRenderNode(size: renderNode.size.bound(to: constraint), component: component, content: renderNode, onTap: onTap, config: config)
+        return GlassTappableViewRenderNode(
+            size: renderNode.size.bound(to: constraint),
+            component: component,
+            content: renderNode,
+            tintColor: tintColor,
+            onTap: onTap,
+            config: config
+        )
     }
 }
 
@@ -41,16 +53,21 @@ public struct GlassTappableViewRenderNode: RenderNode {
     /// The rendered content of the component.
     public let content: any RenderNode
 
+    /// The tint of the glass; nil for clear glass.
+    public let tintColor: UIColor?
+
     /// The closure to be called when the tappable view is tapped.
     public let onTap: ((GlassTappableView) -> Void)?
 
     /// The configuration for the tappable view.
     public let config: GlassTappableViewConfig?
 
-    /// Updates the given `GlassTappableView` with the current configuration and tap handler.
+    /// Updates the given `GlassTappableView` with the current tint, configuration, and tap handler.
+    /// The glass is rebuilt only when its tint changes or its effect was replaced from outside.
     /// - Parameter view: The `GlassTappableView` to update.
     public func updateView(_ view: GlassTappableView) {
-        view.effect = GlassTappableView.defaultEffect()
+        view.glassTintColor = tintColor
+        view.restoreDefaultEffectIfNeeded()
         view.config = config
         view.onTap = onTap
         view.contentView.componentEngine.reloadWithExisting(component: component, renderNode: content)
