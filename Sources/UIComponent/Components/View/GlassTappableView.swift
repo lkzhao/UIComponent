@@ -174,6 +174,36 @@ open class GlassTappableView: UIVisualEffectView {
     }
     #endif
 
+    /// The tint of the glass on iOS 26 and later; nil for clear glass. The effect is replaced only
+    /// when the tint changes, since rebuilding glass is expensive.
+    public var glassTintColor: UIColor? {
+        didSet {
+            guard glassTintColor != oldValue else { return }
+            applyDefaultEffect()
+        }
+    }
+
+    /// Whether `effect` was set from outside since the view last applied its own.
+    private var hasCustomEffect = false
+    private var isApplyingDefaultEffect = false
+
+    open override var effect: UIVisualEffect? {
+        didSet { hasCustomEffect = !isApplyingDefaultEffect }
+    }
+
+    /// Restores the view's own effect if `effect` was replaced from outside, and leaves it alone
+    /// otherwise, so re-rendering an unchanged view doesn't rebuild its glass.
+    public func restoreDefaultEffectIfNeeded() {
+        guard hasCustomEffect else { return }
+        applyDefaultEffect()
+    }
+
+    private func applyDefaultEffect() {
+        isApplyingDefaultEffect = true
+        effect = Self.defaultEffect(tintColor: glassTintColor)
+        isApplyingDefaultEffect = false
+    }
+
     /// A Boolean value that determines whether the GlassTappableView is in a highlighted state.
     /// Changes to this property can trigger an update to the view's appearance.
     open var isHighlighted: Bool = false {
@@ -192,11 +222,13 @@ open class GlassTappableView: UIVisualEffectView {
     public init(frame: CGRect) {
         super.init(effect: Self.defaultEffect())
         self.frame = frame
+        hasCustomEffect = false
         configure()
     }
 
     public override init(effect: UIVisualEffect?) {
         super.init(effect: effect ?? Self.defaultEffect())
+        hasCustomEffect = effect != nil
         configure()
     }
 
@@ -204,10 +236,13 @@ open class GlassTappableView: UIVisualEffectView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public static func defaultEffect() -> UIVisualEffect {
+    /// The view's own effect: interactive glass tinted with `tintColor` on iOS 26 and later, or the
+    /// system material blur, which ignores the tint, on earlier versions.
+    public static func defaultEffect(tintColor: UIColor? = nil) -> UIVisualEffect {
         if #available(iOS 26.0, tvOS 26.0, macCatalyst 26.0, *) {
             let effect = UIGlassEffect(style: .regular)
             effect.isInteractive = true
+            effect.tintColor = tintColor
             return effect
         }
 
