@@ -336,6 +336,7 @@ extension TappableView: UIPointerInteractionDelegate {
         if let pointerStyleProvider {
             return pointerStyleProvider()
         } else {
+            guard window != nil else { return nil }
             return UIPointerStyle(effect: .automatic(UITargetedPreview(view: self)), shape: nil)
         }
     }
