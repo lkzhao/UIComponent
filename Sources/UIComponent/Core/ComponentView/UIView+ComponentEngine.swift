@@ -99,6 +99,12 @@ extension UIScrollView {
     }
 
     @objc func swizzled_setContentInset(_ contentInset: UIEdgeInsets) {
+        // The hook is global, but UIKit owns the offset of its own scroll views
+        // (including the internal views used by alert text fields).
+        guard _componentEngine != nil else {
+            swizzled_setContentInset(contentInset)
+            return
+        }
         // when contentOffset is at the top, and contentSize is set
         // changing contentInset will not trigger a contentOffset change
         // we manually adjust the contentOffset back to the top

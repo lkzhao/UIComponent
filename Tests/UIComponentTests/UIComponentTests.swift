@@ -10,6 +10,15 @@ let font = UIFont.systemFont(ofSize: 16)
 let maxSize = CGSize(width: 100, height: CGFloat.infinity)
 
 final class UIComponentTests: XCTestCase {
+    func testComponentScrollViewInsetChangesKeepTopAndLeadingEdgesPinned() {
+        let scrollView = UIScrollView()
+        _ = scrollView.componentEngine
+
+        scrollView.contentInset = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 0)
+
+        XCTAssertEqual(scrollView.contentOffset, CGPoint(x: -10, y: -20))
+    }
+
     func testPerfHStackText() {
         let view = UIView()
         measure {
