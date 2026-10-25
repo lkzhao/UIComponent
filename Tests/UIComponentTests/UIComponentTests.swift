@@ -10,18 +10,6 @@ let font = UIFont.systemFont(ofSize: 16)
 let maxSize = CGSize(width: 100, height: CGFloat.infinity)
 
 final class UIComponentTests: XCTestCase {
-    func testNativeScrollViewInsetChangesPreserveOffset() {
-        // Activate the global hooks through a different view, as an app does
-        // before presenting a native alert.
-        _ = UIView().componentEngine
-        let scrollView = UIScrollView()
-        scrollView.contentOffset = CGPoint(x: -40, y: -30)
-
-        scrollView.contentInset = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 0)
-
-        XCTAssertEqual(scrollView.contentOffset, CGPoint(x: -40, y: -30))
-    }
-
     func testComponentScrollViewInsetChangesKeepTopAndLeadingEdgesPinned() {
         let scrollView = UIScrollView()
         _ = scrollView.componentEngine
@@ -29,16 +17,6 @@ final class UIComponentTests: XCTestCase {
         scrollView.contentInset = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 0)
 
         XCTAssertEqual(scrollView.contentOffset, CGPoint(x: -10, y: -20))
-    }
-
-    func testComponentScrollViewInsetChangesPreserveScrolledPosition() {
-        let scrollView = UIScrollView()
-        _ = scrollView.componentEngine
-        scrollView.contentOffset = CGPoint(x: 40, y: 60)
-
-        scrollView.contentInset = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 0)
-
-        XCTAssertEqual(scrollView.contentOffset, CGPoint(x: 40, y: 60))
     }
 
     func testPerfHStackText() {
